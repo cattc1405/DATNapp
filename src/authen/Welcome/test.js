@@ -4,7 +4,11 @@ import React from 'react'
 const test = () => {
   return (
     <View>
-      <Text>testrr</Text>
+
+      <Text>testrr sang</Text>
+
+   
+
     </View>
   )
 }
