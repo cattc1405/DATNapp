@@ -5,7 +5,7 @@ const test = () => {
   return (
     <View>
 
-      <Text>testrr sang</Text>
+      <Text>testrr sang   ss</Text>
 
    
 
