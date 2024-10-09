@@ -1,25 +1,43 @@
 import {
   StyleSheet,
   Text,
+  Alert,
   View,
   Image,
   TouchableHighlight,
   TouchableOpacity,
 } from 'react-native';
 import React, {useState} from 'react';
+import { useNavigation } from '@react-navigation/native';
 
-const Step2Gender = () => {
+const Step2Register = () => {
   const [selectedGender, setSelectedGender] = useState(null);
+  const navigation = useNavigation(); 
+
   const handleSelectGender = gender => {
     setSelectedGender(gender);
   };
+
+  const handleNextStep = () => {
+    if (!selectedGender) {
+      Alert.alert(
+        'Gender Not Selected',
+        'Please select your gender before proceeding.', 
+        [{text: 'OK'}] 
+      );
+    } else {
+      navigation.navigate('Step3');  
+    }
+  };
+
 
   return (
     <View style={styles.container}>
       <View style={styles.mainContents}>
         <View style={styles.topView}>
-          <TouchableOpacity style={styles.iconTopView}>
+          <TouchableOpacity style={styles.iconTopView} onPress={()=>navigation.goBack()}>
             <Image
+              
               style={styles.iconTop}
               source={require('../../../assets/images/backArrow.png')}
             />
@@ -113,10 +131,10 @@ const Step2Gender = () => {
           </View>
         </View>
         <View style={styles.btnView}>
-          <TouchableOpacity style={styles.btnContainer}>
+          <TouchableOpacity style={styles.btnContainer}  onPress={handleNextStep}>
             <Text
               style={styles.continueText}
-              onPress={() => navigation.navigate('Welcome2')}>
+             >
               Next Step
             </Text>
           </TouchableOpacity>
@@ -127,7 +145,7 @@ const Step2Gender = () => {
   );
 };
 
-export default Step2Gender;
+export default Step2Register;
 
 const styles = StyleSheet.create({
   checkedgenderText: {
@@ -224,7 +242,7 @@ const styles = StyleSheet.create({
   },
   middleView: {
     width: '100%',
-    height: '87%',
+    height: '92%',
     // backgroundColor: 'pink',
     alignItems: 'center',
   },
