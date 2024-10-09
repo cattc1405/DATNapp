@@ -1,8 +1,8 @@
 import { View, Text, TouchableOpacity, StyleSheet, TextInput, Image } from 'react-native'
 import React, { useState } from 'react'
 
-const NewPass = (props) => {
- const {navigation} = props
+const YourPass = (props) => {
+  const { navigation } = props
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isPasswordVisible, setPasswordVisible] = useState(false);
@@ -31,11 +31,11 @@ const NewPass = (props) => {
       />
 
       {/* Tiêu đề */}
-      <Text style={styles.title}>Set Your New Password</Text>
+      <Text style={styles.title}>Set Your Password</Text>
 
       {/* Mô tả */}
       <Text style={styles.description}>
-        Try to create a new password that you will remember.
+        In order to keep your account safe you need to create a strong password.
       </Text>
 
       {/* Ô nhập mật khẩu */}
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
   },
   nextButton: {
     padding: 15,
-    backgroundColor: '#FF6B6B',
+    backgroundColor: '#F55F44',
     borderRadius: 10,
     alignItems: 'center',
     marginBottom: 20,
@@ -212,4 +212,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NewPass
+export default YourPass

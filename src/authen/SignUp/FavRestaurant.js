@@ -1,7 +1,8 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 
-const FavRestaurant = () => {
+const FavRestaurant = (props) => {
+    const { navigation } = props
     // State lưu trữ cửa hàng được chọn
     const [selectedRestaurant, setselectedRestaurant] = useState(null);
 
@@ -101,7 +102,9 @@ const FavRestaurant = () => {
 
 
 
-            <TouchableOpacity style={styles.nextButton}>
+            <TouchableOpacity
+                onPress={() => navigation.navigate('ReceiveNotifi')}
+                style={styles.nextButton}>
                 <Text style={styles.nextButtonText}>Next Step</Text>
             </TouchableOpacity>
             <TouchableOpacity>

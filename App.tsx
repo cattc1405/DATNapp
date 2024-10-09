@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, StatusBar, StyleSheet,ScrollView,Image, } from 'react-native';
+import { SafeAreaView, StatusBar, StyleSheet, ScrollView, Image, } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import WelcomeScreen from './src/authen/Welcome/WelcomeScreen';
@@ -8,25 +8,38 @@ import Welcome2 from './src/authen/Welcome/Welcome2';
 import WelcomeNavigator from './src/authen/Welcome/WelcomeNavigator';
 import Step2Gender from './src/authen/Register/Step2Gender';
 import Step1Gender from './src/authen/Register/Step1Gender';
-import ForgetPass from './src/authen/DATN/ForgetPass';
-import NewPass from './src/authen/DATN/NewPass';
-import Gender from './src/authen/DATN/Gender';
+import ForgetPass from './src/authen/ForgotPass/ForgetPass';
+import NewPass from './src/authen/ForgotPass/NewPass';
+import Gender from './src/authen/SignUp/Gender';
+import Code from './src/authen/ForgotPass/Code';
+import Restaurant1 from './src/authen/Restaurant/Restaurant1';
+import FavRestaurant from './src/authen/SignUp/FavRestaurant';
+import ReceiveNotifi from './src/authen/SignUp/ReceiveNotifi';
+import YourPass from './src/authen/SignUp/YourPass';
+import Code1 from './src/authen/SignUp/Code1';
 // import Code from './src/authen/DATN/Code';
 function App(): React.JSX.Element {
-const Stack = createNativeStackNavigator();
-// const Tab = createBottomTabNavigator();
-  return 
-  (
+  const Stack = createNativeStackNavigator();
+  // const Tab = createBottomTabNavigator();
+  return (
     <NavigationContainer>
-    <StatusBar />
-    <Stack.Navigator initialRouteName="Restaurant1">
-      <Stack.Screen name="ForgetPass" component={ForgetPass} options={{ headerShown: false }} />
-      <Stack.Screen name="Code" component={Code} options={{ headerShown: false }} />
-      <Stack.Screen name="NewPass" component={NewPass} options={{ headerShown: false }} />
-      <Stack.Screen name="Restaurant" component={Restaurant} options={{headerShown:false}}/>
-      <Stack.Screen name="Restaurant1" component={Restaurant1} options={{headerShown:false}}/>
-    </Stack.Navigator>
-  </NavigationContainer>
+      <StatusBar />
+      <Stack.Navigator initialRouteName="Code1">
+        <Stack.Screen name="ForgetPass" component={ForgetPass} options={{ headerShown: false }} />
+        <Stack.Screen name="Code" component={Code} options={{ headerShown: false }} />
+        <Stack.Screen name="NewPass" component={NewPass} options={{ headerShown: false }} />
+        <Stack.Screen name="Gender" component={Gender} options={{ headerShown: false }} />
+        <Stack.Screen name="Restaurant1" component={Restaurant1} options={{ headerShown: false }} />
+        <Stack.Screen name="FavRestaurant" component={FavRestaurant} options={{ headerShown: false }} />
+        <Stack.Screen name="ReceiveNotifi" component={ReceiveNotifi} options={{ headerShown: false }} />
+        <Stack.Screen name="YourPass" component={YourPass} options={{ headerShown: false }} />
+        <Stack.Screen name="Code1" component={Code1} options={{ headerShown: false }} />
+
+
+
+
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 export default App;
