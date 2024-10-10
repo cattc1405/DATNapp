@@ -7,11 +7,11 @@ const Code1 = (props) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton}
-          onPress={() => navigation.navigate('ForgetPass')}>
+          >
           <Image
             source={require('../../../assets/images/Back.png')} />
         </TouchableOpacity>
-        <Text style={styles.stepText}>Step 2/3</Text>
+        <Text style={styles.stepText}>Step 5/10</Text>
         <TouchableOpacity style={styles.closeButton}>
           <Image
             source={require('../../../assets/images/Exit.png')} />
@@ -35,7 +35,8 @@ const Code1 = (props) => {
       </View>
 
       {/* Nút "Next Step" */}
-      <TouchableOpacity style={styles.nextButton}>
+      <TouchableOpacity style={styles.nextButton}
+       onPress={() => navigation.navigate('YourPass')}>
         <Text style={styles.nextButtonText}>Next Step</Text>
 
       </TouchableOpacity>

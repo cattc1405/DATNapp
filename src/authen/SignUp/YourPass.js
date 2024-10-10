@@ -12,12 +12,12 @@ const YourPass = (props) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton}
-          onPress={() => navigation.navigate('Code')} >
+          onPress={() => navigation.navigate('Code1')} >
           <Image
             source={require('../../../assets/images/Back.png')}
           />
         </TouchableOpacity>
-        <Text style={styles.stepText}>Step 3/3</Text>
+        <Text style={styles.stepText}>Step 6/10</Text>
         <TouchableOpacity style={styles.closeButton}>
           <Image
             source={require('../../../assets/images/Exit.png')} />
@@ -104,7 +104,8 @@ const YourPass = (props) => {
       </View>
 
       {/* Nút "Next Step" */}
-      <TouchableOpacity style={styles.nextButton}>
+      <TouchableOpacity style={styles.nextButton}
+        onPress={() => navigation.navigate('Finger')}>
         <Text style={styles.nextButtonText}>Next Step</Text>
       </TouchableOpacity>
     </View>

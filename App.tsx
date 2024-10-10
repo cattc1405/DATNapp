@@ -17,6 +17,8 @@ import FavRestaurant from './src/authen/SignUp/FavRestaurant';
 import ReceiveNotifi from './src/authen/SignUp/ReceiveNotifi';
 import YourPass from './src/authen/SignUp/YourPass';
 import Code1 from './src/authen/SignUp/Code1';
+import Finger from './src/authen/SignUp/Finger';
+import Name from './src/authen/SignUp/Name';
 // import Code from './src/authen/DATN/Code';
 function App(): React.JSX.Element {
   const Stack = createNativeStackNavigator();
@@ -24,7 +26,7 @@ function App(): React.JSX.Element {
   return (
     <NavigationContainer>
       <StatusBar />
-      <Stack.Navigator initialRouteName="Code1">
+      <Stack.Navigator initialRouteName="Name">
         <Stack.Screen name="ForgetPass" component={ForgetPass} options={{ headerShown: false }} />
         <Stack.Screen name="Code" component={Code} options={{ headerShown: false }} />
         <Stack.Screen name="NewPass" component={NewPass} options={{ headerShown: false }} />
@@ -34,6 +36,10 @@ function App(): React.JSX.Element {
         <Stack.Screen name="ReceiveNotifi" component={ReceiveNotifi} options={{ headerShown: false }} />
         <Stack.Screen name="YourPass" component={YourPass} options={{ headerShown: false }} />
         <Stack.Screen name="Code1" component={Code1} options={{ headerShown: false }} />
+        <Stack.Screen name="Finger" component={Finger} options={{ headerShown: false }} />
+        <Stack.Screen name="Name" component={Name} options={{ headerShown: false }} />
+
+
 
 
 
