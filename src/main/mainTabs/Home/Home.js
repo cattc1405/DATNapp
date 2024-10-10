@@ -8,32 +8,35 @@ import {
   ScrollView,
 } from 'react-native';
 import React from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 const Home = () => {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
       <View style={styles.headView}>
         <Image
           style={styles.redFoodBgr}
-          source={require('../../../assets/images/redFoodBgr.png')}
+          source={require('../../../../assets/images/redFoodBgr.png')}
         />
         <View style={styles.menuView}>
           <TouchableOpacity>
             <Image
               style={styles.iconMenuView}
-              source={require('../../../assets/images/MenuIcon.png')}
+              source={require('../../../../assets/images/MenuIcon.png')}
             />
           </TouchableOpacity>
 
           <Image
             style={styles.iconLogo}
-            source={require('../../../assets/images/whiteLogo.png')}
+            source={require('../../../../assets/images/whiteLogo.png')}
           />
 
           <TouchableOpacity>
             <Image
               style={styles.iconMenuView}
-              source={require('../../../assets/images/Notification.png')}
+              source={require('../../../../assets/images/Notification.png')}
             />
           </TouchableOpacity>
         </View>
@@ -48,7 +51,7 @@ const Home = () => {
           <View style={styles.treasureView}>
             <Image
               style={styles.diggerImg}
-              source={require('../../../assets/images/TreasureDigger.png')}
+              source={require('../../../../assets/images/TreasureDigger.png')}
             />
             <View style={styles.pointTextView}>
               <Text style={styles.pointText}>
@@ -64,7 +67,7 @@ const Home = () => {
       <View style={styles.mainView}>
         <View style={styles.titleAndViewall}>
           <Text style={styles.titleBoldText}>What's in Today?</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>navigation.navigate("WhatsInToday")          }>
             <Text style={styles.viewallText}>View All</Text>
           </TouchableOpacity>
         </View>
@@ -73,16 +76,16 @@ const Home = () => {
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <ImageBackground
             style={styles.itemTodayView}
-            source={require('../../../assets/images/StarbucksOffer.png')}
+            source={require('../../../../assets/images/StarbucksOffer.png')}
             imageStyle={{borderRadius: 15}}>
             <Image
               style={styles.productImg}
-              source={require('../../../assets/images/coffeeStarbucks.png')}
+              source={require('../../../../assets/images/coffeeStarbucks.png')}
             />
             <View style={styles.tagView}>
               <Image
                 style={styles.logo}
-                source={require('../../../assets/images/icons/StarbucksLogo.png')}
+                source={require('../../../../assets/images/icons/StarbucksLogo.png')}
               />
               <Text style={styles.tagText}>NEW</Text>
             </View>
@@ -94,16 +97,16 @@ const Home = () => {
 
           <ImageBackground
             style={styles.itemTodayView}
-            source={require('../../../assets/images/McDonaldsOffer.png')}
+            source={require('../../../../assets/images/McDonaldsOffer.png')}
             imageStyle={{borderRadius: 15}}>
             <Image
               style={styles.productImg}
-              source={require('../../../assets/images/burgurMc.png')}
+              source={require('../../../../assets/images/burgurMc.png')}
             />
             <View style={styles.tagView}>
               <Image
                 style={styles.logo}
-                source={require('../../../assets/images/icons/McDonaldsLogo.png')}
+                source={require('../../../../assets/images/icons/McDonaldsLogo.png')}
               />
               <Text style={styles.tagText}>NEW</Text>
             </View>
@@ -115,16 +118,16 @@ const Home = () => {
 
           <ImageBackground
             style={styles.itemTodayView}
-            source={require('../../../assets/images/McDonaldsOffer.png')}
+            source={require('../../../../assets/images/McDonaldsOffer.png')}
             imageStyle={{borderRadius: 15}}>
             <Image
               style={styles.productImg}
-              source={require('../../../assets/images/burgurMc.png')}
+              source={require('../../../../assets/images/burgurMc.png')}
             />
             <View style={styles.tagView}>
               <Image
                 style={styles.logo}
-                source={require('../../../assets/images/icons/McDonaldsLogo.png')}
+                source={require('../../../../assets/images/icons/McDonaldsLogo.png')}
               />
               <Text style={styles.tagText}>NEW</Text>
             </View>
@@ -144,7 +147,7 @@ const Home = () => {
         <ScrollView style={styles.popularView} horizontal showsHorizontalScrollIndicator={false}>
           <ImageBackground
             style={styles.itemPopularView}
-            source={require('../../../assets/images/McDonaldimg.png')}
+            source={require('../../../../assets/images/McDonaldimg.png')}
             imageStyle={{borderRadius: 15}}>
             <View style={styles.tagBrand}>
               <View style={styles.bestTag}>
@@ -154,23 +157,23 @@ const Home = () => {
               <View style={styles.starView}>
                 <Image
                   style={styles.starIcon}
-                  source={require('../../../assets/images/icons/StarBold.png')}
+                  source={require('../../../../assets/images/icons/StarBold.png')}
                 />
                 <Image
                   style={styles.starIcon}
-                  source={require('../../../assets/images/icons/StarBold.png')}
+                  source={require('../../../../assets/images/icons/StarBold.png')}
                 />
                 <Image
                   style={styles.starIcon}
-                  source={require('../../../assets/images/icons/StarBold.png')}
+                  source={require('../../../../assets/images/icons/StarBold.png')}
                 />
                 <Image
                   style={styles.starIcon}
-                  source={require('../../../assets/images/icons/StarBold.png')}
+                  source={require('../../../../assets/images/icons/StarBold.png')}
                 />
                 <Image
                   style={styles.starIcon}
-                  source={require('../../../assets/images/icons/StarLight.png')}
+                  source={require('../../../../assets/images/icons/StarLight.png')}
                 />
                 <Text style={styles.thinText}>(694) | 0.3km away</Text>
               </View>
@@ -179,7 +182,7 @@ const Home = () => {
 
           <ImageBackground
             style={styles.itemPopularView}
-            source={require('../../../assets/images/McDonaldimg.png')}
+            source={require('../../../../assets/images/McDonaldimg.png')}
             imageStyle={{borderRadius: 15}}>
             <View style={styles.tagBrand}>
               <View style={styles.bestTag}>
@@ -189,23 +192,23 @@ const Home = () => {
               <View style={styles.starView}>
                 <Image
                   style={styles.starIcon}
-                  source={require('../../../assets/images/icons/StarBold.png')}
+                  source={require('../../../../assets/images/icons/StarBold.png')}
                 />
                 <Image
                   style={styles.starIcon}
-                  source={require('../../../assets/images/icons/StarBold.png')}
+                  source={require('../../../../assets/images/icons/StarBold.png')}
                 />
                 <Image
                   style={styles.starIcon}
-                  source={require('../../../assets/images/icons/StarBold.png')}
+                  source={require('../../../../assets/images/icons/StarBold.png')}
                 />
                 <Image
                   style={styles.starIcon}
-                  source={require('../../../assets/images/icons/StarBold.png')}
+                  source={require('../../../../assets/images/icons/StarBold.png')}
                 />
                 <Image
                   style={styles.starIcon}
-                  source={require('../../../assets/images/icons/StarLight.png')}
+                  source={require('../../../../assets/images/icons/StarLight.png')}
                 />
                 <Text style={styles.thinText}>(694) | 0.3km away</Text>
               </View>
