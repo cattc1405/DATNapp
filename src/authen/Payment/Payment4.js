@@ -1,0 +1,95 @@
+import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+
+const Payment4 = () => {
+    return (
+        <View style={styles.container}>
+            <View style={styles.header}>
+                <Text style={styles.stepText}>Step 4/4</Text>
+                <TouchableOpacity style={styles.closeButton}>
+                    <Image source={require('../../../assets/images/Exit.png')} style={styles.closeIcon} />
+                </TouchableOpacity>
+            </View>
+            <View style={styles.imageContainer}>
+                <Image source={require('../../../assets/images/Delivery.png')} style={styles.image} />
+            </View>
+            <Text style={styles.title}>Your Order Has Been Placed Successfully!</Text>
+            <Text style={styles.description}>
+                Your order has been successfully completed. Within moments you will receive a notification with the receipt of your purchase and you can track every step of your order.
+            </Text>
+            <TouchableOpacity style={styles.button}>
+                <Text style={styles.buttonText}>Finish Order</Text>
+            </TouchableOpacity>
+        </View>
+    );
+};
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#F9FAFB',
+        padding: 20,
+    },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '90%',
+        position: 'absolute',
+        top: 50,
+    },
+    stepText: {
+        fontSize: 16,
+        color: '#888',
+        position: 'absolute',
+        left: '50%',
+        transform: [{ translateX: -40 }], // Điều chỉnh để căn giữa chính xác
+    },
+    closeButton: {
+        position: 'absolute',
+        right: 0,
+    },
+    closeIcon: {
+        width: 24,
+        height: 24,
+    },
+    imageContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginVertical: 30,
+    },
+    image: {
+        width: 200,
+        height: 200,
+        resizeMode: 'contain',
+    },
+    title: {
+        fontSize: 22,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginVertical: 15,
+    },
+    description: {
+        fontSize: 14,
+        color: '#666',
+        textAlign: 'center',
+        marginVertical: 15,
+        paddingHorizontal: 30,
+    },
+    button: {
+        backgroundColor: '#FF6F61',
+        paddingVertical: 15,
+        paddingHorizontal: 60,
+        borderRadius: 30,
+        marginTop: 30,
+    },
+    buttonText: {
+        color: '#FFF',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+});
+
+export default Payment4;
