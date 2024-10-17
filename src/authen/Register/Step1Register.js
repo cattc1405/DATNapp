@@ -2,18 +2,20 @@ import {
   StyleSheet,
   Text,
   View,
+  TextInput,
   Image,
-  TouchableHighlight,
   TouchableOpacity,
 } from 'react-native';
 import React, {useState} from 'react';
+import { useNavigation } from '@react-navigation/native';
 
-const Step1Gender = () => {
-  const [selectedGender, setSelectedGender] = useState(null);
-  const handleSelectGender = gender => {
-    setSelectedGender(gender);
+const Step1Register = () => {
+  const [inputValue, setInputValue] = useState('');
+  const navigation = useNavigation(); 
+
+  const handleTextChange = text => {
+    setInputValue(text);
   };
-
   return (
     <View style={styles.container}>
       <View style={styles.circle001}>
@@ -48,31 +50,47 @@ const Step1Gender = () => {
             style={styles.twopeopleImg}
             source={require('../../../assets/images/nameImgPic.png')}
           />
-           <Image
+          <Image
             style={styles.twopeopleShadow}
             source={require('../../../assets/images/twopeopleShadow.png')}
           />
-          <View style={styles.contentGender}>
+          <View style={styles.contentName}>
             <Text style={styles.nameText}>What is Your Name?</Text>
             <Text style={styles.decribeText}>
               In order to help us identify you, we need
             </Text>
-            <Text style={styles.decribeText}>
-            to know your real name 
-            </Text>
+            <Text style={styles.decribeText}>to know your real name</Text>
           </View>
 
           <View style={styles.inputNameView}>
-            
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.inputView}
+                placeholder="Example: John Smith"
+                placeholderTextColor="rgb(177, 189, 199)"
+                onChangeText={handleTextChange} // Cập nhật trạng thái text
+                value={inputValue}
+              />
+              <Text style={styles.inputLabel}>FULL NAME</Text>
+            </View>
+
+            <Text style={styles.containText}>Your name must contain</Text>
+            <View style={styles.checkView}>
+              <Image
+                style={styles.containCheck}
+                source={
+                  inputValue.length >= 5
+                    ? require('../../../assets/images/orangeChecked.png')
+                    : require('../../../assets/images/grayNotChecked.png')
+                }
+              />
+              <Text style={styles.atLeastText}>At least 5 characters</Text>
+            </View>
           </View>
         </View>
         <View style={styles.btnView}>
-          <TouchableOpacity style={styles.btnContainer}>
-            <Text
-              style={styles.continueText}
-              onPress={() => navigation.navigate('Welcome2')}>
-              Next Step
-            </Text>
+          <TouchableOpacity style={styles.btnContainer} onPress={()=>navigation.navigate("Step2")}>
+            <Text style={styles.continueText} >Next Step</Text>
           </TouchableOpacity>
           {/* <Text style={styles.skipText}>Skip this</Text> */}
         </View>
@@ -81,9 +99,58 @@ const Step1Gender = () => {
   );
 };
 
-export default Step1Gender;
+export default Step1Register;
 
 const styles = StyleSheet.create({
+  atLeastText: {
+    paddingLeft: 10,
+  },
+  containCheck: {
+    width: 20,
+    height: 20,
+  },
+  checkView: {
+    width: '70%',
+    height: 30,
+    marginLeft: '20%',
+    marginTop: '1.2%',
+    flexDirection: 'row',
+    // backgroundColor: 'pink',
+    alignItems: 'center',
+  },
+  containText: {
+    marginLeft: '20%',
+    fontWeight: '700',
+    fontFamily: 'nunitoSan',
+    textTransform: 'uppercase',
+    fontSize: 13,
+    marginTop: '4%',
+    color: '#989DA3',
+  },
+  inputView: {
+    paddingHorizontal: 25,
+    color: 'black',
+    fontWeight: '400',
+  },
+  inputLabel: {
+    position: 'absolute',
+    fontFamily: 'nunitoSan',
+    left: 20,
+    fontWeight: '700',
+    color: '#F55F44',
+    top: -11,
+    paddingHorizontal: 4,
+    backgroundColor: '#fff',
+  },
+  inputContainer: {
+    marginTop: '10%',
+    width: '80%',
+    marginLeft: '10%',
+    height: 50,
+    borderRadius: 25,
+    borderWidth: 1.8,
+    borderColor: 'rgb(211, 222, 232)',
+  },
   lqrHong: {
     position: 'absolute',
     bottom: 0,
@@ -121,8 +188,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     elevation: 4,
     height: '26%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    // flexDirection: 'column',
+    // justifyContent: 'space-between',/
   },
   decribeText: {
     color: '#989DA3',
@@ -139,7 +206,7 @@ const styles = StyleSheet.create({
     marginBottom: '2%',
     fontFamily: 'nunitoSan',
   },
-  contentGender: {
+  contentName: {
     width: '100%',
     height: '22%',
     alignItems: 'center',
@@ -173,7 +240,7 @@ const styles = StyleSheet.create({
   },
   middleView: {
     width: '100%',
-    height: '87%',
+    height: '92%',
     alignItems: 'center',
   },
   twopeopleShadow: {
