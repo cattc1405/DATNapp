@@ -11,11 +11,12 @@ import Checkout4 from './src/authen/Checkout/Checkout4';
 import Checkout5 from './src/authen/Checkout/Checkout5';
 import Checkout6 from './src/authen/Checkout/Checkout6';
 import OrderScreen from './src/authen/Checkout/Checkout1';
+import LoginScreen from './src/authen/Register/Login';
 function App(): React.JSX.Element {
   return (
   <SafeAreaView style={styles.container}>
     <StatusBar/>
-    <OrderScreen/>
+    <LoginScreen/>
   </SafeAreaView>
   );
 }
