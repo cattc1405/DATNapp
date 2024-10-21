@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import Slider from '@react-native-community/slider'; // Đã sửa lỗi import Slider
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
-const Checkuot3 = ({navigation}) => {
+const Checkuot3 = ({ navigation }) => {
   const [pickupTime, setPickupTime] = useState(1); // Thời gian ban đầu được đặt là 1 phút
 
   return (
@@ -21,8 +21,8 @@ const Checkuot3 = ({navigation}) => {
 
       {/* Minh họa */}
       <View style={styles.illustrationContainer}>
-            <Image
-            source={require('../../../assets/images/backroundcheckuot3.png')}/>
+        <Image
+          source={require('../../../assets/images/backroundcheckuot3.png')} />
       </View>
 
       {/* Tiêu đề */}
@@ -49,7 +49,7 @@ const Checkuot3 = ({navigation}) => {
       </View>
 
       {/* Nút "Tiếp tục" */}
-      <TouchableOpacity style={styles.nextButton} onPress={()=>navigation.navigate('PaymentScreen')}>
+      <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('PaymentScreen')}>
         <Text style={styles.nextButtonText}>Tiếp tục</Text>
       </TouchableOpacity>
     </View>
@@ -79,15 +79,18 @@ const styles = StyleSheet.create({
   backText: {
     fontSize: 24,
     color: '#000',
+    fontFamily: 'nunitoSan'
   },
   closeText: {
     fontSize: 28,
     color: '#000',
+    fontFamily: 'nunitoSan'
   },
   stepText: {
     fontSize: 16,
     fontWeight: '600',
     color: '#888',
+    fontFamily: 'nunitoSan'
   },
   illustrationContainer: {
     height: 200,
@@ -106,12 +109,14 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     textAlign: 'center',
     marginBottom: 10,
+    fontFamily: 'nunitoSan'
   },
   description: {
     fontSize: 14,
     textAlign: 'center',
     color: '#777',
     marginBottom: 20,
+    fontFamily: 'nunitoSan'
   },
   sliderContainer: {
     alignItems: 'center',
@@ -136,5 +141,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
+    fontFamily: 'nunitoSan'
   },
 });

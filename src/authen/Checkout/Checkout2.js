@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
-const AddressScreen = ({navigation}) => {
+const AddressScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             {/* Header */}
@@ -52,7 +52,7 @@ const AddressScreen = ({navigation}) => {
             </View>
 
             {/* Next Button */}
-            <TouchableOpacity style={styles.nextButton} onPress={()=>navigation.navigate('Checkout3')}>
+            <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('Checkout3')}>
                 <Text style={styles.nextButtonText}>Next Step</Text>
             </TouchableOpacity>
         </View>
@@ -81,6 +81,7 @@ const styles = StyleSheet.create({
     stepText: {
         fontSize: 16,
         color: '#999',
+        fontFamily: 'nunitoSan'
     },
     closeIcon: {
         width: 20,
@@ -97,12 +98,14 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         marginBottom: 10,
+        fontFamily: 'nunitoSan'
     },
     subText: {
         fontSize: 14,
         color: '#888',
         textAlign: 'center',
         marginBottom: 20,
+        fontFamily: 'nunitoSan'
     },
     addressBox: {
         width: '100%',
@@ -112,8 +115,8 @@ const styles = StyleSheet.create({
         shadowColor: '#000', // Đổ bóng
         marginTop: 30,
         shadowOffset: {
-        width: 0,
-        height: 1,
+            width: 0,
+            height: 1,
 
         },
         shadowOpacity: 0.2,
@@ -125,6 +128,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: '#999',
         marginBottom: 10,
+        fontFamily: 'nunitoSan'
     },
     addressContent: {
         flexDirection: 'row',
@@ -135,6 +139,7 @@ const styles = StyleSheet.create({
     addressTitle: {
         fontSize: 16,
         fontWeight: 'bold',
+        fontFamily: 'nunitoSan'
     },
     deleteIcon: {
         width: 20,
@@ -144,6 +149,7 @@ const styles = StyleSheet.create({
     addressDetails: {
         fontSize: 14,
         color: '#666',
+        fontFamily: 'nunitoSan'
     },
     changeAddressButton: {
         marginTop: 10,
@@ -159,6 +165,7 @@ const styles = StyleSheet.create({
     changeAddressButtonText: {
         color: '#fff',
         fontSize: 14,
+        fontFamily: 'nunitoSan'
     },
     nextButton: {
         backgroundColor: '#ff6347',
@@ -167,11 +174,12 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         alignItems: 'center',
         width: '100%',
-        marginTop: 40   
+        marginTop: 40
     },
     nextButtonText: {
         color: '#fff',
         fontSize: 16,
+        fontFamily: 'nunitoSan'
     },
 });
 

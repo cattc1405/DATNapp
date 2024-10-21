@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         marginVertical: 15,
+        fontFamily: 'nunitoSan'
     },
     description: {
         fontSize: 14,
@@ -80,6 +81,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginVertical: 10,
         paddingHorizontal: 30,
+        fontFamily: 'nunitoSan'
     },
     button: {
         backgroundColor: '#FF6F61',
@@ -92,6 +94,7 @@ const styles = StyleSheet.create({
         color: '#FFF',
         fontSize: 16,
         fontWeight: 'bold',
+        fontFamily: 'nunitoSan'
     },
 });
 

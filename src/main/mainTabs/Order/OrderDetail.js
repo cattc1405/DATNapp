@@ -6,8 +6,8 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import React, {useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import React, { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 const OrderDetail = () => {
   const navigation = useNavigation();
@@ -61,13 +61,13 @@ const OrderDetail = () => {
     },
   ]);
 
-  const renderProductItem = ({item}) => {
+  const renderProductItem = ({ item }) => {
     const isEditing = editingItemId === item.id;
 
     return (
       <View style={styles.productItem}>
         <View
-          style={[styles.imgLeft, isEditing && {width: 0, display: 'none'}]}>
+          style={[styles.imgLeft, isEditing && { width: 0, display: 'none' }]}>
           <Image style={styles.productImg} source={item.imgSrc} />
           <View style={styles.quantityView}>
             <TouchableOpacity style={styles.orangeCircle}>
@@ -143,7 +143,7 @@ const OrderDetail = () => {
           data={productData}
           renderItem={renderProductItem}
           keyExtractor={item => item.id}
-          contentContainerStyle={{paddingBottom: 20}}
+          contentContainerStyle={{ paddingBottom: 20 }}
         />
       </View>
 
@@ -191,6 +191,7 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     fontSize: 12,
     fontWeight: 'bold',
+    fontFamily: 'nunitoSan'
   },
   locateView: {
     flexDirection: 'row',
@@ -203,6 +204,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'white',
     borderBottomWidth: 1,
     fontWeight: 'bold',
+    fontFamily: 'nunitoSan'
   },
   orderText: {
     color: '#fff',
@@ -211,6 +213,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     fontSize: 13,
     fontWeight: 'bold',
+    fontFamily: 'nunitoSan'
   },
   mgnL15: {
     fontSize: 14,
@@ -220,6 +223,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F55F44',
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
+    fontFamily: 'nunitoSan'
   },
   checkoutText: {
     fontFamily: 'nunitoSan',
@@ -295,6 +299,7 @@ const styles = StyleSheet.create({
     marginTop: 3,
     color: 'black',
     fontWeight: 'bold',
+    fontFamily: 'nunitoSan'
   },
   thinGrayText: {
     fontFamily: 'nunitoSan',
@@ -302,6 +307,7 @@ const styles = StyleSheet.create({
     color: '#9D9D9D',
     opacity: 0.5,
     fontWeight: 'bold',
+    fontFamily: 'nunitoSan'
   },
   nameItem: {
     fontFamily: 'nunitoSan',
@@ -316,6 +322,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'black',
     fontWeight: 'bold',
+    fontFamily: 'nunitoSan'
   },
   quantityView: {
     width: '75%',

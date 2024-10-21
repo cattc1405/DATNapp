@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
-const Checkuot5 = ({navigation}) => {
+const Checkuot5 = ({ navigation }) => {
   return (
     <View style={styles.container}>
       {/* Phần đầu (Header) */}
@@ -32,7 +32,7 @@ const Checkuot5 = ({navigation}) => {
       </Text>
 
       {/* Nút hoàn thành */}
-      <TouchableOpacity style={styles.finishButton} onPress={()=>navigation.navigate('Checkout6')}>
+      <TouchableOpacity style={styles.finishButton} onPress={() => navigation.navigate('Checkout6')}>
         <Text style={styles.finishButtonText}>Finish Order</Text>
       </TouchableOpacity>
     </View>
@@ -57,7 +57,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     color: '#888',
-    marginLeft: '40%'
+    marginLeft: '40%',
+    fontFamily: 'nunitoSan'
   },
   closeButton: {
     padding: 10,
@@ -65,6 +66,7 @@ const styles = StyleSheet.create({
   closeText: {
     fontSize: 28,
     color: '#000',
+    fontFamily: 'nunitoSan'
   },
   illustrationContainer: {
     justifyContent: 'center',
@@ -80,14 +82,16 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'black',
     paddingHorizontal: 20,
-    marginBottom: 20
+    marginBottom: 20,
+    fontFamily: 'nunitoSan'
   },
   description: {
     fontSize: 14,
     color: '#666',
     textAlign: 'center',
     lineHeight: 22,
-    marginBottom: '35%'
+    marginBottom: '35%',
+    fontFamily: 'nunitoSan'
   },
   finishButton: {
     backgroundColor: '#FF5733',

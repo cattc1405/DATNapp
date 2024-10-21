@@ -135,6 +135,7 @@ const styles = StyleSheet.create({
     stepText: {
         fontSize: 16,
         fontWeight: 'bold',
+        fontFamily: 'nunitoSan'
     },
     closeButton: {
         padding: 10,
@@ -188,10 +189,12 @@ const styles = StyleSheet.create({
     nextButtonText: {
         color: 'white',
         fontSize: 18,
+        fontFamily: 'nunitoSan'
     },
     skipText: {
         textAlign: 'center',
         color: 'gray',
+        fontFamily: 'nunitoSan'
     },
 });
 

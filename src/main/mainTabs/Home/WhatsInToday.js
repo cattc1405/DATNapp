@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, Image, TouchableOpacity,ImageBackground} from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, ImageBackground } from 'react-native';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 
@@ -14,15 +14,15 @@ const WhatsInToday = () => {
           source={require('../../../../assets/images/redFoodBgr.png')}
         />
         <View style={styles.menuView}>
-          <TouchableOpacity onPress={()=>navigation.goBack()}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <Image
               style={styles.iconMenuView}
               source={require('../../../../assets/images/icons/whiteBackArrow.png')}
             />
           </TouchableOpacity>
 
-          
-          <TouchableOpacity onPress={()=>navigation.navigate("Filter")}>
+
+          <TouchableOpacity onPress={() => navigation.navigate("Filter")}>
             <Image
               style={styles.iconMenuView}
               source={require('../../../../assets/images/icons/FilterIcon.png')}
@@ -33,68 +33,68 @@ const WhatsInToday = () => {
         <Text style={styles.titleBoldText}>What's in Today?</Text>
       </View>
       <ImageBackground
-            style={styles.itemTodayView}
-            source={require('../../../../assets/images/StarbucksOffer.png')}
-            imageStyle={{borderRadius: 15}}>
-            <Image
-              style={styles.productImg}
-              source={require('../../../../assets/images/coffeeStarbucks.png')}
-            />
-            <View style={styles.tagView}>
-              <Image
-                style={styles.logo}
-                source={require('../../../../assets/images/icons/StarbucksLogo.png')}
-              />
-              <Text style={styles.tagText}>NEW</Text>
-            </View>
-            <Text style={styles.brandText}>STARBUCKS</Text>
-            <Text style={styles.describeText}>
-              Buy 2 coffees and get 1 for free!
-            </Text>
-          </ImageBackground>
+        style={styles.itemTodayView}
+        source={require('../../../../assets/images/StarbucksOffer.png')}
+        imageStyle={{ borderRadius: 15 }}>
+        <Image
+          style={styles.productImg}
+          source={require('../../../../assets/images/coffeeStarbucks.png')}
+        />
+        <View style={styles.tagView}>
+          <Image
+            style={styles.logo}
+            source={require('../../../../assets/images/icons/StarbucksLogo.png')}
+          />
+          <Text style={styles.tagText}>NEW</Text>
+        </View>
+        <Text style={styles.brandText}>STARBUCKS</Text>
+        <Text style={styles.describeText}>
+          Buy 2 coffees and get 1 for free!
+        </Text>
+      </ImageBackground>
 
-          <ImageBackground
-            style={styles.itemTodayView}
-            source={require('../../../../assets/images/McDonaldsOffer.png')}
-            imageStyle={{borderRadius: 15}}>
-            <Image
-              style={styles.productImg}
-              source={require('../../../../assets/images/burgurMc.png')}
-            />
-            <View style={styles.tagView}>
-              <Image
-                style={styles.logo}
-                source={require('../../../../assets/images/icons/McDonaldsLogo.png')}
-              />
-              <Text style={styles.tagText}>NEW</Text>
-            </View>
-            <Text style={styles.brandText}>McDonald'S</Text>
-            <Text style={styles.describeText}>
-              2 McMenu Texas, CBO or Big Tasty For only 10.99$*
-            </Text>
-          </ImageBackground>
+      <ImageBackground
+        style={styles.itemTodayView}
+        source={require('../../../../assets/images/McDonaldsOffer.png')}
+        imageStyle={{ borderRadius: 15 }}>
+        <Image
+          style={styles.productImg}
+          source={require('../../../../assets/images/burgurMc.png')}
+        />
+        <View style={styles.tagView}>
+          <Image
+            style={styles.logo}
+            source={require('../../../../assets/images/icons/McDonaldsLogo.png')}
+          />
+          <Text style={styles.tagText}>NEW</Text>
+        </View>
+        <Text style={styles.brandText}>McDonald'S</Text>
+        <Text style={styles.describeText}>
+          2 McMenu Texas, CBO or Big Tasty For only 10.99$*
+        </Text>
+      </ImageBackground>
 
-          <ImageBackground
-            style={styles.itemTodayView}
-            source={require('../../../../assets/images/PizzaOffer.png')}
-            imageStyle={{borderRadius: 15}}>
-            <Image
-              style={styles.productImg}
-              source={require('../../../../assets/images/PizzaDomino.png')}
-            />
-            <View style={styles.tagView}>
-              <Image
-                style={styles.logo}
-                source={require('../../../../assets/images/icons/DominoLogo.png')}
-              />
-              <Text style={styles.tagText}>BEST DEAL</Text>
-            </View>
-            <Text style={styles.brandText}>Domino's</Text>
-            <Text style={styles.describeText}>
-            Buy 3 pizzas and
-get 1 for free!
-            </Text>
-          </ImageBackground>
+      <ImageBackground
+        style={styles.itemTodayView}
+        source={require('../../../../assets/images/PizzaOffer.png')}
+        imageStyle={{ borderRadius: 15 }}>
+        <Image
+          style={styles.productImg}
+          source={require('../../../../assets/images/PizzaDomino.png')}
+        />
+        <View style={styles.tagView}>
+          <Image
+            style={styles.logo}
+            source={require('../../../../assets/images/icons/DominoLogo.png')}
+          />
+          <Text style={styles.tagText}>BEST DEAL</Text>
+        </View>
+        <Text style={styles.brandText}>Domino's</Text>
+        <Text style={styles.describeText}>
+          Buy 3 pizzas and
+          get 1 for free!
+        </Text>
+      </ImageBackground>
     </View>
   );
 };
@@ -137,6 +137,7 @@ const styles = StyleSheet.create({
     marginRight: 20,
     fontWeight: '600',
     color: 'white',
+    fontFamily: 'nunitoSan'
   },
   tagView: {
     borderTopLeftRadius: 20,
@@ -153,9 +154,9 @@ const styles = StyleSheet.create({
   itemTodayView: {
     width: 340,
     height: 145,
-    marginLeft:'10%',
+    marginLeft: '10%',
     borderRadius: 15,
-    marginTop:'3%'
+    marginTop: '3%'
   },
   titleBoldText: {
     fontSize: 23,
@@ -163,7 +164,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     marginLeft: '5%',
-    marginTop:'3%'
+    marginTop: '3%'
 
   },
   iconLogo: {
@@ -188,7 +189,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '23%',
     backgroundColor: 'blue',
-    marginBottom:'10%'
+    marginBottom: '10%'
   },
   redFoodBgr: {
     width: '100%',

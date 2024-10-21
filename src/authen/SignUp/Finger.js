@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#555',
         fontWeight: 'bold',
+        fontFamily: 'nunitoSan'
     },
     imageContainer: {
         justifyContent: 'center',
@@ -106,6 +107,7 @@ const styles = StyleSheet.create({
         color: '#000',
         textAlign: 'center',
         marginBottom: 10,
+        fontFamily: 'nunitoSan'
     },
     description: {
         fontSize: 16,
@@ -113,6 +115,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginHorizontal: 20,
         marginBottom: 30,
+        fontFamily: 'nunitoSan'
     },
     nextButton: {
         backgroundColor: '#FF6F61',
@@ -125,11 +128,13 @@ const styles = StyleSheet.create({
         color: '#FFF',
         fontSize: 18,
         fontWeight: 'bold',
+        fontFamily: 'nunitoSan'
     },
     skipText: {
         color: '#FF6F61',
         fontSize: 16,
         textDecorationLine: 'underline',
+        fontFamily: 'nunitoSan'
     },
 });
 

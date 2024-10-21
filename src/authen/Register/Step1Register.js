@@ -6,12 +6,12 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 const Step1Register = () => {
   const [inputValue, setInputValue] = useState('');
-  const navigation = useNavigation(); 
+  const navigation = useNavigation();
 
   const handleTextChange = text => {
     setInputValue(text);
@@ -89,7 +89,7 @@ const Step1Register = () => {
           </View>
         </View>
         <View style={styles.btnView}>
-          <TouchableOpacity style={styles.btnContainer} onPress={()=>navigation.navigate("Step2")}>
+          <TouchableOpacity style={styles.btnContainer} onPress={() => navigation.navigate("Step2")}>
             <Text style={styles.continueText} >Next Step</Text>
           </TouchableOpacity>
           {/* <Text style={styles.skipText}>Skip this</Text> */}
@@ -104,6 +104,7 @@ export default Step1Register;
 const styles = StyleSheet.create({
   atLeastText: {
     paddingLeft: 10,
+    fontFamily: 'nunitoSan'
   },
   containCheck: {
     width: 20,

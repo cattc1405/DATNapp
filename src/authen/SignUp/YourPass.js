@@ -6,11 +6,11 @@ import {
   TextInput,
   Image,
 } from 'react-native';
-import React, {useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import React, { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 const YourPass = () => {
-  
+
   const [inputValue, setInputValue] = useState('');
   const navigation = useNavigation();
   const handleTextChange = text => {
@@ -293,12 +293,14 @@ const styles = StyleSheet.create({
   stepText: {
     fontSize: 16,
     textAlign: 'center',
+    fontFamily: 'nunitoSan'
   },
   closeButton: {
     padding: 10,
   },
   closeText: {
     fontSize: 24,
+    fontFamily: 'nunitoSan'
   },
   image: {
     width: 200,
@@ -311,12 +313,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 10,
+    fontFamily: 'nunitoSan'
   },
   description: {
     fontSize: 16,
     textAlign: 'center',
     color: '#777',
     marginBottom: 20,
+    fontFamily: 'nunitoSan'
   },
   // inputContainer: {
   //   marginBottom: 20,
@@ -333,7 +337,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     borderRadius: 10,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 2,
@@ -363,7 +367,7 @@ const styles = StyleSheet.create({
     padding: 15,
     backgroundColor: '#F55F44',
     borderRadius: 10,
-    marginTop:10,
+    marginTop: 10,
     alignItems: 'center',
     marginBottom: 20,
   },
@@ -371,6 +375,7 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 16,
     fontWeight: 'bold',
+    fontFamily: 'nunitoSan'
   },
 });
 

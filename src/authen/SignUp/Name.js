@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 
 const Name = props => {
-  const {navigation} = props;
+  const { navigation } = props;
   const [inputValue, setInputValue] = useState('');
   const handleTextChange = text => {
     setInputValue(text);
@@ -18,7 +18,7 @@ const Name = props => {
     <View style={styles.container}>
       {/* Tiêu đề bước */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={()=>navigation.goBack()}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image
             source={require('../../../assets/images/Back.png')}
             style={styles.icon}
@@ -83,6 +83,7 @@ const Name = props => {
 const styles = StyleSheet.create({
   atLeastText: {
     paddingLeft: 10,
+    fontFamily: 'nunitoSan'
   },
   containCheck: {
     width: 20,
@@ -124,6 +125,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#555',
     fontWeight: 'bold',
+    fontFamily: 'nunitoSan'
   },
   illustrationContainer: {
     justifyContent: 'center',
@@ -141,6 +143,7 @@ const styles = StyleSheet.create({
     color: '#000',
     textAlign: 'center',
     marginBottom: 10,
+    fontFamily: 'nunitoSan'
   },
   description: {
     fontSize: 16,
@@ -148,6 +151,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginHorizontal: 20,
     marginBottom: 20,
+    fontFamily: 'nunitoSan'
   },
   inputContainer: {
     width: '90%',
@@ -162,6 +166,7 @@ const styles = StyleSheet.create({
     color: '#FF6F61',
     fontWeight: 'bold',
     marginBottom: 8,
+    fontFamily: 'nunitoSan'
   },
   input: {
     width: '100%',
@@ -176,6 +181,7 @@ const styles = StyleSheet.create({
   inputHint: {
     fontSize: 12,
     color: '#888',
+    fontFamily: 'nunitoSan'
   },
   inputRequirement: {
     fontSize: 12,
@@ -194,6 +200,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',
+    fontFamily: 'nunitoSan'
   },
 });
 

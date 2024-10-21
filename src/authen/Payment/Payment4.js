@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 
-const Payment4 = ({navigation}) => {
+const Payment4 = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -17,7 +17,7 @@ const Payment4 = ({navigation}) => {
             <Text style={styles.description}>
                 Your order has been successfully completed. Within moments you will receive a notification with the receipt of your purchase and you can track every step of your order.
             </Text>
-            <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('Product')}>
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Product')}>
                 <Text style={styles.buttonText}>Finish Order</Text>
             </TouchableOpacity>
         </View>
@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         left: '50%',
         transform: [{ translateX: -40 }], // Điều chỉnh để căn giữa chính xác
+        fontFamily: 'nunitoSan'
     },
     closeButton: {
         position: 'absolute',
@@ -70,6 +71,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         marginVertical: 15,
+        fontFamily: 'nunitoSan'
     },
     description: {
         fontSize: 14,
@@ -77,6 +79,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginVertical: 15,
         paddingHorizontal: 30,
+        fontFamily: 'nunitoSan'
     },
     button: {
         backgroundColor: '#FF6F61',
@@ -89,6 +92,7 @@ const styles = StyleSheet.create({
         color: '#FFF',
         fontSize: 16,
         fontWeight: 'bold',
+        fontFamily: 'nunitoSan'
     },
 });
 

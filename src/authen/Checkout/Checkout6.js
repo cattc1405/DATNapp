@@ -45,9 +45,9 @@ const Checkout6 = () => {
                     <View style={styles.restaurantDetails}>
                         <Text style={styles.restaurantName}>McDonald's</Text>
                         <Text style={styles.restaurantLocation}>Brooklyn NY</Text>
-                        <View style={{flexDirection:'row'}}>
+                        <View style={{ flexDirection: 'row' }}>
                             <Text style={styles.restaurantRating}>★ ★ ★ ★ ★ </Text>
-                            <Text style={{ color: '#888888', marginTop:6 }}>(960 reviews)</Text>
+                            <Text style={{ color: '#888888', marginTop: 6 }}>(960 reviews)</Text>
                         </View>
                     </View>
                 </View>
@@ -84,11 +84,13 @@ const styles = StyleSheet.create({
     backText: {
         fontSize: 24,
         color: '#000',
+        fontFamily: 'nunitoSan'
     },
     stepText: {
         fontSize: 14,
         fontWeight: '600',
         color: '#888',
+        fontFamily: 'nunitoSan'
     },
     closeButton: {
         padding: 10,
@@ -96,6 +98,7 @@ const styles = StyleSheet.create({
     closeText: {
         fontSize: 28,
         color: '#000',
+        fontFamily: 'nunitoSan'
     },
     illustrationContainer: {
         justifyContent: 'center',
@@ -113,6 +116,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         color: 'black',
         paddingHorizontal: 25,
+        fontFamily: 'nunitoSan'
     },
     subtitle: {
         fontSize: 14,
@@ -120,6 +124,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginBottom: 20,
         paddingHorizontal: 30,
+        fontFamily: 'nunitoSan'
     },
     restaurantCard: {
         backgroundColor: '#f5f5f5',
@@ -179,7 +184,7 @@ const styles = StyleSheet.create({
         height: 38,
         position: 'absolute',
         bottom: 0,
-        right: 0  
+        right: 0
     },
     changeButtonText: {
         color: '#fff',

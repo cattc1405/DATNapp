@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity, Dimensions } from 'react-native';
 
 const { width, height } = Dimensions.get('window'); // Lấy chiều rộng và chiều cao của màn hình
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
-const OrderScreen = ({navigation}) => {
+const OrderScreen = ({ navigation }) => {
   const [selectedOption, setSelectedOption] = useState(null);
 
   const handleOptionPress = (option) => {
@@ -59,7 +59,7 @@ const OrderScreen = ({navigation}) => {
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity style={styles.nextButton} onPress={()=>navigation.navigate('AddressScreen')}> 
+      <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('AddressScreen')}>
         <Text style={styles.nextButtonText}>Bước Tiếp Theo</Text>
       </TouchableOpacity>
     </View>
@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#999',
     marginBottom: 10,
+    fontFamily: 'nunitoSan'
   },
   closeIcon: {
     width: 20,
@@ -104,12 +105,14 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',
+    fontFamily: 'nunitoSan'
   },
   subText: {
     fontSize: 14,
     color: '#888',
     textAlign: 'center',
     marginBottom: 20,
+    fontFamily: 'nunitoSan'
   },
   optionsContainer: {
     flexDirection: 'row',
@@ -129,7 +132,7 @@ const styles = StyleSheet.create({
   },
   optionSelected: {
     borderColor: 'black',
-  },  
+  },
   icon: {
     width: width * 0.2, // Kích thước icon là 20% chiều rộng màn hình
     height: width * 0.2,
@@ -139,6 +142,7 @@ const styles = StyleSheet.create({
   optionText: {
     fontSize: 14,
     color: '#333',
+    fontFamily: 'nunitoSan'
   },
   nextButton: {
     backgroundColor: '#ff6347',
@@ -151,6 +155,7 @@ const styles = StyleSheet.create({
   nextButtonText: {
     color: '#fff',
     fontSize: 16,
+    fontFamily: 'nunitoSan'
   },
 });
 

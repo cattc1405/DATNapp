@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -8,7 +8,7 @@ import {
   Image,
 } from 'react-native';
 
-const LoginScreen = ({navigation}) => {
+const LoginScreen = ({ navigation }) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   return (
@@ -141,6 +141,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#333',
     marginBottom: 5,
+    fontFamily: 'nunitoSan'
   },
   input: {
     height: 50,
@@ -168,6 +169,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginBottom: 15,
     textAlign: 'right',
+    fontFamily: 'nunitoSan'
   },
   loginButton: {
     backgroundColor: '#ff7f50',
@@ -180,6 +182,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+    fontFamily: 'nunitoSan'
   },
   signupContainer: {
     flexDirection: 'row',
@@ -189,17 +192,20 @@ const styles = StyleSheet.create({
   signupText: {
     fontSize: 14,
     color: '#333',
+    fontFamily: 'nunitoSan'
   },
   signupLink: {
     fontSize: 14,
     color: '#ff7f50',
     fontWeight: 'bold',
+    fontFamily: 'nunitoSan'
   },
   signInWithText: {
     textAlign: 'center',
     marginVertical: 10,
     color: '#333',
     fontSize: 14,
+    fontFamily: 'nunitoSan'
   },
   socialButtonsContainer: {
     flexDirection: 'row',
@@ -222,6 +228,7 @@ const styles = StyleSheet.create({
   socialButtonText: {
     fontSize: 14,
     color: '#333',
+    fontFamily: 'nunitoSan'
   },
   signInContainer: {
     flexDirection: 'row',
