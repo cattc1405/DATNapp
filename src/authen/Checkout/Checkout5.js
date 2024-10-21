@@ -1,7 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
-const Checkuot5 = () => {
+const Checkuot5 = ({navigation}) => {
   return (
     <View style={styles.container}>
       {/* Phần đầu (Header) */}
@@ -31,7 +32,7 @@ const Checkuot5 = () => {
       </Text>
 
       {/* Nút hoàn thành */}
-      <TouchableOpacity style={styles.finishButton}>
+      <TouchableOpacity style={styles.finishButton} onPress={()=>navigation.navigate('Checkout6')}>
         <Text style={styles.finishButtonText}>Finish Order</Text>
       </TouchableOpacity>
     </View>

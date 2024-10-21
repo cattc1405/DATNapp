@@ -3,25 +3,40 @@ import {
   Text,
   View,
   Image,
+  Modal,
   TouchableOpacity,
   ImageBackground,
   ScrollView,
 } from 'react-native';
-import React from 'react';
-import { useNavigation } from '@react-navigation/native';
+import React, {useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
+import SlideNav from '../../slidenav/SlideNav';
 
 const Home = () => {
   const navigation = useNavigation();
+  const [isSlideNavVisible, setIsSlideNavVisible] = useState(false);
 
+  const toggleSlideNav = () => {
+    setIsSlideNavVisible(!isSlideNavVisible);
+  };
   return (
     <View style={styles.container}>
+      <Modal
+        visible={isSlideNavVisible}
+        animationType="fade"
+        transparent={true}
+        onRequestClose={toggleSlideNav}>
+        <View style={styles.modalContainer}>
+          <SlideNav onClose={toggleSlideNav} />
+        </View>
+      </Modal>
       <View style={styles.headView}>
         <Image
           style={styles.redFoodBgr}
           source={require('../../../../assets/images/redFoodBgr.png')}
         />
         <View style={styles.menuView}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={toggleSlideNav}>
             <Image
               style={styles.iconMenuView}
               source={require('../../../../assets/images/MenuIcon.png')}
@@ -67,7 +82,7 @@ const Home = () => {
       <View style={styles.mainView}>
         <View style={styles.titleAndViewall}>
           <Text style={styles.titleBoldText}>What's in Today?</Text>
-          <TouchableOpacity onPress={()=>navigation.navigate("WhatsInToday")          }>
+          <TouchableOpacity onPress={() => navigation.navigate('WhatsInToday')}>
             <Text style={styles.viewallText}>View All</Text>
           </TouchableOpacity>
         </View>
@@ -144,76 +159,89 @@ const Home = () => {
             <Text style={styles.viewallText}>View All</Text>
           </TouchableOpacity>
         </View>
-        <ScrollView style={styles.popularView} horizontal showsHorizontalScrollIndicator={false}>
-          <ImageBackground
-            style={styles.itemPopularView}
-            source={require('../../../../assets/images/McDonaldimg.png')}
-            imageStyle={{borderRadius: 15}}>
-            <View style={styles.tagBrand}>
-              <View style={styles.bestTag}>
-                <Text style={styles.bestText}>BEST OFFER</Text>
+        <ScrollView
+          style={styles.popularView}
+          horizontal
+          showsHorizontalScrollIndicator={false}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('RestaurantStack', {screen: 'BrandDetails'})
+            }>
+            <ImageBackground
+              style={styles.itemPopularView}
+              source={require('../../../../assets/images/Starbucksimg.png')}
+              imageStyle={{borderRadius: 15}}>
+              <View style={styles.tagBrand}>
+                <View style={styles.bestTag}>
+                  <Text style={styles.bestText}>BEST OFFER</Text>
+                </View>
+                <Text style={styles.nameText}>McDonald's</Text>
+                <View style={styles.starView}>
+                  <Image
+                    style={styles.starIcon}
+                    source={require('../../../../assets/images/icons/StarBold.png')}
+                  />
+                  <Image
+                    style={styles.starIcon}
+                    source={require('../../../../assets/images/icons/StarBold.png')}
+                  />
+                  <Image
+                    style={styles.starIcon}
+                    source={require('../../../../assets/images/icons/StarBold.png')}
+                  />
+                  <Image
+                    style={styles.starIcon}
+                    source={require('../../../../assets/images/icons/StarBold.png')}
+                  />
+                  <Image
+                    style={styles.starIcon}
+                    source={require('../../../../assets/images/icons/StarLight.png')}
+                  />
+                  <Text style={styles.thinText}>(694) | 0.3km away</Text>
+                </View>
               </View>
-              <Text style={styles.nameText}>McDonald's</Text>
-              <View style={styles.starView}>
-                <Image
-                  style={styles.starIcon}
-                  source={require('../../../../assets/images/icons/StarBold.png')}
-                />
-                <Image
-                  style={styles.starIcon}
-                  source={require('../../../../assets/images/icons/StarBold.png')}
-                />
-                <Image
-                  style={styles.starIcon}
-                  source={require('../../../../assets/images/icons/StarBold.png')}
-                />
-                <Image
-                  style={styles.starIcon}
-                  source={require('../../../../assets/images/icons/StarBold.png')}
-                />
-                <Image
-                  style={styles.starIcon}
-                  source={require('../../../../assets/images/icons/StarLight.png')}
-                />
-                <Text style={styles.thinText}>(694) | 0.3km away</Text>
-              </View>
-            </View>
-          </ImageBackground>
+            </ImageBackground>
+          </TouchableOpacity>
 
-          <ImageBackground
-            style={styles.itemPopularView}
-            source={require('../../../../assets/images/McDonaldimg.png')}
-            imageStyle={{borderRadius: 15}}>
-            <View style={styles.tagBrand}>
-              <View style={styles.bestTag}>
-                <Text style={styles.bestText}>BEST OFFER</Text>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('RestaurantStack', {screen: 'BrandDetails'})
+            }>
+            <ImageBackground
+              style={styles.itemPopularView}
+              source={require('../../../../assets/images/Starbucksimg.png')}
+              imageStyle={{borderRadius: 15}}>
+              <View style={styles.tagBrand}>
+                <View style={styles.bestTag}>
+                  <Text style={styles.bestText}>BEST OFFER</Text>
+                </View>
+                <Text style={styles.nameText}>McDonald's</Text>
+                <View style={styles.starView}>
+                  <Image
+                    style={styles.starIcon}
+                    source={require('../../../../assets/images/icons/StarBold.png')}
+                  />
+                  <Image
+                    style={styles.starIcon}
+                    source={require('../../../../assets/images/icons/StarBold.png')}
+                  />
+                  <Image
+                    style={styles.starIcon}
+                    source={require('../../../../assets/images/icons/StarBold.png')}
+                  />
+                  <Image
+                    style={styles.starIcon}
+                    source={require('../../../../assets/images/icons/StarBold.png')}
+                  />
+                  <Image
+                    style={styles.starIcon}
+                    source={require('../../../../assets/images/icons/StarLight.png')}
+                  />
+                  <Text style={styles.thinText}>(694) | 0.3km away</Text>
+                </View>
               </View>
-              <Text style={styles.nameText}>McDonald's</Text>
-              <View style={styles.starView}>
-                <Image
-                  style={styles.starIcon}
-                  source={require('../../../../assets/images/icons/StarBold.png')}
-                />
-                <Image
-                  style={styles.starIcon}
-                  source={require('../../../../assets/images/icons/StarBold.png')}
-                />
-                <Image
-                  style={styles.starIcon}
-                  source={require('../../../../assets/images/icons/StarBold.png')}
-                />
-                <Image
-                  style={styles.starIcon}
-                  source={require('../../../../assets/images/icons/StarBold.png')}
-                />
-                <Image
-                  style={styles.starIcon}
-                  source={require('../../../../assets/images/icons/StarLight.png')}
-                />
-                <Text style={styles.thinText}>(694) | 0.3km away</Text>
-              </View>
-            </View>
-          </ImageBackground>
+            </ImageBackground>
+          </TouchableOpacity>
         </ScrollView>
       </View>
     </View>
@@ -223,8 +251,17 @@ const Home = () => {
 export default Home;
 
 const styles = StyleSheet.create({
+  modalContainer: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
   popularView: {
-    height:200,
+    height: 200,
   },
   thinText: {
     paddingLeft: 3,
@@ -278,7 +315,7 @@ const styles = StyleSheet.create({
     bottom: -20,
   },
   itemPopularView: {
-    marginLeft:20,
+    marginLeft: 20,
     width: 250,
     height: 160,
   },
@@ -333,7 +370,7 @@ const styles = StyleSheet.create({
   itemTodayView: {
     width: 300,
     height: 125,
-    marginLeft:20,
+    marginLeft: 20,
     borderRadius: 15,
     marginRight: 10,
   },

@@ -10,8 +10,7 @@ import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 
 const Product = () => {
-
-    const navigation = useNavigation();
+  const navigation = useNavigation();
 
   const [selectedType, setSelectedType] = useState();
   const [selectedDrink, setSelectedDrink] = useState(null);
@@ -146,9 +145,7 @@ const Product = () => {
           </TouchableOpacity>
         </View>
         {/* drink */}
-        <Text style={styles.grayNormalText}>
-          What is the size of your burguer?
-        </Text>
+        <Text style={styles.grayNormalText}>What do you want to drink?</Text>
         <View style={styles.optionDrinkView}>
           <TouchableOpacity
             style={[
@@ -255,7 +252,7 @@ const Product = () => {
 
         {/* sth out */}
         <Text style={styles.grayNormalText}>
-          What is the size of your burguer?
+          Do you want to take something out?
         </Text>
         <View style={styles.optionDrinkView}>
           <TouchableOpacity
@@ -336,7 +333,9 @@ const Product = () => {
         </View>
         <View style={styles.spaceView} />
       </ScrollView>
-      <TouchableOpacity style={styles.addBtn}  onPress={()=>navigation.navigate('OrderDetail')}>
+      <TouchableOpacity
+        style={styles.addBtn}
+        onPress={() => navigation.navigate('OrderDetail')}>
         <Text style={styles.addText}>Add to Order</Text>
       </TouchableOpacity>
     </View>

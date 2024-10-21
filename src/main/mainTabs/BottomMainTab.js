@@ -1,7 +1,7 @@
-import {StyleSheet, Text, View, Image} from 'react-native';
+import {StyleSheet,Modal, Text, View, Image} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
-import React from 'react';
+import React,{useState} from 'react';
 import Home from './Home/Home';
 import OrderDetail from './Order/OrderDetail';
 import Restaurants from './restaurants';
@@ -14,11 +14,18 @@ import SlideNav from '../slidenav/SlideNav';
 import ConfirmOrder from './Order/ConfimOrder';
 import Product from './Order/Product';
 import Order from './Order/Order';
+import Restaurant1 from './Restaurant/Restaurant1';
+import PaymentNavigation from '../../authen/Payment/PaymentNavigation';
+import BrandDetails from './Restaurant/BrandDetails';
+import CheckoutNavigator from '../../authen/Checkout/CheckoutNavigator';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 const HomeStack = () => {
+
+
+
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -39,6 +46,11 @@ const HomeStack = () => {
           tabBarStyle: {display: 'none'},
         }}
       />
+      <Stack.Screen
+        name="SlideNav"
+        component={SlideNav}
+        options={{headerShown: false}}
+      />
     </Stack.Navigator>
   );
 };
@@ -46,11 +58,11 @@ const HomeStack = () => {
 const OrderStack = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen
+      {/* <Stack.Screen
         name="Order"
         component={Order}
         options={{headerShown: false}}
-      />
+      /> */}
       <Stack.Screen
         name="Product"
         component={Product}
@@ -65,6 +77,33 @@ const OrderStack = () => {
       <Stack.Screen
         name="ConfirmOrder"
         component={ConfirmOrder}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="CheckoutNavigator"
+        component={CheckoutNavigator}
+        options={{headerShown: false}}
+      />
+    </Stack.Navigator>
+  );
+};
+
+const RestaurantStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Restaurant1"
+        component={Restaurant1}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="BrandDetails"
+        component={BrandDetails}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Filter"
+        component={Filter}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
@@ -88,7 +127,7 @@ const tabScreenOptions = ({route}) => {
         iconSource = focused
           ? require('../../../assets/images/icons/HomeGreen.png')
           : require('../../../assets/images/icons/HomeGray.png');
-      } else if (route.name === 'Restaurants') {
+      } else if (route.name === 'RestaurantStack') {
         iconSource = focused
           ? require('../../../assets/images/icons/RestaurantsRed.png')
           : require('../../../assets/images/icons/RestaurantsGray.png');
@@ -118,22 +157,28 @@ const tabScreenOptions = ({route}) => {
 
 const BottomMainTab = () => {
   return (
-    <NavigationContainer>
-      <Tab.Navigator screenOptions={tabScreenOptions}>
-        <Tab.Screen
-          name="HomeStack"
-          component={HomeStack}
-          options={{title: 'Home'}}
-        />
-        <Tab.Screen name="Restaurants" component={SlideNav} />
-        <Tab.Screen
-          name="OrderStack"
-          component={OrderStack}
-          options={{title: 'Order'}}
-        />
-        <Tab.Screen name="Rewards" component={Rewards} />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <Tab.Navigator screenOptions={tabScreenOptions}>
+      <Tab.Screen
+        name="HomeStack"
+        component={HomeStack}
+        options={{title: 'Home'}}
+      />
+      <Tab.Screen
+        name="RestaurantStack"
+        component={RestaurantStack}
+        options={{title: 'Restaurants'}}
+      />
+      <Tab.Screen
+        name="OrderStack"
+        component={OrderStack}
+        options={{title: 'Order'}}
+      />
+      <Tab.Screen
+        name="Rewards"
+        component={Rewards}
+        options={{title: 'Rewards'}}
+      />
+    </Tab.Navigator>
   );
 };
 

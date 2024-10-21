@@ -7,20 +7,21 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React, {useState} from 'react';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 const Step3Register = () => {
   const [inputValue, setInputValue] = useState('');
-const navigation = useNavigation(); 
+  const navigation = useNavigation();
   const handleTextChange = text => {
     setInputValue(text);
   };
   return (
     <View style={styles.container}>
-      
       <View style={styles.mainContents}>
         <View style={styles.topView}>
-          <TouchableOpacity style={styles.iconTopView} onPress={()=>navigation.goBack()}>
+          <TouchableOpacity
+            style={styles.iconTopView}
+            onPress={() => navigation.goBack()}>
             <Image
               style={styles.iconTop}
               source={require('../../../assets/images/backArrow.png')}
@@ -43,11 +44,11 @@ const navigation = useNavigation();
             style={styles.setPassImg}
             source={require('../../../assets/images/setPasswordImg.png')}
           />
-         
+
           <View style={styles.contentPass}>
             <Text style={styles.passText}>Set Your Password</Text>
             <Text style={styles.decribeText}>
-            In order to keep your account safe you need
+              In order to keep your account safe you need
             </Text>
             <Text style={styles.decribeText}>to create a strong password.</Text>
           </View>
@@ -59,7 +60,7 @@ const navigation = useNavigation();
                 secureTextEntry={true}
                 placeholder="Example: John Smith"
                 placeholderTextColor="rgb(177, 189, 199)"
-                onChangeText={handleTextChange} 
+                onChangeText={handleTextChange}
                 value={inputValue}
               />
               <Text style={styles.inputLabel}>Password</Text>
@@ -75,7 +76,6 @@ const navigation = useNavigation();
               <Text style={styles.inputLabel}>confirm password</Text>
             </View>
 
-
             <Text style={styles.containText}>Your password must contain</Text>
             <View style={styles.checkView}>
               <Image
@@ -86,7 +86,9 @@ const navigation = useNavigation();
                     : require('../../../assets/images/grayNotChecked.png')
                 }
               />
-              <Text style={styles.atLeastText}>Between 8 and 20 characters</Text>
+              <Text style={styles.atLeastText}>
+                Between 8 and 20 characters
+              </Text>
             </View>
             <View style={styles.checkView}>
               <Image
@@ -119,7 +121,9 @@ const navigation = useNavigation();
                     : require('../../../assets/images/grayNotChecked.png')
                 }
               />
-              <Text style={styles.atLeastText}>1 or more special characters</Text>
+              <Text style={styles.atLeastText}>
+                1 or more special characters
+              </Text>
             </View>
           </View>
         </View>
@@ -140,7 +144,7 @@ const styles = StyleSheet.create({
   atLeastText: {
     paddingLeft: 10,
     fontSize: 13,
-    fontFamily:'nunitoSan'
+    fontFamily: 'nunitoSan',
   },
   containCheck: {
     width: 17,
@@ -151,7 +155,7 @@ const styles = StyleSheet.create({
     height: 25,
     marginLeft: '20%',
     marginTop: '1.2%',
-    marginBottom:'-1%',
+    marginBottom: '-1%',
     flexDirection: 'row',
     // backgroundColor: 'pink',
     alignItems: 'center',
@@ -171,7 +175,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
   },
   inputLabel: {
-    textTransform:'uppercase',
+    textTransform: 'uppercase',
     position: 'absolute',
     fontFamily: 'nunitoSan',
     left: 20,
@@ -185,13 +189,13 @@ const styles = StyleSheet.create({
     marginTop: '10%',
     width: '80%',
     marginLeft: '10%',
-    marginBottom:'-4%',
+    marginBottom: '-4%',
     height: 50,
     borderRadius: 25,
     borderWidth: 1.8,
     borderColor: 'rgb(211, 222, 232)',
   },
- 
+
   checkedgenderText: {
     color: 'black',
     alignSelf: 'center',
@@ -265,7 +269,7 @@ const styles = StyleSheet.create({
   btnView: {
     width: '100%',
     height: '15%',
-      // backgroundColor: 'red',
+    // backgroundColor: 'red',
     alignItems: 'center',
   },
   middleView: {
@@ -273,7 +277,7 @@ const styles = StyleSheet.create({
     height: '92%',
     alignItems: 'center',
   },
-  
+
   setPassImg: {
     width: '40%',
     height: '25%',

@@ -1,141 +1,144 @@
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
 
-const SlideNav = () => {
+const SlideNav = ({ onClose }) => {
   return (
     <View style={styles.container}>
-      <View style={styles.headView}>
-        <Image
-          style={styles.redFoodBgr}
-          source={require('../../../assets/images/redFoodBgr.png')}
-          borderTopRightRadius={30}
-        />
-        <View style={styles.menuView}>
-          <TouchableOpacity>
-            <Image
-              style={styles.iconMenuView}
-              source={require('../../../assets/images/icons/whiteBackArrow.png')}
-            />
+      <View style={styles.leftContainer}>
+        <View style={styles.headView}>
+          <Image
+            style={styles.redFoodBgr}
+            source={require('../../../assets/images/redFoodBgr.png')}
+            borderTopRightRadius={30}
+          />
+          <View style={styles.menuView}>
+            <TouchableOpacity onPress={onClose}>
+              <Image
+                style={styles.iconMenuView}
+                source={require('../../../assets/images/icons/whiteBackArrow.png')}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={styles.mainView}>
+          <Image
+            style={styles.avatar}
+            source={require('../../../assets/images/avatar.jpg')}
+          />
+          <TouchableOpacity style={styles.upgradeBtn}>
+            <Text style={styles.upgradeText}>Upgrade</Text>
           </TouchableOpacity>
-        </View>
-        <Image
-          style={styles.avatar}
-          source={require('../../../assets/images/avatar.jpg')}
-        />
-        <TouchableOpacity style={styles.upgradeBtn}>
-          <Text style={styles.upgradeText}>Upgrade</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.mainView}>
-        <View style={styles.spaceBetwnView}>
-          <View style={styles.nameAndCountry}>
-            <View style={styles.nameAndEditView}>
-              <Text style={styles.nameText}>Mafalda Matias</Text>
-              <Image
-                style={styles.editIcon}
-                source={require('../../../assets/images/icons/editPencil.png')}
-              />
+          <View style={styles.spaceBetwnView}>
+            <View style={styles.nameAndCountry}>
+              <View style={styles.nameAndEditView}>
+                <Text style={styles.nameText}>Mafalda Matias</Text>
+                <Image
+                  style={styles.editIcon}
+                  source={require('../../../assets/images/icons/editPencil.png')}
+                />
+              </View>
+              <Text style={styles.countryText}>New York, USA</Text>
             </View>
-            <Text style={styles.countryText}>New York, USA</Text>
-          </View>
-          <View style={styles.lineView} />
-          <Text style={styles.titleBoldText}>Account</Text>
-          <View style={styles.accProperties}>
-            <TouchableOpacity style={styles.properView}>
-              <Text style={styles.titleProper}>Personal Information</Text>
-              <Text style={styles.valueProper}></Text>
-              <Image
-                style={styles.arrowGray}
-                source={require('../../../assets/images/icons/grayArrow.png')}
-              />
-            </TouchableOpacity>
+            <View style={styles.lineView} />
+            <Text style={styles.titleBoldText}>Account</Text>
+            <View style={styles.accProperties}>
+              <TouchableOpacity style={styles.properView}>
+                <Text style={styles.titleProper}>Personal Information</Text>
+                <Text style={styles.valueProper}></Text>
+                <Image
+                  style={styles.arrowGray}
+                  source={require('../../../assets/images/icons/grayArrow.png')}
+                />
+              </TouchableOpacity>
 
-            <TouchableOpacity style={styles.properView}>
-              <Text style={styles.titleProper}>Edit Profile</Text>
-              <Text style={styles.valueProper}></Text>
-              <Image
-                style={styles.arrowGray}
-                source={require('../../../assets/images/icons/grayArrow.png')}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.properView}>
-              <Text style={styles.titleProper}>Country</Text>
-              <Text style={styles.valueProper}>New York</Text>
-              <Image
-                style={styles.arrowGray}
-                source={require('../../../assets/images/icons/grayArrow.png')}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.properView}>
-              <Text style={styles.titleProper}>Language</Text>
-              <Text style={styles.valueProper}>English</Text>
-              <Image
-                style={styles.arrowGray}
-                source={require('../../../assets/images/icons/grayArrow.png')}
-              />
-            </TouchableOpacity>
-          </View>
+              <TouchableOpacity style={styles.properView}>
+                <Text style={styles.titleProper}>Edit Profile</Text>
+                <Text style={styles.valueProper}></Text>
+                <Image
+                  style={styles.arrowGray}
+                  source={require('../../../assets/images/icons/grayArrow.png')}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.properView}>
+                <Text style={styles.titleProper}>Country</Text>
+                <Text style={styles.valueProper}>New York</Text>
+                <Image
+                  style={styles.arrowGray}
+                  source={require('../../../assets/images/icons/grayArrow.png')}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.properView}>
+                <Text style={styles.titleProper}>Language</Text>
+                <Text style={styles.valueProper}>English</Text>
+                <Image
+                  style={styles.arrowGray}
+                  source={require('../../../assets/images/icons/grayArrow.png')}
+                />
+              </TouchableOpacity>
+            </View>
 
-          {/* General */}
-          <Text style={styles.titleBoldText}>General</Text>
-          <View style={styles.accProperties}>
-            <TouchableOpacity style={styles.properView}>
-              <Text style={styles.titleProper}>Notifications</Text>
-              <Text style={styles.valueProper}></Text>
-              <Image
-                style={styles.arrowGray}
-                source={require('../../../assets/images/icons/grayArrow.png')}
-              />
-            </TouchableOpacity>
+            {/* General */}
+            <Text style={styles.titleBoldText}>General</Text>
+            <View style={styles.accProperties}>
+              <TouchableOpacity style={styles.properView}>
+                <Text style={styles.titleProper}>Notifications</Text>
+                <Text style={styles.valueProper}></Text>
+                <Image
+                  style={styles.arrowGray}
+                  source={require('../../../assets/images/icons/grayArrow.png')}
+                />
+              </TouchableOpacity>
 
-            <TouchableOpacity style={styles.properView}>
-              <Text style={styles.titleProper}>Dark Mode</Text>
-              <Text style={styles.valueProper}></Text>
-              <Image
-                style={styles.arrowGray}
-                source={require('../../../assets/images/icons/grayArrow.png')}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.properView}>
-              <Text style={styles.titleProper}>Touch ID and Password</Text>
-              <Text style={styles.valueProper}></Text>
-              <Image
-                style={styles.arrowGray}
-                source={require('../../../assets/images/icons/grayArrow.png')}
-              />
-            </TouchableOpacity>
-          </View>
-          {/* Help and sp */}
-          <Text style={styles.titleBoldText}>Help and support</Text>
-          <View style={styles.accProperties}>
-            <TouchableOpacity style={styles.properView}>
-              <Text style={styles.titleProper}>Privacy and Security</Text>
-              <Text style={styles.valueProper}></Text>
-              <Image
-                style={styles.arrowGray}
-                source={require('../../../assets/images/icons/grayArrow.png')}
-              />
-            </TouchableOpacity>
+              <TouchableOpacity style={styles.properView}>
+                <Text style={styles.titleProper}>Dark Mode</Text>
+                <Text style={styles.valueProper}></Text>
+                <Image
+                  style={styles.arrowGray}
+                  source={require('../../../assets/images/icons/grayArrow.png')}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.properView}>
+                <Text style={styles.titleProper}>Touch ID and Password</Text>
+                <Text style={styles.valueProper}></Text>
+                <Image
+                  style={styles.arrowGray}
+                  source={require('../../../assets/images/icons/grayArrow.png')}
+                />
+              </TouchableOpacity>
+            </View>
+            {/* Help and sp */}
+            <Text style={styles.titleBoldText}>Help and support</Text>
+            <View style={styles.accProperties}>
+              <TouchableOpacity style={styles.properView}>
+                <Text style={styles.titleProper}>Privacy and Security</Text>
+                <Text style={styles.valueProper}></Text>
+                <Image
+                  style={styles.arrowGray}
+                  source={require('../../../assets/images/icons/grayArrow.png')}
+                />
+              </TouchableOpacity>
 
-            <TouchableOpacity style={styles.properView}>
-              <Text style={styles.titleProper}>About Us</Text>
-              <Text style={styles.valueProper}></Text>
+              <TouchableOpacity style={styles.properView}>
+                <Text style={styles.titleProper}>About Us</Text>
+                <Text style={styles.valueProper}></Text>
+                <Image
+                  style={styles.arrowGray}
+                  source={require('../../../assets/images/icons/grayArrow.png')}
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.lineView} />
+            <TouchableOpacity style={styles.logoutView} onPress={()=>NavigationContainer.navigate('Auth')}>
               <Image
-                style={styles.arrowGray}
-                source={require('../../../assets/images/icons/grayArrow.png')}
+                style={styles.iconLogout}
+                source={require('../../../assets/images/icons/logoutIcon.png')}
               />
+              <Text style={styles.logoutText}>Log Out</Text>
             </TouchableOpacity>
-          </View>
-          <View style={styles.lineView} />
-          <View style={styles.logoutView}>
-            <Image
-              style={styles.iconLogout}
-              source={require('../../../assets/images/icons/logoutIcon.png')}
-            />
-            <Text style={styles.logoutText}>Log Out</Text>
           </View>
         </View>
       </View>
+      <View style={styles.rightContainer}></View>
     </View>
   );
 };
@@ -143,22 +146,22 @@ const SlideNav = () => {
 export default SlideNav;
 
 const styles = StyleSheet.create({
-    logoutText: {
-        marginLeft: 5,
-        fontSize: 14,
+  logoutText: {
+    marginLeft: 5,
+    fontSize: 14,
     fontFamily: 'nunitoSan',
     color: '#E66767',
     fontWeight: 'bold',
-    },
-    iconLogout: {
-        width: 20,
-        height: 20,
-        resizeMode:'contain'
-    },
-    logoutView: {
-        marginLeft: 30,
-      flexDirection:'row'  
-    },
+  },
+  iconLogout: {
+    width: 20,
+    height: 20,
+    resizeMode: 'contain',
+  },
+  logoutView: {
+    marginLeft: 30,
+    flexDirection: 'row',
+  },
   titleProper: {
     width: '65%',
     fontSize: 14,
@@ -246,7 +249,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     right: 40,
     borderRadius: 15,
-    bottom: -23,
+    top: -23,
   },
   avatar: {
     width: 100,
@@ -254,7 +257,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 30,
     borderRadius: 50,
-    bottom: -50,
+    top: -50,
   },
   mainView: {
     height: '80%',
@@ -272,9 +275,22 @@ const styles = StyleSheet.create({
     marginTop: '18%',
     alignItems: 'center',
   },
-  container: {
+  rightContainer: {
+    width: '20%',
+    backgroundColor: 'white',
+    opacity:0.5,
+    height: '100%',
+  },
+  leftContainer: {
     width: '80%',
     height: '100%',
+    backgroundColor:'none'
+  },
+  container: {
+    width: '100%',
+    height: '100%',
+    
+    flexDirection:'row'
   },
   headView: {
     width: '100%',

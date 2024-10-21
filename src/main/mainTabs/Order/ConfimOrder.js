@@ -157,7 +157,7 @@ const ConfirmOrder = () => {
           <Text style={styles.totalText}>Total Amount:</Text>
           <Text style={styles.totalText}>$14.50</Text>
         </View>
-        <TouchableOpacity style={styles.payBtn}>
+        <TouchableOpacity style={styles.payBtn} onPress={()=>navigation.navigate('CheckoutNavigator')}>
           <Text style={styles.payText}>Proceed to Payment</Text>
         </TouchableOpacity>
         <View style={styles.brandTag}>

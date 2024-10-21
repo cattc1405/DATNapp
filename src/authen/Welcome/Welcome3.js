@@ -1,7 +1,9 @@
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
 
-const Welcome3 = () => {
+
+
+const Welcome3 = ({ onGetStarted }) => {
   return (
     <View style={styles.container}>
       <Image
@@ -13,17 +15,16 @@ const Welcome3 = () => {
           <View style={styles.lineNot} />
           <View style={styles.lineNot} />
           <View style={styles.lineNavi} />
-
         </View>
         <Text style={styles.welcomeText}>Exclusive Offers and Rewards!</Text>
         <Text style={styles.decribeText}>
-        We offer amazing and exclusive rewards
+          We offer amazing and exclusive rewards
         </Text>
         <Text style={styles.decribeText}>and coupons that you can only</Text>
         <Text style={styles.decribeText}>find in here!</Text>
       </View>
       <View style={styles.btnView}> 
-        <TouchableOpacity style={styles.btnContainer}>
+        <TouchableOpacity style={styles.btnContainer} onPress={onGetStarted}>
           <Text style={styles.continueText}>Get Started!</Text>
         </TouchableOpacity>
         {/* <Text style={styles.skipText}>Skip</Text> */}

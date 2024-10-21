@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 
-const Payment4 = () => {
+const Payment4 = ({navigation}) => {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -17,7 +17,7 @@ const Payment4 = () => {
             <Text style={styles.description}>
                 Your order has been successfully completed. Within moments you will receive a notification with the receipt of your purchase and you can track every step of your order.
             </Text>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('Product')}>
                 <Text style={styles.buttonText}>Finish Order</Text>
             </TouchableOpacity>
         </View>

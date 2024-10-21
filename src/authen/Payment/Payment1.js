@@ -4,8 +4,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions } from 'rea
 // Lấy kích thước màn hình để tinh chỉnh cho giao diện linh hoạt hơn
 const { width } = Dimensions.get('window');
 
-const Payment1 = (props) => {
-    const { navigation } = props;
+const Payment1 = ({navigation}) => {
     const [selectedPayment1, setSelectedPayment1] = useState(null);
 
     const selectPayment1 = (Payment1) => {
@@ -65,6 +64,7 @@ const Payment1 = (props) => {
             <TouchableOpacity
                 style={[styles.nextButton, !selectedPayment1 && styles.disabledButton]}
                 disabled={!selectedPayment1}
+                onPress={()=>navigation.navigate('Payment4')}
             >
                 <Text style={styles.nextButtonText}>Next Step</Text>
             </TouchableOpacity>

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
 
-const ReceiveNotifi = () => {
+const ReceiveNotifi = props => {
+    const {navigation} = props;
     const [selectedNotifications, setSelectedNotifications] = useState([]);
 
     const toggleNotification = (notification) => {
@@ -20,7 +21,7 @@ const ReceiveNotifi = () => {
                     <Image source={require('../../../assets/images/Back.png')} />
                 </TouchableOpacity>
                 <Text style={styles.stepText}>Step 10/10</Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={()=>navigation.navigate('Login')}>
                     <Image source={require('../../../assets/images/Exit.png')} />
                 </TouchableOpacity>
             </View>

@@ -1,10 +1,55 @@
-import React from 'react';
+import React, {useState} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createStackNavigator} from '@react-navigation/stack';
 
 import BottomMainTab from './src/main/mainTabs/BottomMainTab';
 import SlideNav from './src/main/slidenav/SlideNav';
+import Restaurant1 from './src/main/mainTabs/Restaurant/Restaurant1';
+import CheckoutNavigation from './src/authen/Checkout/CheckoutNavigator';
+import ForgotPassNavigation from './src/authen/ForgotPass/ForgotPassNavigation';
+import PaymentNavigation from './src/authen/Payment/PaymentNavigation';
+import WelcomeNavigator from './src/authen/Welcome/WelcomeNavigator';
+import LoginScreen from './src/authen/LoginScreen';
+import SignUpNavigation from './src/authen/SignUp/SignUpNavigation';
+import AuthNavigator from './src/authen/AuthNavigation';
 
+const Drawer = createDrawerNavigator();
+const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
 function App(): React.JSX.Element {
-  return <BottomMainTab />;
+  const [isWelcomeScreenVisible, setWelcomeScreenVisible] = useState(false);
+
+  const hideWelcomeScreen = () => {
+    setWelcomeScreenVisible(false);
+  };
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        {isWelcomeScreenVisible ? (
+          <Stack.Screen 
+            name="WelcomeNavigator" 
+            options={{ headerShown: false }}>
+            {(props) => <WelcomeNavigator {...props} onGetStarted={hideWelcomeScreen} />} 
+          </Stack.Screen>
+        ) : (
+          <Stack.Screen 
+            name="Auth" 
+            component={AuthNavigator} 
+            options={{ headerShown: false }} 
+          />
+        )}
+        <Stack.Screen
+          name="MainApp"
+          component={BottomMainTab}
+          options={{headerShown: false}}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 }
+
 export default App;
