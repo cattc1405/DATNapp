@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import Slider from '@react-native-community/slider'; // Đã sửa lỗi import Slider
+import {useNavigation} from '@react-navigation/native';
 
-const Checkuot3 = () => {
+const Checkuot3 = ({navigation}) => {
   const [pickupTime, setPickupTime] = useState(1); // Thời gian ban đầu được đặt là 1 phút
 
   return (
@@ -48,7 +49,7 @@ const Checkuot3 = () => {
       </View>
 
       {/* Nút "Tiếp tục" */}
-      <TouchableOpacity style={styles.nextButton}>
+      <TouchableOpacity style={styles.nextButton} onPress={()=>navigation.navigate('PaymentScreen')}>
         <Text style={styles.nextButtonText}>Tiếp tục</Text>
       </TouchableOpacity>
     </View>

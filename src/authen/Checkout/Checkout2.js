@@ -1,7 +1,8 @@
 import React from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
-const AddressScreen = () => {
+const AddressScreen = ({navigation}) => {
     return (
         <View style={styles.container}>
             {/* Header */}
@@ -51,7 +52,7 @@ const AddressScreen = () => {
             </View>
 
             {/* Next Button */}
-            <TouchableOpacity style={styles.nextButton}>
+            <TouchableOpacity style={styles.nextButton} onPress={()=>navigation.navigate('Checkout3')}>
                 <Text style={styles.nextButtonText}>Next Step</Text>
             </TouchableOpacity>
         </View>

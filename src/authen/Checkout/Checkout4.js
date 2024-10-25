@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, Image } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
-const PaymentScreen = () => {
+const PaymentScreen = ({navigation}) => {
   const [cardNumber, setCardNumber] = useState('');
   const [cardHolder, setCardHolder] = useState('');
   const [expirationDate, setExpirationDate] = useState('');
@@ -117,7 +118,7 @@ const PaymentScreen = () => {
       </View>
 
       {/* Nút thanh toán */}
-      <TouchableOpacity style={styles.payButton}>
+      <TouchableOpacity style={styles.payButton} onPress={()=>navigation.navigate('Checkout5')}>
         <Text style={styles.payButtonText}>Thanh toán $14.50</Text>
       </TouchableOpacity>
     </View>

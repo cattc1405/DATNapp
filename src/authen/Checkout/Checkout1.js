@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity, Dimensions } from 'react-native';
 
 const { width, height } = Dimensions.get('window'); // Lấy chiều rộng và chiều cao của màn hình
+import {useNavigation} from '@react-navigation/native';
 
-const OrderScreen = () => {
+const OrderScreen = ({navigation}) => {
   const [selectedOption, setSelectedOption] = useState(null);
 
   const handleOptionPress = (option) => {
@@ -58,7 +59,7 @@ const OrderScreen = () => {
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity style={styles.nextButton}>
+      <TouchableOpacity style={styles.nextButton} onPress={()=>navigation.navigate('AddressScreen')}> 
         <Text style={styles.nextButtonText}>Bước Tiếp Theo</Text>
       </TouchableOpacity>
     </View>
