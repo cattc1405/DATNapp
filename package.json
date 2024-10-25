@@ -11,13 +11,18 @@
   },
   "dependencies": {
     "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
+<<<<<<< Updated upstream
+=======
+    "@react-native-async-storage/async-storage": "^2.0.0",
+    "@react-native-community/masked-view": "^0.1.11",
+>>>>>>> Stashed changes
     "@react-native-community/slider": "^4.5.0",
     "@react-navigation/bottom-tabs": "^6.5.19",
     "@react-navigation/native": "^6.1.16",
     "@react-navigation/native-stack": "^6.9.22",
     "@react-navigation/stack": "^6.4.1",
     "@reduxjs/toolkit": "^2.2.3",
-    "axios": "^1.6.8",
+    "axios": "^1.7.7",
     "react": "^18.2.0",
     "react-native": "0.73.5",
     "react-native-image-picker": "^7.1.2",
