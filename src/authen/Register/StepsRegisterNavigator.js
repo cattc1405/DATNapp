@@ -14,11 +14,7 @@ const RegisterNavigator = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-<<<<<<< HEAD
-        screenOptions={{  
-=======
         screenOptions={{
->>>>>>> cat
           headerShown: false, 
         }}
       >
