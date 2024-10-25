@@ -133,6 +133,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#333',
         marginBottom: 20,
+        textAlign: 'center',
+        fontFamily:'nunitoSan'
     },
     label: {
         fontSize: 14,
@@ -221,21 +223,21 @@ const styles = StyleSheet.create({
         color: '#333',
     },
     signInContainer: {
-        flexDirection: 'row', 
-        alignItems: 'center', 
+        flexDirection: 'row',
+        alignItems: 'center',
         marginVertical: 10,
-      },
-      horizontalLine: {
+    },
+    horizontalLine: {
         flex: 1, // Để đường kẻ chiếm không gian còn lại
         height: 1, // Độ cao của đường kẻ
         backgroundColor: '#ccc', // Màu xám nhẹ cho đường kẻ
         marginHorizontal: 10, // Khoảng cách giữa đường kẻ và chữ
-      },
-      signInWithText: {
+    },
+    signInWithText: {
         fontSize: 14,
         color: '#666', // Màu xám đậm hơn cho chữ
         fontWeight: '500', // Độ dày của chữ
-      },
+    },
 });
 
 export default LoginScreen;
