@@ -1,15 +1,10 @@
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
-<<<<<<< HEAD
 import { useNavigation } from '@react-navigation/native';
 
 const SlideNav = ({ onClose }) => {
   const navigation = useNavigation();
 
-=======
-
-const SlideNav = ({ onClose }) => {
->>>>>>> cat
   return (
     <View style={styles.container}>
       <View style={styles.leftContainer}>
@@ -136,11 +131,7 @@ const SlideNav = ({ onClose }) => {
               </TouchableOpacity>
             </View>
             <View style={styles.lineView} />
-<<<<<<< HEAD
             <TouchableOpacity style={styles.logoutView} onPress={() => navigation.navigate('Auth')}>
-=======
-            <TouchableOpacity style={styles.logoutView} onPress={()=>NavigationContainer.navigate('Auth')}>
->>>>>>> cat
               <Image
                 style={styles.iconLogout}
                 source={require('../../../assets/images/icons/logoutIcon.png')}
@@ -154,12 +145,7 @@ const SlideNav = ({ onClose }) => {
     </View>
   );
 };
-
 export default SlideNav;
-<<<<<<< HEAD
-=======
-
->>>>>>> cat
 const styles = StyleSheet.create({
   logoutText: {
     marginLeft: 5,

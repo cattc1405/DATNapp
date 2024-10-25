@@ -16,10 +16,6 @@ const FavRestaurant = (props) => {
             {/* Header */}
             <View style={styles.header}>
                 <TouchableOpacity style={styles.backButton}
-<<<<<<< HEAD
-                    onPress={() => navigation.goBack()} // Navigate back
-=======
->>>>>>> cat
                 >
                     <Image source={require('../../../assets/images/Back.png')} />
                 </TouchableOpacity>

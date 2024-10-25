@@ -44,11 +44,7 @@ const Payment1 = ({navigation}) => {
                     ]}
                     onPress={() => selectPayment1('mcdonalds')}
                 >
-<<<<<<< HEAD
                     <Image source={require('../../../assets/images/McDonaldimg.png')} style={styles.paymentIcon} />
-=======
-                    <Image source={require('../../../assets/images/McDonaldImg.png')} style={styles.paymentIcon} />
->>>>>>> cat
                     <Text style={styles.paymentText}>Pick Up From Store</Text>
                 </TouchableOpacity>
 

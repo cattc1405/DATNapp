@@ -11,9 +11,8 @@ import CheckoutNavigation from './src/authen/Checkout/CheckoutNavigator';
 import ForgotPassNavigation from './src/authen/ForgotPass/ForgotPassNavigation';
 import PaymentNavigation from './src/authen/Payment/PaymentNavigation';
 import WelcomeNavigator from './src/authen/Welcome/WelcomeNavigator';
-<<<<<<< HEAD
-import Step2Gender from './src/authen/Register/Step2Gender';
-import Step1Gender from './src/authen/Register/Step1Gender';
+// import Step2Gender from './src/authen/Register/Step2Gender';
+// import Step1Gender from './src/authen/Register/Step1Gender';
 import { SafeAreaView, StatusBar, StyleSheet } from 'react-native';
 import Checkout2 from './src/authen/Checkout/Checkout2';
 import Checkout3 from './src/authen/Checkout/Checkout3';
@@ -21,8 +20,7 @@ import Checkout4 from './src/authen/Checkout/Checkout4';
 import Checkout5 from './src/authen/Checkout/Checkout5';
 import Checkout6 from './src/authen/Checkout/Checkout6';
 import OrderScreen from './src/authen/Checkout/Checkout1';
-import LoginScreen from './src/authen/Register/Login';
-=======
+// import LoginScreen from './src/authen/Register/Login';
 import LoginScreen from './src/authen/LoginScreen';
 import SignUpNavigation from './src/authen/SignUp/SignUpNavigation';
 import AuthNavigator from './src/authen/AuthNavigation';
@@ -31,7 +29,6 @@ const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
->>>>>>> cat
 function App(): React.JSX.Element {
   const [isWelcomeScreenVisible, setWelcomeScreenVisible] = useState(false);
 
@@ -40,12 +37,6 @@ function App(): React.JSX.Element {
   };
 
   return (
-<<<<<<< HEAD
-  <SafeAreaView style={styles.container}>
-    <StatusBar/>
-    <LoginScreen/>
-  </SafeAreaView>
-=======
     <NavigationContainer>
       <Stack.Navigator>
         {isWelcomeScreenVisible ? (
@@ -68,7 +59,6 @@ function App(): React.JSX.Element {
         />
       </Stack.Navigator>
     </NavigationContainer>
->>>>>>> cat
   );
 }
 

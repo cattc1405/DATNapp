@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import React, { useState } from 'react';
-=======
-import React, {useState} from 'react';
->>>>>>> cat
 import {
   View,
   Text,
@@ -10,7 +6,6 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
-<<<<<<< HEAD
   Alert,
 } from 'react-native';
 import { loginUser } from '../apiClient'; // Import the loginUser function
@@ -31,7 +26,10 @@ const LoginScreen = ({ navigation }) => {
     try {
       const response = await loginUser(email.trim(), password); // Use the loginUser function
       if (response) {
-        navigation.navigate('MainApp'); // Navigate to MainApp if login is successful
+
+        navigation.navigate('MainApp');   // Navigate to MainApp if login is successful
+        setEmail('');
+        setPassword('');
       }
     } catch (error) {
       console.error('Login error:', error);
@@ -45,22 +43,11 @@ const LoginScreen = ({ navigation }) => {
     }
   };
 
-=======
-} from 'react-native';
-
-const LoginScreen = ({navigation}) => {
-  const [passwordVisible, setPasswordVisible] = useState(false);
-
->>>>>>> cat
   return (
     <View style={styles.container}>
       {/* Back Button (optional) */}
       <TouchableOpacity style={styles.backButton}>
-<<<<<<< HEAD
         <Image source={require('../../assets/images/backArrow.png')} />
-=======
-        <Image source={require('../../assets/images/backArrow.png')}></Image>
->>>>>>> cat
       </TouchableOpacity>
 
       {/* Logo Section */}
@@ -81,11 +68,8 @@ const LoginScreen = ({navigation}) => {
           style={styles.input}
           placeholder="Your email or phone"
           placeholderTextColor="#ccc"
-<<<<<<< HEAD
           value={email}
           onChangeText={setEmail} // Cập nhật email khi người dùng nhập
-=======
->>>>>>> cat
         />
 
         {/* Password Input with Visibility Toggle */}
@@ -96,11 +80,8 @@ const LoginScreen = ({navigation}) => {
             placeholder="Password"
             secureTextEntry={!passwordVisible}
             placeholderTextColor="#ccc"
-<<<<<<< HEAD
             value={password}
             onChangeText={setPassword} // Cập nhật password khi người dùng nhập
-=======
->>>>>>> cat
           />
           <TouchableOpacity
             style={styles.eyeIcon}
@@ -115,13 +96,7 @@ const LoginScreen = ({navigation}) => {
         </TouchableOpacity>
 
         {/* Login Button */}
-<<<<<<< HEAD
         <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-=======
-        <TouchableOpacity
-          style={styles.loginButton}
-          onPress={() => navigation.navigate('MainApp')}>
->>>>>>> cat
           <Text style={styles.loginButtonText}>LOGIN</Text>
         </TouchableOpacity>
 
@@ -152,11 +127,7 @@ const LoginScreen = ({navigation}) => {
               source={require('../../assets/images/icons/logogg.jpg')}
               style={styles.socialIcon}
             />
-<<<<<<< HEAD
             <Text style={styles.socialButtonText}>GOOGLE</Text>
-=======
-            <Text style={styles.socialButtonText}>GOOGLE </Text>
->>>>>>> cat
           </TouchableOpacity>
         </View>
       </View>
@@ -176,13 +147,6 @@ const styles = StyleSheet.create({
     top: 40,
     left: 20,
   },
-<<<<<<< HEAD
-=======
-  backButtonText: {
-    fontSize: 30,
-    color: '#333',
-  },
->>>>>>> cat
   logoContainer: {
     marginBottom: 20,
   },
@@ -201,10 +165,6 @@ const styles = StyleSheet.create({
     color: '#333',
     marginBottom: 20,
     textAlign: 'center',
-<<<<<<< HEAD
-=======
-    fontFamily: 'nunitoSan',
->>>>>>> cat
   },
   label: {
     fontSize: 14,
@@ -264,7 +224,6 @@ const styles = StyleSheet.create({
     color: '#ff7f50',
     fontWeight: 'bold',
   },
-<<<<<<< HEAD
   signInContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -280,13 +239,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
     fontWeight: '500',
-=======
-  signInWithText: {
-    textAlign: 'center',
-    marginVertical: 10,
-    color: '#333',
-    fontSize: 14,
->>>>>>> cat
   },
   socialButtonsContainer: {
     flexDirection: 'row',
@@ -310,25 +262,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#333',
   },
-<<<<<<< HEAD
-=======
-  signInContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 10,
-  },
-  horizontalLine: {
-    flex: 1, // Để đường kẻ chiếm không gian còn lại
-    height: 1, // Độ cao của đường kẻ
-    backgroundColor: '#ccc', // Màu xám nhẹ cho đường kẻ
-    marginHorizontal: 10, // Khoảng cách giữa đường kẻ và chữ
-  },
-  signInWithText: {
-    fontSize: 14,
-    color: '#666', // Màu xám đậm hơn cho chữ
-    fontWeight: '500', // Độ dày của chữ
-  },
->>>>>>> cat
 });
 
 export default LoginScreen;
