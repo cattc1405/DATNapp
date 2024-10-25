@@ -34,7 +34,7 @@ const Finger = (props) => {
             {/* Văn bản mô tả */}
             <Text style={styles.title}>Enable Your Fingerprint</Text>
             <Text style={styles.description}>
-                In order to log in into your account in a faster and safer way, add your fingerprint.
+                In order to log in into your account in a{"\n"}  faster and safer way, add your {"\n"}fingerprint.
             </Text>
 
             {/* Hình ảnh Fingerprint */}
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     imageContainer: {
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 20,
+        marginBottom: 10,
 
     },
     image: {
@@ -102,11 +102,11 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     title: {
-        fontSize: 22,
+        fontSize: 20,
         fontWeight: 'bold',
         color: '#000',
         textAlign: 'center',
-        marginBottom: 10,
+        // marginBottom: 10,
     },
     description: {
         fontSize: 15,
@@ -114,25 +114,26 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginHorizontal: 20,
         marginBottom: 30,
+        lineHeight: 25, 
     },
     nextButton: {
         backgroundColor: '#F55F44',
-        paddingVertical: 15,
-        paddingHorizontal: 80,
+        paddingVertical: 10,
+        paddingHorizontal: 110,
         borderRadius: 30,
-        paddingBottom: 1
+       
     },
     nextButtonText: {
         color: '#FFFFFF',
         fontSize: 17,
         textAlign: 'center',
-
+        fontWeight:'600',
 
     },
     skipText: {
         color: '#FF6F61',
-        fontSize: 16,
-        textDecorationLine: 'underline',
+        fontSize: 14,
+       fontWeight:'800',
     },
 });
 

@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity, StyleSheet, TextInput, Image } from 'reac
 import React, { useState } from 'react'
 
 const NewPass = (props) => {
-  const { navigation } = props
+  const { navigation } = props;
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isPasswordVisible, setPasswordVisible] = useState(false);
@@ -29,78 +29,73 @@ const NewPass = (props) => {
         style={styles.image}
         resizeMode="contain"
       />
-
-      {/* Tiêu đề */}
       <Text style={styles.title}>Set Your New Password</Text>
-
-      {/* Mô tả */}
       <Text style={styles.description}>
-        Try to create a new password that you will remember.
+        Try to create a new password that you{"\n"} will remember.
       </Text>
 
-      {/* Ô nhập mật khẩu */}
-      <View style={styles.inputContainer}>
-        <Text style={styles.inputLabel}>PASSWORD</Text>
-        <View style={styles.passwordWrapper}>
-          <TextInput
-            style={styles.input}
-            secureTextEntry={!isPasswordVisible}
-            value={password}
-            onChangeText={setPassword}
-            placeholder="********"
-          />
-          <TouchableOpacity
-            onPress={() => setPasswordVisible(!isPasswordVisible)}
-            style={styles.iconButton}
-          >
-            <Image
-              source={require('../../../assets/images/NotEye.png')} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setPassword('')}
-            style={styles.iconButton}
-          >
-            <Image
-              source={require('../../../assets/images/RedExit.png')} />
-          </TouchableOpacity>
+      {/* Box containing the password inputs and requirements */}
+      <View style={styles.boxContainer}>
+        <View style={styles.inputContainer}>
+          <Text style={styles.inputLabel}>PASSWORD</Text>
+          <View style={styles.passwordWrapper}>
+            <TextInput
+              style={styles.input}
+              secureTextEntry={!isPasswordVisible}
+              value={password}
+              onChangeText={setPassword}
+              placeholder="********"
+            />
+            <TouchableOpacity
+              onPress={() => setPasswordVisible(!isPasswordVisible)}
+              style={styles.iconButton}
+            >
+              <Image
+                source={require('../../../assets/images/NotEye.png')} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setPassword('')}
+              style={styles.iconButton}
+            >
+              <Image
+                source={require('../../../assets/images/RedExit.png')} />
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-
-      {/* Ô nhập xác nhận mật khẩu */}
-      <View style={styles.inputContainer}>
-        <Text style={styles.inputLabel}>CONFIRM PASSWORD</Text>
-        <View style={styles.passwordWrapper}>
-          <TextInput
-            style={styles.input}
-            secureTextEntry={!isConfirmPasswordVisible}
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-            placeholder="********"
-          />
-          <TouchableOpacity
-            onPress={() => setConfirmPasswordVisible(!isConfirmPasswordVisible)}
-            style={styles.iconButton}
-          >
-            <Image
-              source={require('../../../assets/images/NotEye.png')} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setConfirmPassword('')}
-            style={styles.iconButton}
-          >
-            <Image
-              source={require('../../../assets/images/RedExit.png')} />
-          </TouchableOpacity>
+        <View style={styles.inputContainer}>
+          <Text style={styles.inputLabel}>CONFIRM PASSWORD</Text>
+          <View style={styles.passwordWrapper}>
+            <TextInput
+              style={styles.input}
+              secureTextEntry={!isConfirmPasswordVisible}
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+              placeholder="********"
+            />
+            <TouchableOpacity
+              onPress={() => setConfirmPasswordVisible(!isConfirmPasswordVisible)}
+              style={styles.iconButton}
+            >
+              <Image
+                source={require('../../../assets/images/NotEye.png')} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setConfirmPassword('')}
+              style={styles.iconButton}
+            >
+              <Image
+                source={require('../../../assets/images/RedExit.png')} />
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
 
-
-      <View style={styles.passwordRequirements}>
-        <Text style={styles.requirementTitle}>YOUR PASSWORD MUST CONTAIN</Text>
-        <Text style={styles.requirement}>• Between 8 and 20 characters</Text>
-        <Text style={styles.requirement}>• 1 upper case letter</Text>
-        <Text style={styles.requirement}>• 1 or more numbers</Text>
-        <Text style={styles.requirement}>• 1 or more special characters</Text>
+        <View style={styles.passwordRequirements}>
+          <Text style={styles.requirementTitle}> YOUR PASSWORD MUST CONTAIN</Text>
+          <Text style={styles.requirement}>🟠 Between 8 and 20 characters</Text>
+          <Text style={styles.requirement}>🟠 1 upper case letter</Text>
+          <Text style={styles.requirement}>🟠 1 or more numbers</Text>
+          <Text style={styles.requirement}>🟠 1 or more special characters</Text>
+        </View>
       </View>
 
       {/* Nút "Next Step" */}
@@ -112,6 +107,12 @@ const NewPass = (props) => {
 };
 
 const styles = StyleSheet.create({
+  passwordRequirements: {
+    marginHorizontal: 50,
+  },
+  inputContainer:{
+borderRadius:20
+  },
   container: {
     flex: 1,
     padding: 20,
@@ -126,18 +127,12 @@ const styles = StyleSheet.create({
   backButton: {
     padding: 10,
   },
-  backText: {
-    fontSize: 24,
-  },
   stepText: {
     fontSize: 16,
     textAlign: 'center',
   },
   closeButton: {
-    padding: 10,
-  },
-  closeText: {
-    fontSize: 24,
+    padding: 20,
   },
   image: {
     width: 142,
@@ -157,54 +152,70 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#989DA3',
     marginBottom: 20,
+    lineHeight: 25
   },
-  inputContainer: {
-    marginBottom: 20,
+  boxContainer: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 15,
+    padding: 20,
+    marginHorizontal: 20,
+    marginBottom: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
   },
+
   inputLabel: {
     fontSize: 14,
     fontWeight: 'bold',
     color: '#FF6B6B',
-    marginBottom: 10,
+    borderRadius:30
   },
   passwordWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#FFF',
-    borderRadius: 10,
+    borderRadius: 20,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 2,
+    paddingVertical:1,
   },
   input: {
     flex: 1,
-    padding: 15,
+    padding: 10,
     fontSize: 18,
   },
   iconButton: {
     padding: 10,
   },
-  passwordRequirements: {
-    marginBottom: 20,
-  },
   requirementTitle: {
-    fontSize: 14,
+    fontSize: 9,
     fontWeight: 'bold',
     marginBottom: 10,
+    textAlign: 'center',
+    marginHorizontal: 10,
+    marginVertical: 10,
   },
   requirement: {
-    fontSize: 14,
+    fontSize: 11,
     marginBottom: 5,
     color: '#555',
+
   },
   nextButton: {
     padding: 15,
     backgroundColor: '#F55F44',
     borderRadius: 25,
     alignItems: 'center',
-    marginBottom: 20,
+    marginTop: 30,
+    marginHorizontal: 30,
+    paddingVertical:10
+
   },
   nextButtonText: {
     color: '#FFFFFF',
@@ -213,4 +224,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NewPass
+export default NewPass;

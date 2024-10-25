@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     },
     skipText: {
         textAlign: 'center',
-        color: 'gray',
+        color: '#F55F44',
     },
 });
 

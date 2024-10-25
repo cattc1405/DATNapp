@@ -2,29 +2,25 @@ import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from 'reac
 import React from 'react'
 
 const Code = (props) => {
-  const { navigation } = props
+  const { navigation } = props;
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton}
-          onPress={() => navigation.navigate('ForgetPass')}>
-          <Image
-            source={require('../../../assets/images/Back.png')} />
-        </TouchableOpacity>
-        <Text style={styles.stepText}>Step 2/3</Text>
+        <View style={styles.headerContent}>
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('ForgetPass')}>
+            <Image source={require('../../../assets/images/Back.png')} />
+          </TouchableOpacity>
+          <Text style={styles.stepText}>Step 2/3</Text>
+        </View>
         <TouchableOpacity style={styles.closeButton}>
-          <Image
-            source={require('../../../assets/images/Exit.png')} />
+          <Image source={require('../../../assets/images/Exit.png')} />
         </TouchableOpacity>
       </View>
-      <Image
-        source={require('../../../assets/images/Mobile.png')}
-        style={styles.image}
-        resizeMode="contain"
-      />
+
+      <Image source={require('../../../assets/images/Mobile.png')} style={styles.image} resizeMode="contain" />
       <Text style={styles.title}>Enter the Verification Code</Text>
       <Text style={styles.description}>
-        Enter the 4 digit number that we sent to mafalda123@gmail.com.
+        Enter the 4 digit number that we sent{"\n"} to mafalda123@gmail.com.
       </Text>
 
       <View style={styles.inputContainer}>
@@ -33,10 +29,11 @@ const Code = (props) => {
         <TextInput style={styles.input} maxLength={1} keyboardType="numeric" />
         <TextInput style={styles.input} maxLength={1} keyboardType="numeric" />
       </View>
-      <TouchableOpacity style={styles.nextButton}
-        onPress={() => navigation.navigate('NewPass')}>
+
+      <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('NewPass')}>
         <Text style={styles.nextButtonText}>Next Step</Text>
       </TouchableOpacity>
+
       <Text style={styles.resendText}>
         Didn't Receive Anything? <Text style={styles.resendLink}>Resend Code</Text>
       </Text>
@@ -56,22 +53,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
+  headerContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   backButton: {
     padding: 10,
   },
-  backText: {
-    fontSize: 24,
-  },
   stepText: {
     fontSize: 16,
-    textAlign: 'center',
     color: '#989DA3',
+    marginLeft: 10,
   },
   closeButton: {
     padding: 10,
-  },
-  closeText: {
-    fontSize: 24,
   },
   image: {
     width: 256,
@@ -84,32 +79,39 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 10,
-    color: '#000000'
+    color: '#000000',
   },
   description: {
     fontSize: 15,
     textAlign: 'center',
     color: '#989DA3',
+    fontWeight: '300',
     marginBottom: 20,
+    lineHeight: 25,
   },
   inputContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginHorizontal: 20,
+    paddingVertical: 15,
+    paddingHorizontal: 20,
     marginBottom: 20,
-    bottom: -70,
-  },
-  input: {
-    backgroundColor: '#FFF',
+    marginTop: '10%',
     borderRadius: 10,
-    width: 50,
-    height: 50,
-    textAlign: 'center',
-    fontSize: 18,
+    backgroundColor: '#FFF',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
-    elevation: 2,
+    elevation: 3,
+  },
+  input: {
+    width: 50,
+    height: 50,
+    textAlign: 'center',
+    fontSize: 18,
+    borderBottomWidth: 2,
+    borderBottomColor: '#E1E0E0',
   },
   nextButton: {
     padding: 15,
@@ -117,19 +119,18 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     alignItems: 'center',
     marginBottom: 20,
-    bottom: -70,
+    marginTop: 50,
+    marginHorizontal: 30,
   },
   nextButtonText: {
     color: '#FFFFFF',
     fontSize: 17,
     fontWeight: 'bold',
-
   },
   resendText: {
     textAlign: 'center',
     color: '#989DA3',
     fontSize: 14,
-    bottom: -70,
   },
   resendLink: {
     color: '#F55F44',
@@ -137,4 +138,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Code
+export default Code;
