@@ -23,6 +23,7 @@ import Payment1 from './src/authen/Payment/Payment1';
 import Payment4 from './src/authen/Payment/Payment4';
 import Payment5 from './src/authen/Payment/Payment5';
 import PhoneNumberScreen from './src/authen/SignUp/PhoneNumberScreen';
+import ChooseRestaurant from './src/authen/SignUp/ChooseRestaurant';
 // import Code from './src/authen/DATN/Code';
 function App(): React.JSX.Element {
   const Stack = createNativeStackNavigator();
@@ -30,7 +31,7 @@ function App(): React.JSX.Element {
   return (
     <NavigationContainer >
       <StatusBar />
-      <Stack.Navigator initialRouteName="Name">
+      <Stack.Navigator initialRouteName="ChooseRestaurant">
         <Stack.Screen name="ForgetPass" component={ForgetPass} options={{ headerShown: false }} />
         <Stack.Screen name="Code" component={Code} options={{ headerShown: false }} />
         <Stack.Screen name="NewPass" component={NewPass} options={{ headerShown: false }} />
@@ -43,6 +44,7 @@ function App(): React.JSX.Element {
         <Stack.Screen name="Finger" component={Finger} options={{ headerShown: false }} />
         <Stack.Screen name="Name" component={Name} options={{ headerShown: false }} />
         <Stack.Screen name="PhoneNumberScreen" component={PhoneNumberScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="ChooseRestaurant" component={ChooseRestaurant} options={{ headerShown: false }} />
         {/* <Stack.Screen name="Payment1" component={Payment1} options={{ headerShown: false }} /> */}
         {/* <Stack.Screen name="Payment4" component={Payment4} options={{ headerShown: false }} /> */}
         {/* <Stack.Screen name="Payment5" component={Payment5} options={{ headerShown: false }} /> */}
