@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#F9F9F9',
+    backgroundColor: '#F7F6FB',
   },
   header: {
     flexDirection: 'row',
@@ -140,8 +140,8 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
   image: {
-    width: 200,
-    height: 150,
+    width: 142,
+    height: 127,
     alignSelf: 'center',
     marginBottom: 20,
   },
@@ -150,11 +150,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 10,
+    color: '#000000'
   },
   description: {
     fontSize: 16,
     textAlign: 'center',
-    color: '#777',
+    color: '#989DA3',
     marginBottom: 20,
   },
   inputContainer: {
@@ -201,12 +202,12 @@ const styles = StyleSheet.create({
   nextButton: {
     padding: 15,
     backgroundColor: '#F55F44',
-    borderRadius: 10,
+    borderRadius: 25,
     alignItems: 'center',
     marginBottom: 20,
   },
   nextButtonText: {
-    color: '#FFF',
+    color: '#FFFFFF',
     fontSize: 16,
     fontWeight: 'bold',
   },

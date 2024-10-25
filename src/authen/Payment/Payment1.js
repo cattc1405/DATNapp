@@ -17,7 +17,7 @@ const Payment1 = (props) => {
             {/* Header */}
             <View style={styles.header}>
                 <TouchableOpacity style={styles.backButton}
-                  >
+                >
                     <Image source={require('../../../assets/images/Back.png')} style={styles.icon} />
                 </TouchableOpacity>
                 <Text style={styles.stepText}>Step 1/5</Text>
@@ -45,7 +45,7 @@ const Payment1 = (props) => {
                     ]}
                     onPress={() => selectPayment1('mcdonalds')}
                 >
-                    <Image source={require('../../../assets/images/McDonaldImg.png')} style={styles.paymentIcon} />
+                    <Image source={require('../../../assets/images/McDonalds.png')} style={styles.paymentIcon} />
                     <Text style={styles.paymentText}>Pick Up From Store</Text>
                 </TouchableOpacity>
 

@@ -33,15 +33,10 @@ const Code = (props) => {
         <TextInput style={styles.input} maxLength={1} keyboardType="numeric" />
         <TextInput style={styles.input} maxLength={1} keyboardType="numeric" />
       </View>
-
-      {/* Nút "Next Step" */}
       <TouchableOpacity style={styles.nextButton}
         onPress={() => navigation.navigate('NewPass')}>
         <Text style={styles.nextButtonText}>Next Step</Text>
-
       </TouchableOpacity>
-
-      {/* Liên kết gửi lại mã */}
       <Text style={styles.resendText}>
         Didn't Receive Anything? <Text style={styles.resendLink}>Resend Code</Text>
       </Text>
@@ -53,7 +48,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#F9F9F9',
+    backgroundColor: '#FFFFFF',
   },
   header: {
     flexDirection: 'row',
@@ -70,6 +65,7 @@ const styles = StyleSheet.create({
   stepText: {
     fontSize: 16,
     textAlign: 'center',
+    color: '#989DA3',
   },
   closeButton: {
     padding: 10,
@@ -78,27 +74,29 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
   image: {
-    width: 200,
-    height: 150,
+    width: 256,
+    height: 214,
     alignSelf: 'center',
-    marginBottom: 20,
+    marginBottom: 30,
   },
   title: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 10,
+    color: '#000000'
   },
   description: {
-    fontSize: 16,
+    fontSize: 15,
     textAlign: 'center',
-    color: '#777',
+    color: '#989DA3',
     marginBottom: 20,
   },
   inputContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 20,
+    bottom: -70,
   },
   input: {
     backgroundColor: '#FFF',
@@ -116,22 +114,25 @@ const styles = StyleSheet.create({
   nextButton: {
     padding: 15,
     backgroundColor: '#F55F44',
-    borderRadius: 10,
+    borderRadius: 30,
     alignItems: 'center',
     marginBottom: 20,
+    bottom: -70,
   },
   nextButtonText: {
-    color: '#FFF',
-    fontSize: 16,
+    color: '#FFFFFF',
+    fontSize: 17,
     fontWeight: 'bold',
+
   },
   resendText: {
     textAlign: 'center',
-    color: '#777',
+    color: '#989DA3',
     fontSize: 14,
+    bottom: -70,
   },
   resendLink: {
-    color: '#FF6B6B',
+    color: '#F55F44',
     fontWeight: 'bold',
   },
 });

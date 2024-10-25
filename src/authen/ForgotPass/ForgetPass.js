@@ -50,11 +50,11 @@ const styles = StyleSheet.create({
   stepText: {
     fontSize: 16,
     textAlign: 'center',
-    marginVertical: 20,
   },
   imagePlaceholder: {
-    height: 150,
-    backgroundColor: '#E0F7EF',
+    width: 215,
+    height: 159,
+    marginLeft: 70,
     marginBottom: 20,
     justifyContent: 'center',
     alignItems: 'center',
@@ -67,15 +67,15 @@ const styles = StyleSheet.create({
     color: '#000000'
   },
   description: {
-    fontSize: 16,
+    fontSize: 15,
     textAlign: 'center',
-    color: '#777',
+    color: '#989DA3',
     marginBottom: 20,
   },
   option: {
-    padding: 20,
+    padding: 30,
     backgroundColor: '#FFF',
-    borderRadius: 10,
+    borderRadius: 20,
     marginBottom: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   sendButton: {
     padding: 15,
     backgroundColor: '#F55F44',
-    borderRadius: 10,
+    borderRadius: 25,
     alignItems: 'center',
     marginTop: 20,
   },

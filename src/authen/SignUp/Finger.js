@@ -81,22 +81,23 @@ const styles = StyleSheet.create({
     },
     stepText: {
         fontSize: 16,
-        color: '#555',
+        color: '#989DA3',
         fontWeight: 'bold',
     },
     imageContainer: {
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 20,
+
     },
     image: {
-        width: 200, // Cập nhật kích thước của hình ảnh để phù hợp hơn
-        height: 200,
+        width: 270,
+        height: 238,
         resizeMode: 'contain',
     },
     fingerprintImage: {
-        width: 100, // Điều chỉnh kích thước Fingerprint để giống với thiết kế
-        height: 100,
+        width: 46,
+        height: 52,
         resizeMode: 'contain',
         marginBottom: 20,
     },
@@ -108,23 +109,25 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     description: {
-        fontSize: 16,
-        color: '#888',
+        fontSize: 15,
+        color: '#989DA3',
         textAlign: 'center',
         marginHorizontal: 20,
         marginBottom: 30,
     },
     nextButton: {
-        backgroundColor: '#FF6F61',
+        backgroundColor: '#F55F44',
         paddingVertical: 15,
-        paddingHorizontal: 60,
+        paddingHorizontal: 80,
         borderRadius: 30,
-        marginBottom: 15,
+        paddingBottom: 1
     },
     nextButtonText: {
-        color: '#FFF',
-        fontSize: 18,
-        fontWeight: 'bold',
+        color: '#FFFFFF',
+        fontSize: 17,
+        textAlign: 'center',
+
+
     },
     skipText: {
         color: '#FF6F61',

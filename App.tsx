@@ -27,9 +27,9 @@ function App(): React.JSX.Element {
   const Stack = createNativeStackNavigator();
   // const Tab = createBottomTabNavigator();
   return (
-    <NavigationContainer>
+    <NavigationContainer >
       <StatusBar />
-      <Stack.Navigator initialRouteName="Code">
+      <Stack.Navigator initialRouteName="Finger">
         <Stack.Screen name="ForgetPass" component={ForgetPass} options={{ headerShown: false }} />
         <Stack.Screen name="Code" component={Code} options={{ headerShown: false }} />
         <Stack.Screen name="NewPass" component={NewPass} options={{ headerShown: false }} />
@@ -41,9 +41,9 @@ function App(): React.JSX.Element {
         <Stack.Screen name="Code1" component={Code1} options={{ headerShown: false }} />
         <Stack.Screen name="Finger" component={Finger} options={{ headerShown: false }} />
         <Stack.Screen name="Name" component={Name} options={{ headerShown: false }} />
-        <Stack.Screen name="Payment1" component={Payment1} options={{ headerShown: false }} />
-        <Stack.Screen name="Payment4" component={Payment4} options={{ headerShown: false }} />
-        <Stack.Screen name="Payment5" component={Payment5} options={{ headerShown: false }} />
+        {/* <Stack.Screen name="Payment1" component={Payment1} options={{ headerShown: false }} /> */}
+        {/* <Stack.Screen name="Payment4" component={Payment4} options={{ headerShown: false }} /> */}
+        {/* <Stack.Screen name="Payment5" component={Payment5} options={{ headerShown: false }} /> */}
 
 
 
