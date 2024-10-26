@@ -11,7 +11,7 @@ const PhoneNumberScreen = () => {
 
   const handleNextStep = () => {
     if (phoneNumber.length === 11 && isAccepted) {
-      // Proceed to the next step
+   
       console.log('Next step');
     } else {
       console.log('Please enter valid phone number and accept terms');
@@ -20,16 +20,13 @@ const PhoneNumberScreen = () => {
 
   return (
     <View style={styles.container}>
-      {/* Step 4/10 Header */}
+  
       <Text style={styles.stepText}>Step 4/10</Text>
-
-      {/* Add Phone Number Section */}
       <Text style={styles.headerText}>Add Your Phone Number</Text>
       <Text style={styles.descriptionText}>
         Enter your phone number in order to send you your OTP security code.
       </Text>
 
-      {/* Phone Number Input */}
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.phoneInput}
