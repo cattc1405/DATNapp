@@ -147,13 +147,14 @@ const styles = StyleSheet.create({
     borderColor: '#FF6347',
   },
   genderIcon: {
-    width: 60,
-    height: 60,
+    width: 72,
+    height: 72,
     marginBottom: 10,
   },
   genderText: {
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 14,
+    fontWeight: '800',
+    color: '#000000'
   },
   nextButton: {
     backgroundColor: '#F55F44',
@@ -172,7 +173,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#F55F44',
     marginBottom: 20,
-    fontSize: 17,
+    fontSize: 14,
     fontWeight: '800',
   },
 });

@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
 
     },
     checkboxChecked: {
-        backgroundColor: '#F55F44', // Color when checkbox is selected
+        backgroundColor: '#F55F44', 
         borderColor: '#F55F44',
     },
     inputRequirement: {

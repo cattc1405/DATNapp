@@ -2,7 +2,6 @@ import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from 'react
 import React from 'react';
 
 const Restaurant1 = ({ navigation }) => {
-    // Dữ liệu mẫu cho danh sách nhà hàng
     const restaurantData = [
         {
             _id: '1',
@@ -71,17 +70,12 @@ const Restaurant1 = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                {/* Nút Back */}
                 <TouchableOpacity onPress={() => navigation.goBack()} style={styles.headerButton}>
-                    <Image source={require('../../../assets/images/BackWhite.png')} />
+                    <Image style={styles.imageheader} source={require('../../../assets/images/BackWhite.png')} />
                 </TouchableOpacity>
-
-                {/* Tiêu đề */}
                 <Text style={styles.headerTitle}>Nearby Restaurants</Text>
-
-                {/* Nút Profile */}
                 <TouchableOpacity style={styles.headerButton}>
-                    <Image source={require('../../../assets/images/Filter.png')} />
+                    <Image style={styles.imageheader} source={require('../../../assets/images/Filter.png')} />
                 </TouchableOpacity>
             </View>
 
@@ -89,7 +83,7 @@ const Restaurant1 = ({ navigation }) => {
                 data={restaurantData}
                 keyExtractor={(item) => item._id}
                 renderItem={renderItem}
-                contentContainerStyle={styles.scrollContainer} // giống ScrollView của bạn
+                contentContainerStyle={styles.scrollContainer}
             />
         </View>
     );
@@ -100,19 +94,29 @@ export default Restaurant1;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f9f9f9',
+        backgroundColor: '#F7F6FB',
+    },
+    imageheader: {
+        width: 24,
+        height: 24,
     },
     header: {
-        backgroundColor: '#ff5a5f',
-        padding: 16,
-        flexDirection: 'row', // Thay đổi thành row để căn chỉnh theo hàng ngang
+        backgroundColor: '#F55F44',
+        paddingTop: 20,
+        paddingBottom: 10,
+        paddingHorizontal: 16,
+        flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between', // Căn đều các phần tử
+        justifyContent: 'space-between',
+
     },
     headerTitle: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#fff',
+        flex: 1,
+        fontSize: 23,
+        fontWeight: '900',
+        color: '#ffffff',
+        textAlign: 'center',
+        padding: 30,
     },
     headerButton: {
         padding: 8,
@@ -124,9 +128,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: '#fff',
-        borderRadius: 10,
+        borderRadius: 20,
         padding: 12,
-        marginBottom: 16,
+        marginBottom: 20,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
@@ -156,21 +160,23 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     ratingStars: {
-        color: '#ffcc00',
+        color: '#ffffff',
         marginRight: 4,
     },
     reviewText: {
-        color: '#888',
+        color: '#9D9D9D',
+        fontSize: 11,
+        fontWeight: '700',
     },
     offerBadge: {
-        backgroundColor: '#ff5a5f',
+        backgroundColor: '#F55F44',
         borderRadius: 8,
         paddingVertical: 4,
         paddingHorizontal: 8,
     },
     offerText: {
-        color: '#fff',
-        fontSize: 12,
+        color: '#ffffff',
+        fontSize: 10,
         fontWeight: 'bold',
     },
 });
