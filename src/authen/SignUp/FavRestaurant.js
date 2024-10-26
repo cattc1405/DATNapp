@@ -13,7 +13,7 @@ const FavRestaurant = (props) => {
         <View style={styles.container}>
             {/* Header */}
             <View style={styles.header}>
-                <TouchableOpacity style={styles.backButton}>
+                <TouchableOpacity style={styles.backButton} onPress={()=>navigation.goBack()}>
                     <Image source={require('../../../assets/images/Back.png')} />
                 </TouchableOpacity>
                 <Text style={styles.stepText}>Step 9/10</Text>
@@ -119,7 +119,7 @@ const FavRestaurant = (props) => {
                 </View>
             </View>
 
-            <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('NextPage')}>
+            <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('ReceiveNotifi')}>
                 <Text style={styles.nextButtonText}>Next Step</Text>
             </TouchableOpacity>
             <TouchableOpacity>

@@ -6,21 +6,25 @@ const Code1 = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <View style={styles.headerContent}>
-          <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('ForgetPass')}>
-            <Image source={require('../../../assets/images/Back.png')} />
-          </TouchableOpacity>
-          <Text style={styles.stepText}>Step 5/10</Text>
-        </View>
+        <TouchableOpacity style={styles.backButton} onPress={()=>navigation.goBack()}
+        >
+          <Image
+            source={require('../../../assets/images/Back.png')} />
+        </TouchableOpacity>
+        <Text style={styles.stepText}>Step 5/10</Text>
         <TouchableOpacity style={styles.closeButton}>
-          <Image source={require('../../../assets/images/Exit.png')} />
+          <Image
+            source={require('../../../assets/images/Exit.png')} />
         </TouchableOpacity>
       </View>
-
-      <Image source={require('../../../assets/images/Mobile.png')} style={styles.image} resizeMode="contain" />
+      <Image
+        source={require('../../../assets/images/Mobile.png')}
+        style={styles.image}
+        resizeMode="contain"
+      />
       <Text style={styles.title}>Enter the Verification Code</Text>
       <Text style={styles.description}>
-        Enter the 4 digit number that we sent {"\n"} to mafalda123@gmail.com.
+        Enter the 4 digit number that we sent to mafalda123@gmail.com.
       </Text>
 
       <View style={styles.inputContainer}>
@@ -30,10 +34,14 @@ const Code1 = (props) => {
         <TextInput style={styles.input} maxLength={1} keyboardType="numeric" />
       </View>
 
-      <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('YourPass')}>
+      {/* Nút "Next Step" */}
+      <TouchableOpacity style={styles.nextButton}
+        onPress={() => navigation.navigate('YourPass')}>
         <Text style={styles.nextButtonText}>Next Step</Text>
+
       </TouchableOpacity>
 
+      {/* Liên kết gửi lại mã */}
       <Text style={styles.resendText}>
         Didn't Receive Anything? <Text style={styles.resendLink}>Resend Code</Text>
       </Text>
@@ -45,7 +53,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F9F9F9',
   },
   header: {
     flexDirection: 'row',
@@ -53,89 +61,85 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
-  headerContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
   backButton: {
     padding: 10,
   },
+  backText: {
+    fontSize: 24,
+  },
   stepText: {
     fontSize: 16,
-    color: '#989DA3',
-    marginLeft: 110,
+    textAlign: 'center',
+    fontFamily: 'nunitoSan'
   },
   closeButton: {
     padding: 10,
   },
+  closeText: {
+    fontSize: 24,
+  },
   image: {
-    width: 256,
-    height: 214,
+    width: 200,
+    height: 150,
     alignSelf: 'center',
-    marginBottom: 30,
+    marginBottom: 20,
   },
   title: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 10,
-    color: '#000000',
+    fontFamily: 'nunitoSan'
   },
   description: {
-    fontSize: 15,
+    fontSize: 16,
     textAlign: 'center',
-    color: '#989DA3',
-    fontWeight: '300',
-    marginBottom: 10,
-    lineHeight: 25,
+    color: '#777',
+    marginBottom: 20,
+    fontFamily: 'nunitoSan'
   },
   inputContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginHorizontal: 20,
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    marginBottom: 10,
-    marginTop: '10%',
-    borderRadius: 10,
-    backgroundColor: '#FFF',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 3,
+    marginBottom: 20,
   },
   input: {
+    backgroundColor: '#FFF',
+    borderRadius: 10,
     width: 50,
     height: 50,
     textAlign: 'center',
     fontSize: 18,
-    borderBottomWidth: 2,
-    borderBottomColor: '#E1E0E0',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 2,
   },
   nextButton: {
     padding: 15,
     backgroundColor: '#F55F44',
-    borderRadius: 30,
+    borderRadius: 10,
     alignItems: 'center',
     marginBottom: 20,
-    marginTop: 50,
-    marginHorizontal: 30,
   },
   nextButtonText: {
-    color: '#FFFFFF',
-    fontSize: 17,
+    color: '#FFF',
+    fontSize: 16,
     fontWeight: 'bold',
+    fontFamily: 'nunitoSan'
   },
   resendText: {
     textAlign: 'center',
-    color: '#989DA3',
+    color: '#777',
     fontSize: 14,
+    fontFamily: 'nunitoSan'
   },
   resendLink: {
-    color: '#F55F44',
+    color: '#FF6B6B',
     fontWeight: 'bold',
+    fontFamily: 'nunitoSan'
   },
 });
 
-export default Code1;
+export default Code1

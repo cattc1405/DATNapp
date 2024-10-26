@@ -8,7 +8,7 @@ const Finger = (props) => {
             {/* Tiêu đề bước */}
             <View style={styles.header}>
                 <TouchableOpacity
-                    onPress={() => navigation.navigate('YourPass')}>
+                    onPress={()=>navigation.goBack()}>
                     <Image
                         source={require('../../../assets/images/Back.png')}
                         style={styles.icon} // Cập nhật kích thước biểu tượng
