@@ -15,7 +15,7 @@ const Finger = (props) => {
                     />
                 </TouchableOpacity>
                 <Text style={styles.stepText}>Step 7/10</Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={()=>navigation.navigate('Login')}>
                     <Image
                         source={require('../../../assets/images/Exit.png')}
                         style={styles.icon} // Cập nhật kích thước biểu tượng

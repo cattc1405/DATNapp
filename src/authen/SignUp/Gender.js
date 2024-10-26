@@ -40,7 +40,7 @@ const Gender = props => {
           />
         </TouchableOpacity>
         <Text style={styles.stepText}>Step 2/10</Text>
-        <TouchableOpacity style={styles.closeButton}>
+        <TouchableOpacity style={styles.closeButton} onPress={()=>navigation.navigate('Login')}>
           <Image
             source={require('../../../assets/images/Exit.png')}
             style={styles.icon}

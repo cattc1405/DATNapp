@@ -12,7 +12,7 @@ const Code1 = (props) => {
             source={require('../../../assets/images/Back.png')} />
         </TouchableOpacity>
         <Text style={styles.stepText}>Step 5/10</Text>
-        <TouchableOpacity style={styles.closeButton}>
+        <TouchableOpacity style={styles.closeButton} onPress={()=>navigation.navigate('Login')}>
           <Image
             source={require('../../../assets/images/Exit.png')} />
         </TouchableOpacity>

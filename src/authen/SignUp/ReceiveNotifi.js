@@ -21,7 +21,7 @@ const ReceiveNotifi = () => {
                     <Image source={require('../../../assets/images/Back.png')} />
                 </TouchableOpacity>
                 <Text style={styles.stepText}>Step 10/10</Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={()=>navigation.navigate('Login')}>
                     <Image source={require('../../../assets/images/Exit.png')} />
                 </TouchableOpacity>
             </View>
