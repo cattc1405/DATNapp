@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const ReceiveNotifi = () => {
     const [selectedNotifications, setSelectedNotifications] = useState([]);
+    const navigation = useNavigation();
 
     const toggleNotification = (notification) => {
         if (selectedNotifications.includes(notification)) {
@@ -15,7 +17,7 @@ const ReceiveNotifi = () => {
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <View style={styles.header}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={()=>navigation.goBack()}>
                     <Image source={require('../../../assets/images/Back.png')} />
                 </TouchableOpacity>
                 <Text style={styles.stepText}>Step 10/10</Text>

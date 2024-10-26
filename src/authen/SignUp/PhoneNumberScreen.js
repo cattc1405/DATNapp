@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, CheckBox, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+// import CheckBox from '@react-native-community/checkbox'; 
 
-const PhoneNumberScreen = () => {
+const PhoneNumberScreen = (props) => {
+  const { navigation } = props;
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isAccepted, setIsAccepted] = useState(false);
 
@@ -11,8 +13,9 @@ const PhoneNumberScreen = () => {
 
   const handleNextStep = () => {
     if (phoneNumber.length === 11 && isAccepted) {
-      // Proceed to the next step
       console.log('Next step');
+      // Navigate to the next screen
+      navigation.navigate('NextScreen');
     } else {
       console.log('Please enter valid phone number and accept terms');
     }
@@ -20,17 +23,34 @@ const PhoneNumberScreen = () => {
 
   return (
     <View style={styles.container}>
-      {/* Step 4/10 Header */}
-      <Text style={styles.stepText}>Step 4/10</Text>
+      <View style={styles.header}>
+        <TouchableOpacity style={styles.backButton}
+          onPress={() => navigation.goBack()}>
+          <Image
+            source={require('../../../assets/images/Back.png')}
+          />
+        </TouchableOpacity>
+        <Text style={styles.stepText}>Step 4/10</Text>
+        <TouchableOpacity style={styles.closeButton}>
+          <Image
+            source={require('../../../assets/images/Exit.png')}
+          />
+        </TouchableOpacity>
+      </View>
 
-      {/* Add Phone Number Section */}
-      <Text style={styles.headerText}>Add Your Phone Number</Text>
-      <Text style={styles.descriptionText}>
+      <Image
+        source={require('../../../assets/images/PhoneImage.png')}
+        style={styles.image}
+        resizeMode="contain"
+      />
+
+      <Text style={styles.title}>Add Your Phone Number</Text>
+      <Text style={styles.description}>
         Enter your phone number in order to send you your OTP security code.
       </Text>
 
-      {/* Phone Number Input */}
       <View style={styles.inputContainer}>
+        <Text style={styles.inputLabel}>PHONE NUMBER</Text>
         <TextInput
           style={styles.phoneInput}
           placeholder="1-541-754-3010"
@@ -43,18 +63,20 @@ const PhoneNumberScreen = () => {
         <Text style={styles.listText}>• Exactly 11 numbers</Text>
       </View>
 
-      {/* Accept Terms */}
       <View style={styles.checkboxContainer}>
-        <CheckBox value={isAccepted} onValueChange={setIsAccepted} />
+        <CheckBox
+          value={isAccepted}
+          onValueChange={setIsAccepted}
+          tintColors={{ true: '#F55F44', false: '#989DA3' }}
+        />
         <Text style={styles.checkboxText}>I Accept the</Text>
         <TouchableOpacity>
           <Text style={styles.linkText}>Terms and Conditions</Text>
         </TouchableOpacity>
       </View>
 
-      {/* Next Step Button */}
       <TouchableOpacity
-        style={styles.nextButton}
+        style={[styles.nextButton, (!isAccepted || phoneNumber.length !== 11) && styles.nextButtonDisabled]}
         onPress={handleNextStep}
         disabled={!isAccepted || phoneNumber.length !== 11}
       >
@@ -68,65 +90,110 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    justifyContent: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#F9F9F9',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  backButton: {
+    padding: 10,
   },
   stepText: {
-    textAlign: 'center',
     fontSize: 16,
+    textAlign: 'center',
+    fontWeight: '800',
+    color: '#989DA3',
+  },
+  closeButton: {
+    padding: 10,
+  },
+  image: {
+    width: 142,
+    height: 127,
+    alignSelf: 'center',
     marginBottom: 20,
   },
-  headerText: {
-    fontSize: 24,
+  title: {
+    fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 10,
+    color: '#000',
+    marginVertical: 10,
   },
-  descriptionText: {
+  description: {
+    fontSize: 15,
     textAlign: 'center',
+    color: '#989DA3',
     marginBottom: 20,
-    color: 'gray',
+    lineHeight: 25,
+    fontWeight: '600',
   },
   inputContainer: {
-    marginBottom: 20,
+    backgroundColor: '#FFF',
+    borderRadius: 20,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 2,
+    marginBottom: 30,
+  },
+  inputLabel: {
+    fontSize: 8.5,
+    fontWeight: '800',
+    color: '#F55F44',
   },
   phoneInput: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F55F44',
     padding: 10,
-    fontSize: 18,
+    fontSize: 16,
     marginBottom: 10,
   },
   validationText: {
-    fontSize: 14,
+    fontSize: 9,
+    fontWeight: '900',
+    color: '#979DA3',
     marginBottom: 5,
   },
   listText: {
-    fontSize: 14,
-    color: 'gray',
+    fontSize: 11,
+    color: '#989DA3',
+    fontWeight: '600',
+    marginLeft: 20,
   },
   checkboxContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
+    marginLeft: 50,
   },
   checkboxText: {
     marginLeft: 8,
+    color: '#989DA3',
   },
   linkText: {
-    color: 'blue',
+    color: '#F55F44',
     marginLeft: 4,
   },
   nextButton: {
-    backgroundColor: 'orange',
     padding: 15,
-    borderRadius: 5,
+    backgroundColor: '#F55F44',
+    borderRadius: 20,
     alignItems: 'center',
+    marginHorizontal: 30,
+  },
+  nextButtonDisabled: {
+    backgroundColor: '#E0E0E0',
   },
   buttonText: {
-    color: 'white',
-    fontSize: 18,
+    color: '#FFFFFF',
+    fontSize: 17,
+    fontWeight: '800',
   },
 });
 

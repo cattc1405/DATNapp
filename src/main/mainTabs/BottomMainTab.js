@@ -109,6 +109,27 @@ const RestaurantStack = () => {
     </Stack.Navigator>
   );
 };
+const CartStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="OrderDetail"
+        component={OrderDetail}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ConfirmOrder"
+        component={ConfirmOrder}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="CheckoutNavigator"
+        component={CheckoutNavigator}
+        options={{headerShown: false}}
+      />
+    </Stack.Navigator>
+  );
+};
 
 const tabScreenOptions = ({route}) => {
   return {
@@ -135,7 +156,7 @@ const tabScreenOptions = ({route}) => {
         iconSource = focused
           ? require('../../../assets/images/icons/OrderGreen.png')
           : require('../../../assets/images/icons/OrdersGray.png');
-      } else if (route.name === 'Rewards') {
+      } else if (route.name === 'CartStack') {
         iconSource = require('../../../assets/images/icons/RewardsGray.png');
       }
 
@@ -174,9 +195,9 @@ const BottomMainTab = () => {
         options={{title: 'Order'}}
       />
       <Tab.Screen
-        name="Rewards"
-        component={Rewards}
-        options={{title: 'Rewards'}}
+        name="CartStack"
+        component={CartStack}
+        options={{title: 'Cart'}}
       />
     </Tab.Navigator>
   );

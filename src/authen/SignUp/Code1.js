@@ -6,7 +6,7 @@ const Code1 = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton}
+        <TouchableOpacity style={styles.backButton} onPress={()=>navigation.goBack()}
         >
           <Image
             source={require('../../../assets/images/Back.png')} />
