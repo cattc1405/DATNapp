@@ -1,81 +1,43 @@
-import { View, Text, StyleSheet, TouchableOpacity, Alert, Image } from 'react-native';
-import React, { useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
+import React from 'react'
 
-const ForgetPass = ({ navigation }) => {
-  // const {navigation} = props;
-
-  const [selectedOption, setSelectedOption] = useState(null);
-
-  const handleOptionSelect = option => {
-    setSelectedOption(option);
-  };
-
-  const handleSendcode = () => {
-    if (!selectedOption) {
-      Alert.alert(
-        'Method Not Selected',
-        'Please select your contact method before proceeding.',
-        [{ text: 'OK' }],
-      );
-    } else {
-      navigation.navigate('Code');
-    }
-  };
+const ForgetPass = (props) => {
+  const { navigation } = props
   return (
     <View style={styles.container}>
-      <Image source={require('../../../assets/images/Back.png')} />
-      <TouchableOpacity
-        style={styles.backButton}
-        onPress={() => navigation.navigate('Login')}></TouchableOpacity>
-      <Text style={styles.stepText}>Step 1/3</Text>
+      <View style={styles.header}>
+        <View style={styles.headerContent}>
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+            <Image source={require('../../../assets/images/Back.png')} />
+          </TouchableOpacity>
+          <Text style={styles.stepText}>Step 1/3</Text>
+        </View>
+      </View>
       <View style={styles.imagePlaceholder}>
         <Image source={require('../../../assets/images/Img.png')} />
       </View>
       <Text style={styles.title}>Forgot Your Password?</Text>
       <Text style={styles.description}>
-        Choose from the two contact methods in order to send you an OTP code to
-        restore your password.
+        Choose from the two contact methods{"\n"} in order to send you an OTP code to{"\n"} restore your password.
       </Text>
 
-      <TouchableOpacity
-        style={
-          selectedOption === 'mobile' ? styles.option : styles.optionUncheck
-        }
-        onPress={() => handleOptionSelect('mobile')}>
-        <Text
-          style={
-            selectedOption === 'mobile'
-              ? styles.optionText
-              : styles.optionTextNonchecked
-          }>
-          1 VIA MOBILE NUMBER
-        </Text>
-        <Text style={styles.subText}>
-          We will send you your OTP number via SMS.
-        </Text>
+      <TouchableOpacity style={styles.option}>
+        <Image source={require('../../../assets/images/one.png')} style={styles.icon} />
+        <View style={styles.optionContent}>
+          <Text style={styles.optionText}>VIA MOBILE NUMBER</Text>
+          <Text style={styles.subText}>We will send you your OTP number via{"\n"} SMS.</Text>
+        </View>
       </TouchableOpacity>
 
-      <TouchableOpacity
-        style={
-          selectedOption === 'email' ? styles.option : styles.optionUncheck
-        }
-        onPress={() => handleOptionSelect('email')}>
-        <Text
-          style={
-            selectedOption === 'email'
-              ? styles.optionText
-              : styles.optionTextNonchecked
-          }>
-          2 VIA EMAIL
-        </Text>
-        <Text style={styles.subText}>
-          We will send you your OTP number via EMAIL.
-        </Text>
+      <TouchableOpacity style={styles.option}>
+        <Image source={require('../../../assets/images/two.png')} style={styles.icon} />
+        <View style={styles.optionContent}>
+          <Text style={styles.optionText}>VIA EMAIL</Text>
+          <Text style={styles.subText}>We will send you your OTP number via{"\n"} EMAIL.</Text>
+        </View>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.sendButton}
-        onPress={handleSendcode}>
+
+      <TouchableOpacity style={styles.sendButton} onPress={() => navigation.navigate('Code')}>
         <Text style={styles.sendButtonText}>Send Verification Code</Text>
       </TouchableOpacity>
     </View>
@@ -83,13 +45,6 @@ const ForgetPass = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  optionTextNonchecked: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 5,
-    color: '#000',
-    fontFamily: 'nunitoSan'
-  },
   container: {
     flex: 1,
     padding: 20,
@@ -97,21 +52,30 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    top: 20,
+    top: 5,
     left: 10,
+
   },
-  backText: {
-    fontSize: 24,
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  headerContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   stepText: {
     fontSize: 16,
-    textAlign: 'center',
-    marginVertical: 20,
-    fontFamily: 'nunitoSan'
+    color: '#989DA3',
+    marginLeft: 135,
+    fontWeight: '800'
   },
   imagePlaceholder: {
-    height: 150,
-    backgroundColor: '#E0F7EF',
+    width: 215,
+    height: 159,
+    alignSelf: 'center',
     marginBottom: 20,
     justifyContent: 'center',
     alignItems: 'center',
@@ -121,63 +85,60 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 10,
-    color: '#000000',
-    fontFamily: 'nunitoSan'
+    color: '#000000'
   },
   description: {
-    fontSize: 16,
+    fontSize: 15,
     textAlign: 'center',
-    color: '#777',
+    fontWeight: '600',
+    color: '#989DA3',
     marginBottom: 20,
-    fontFamily: 'nunitoSan'
-  },
-  optionUncheck: {
-    padding: 20,
-    backgroundColor: '#FFF',
-    borderRadius: 10,
-    marginBottom: 10,
-    shadowColor: '#000',
-    opacity: 0.6,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 2,
+    lineHeight: 25,
   },
   option: {
+    flexDirection: 'row', // Sắp xếp các thành phần theo chiều ngang
     padding: 20,
     backgroundColor: '#FFF',
-    borderRadius: 10,
-    marginBottom: 10,
+    borderRadius: 20,
+    marginBottom: 20,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 2,
+    alignItems: 'center',
+  },
+  icon: {
+    width: 18,
+    height: 18,
+    marginRight: 15, // Thêm khoảng cách giữa ảnh và văn bản
+    marginBottom: 40
+  },
+  optionContent: {
+    flex: 1,
   },
   optionText: {
-    fontSize: 16,
+    fontSize: 11,
     fontWeight: 'bold',
     marginBottom: 5,
     color: '#F55F44',
-    fontFamily: 'nunitoSan'
   },
   subText: {
     fontSize: 14,
     color: '#777',
-    fontFamily: 'nunitoSan'
   },
   sendButton: {
     padding: 15,
     backgroundColor: '#F55F44',
-    borderRadius: 30,
+    borderRadius: 25,
     alignItems: 'center',
     marginTop: 20,
+    marginHorizontal: 15
   },
   sendButtonText: {
     color: '#FFF',
     fontSize: 16,
     fontWeight: 'bold',
-    fontFamily: 'nunitoSan'
   },
 });
 

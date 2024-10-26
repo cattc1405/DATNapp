@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
 
-const ReceiveNotifi = props => {
-    const { navigation } = props;
+const ReceiveNotifi = () => {
     const [selectedNotifications, setSelectedNotifications] = useState([]);
 
     const toggleNotification = (notification) => {
@@ -15,28 +14,25 @@ const ReceiveNotifi = props => {
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
-            {/* Icon quay lại và đóng */}
             <View style={styles.header}>
                 <TouchableOpacity>
                     <Image source={require('../../../assets/images/Back.png')} />
                 </TouchableOpacity>
                 <Text style={styles.stepText}>Step 10/10</Text>
-                <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                <TouchableOpacity>
                     <Image source={require('../../../assets/images/Exit.png')} />
                 </TouchableOpacity>
             </View>
 
-            {/* Hình ảnh minh họa */}
             <Image source={require('../../../assets/images/Notifi.png')} style={styles.image} />
 
-            {/* Tiêu đề và mô tả */}
-            <Text style={styles.title}>Do You Want to Receive Notifications?</Text>
+            <Text style={styles.title}>Do You Want to Receive{"\n"} Notifications?</Text>
             <Text style={styles.description}>
-                Select the notifications that you want to receive in order to track every coupon.
+                Select the notifications that you want to{"\n"} receive in order to track every coupon.
             </Text>
 
-            {/* Tùy chọn thông báo */}
             <View style={styles.notificationOptions}>
+                <Text style={styles.subTitle}>YOU WILL RECEIVE NOTIFICATIONS FOR</Text>
                 {['Nearby Favorite Stores', 'Exclusive Rewards and Coupons', 'Special Offers'].map((item) => (
                     <TouchableOpacity
                         key={item}
@@ -50,8 +46,6 @@ const ReceiveNotifi = props => {
                     </TouchableOpacity>
                 ))}
             </View>
-
-            {/* Nút bật thông báo và bỏ qua */}
             <TouchableOpacity style={styles.button}>
                 <Text style={styles.buttonText}>Turn Notifications On</Text>
             </TouchableOpacity>
@@ -76,56 +70,67 @@ const styles = StyleSheet.create({
         width: '100%',
         marginBottom: 20,
     },
-    headerButton: {
-        fontSize: 20,
-        color: '#333',
-    },
     stepText: {
         fontSize: 16,
         fontWeight: 'bold',
-        fontFamily: 'nunitoSan'
     },
     image: {
-        width: 200,
-        height: 200,
+        width: 190,
+        height: 213,
         resizeMode: 'contain',
         marginBottom: 20,
     },
     title: {
-        fontSize: 22,
-        fontWeight: 'bold',
+        fontSize: 20,
+        fontWeight: '700',
         textAlign: 'center',
         marginBottom: 10,
-        fontFamily: 'nunitoSan'
+        color: '#000000',
+
     },
     description: {
-        fontSize: 16,
-        color: '#666',
+        fontSize: 15,
+        color: '#989DA3',
         textAlign: 'center',
         marginBottom: 20,
-        fontFamily: 'nunitoSan'
+        fontWeight: '600',
+        lineHeight: 25
     },
     notificationOptions: {
-        width: '100%',
-        backgroundColor: '#FFF',
-        borderRadius: 10,
-        padding: 15,
+        width: '90%',
+        backgroundColor: '#FFFFFF',
+        borderRadius: 20,
+        padding: 10,
         marginBottom: 20,
+        alignItems: 'center',
+        marginVertical: 10,
+        paddingVertical: 10,
+        paddingHorizontal: 30,
+
+    },
+    subTitle: {
+        fontSize: 9,
+        fontWeight: '900',
+        color: '#979DA3',
+        marginBottom: 10,
+        textAlign: 'center',
     },
     option: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 10,
+        marginBottom: 15,
+        width: '90%',
+        justifyContent: 'flex-start',
     },
     radioButton: {
-        width: 20,
-        height: 20,
+        width: 14,
+        height: 14,
         borderRadius: 10,
         borderWidth: 2,
         borderColor: '#FF6347',
         alignItems: 'center',
         justifyContent: 'center',
-        marginRight: 10,
+        marginLeft: 40,
     },
     radioButtonSelected: {
         width: 10,
@@ -134,27 +139,29 @@ const styles = StyleSheet.create({
         backgroundColor: '#FF6347',
     },
     optionText: {
-        fontSize: 16,
-        color: '#333',
+        fontSize: 11,
+        fontWeight: '600',
+        color: '#989DA3',
+        textAlign: 'center',
+        marginLeft: 10
     },
     button: {
-        backgroundColor: '#FF6347',
-        paddingVertical: 15,
-        paddingHorizontal: 30,
-        borderRadius: 10,
-        marginBottom: 10,
+        backgroundColor: '#F55F44',
+        paddingVertical: 10,
+        paddingHorizontal: 50,
+        borderRadius: 20,
+        marginBottom: 15,
     },
     buttonText: {
-        color: '#FFF',
-        fontSize: 18,
-        fontWeight: 'bold',
-        fontFamily: 'nunitoSan'
+        color: '#FFFFFF',
+        fontSize: 17,
+        fontWeight: '800',
     },
     skipText: {
         fontSize: 16,
-        color: '#FF6347',
-        textDecorationLine: 'underline',
-        fontFamily: 'nunitoSan'
+        color: '#F55F44',
+        fontWeight: '800',
+
     },
 });
 

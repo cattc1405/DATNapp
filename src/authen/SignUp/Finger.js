@@ -34,7 +34,7 @@ const Finger = (props) => {
             {/* Văn bản mô tả */}
             <Text style={styles.title}>Enable Your Fingerprint</Text>
             <Text style={styles.description}>
-                In order to log in into your account in a faster and safer way, add your fingerprint.
+                In order to log in into your account in a{"\n"}  faster and safer way, add your {"\n"}fingerprint.
             </Text>
 
             {/* Hình ảnh Fingerprint */}
@@ -81,60 +81,59 @@ const styles = StyleSheet.create({
     },
     stepText: {
         fontSize: 16,
-        color: '#555',
+        color: '#989DA3',
         fontWeight: 'bold',
-        fontFamily: 'nunitoSan'
     },
     imageContainer: {
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 20,
+        marginBottom: 10,
+
     },
     image: {
-        width: 200, // Cập nhật kích thước của hình ảnh để phù hợp hơn
-        height: 200,
+        width: 270,
+        height: 238,
         resizeMode: 'contain',
     },
     fingerprintImage: {
-        width: 100, // Điều chỉnh kích thước Fingerprint để giống với thiết kế
-        height: 100,
+        width: 46,
+        height: 52,
         resizeMode: 'contain',
         marginBottom: 20,
     },
     title: {
-        fontSize: 22,
+        fontSize: 20,
         fontWeight: 'bold',
         color: '#000',
         textAlign: 'center',
-        marginBottom: 10,
-        fontFamily: 'nunitoSan'
+        // marginBottom: 10,
     },
     description: {
-        fontSize: 16,
-        color: '#888',
+        fontSize: 15,
+        color: '#989DA3',
         textAlign: 'center',
         marginHorizontal: 20,
         marginBottom: 30,
-        fontFamily: 'nunitoSan'
+        lineHeight: 25, 
     },
     nextButton: {
-        backgroundColor: '#FF6F61',
-        paddingVertical: 15,
-        paddingHorizontal: 60,
+        backgroundColor: '#F55F44',
+        paddingVertical: 10,
+        paddingHorizontal: 110,
         borderRadius: 30,
-        marginBottom: 15,
+       
     },
     nextButtonText: {
-        color: '#FFF',
-        fontSize: 18,
-        fontWeight: 'bold',
-        fontFamily: 'nunitoSan'
+        color: '#FFFFFF',
+        fontSize: 17,
+        textAlign: 'center',
+        fontWeight:'600',
+
     },
     skipText: {
         color: '#FF6F61',
-        fontSize: 16,
-        textDecorationLine: 'underline',
-        fontFamily: 'nunitoSan'
+        fontSize: 14,
+       fontWeight:'800',
     },
 });
 

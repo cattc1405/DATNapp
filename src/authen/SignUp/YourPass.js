@@ -1,32 +1,26 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  TextInput,
-  Image,
-} from 'react-native';
-import React, { useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, Image } from 'react-native'
+import React, { useState } from 'react'
 
-const YourPass = () => {
+const YourPass = (props) => {
+  const { navigation } = props
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [isPasswordVisible, setPasswordVisible] = useState(false);
+  const [isConfirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
 
-  const [inputValue, setInputValue] = useState('');
-  const navigation = useNavigation();
-  const handleTextChange = text => {
-    setInputValue(text);
-  };
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.navigate('Code1')}>
-          <Image source={require('../../../assets/images/Back.png')} />
+        <TouchableOpacity style={styles.backButton}
+          onPress={() => navigation.navigate('Code1')} >
+          <Image
+            source={require('../../../assets/images/Back.png')}
+          />
         </TouchableOpacity>
         <Text style={styles.stepText}>Step 6/10</Text>
         <TouchableOpacity style={styles.closeButton}>
-          <Image source={require('../../../assets/images/Exit.png')} />
+          <Image
+            source={require('../../../assets/images/Exit.png')} />
         </TouchableOpacity>
       </View>
 
@@ -36,152 +30,77 @@ const YourPass = () => {
         resizeMode="contain"
       />
 
-      {/* Tiêu đề */}
       <Text style={styles.title}>Set Your Password</Text>
-
-      {/* Mô tả */}
       <Text style={styles.description}>
-        In order to keep your account safe you need to create a strong password.
+        In order to keep your account safe you need{"\n"} to create a strong password.
       </Text>
-
-      {/* Ô nhập mật khẩu */}
-      {/* <View style={styles.inputContainer}>
-        <Text style={styles.inputLabel}>PASSWORD</Text>
-        <View style={styles.passwordWrapper}>
-          <TextInput
-            style={styles.input}
-            secureTextEntry={!isPasswordVisible}
-            value={password}
-            onChangeText={setPassword}
-            placeholder="********"
-          />
-          <TouchableOpacity
-            onPress={() => setPasswordVisible(!isPasswordVisible)}
-            style={styles.iconButton}
-          >
-            <Image
-              source={require('../../../assets/images/NotEye.png')} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setPassword('')}
-            style={styles.iconButton}
-          >
-            <Image
-              source={require('../../../assets/images/RedExit.png')} />
-          </TouchableOpacity>
+      <View style={styles.passwordBox}>
+        <View style={styles.inputContainer}>
+          <Text style={styles.inputLabel}>PASSWORD</Text>
+          <View style={styles.passwordWrapper}>
+            <TextInput
+              style={styles.input}
+              secureTextEntry={!isPasswordVisible}
+              value={password}
+              onChangeText={setPassword}
+              placeholder="********"
+            />
+            <TouchableOpacity
+              onPress={() => setPasswordVisible(!isPasswordVisible)}
+              style={styles.iconButton}
+            >
+              <Image
+                source={require('../../../assets/images/NotEye.png')} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setPassword('')}
+              style={styles.iconButton}
+            >
+              <Image
+                source={require('../../../assets/images/RedExit.png')} />
+            </TouchableOpacity>
+          </View>
         </View>
-      </View> */}
+        <View style={styles.inputContainer}>
+          <Text style={styles.inputLabel}>CONFIRM PASSWORD</Text>
+          <View style={styles.passwordWrapper}>
+            <TextInput
+              style={styles.input}
+              secureTextEntry={!isConfirmPasswordVisible}
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+              placeholder="********"
+            />
+            <TouchableOpacity
+              onPress={() => setConfirmPasswordVisible(!isConfirmPasswordVisible)}
+              style={styles.iconButton}
+            >
+              <Image
+                source={require('../../../assets/images/NotEye.png')} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setConfirmPassword('')}
+              style={styles.iconButton}
+            >
+              <Image
+                source={require('../../../assets/images/RedExit.png')} />
+            </TouchableOpacity>
+          </View>
+        </View>
 
-      {/* Ô nhập xác nhận mật khẩu */}
-      {/* <View style={styles.inputContainer}>
-        <Text style={styles.inputLabel}>CONFIRM PASSWORD</Text>
-        <View style={styles.passwordWrapper}>
-          <TextInput
-            style={styles.input}
-            secureTextEntry={!isConfirmPasswordVisible}
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-            placeholder="********"
-          />
-          <TouchableOpacity
-            onPress={() => setConfirmPasswordVisible(!isConfirmPasswordVisible)}
-            style={styles.iconButton}
-          >
-            <Image
-              source={require('../../../assets/images/NotEye.png')} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setConfirmPassword('')}
-            style={styles.iconButton}
-          >
-            <Image
-              source={require('../../../assets/images/RedExit.png')} />
-          </TouchableOpacity>
+        {/* Password Requirements */}
+        <View style={styles.requirementsBox}>
+          <Text style={styles.requirementTitle}>YOUR PASSWORD MUST CONTAIN</Text>
+          {['Between 8 and 20 characters', '1 upper case letter', '1 or more numbers', '1 or more special characters'].map((requirement, index) => (
+            <View style={styles.requirementRow} key={index}>
+              <View style={styles.checkBox} />
+              <Text style={styles.requirement}>{requirement}</Text>
+            </View>
+          ))}
         </View>
       </View>
 
-
-      <View style={styles.passwordRequirements}>
-        <Text style={styles.requirementTitle}>YOUR PASSWORD MUST CONTAIN</Text>
-        <Text style={styles.requirement}>• Between 8 and 20 characters</Text>
-        <Text style={styles.requirement}>• 1 upper case letter</Text>
-        <Text style={styles.requirement}>• 1 or more numbers</Text>
-        <Text style={styles.requirement}>• 1 or more special characters</Text>
-      </View> */}
-
-      <View style={styles.inputNameView}>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.inputView}
-            secureTextEntry={true}
-            placeholder="Example: John Smith"
-            placeholderTextColor="rgb(177, 189, 199)"
-            onChangeText={handleTextChange}
-            value={inputValue}
-          />
-          <Text style={styles.inputLabel}>Password</Text>
-        </View>
-
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.inputView}
-            placeholder="Example: John Smith"
-            placeholderTextColor="rgb(177, 189, 199)"
-            secureTextEntry={true}
-          />
-          <Text style={styles.inputLabel}>confirm password</Text>
-        </View>
-
-        <Text style={styles.containText}>Your password must contain</Text>
-        <View style={styles.checkView}>
-          <Image
-            style={styles.containCheck}
-            source={
-              inputValue.length >= 8 && inputValue.length <= 20
-                ? require('../../../assets/images/orangeChecked.png')
-                : require('../../../assets/images/grayNotChecked.png')
-            }
-          />
-          <Text style={styles.atLeastText}>Between 8 and 20 characters</Text>
-        </View>
-        <View style={styles.checkView}>
-          <Image
-            style={styles.containCheck}
-            source={
-              /[A-Z]/.test(inputValue)
-                ? require('../../../assets/images/orangeChecked.png')
-                : require('../../../assets/images/grayNotChecked.png')
-            }
-          />
-          <Text style={styles.atLeastText}>1 upper case letter</Text>
-        </View>
-        <View style={styles.checkView}>
-          <Image
-            style={styles.containCheck}
-            source={
-              /[0-9]/.test(inputValue)
-                ? require('../../../assets/images/orangeChecked.png')
-                : require('../../../assets/images/grayNotChecked.png')
-            }
-          />
-          <Text style={styles.atLeastText}>1 or more numbers</Text>
-        </View>
-        <View style={styles.checkView}>
-          <Image
-            style={styles.containCheck}
-            source={
-              /[!@#$%^&*(),.?":{}|<>]/.test(inputValue)
-                ? require('../../../assets/images/orangeChecked.png')
-                : require('../../../assets/images/grayNotChecked.png')
-            }
-          />
-          <Text style={styles.atLeastText}>1 or more special characters</Text>
-        </View>
-      </View>
-
-      {/* Nút "Next Step" */}
-      <TouchableOpacity
-        style={styles.nextButton}
+      <TouchableOpacity style={styles.nextButton}
         onPress={() => navigation.navigate('Finger')}>
         <Text style={styles.nextButtonText}>Next Step</Text>
       </TouchableOpacity>
@@ -190,89 +109,6 @@ const YourPass = () => {
 };
 
 const styles = StyleSheet.create({
-  atLeastText: {
-    paddingLeft: 10,
-    fontSize: 13,
-    fontFamily: 'nunitoSan',
-  },
-  containCheck: {
-    width: 17,
-    height: 17,
-  },
-  checkView: {
-    width: '70%',
-    height: 25,
-    marginLeft: '10%',
-    marginTop: '1.2%',
-    marginBottom: '-1%',
-    flexDirection: 'row',
-    // backgroundColor: 'pink',
-    alignItems: 'center',
-  },
-  containText: {
-    marginLeft: '10%',
-    fontWeight: '700',
-    fontFamily: 'nunitoSan',
-    textTransform: 'uppercase',
-    fontSize: 12,
-    marginTop: '8%',
-    color: '#989DA3',
-  },
-  inputView: {
-    paddingHorizontal: 25,
-    color: 'black',
-    fontWeight: '400',
-  },
-  inputLabel: {
-    textTransform: 'uppercase',
-    position: 'absolute',
-    fontFamily: 'nunitoSan',
-    left: 20,
-    fontWeight: '700',
-    color: '#F55F44',
-    top: -11,
-    paddingHorizontal: 4,
-    backgroundColor: '#fff',
-  },
-  inputContainer: {
-    marginTop: '10%',
-    width: '80%',
-    marginLeft: '10%',
-    marginBottom: '-4%',
-    height: 50,
-    borderRadius: 25,
-    borderWidth: 1.8,
-    borderColor: 'rgb(211, 222, 232)',
-  },
-
-  checkedgenderText: {
-    color: 'black',
-    alignSelf: 'center',
-    fontWeight: '700',
-    fontSize: 17,
-    lineHeight: 28,
-    fontFamily: 'nunitoSan',
-  },
-
-  checkedBlank: {
-    width: '20%',
-    marginLeft: '70%',
-    height: '70%',
-    resizeMode: 'contain',
-  },
-  genderView: {
-    width: '45%',
-    height: '100%',
-    borderRadius: 15,
-    backgroundColor: '#fff',
-  },
-  inputNameView: {
-    width: '100%',
-    backgroundColor: 'white',
-    borderRadius: 20,
-    elevation: 4,
-    height: '45%',
-  },
   container: {
     flex: 1,
     padding: 20,
@@ -287,50 +123,61 @@ const styles = StyleSheet.create({
   backButton: {
     padding: 10,
   },
-  backText: {
-    fontSize: 24,
-  },
   stepText: {
     fontSize: 16,
     textAlign: 'center',
-    fontFamily: 'nunitoSan'
+    fontWeight: '800',
+    color: '#989DA3'
   },
   closeButton: {
     padding: 10,
   },
-  closeText: {
-    fontSize: 24,
-    fontFamily: 'nunitoSan'
-  },
   image: {
-    width: 200,
-    height: 150,
+    width: 142,
+    height: 127,
     alignSelf: 'center',
     marginBottom: 20,
   },
   title: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 10,
-    fontFamily: 'nunitoSan'
+    color: '#000000'
   },
   description: {
-    fontSize: 16,
+    fontSize: 15,
     textAlign: 'center',
-    color: '#777',
+    color: '#989DA3',
     marginBottom: 20,
-    fontFamily: 'nunitoSan'
+    lineHeight: 25,
+    fontWeight: '600',
+
   },
-  // inputContainer: {
-  //   marginBottom: 20,
-  // },
-  // inputLabel: {
-  //   fontSize: 14,
-  //   fontWeight: 'bold',
-  //   color: '#FF6B6B',
-  //   marginBottom: 10,
-  // },
+  passwordBox: {
+    width: '100%',
+    backgroundColor: '#FFF',
+    borderRadius: 20,
+    padding: 20,
+    marginBottom: 30,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 2,
+    borderRadius: 20,
+  },
+  inputContainer: {
+    marginBottom: 20,
+
+
+  },
+  inputLabel: {
+    fontSize: 8.5,
+    fontWeight: '800',
+    color: '#F55F44',
+
+  },
   passwordWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -345,37 +192,60 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     padding: 15,
-    fontSize: 18,
+    fontSize: 12,
+    fontWeight: '800',
+    color: '#979DA3',
   },
   iconButton: {
     padding: 10,
+
   },
-  passwordRequirements: {
-    marginBottom: 20,
+  requirementsBox: {
   },
   requirementTitle: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    marginBottom: 10,
+    fontSize: 9,
+    fontWeight: '900',
+    color: '#979DA3',
+    marginLeft: 50,
+
+
+  },
+  requirementRow: {
+    flexDirection: 'row',
+    marginTop: 5,
+
+  },
+  checkBox: {
+    width: 15,
+    height: 15,
+    borderRadius: 20,
+    backgroundColor: '#EEEEEE',
+    marginLeft: 50,
   },
   requirement: {
-    fontSize: 14,
-    marginBottom: 5,
-    color: '#555',
+    fontSize: 11,
+    color: '#989DA3',
+    fontWeight: '600',
+    lineHeight: 15,
+    marginLeft: 10,
+
   },
   nextButton: {
     padding: 15,
     backgroundColor: '#F55F44',
-    borderRadius: 10,
-    marginTop: 10,
+    borderRadius: 20,
     alignItems: 'center',
     marginBottom: 20,
+    paddingVertical: 10,
+    marginHorizontal: 30,
   },
   nextButtonText: {
-    color: '#FFF',
-    fontSize: 16,
-    fontWeight: 'bold',
-    fontFamily: 'nunitoSan'
+    color: '#FFFFFF',
+    fontSize: 17,
+    fontWeight: '800',
+
+
+
   },
 });
 
