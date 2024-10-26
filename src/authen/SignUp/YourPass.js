@@ -34,10 +34,7 @@ const YourPass = (props) => {
       <Text style={styles.description}>
         In order to keep your account safe you need{"\n"} to create a strong password.
       </Text>
-
-      {/* Unified box containing password fields and requirements */}
       <View style={styles.passwordBox}>
-        {/* Password Input */}
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>PASSWORD</Text>
           <View style={styles.passwordWrapper}>
@@ -64,8 +61,6 @@ const YourPass = (props) => {
             </TouchableOpacity>
           </View>
         </View>
-
-        {/* Confirm Password Input */}
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>CONFIRM PASSWORD</Text>
           <View style={styles.passwordWrapper}>
@@ -131,19 +126,21 @@ const styles = StyleSheet.create({
   stepText: {
     fontSize: 16,
     textAlign: 'center',
+    fontWeight: '800',
+    color: '#989DA3'
   },
   closeButton: {
     padding: 10,
   },
   image: {
-    width: 140,
-    height: 130,
+    width: 142,
+    height: 127,
     alignSelf: 'center',
-    marginBottom: 10,
+    marginBottom: 20,
   },
   title: {
     fontSize: 20,
-    fontWeight: '700',
+    fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 10,
     color: '#000000'
@@ -162,20 +159,24 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     borderRadius: 20,
     padding: 20,
-    marginBottom: 20,
+    marginBottom: 30,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 2,
+    borderRadius: 20,
   },
   inputContainer: {
     marginBottom: 20,
+
+
   },
   inputLabel: {
     fontSize: 8.5,
     fontWeight: '800',
     color: '#F55F44',
+
   },
   passwordWrapper: {
     flexDirection: 'row',
@@ -191,10 +192,13 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     padding: 15,
-    fontSize: 18,
+    fontSize: 12,
+    fontWeight: '800',
+    color: '#979DA3',
   },
   iconButton: {
     padding: 10,
+
   },
   requirementsBox: {
   },
@@ -202,23 +206,28 @@ const styles = StyleSheet.create({
     fontSize: 9,
     fontWeight: '900',
     color: '#979DA3',
-    textAlign: 'center',
+    marginLeft: 50,
+
+
   },
   requirementRow: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 5,
+    marginTop: 5,
+
   },
   checkBox: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    backgroundColor: '#FF6347',
-    marginRight: 10,
+    width: 15,
+    height: 15,
+    borderRadius: 20,
+    backgroundColor: '#EEEEEE',
+    marginLeft: 50,
   },
   requirement: {
     fontSize: 11,
     color: '#989DA3',
+    fontWeight: '600',
+    lineHeight: 15,
+    marginLeft: 10,
 
   },
   nextButton: {

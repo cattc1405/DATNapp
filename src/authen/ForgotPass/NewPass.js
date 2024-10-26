@@ -110,8 +110,8 @@ const styles = StyleSheet.create({
   passwordRequirements: {
     marginHorizontal: 50,
   },
-  inputContainer:{
-borderRadius:20
+  inputContainer: {
+    borderRadius: 20
   },
   container: {
     flex: 1,
@@ -130,6 +130,8 @@ borderRadius:20
   stepText: {
     fontSize: 16,
     textAlign: 'center',
+    fontWeight: '800',
+    color: '#989DA3'
   },
   closeButton: {
     padding: 20,
@@ -141,8 +143,8 @@ borderRadius:20
     marginBottom: 20,
   },
   title: {
-    fontSize: 22,
-    fontWeight: 'bold',
+    fontSize: 20,
+    fontWeight: '700',
     textAlign: 'center',
     marginVertical: 10,
     color: '#000000'
@@ -171,7 +173,7 @@ borderRadius:20
     fontSize: 14,
     fontWeight: 'bold',
     color: '#FF6B6B',
-    borderRadius:30
+    borderRadius: 30
   },
   passwordWrapper: {
     flexDirection: 'row',
@@ -183,7 +185,7 @@ borderRadius:20
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 2,
-    paddingVertical:1,
+    paddingVertical: 1,
   },
   input: {
     flex: 1,
@@ -214,7 +216,7 @@ borderRadius:20
     alignItems: 'center',
     marginTop: 30,
     marginHorizontal: 30,
-    paddingVertical:10
+    paddingVertical: 10
 
   },
   nextButtonText: {
