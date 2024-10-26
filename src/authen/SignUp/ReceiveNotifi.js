@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
 
 const ReceiveNotifi = props => {
-    const {navigation} = props;
+    const { navigation } = props;
     const [selectedNotifications, setSelectedNotifications] = useState([]);
 
     const toggleNotification = (notification) => {
@@ -21,7 +21,7 @@ const ReceiveNotifi = props => {
                     <Image source={require('../../../assets/images/Back.png')} />
                 </TouchableOpacity>
                 <Text style={styles.stepText}>Step 10/10</Text>
-                <TouchableOpacity onPress={()=>navigation.navigate('Login')}>
+                <TouchableOpacity onPress={() => navigation.navigate('Login')}>
                     <Image source={require('../../../assets/images/Exit.png')} />
                 </TouchableOpacity>
             </View>
@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
     stepText: {
         fontSize: 16,
         fontWeight: 'bold',
+        fontFamily: 'nunitoSan'
     },
     image: {
         width: 200,
@@ -95,12 +96,14 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         marginBottom: 10,
+        fontFamily: 'nunitoSan'
     },
     description: {
         fontSize: 16,
         color: '#666',
         textAlign: 'center',
         marginBottom: 20,
+        fontFamily: 'nunitoSan'
     },
     notificationOptions: {
         width: '100%',
@@ -145,11 +148,13 @@ const styles = StyleSheet.create({
         color: '#FFF',
         fontSize: 18,
         fontWeight: 'bold',
+        fontFamily: 'nunitoSan'
     },
     skipText: {
         fontSize: 16,
         color: '#FF6347',
         textDecorationLine: 'underline',
+        fontFamily: 'nunitoSan'
     },
 });
 

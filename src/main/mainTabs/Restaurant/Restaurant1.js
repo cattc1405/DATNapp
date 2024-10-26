@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import React from 'react';
 
-const Restaurant1 = ({navigation}) => {
+const Restaurant1 = ({ navigation }) => {
   // Dữ liệu mẫu cho danh sách nhà hàng
   const restaurantData = [
     {
@@ -58,11 +58,11 @@ const Restaurant1 = ({navigation}) => {
     },
   ];
 
-  const renderItem = ({item}) => (
+  const renderItem = ({ item }) => (
     <TouchableOpacity
       style={styles.restaurantCard}
       onPress={() =>
-        navigation.navigate('RestaurantStack', {screen: 'BrandDetails'})
+        navigation.navigate('RestaurantStack', { screen: 'BrandDetails' })
       }>
       <Image source={item.image} style={styles.logo} />
       <View style={styles.infoContainer}>
@@ -93,7 +93,7 @@ const Restaurant1 = ({navigation}) => {
             />
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={()=>navigation.navigate('Filter')}>
+          <TouchableOpacity onPress={() => navigation.navigate('Filter')}>
             <Image
               source={require('../../../../assets/images/icons/FilterIcon.png')}
             />
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     padding: 12,
     marginBottom: 16,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 6,
     elevation: 3,
@@ -210,6 +210,7 @@ const styles = StyleSheet.create({
   },
   reviewText: {
     color: '#888',
+    fontFamily: 'nunitoSan'
   },
   offerBadge: {
     backgroundColor: '#F55F44',
@@ -223,5 +224,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     marginVertical: 3,
     fontWeight: 'bold',
+    fontFamily: 'nunitoSan'
   },
 });

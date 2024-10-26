@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 
 const Gender = props => {
-  const {navigation} = props;
+  const { navigation } = props;
   const [selectedGender, setSelectedGender] = useState(null);
 
   const handleSelectGender = gender => {
@@ -21,7 +21,7 @@ const Gender = props => {
       Alert.alert(
         'Gender Not Selected',
         'Please select your gender before proceeding.',
-        [{text: 'OK'}],
+        [{ text: 'OK' }],
       );
     } else {
       navigation.navigate('Code1');
@@ -218,6 +218,7 @@ const styles = StyleSheet.create({
   stepText: {
     fontSize: 16,
     fontWeight: 'bold',
+    fontFamily: 'nunitoSan'
   },
   imageContainer: {
     alignItems: 'center',
@@ -233,12 +234,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 10,
+    fontFamily: 'nunitoSan'
   },
   description: {
     fontSize: 16,
     textAlign: 'center',
     color: '#888',
     marginBottom: 20,
+    fontFamily: 'nunitoSan'
   },
   genderContainer: {
     flexDirection: 'row',
@@ -282,11 +285,13 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 18,
     fontWeight: 'bold',
+    fontFamily: 'nunitoSan'
   },
   skipText: {
     textAlign: 'center',
     color: 'gray',
     marginBottom: 20,
+    fontFamily: 'nunitoSan'
   },
 });
 

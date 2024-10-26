@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, Image } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
-const PaymentScreen = ({navigation}) => {
+const PaymentScreen = ({ navigation }) => {
   const [cardNumber, setCardNumber] = useState('');
   const [cardHolder, setCardHolder] = useState('');
   const [expirationDate, setExpirationDate] = useState('');
@@ -78,8 +78,8 @@ const PaymentScreen = ({navigation}) => {
         </TouchableOpacity>
       </View>
       <View>
-        <Text 
-        style={{marginBottom: 15,fontWeight:'bold',color:'#808080'}}
+        <Text
+          style={{ marginBottom: 15, fontWeight: 'bold', color: '#808080', fontFamily: 'nunitoSan' }}
         >
           PAYMENT DETAILS
         </Text>
@@ -118,7 +118,7 @@ const PaymentScreen = ({navigation}) => {
       </View>
 
       {/* Nút thanh toán */}
-      <TouchableOpacity style={styles.payButton} onPress={()=>navigation.navigate('Checkout5')}>
+      <TouchableOpacity style={styles.payButton} onPress={() => navigation.navigate('Checkout5')}>
         <Text style={styles.payButtonText}>Thanh toán $14.50</Text>
       </TouchableOpacity>
     </View>
@@ -148,15 +148,18 @@ const styles = StyleSheet.create({
   backText: {
     fontSize: 24,
     color: '#000',
+    fontFamily: 'nunitoSan'
   },
   closeText: {
     fontSize: 28,
     color: '#000',
+    fontFamily: 'nunitoSan'
   },
   stepText: {
     fontSize: 16,
     fontWeight: '600',
     color: '#888',
+    fontFamily: 'nunitoSan'
   },
   illustrationContainer: {
     height: 150,
@@ -173,6 +176,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     textAlign: 'center',
     marginBottom: 10,
+    fontFamily: 'nunitoSan'
   },
   paymentMethods: {
     flexDirection: 'row',

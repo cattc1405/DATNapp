@@ -1,10 +1,10 @@
-import {StyleSheet, Text, Image, TouchableOpacity, View} from 'react-native';
+import { StyleSheet, Text, Image, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import colors from '../../../../assets/colors';
-import {black} from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
-import {useNavigation} from '@react-navigation/native';
+import { black } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
+import { useNavigation } from '@react-navigation/native';
 
-const BrandDetails = ({navigation}) => {
+const BrandDetails = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.headView}>
@@ -191,6 +191,7 @@ const styles = StyleSheet.create({
     color: '#F55F44',
     fontSize: 15,
     fontWeight: '600',
+    fontFamily: 'nunitoSan'
   },
   titleBoldText: {
     fontSize: 20,

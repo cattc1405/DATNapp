@@ -6,48 +6,16 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
-  Alert,
 } from 'react-native';
-import { loginUser } from '../apiClient'; // Import the loginUser function
 
 const LoginScreen = ({ navigation }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
-
-  // Hàm xử lý khi người dùng nhấn vào nút "LOGIN"
-  const handleLogin = async () => {
-    // Kiểm tra nếu email hoặc password rỗng
-    if (!email || !password) {
-      Alert.alert('Error', 'Please enter both email and password.');
-      return;
-    }
-
-    try {
-      const response = await loginUser(email.trim(), password); // Use the loginUser function
-      if (response) {
-
-        navigation.navigate('MainApp');   // Navigate to MainApp if login is successful
-        setEmail('');
-        setPassword('');
-      }
-    } catch (error) {
-      console.error('Login error:', error);
-      if (error.response) {
-        // Kiểm tra nếu có response từ API
-        Alert.alert('Login Failed', error.response.data.message || 'Invalid credentials.');
-      } else {
-        // Lỗi không có response (có thể do network hoặc vấn đề khác)
-        Alert.alert('Error', 'Something went wrong. Please try again later.');
-      }
-    }
-  };
 
   return (
     <View style={styles.container}>
       {/* Back Button (optional) */}
       <TouchableOpacity style={styles.backButton}>
-        <Image source={require('../../assets/images/backArrow.png')} />
+        <Image source={require('../../assets/images/backArrow.png')}></Image>
       </TouchableOpacity>
 
       {/* Logo Section */}
@@ -68,8 +36,6 @@ const LoginScreen = ({ navigation }) => {
           style={styles.input}
           placeholder="Your email or phone"
           placeholderTextColor="#ccc"
-          value={email}
-          onChangeText={setEmail} // Cập nhật email khi người dùng nhập
         />
 
         {/* Password Input with Visibility Toggle */}
@@ -80,8 +46,6 @@ const LoginScreen = ({ navigation }) => {
             placeholder="Password"
             secureTextEntry={!passwordVisible}
             placeholderTextColor="#ccc"
-            value={password}
-            onChangeText={setPassword} // Cập nhật password khi người dùng nhập
           />
           <TouchableOpacity
             style={styles.eyeIcon}
@@ -96,7 +60,9 @@ const LoginScreen = ({ navigation }) => {
         </TouchableOpacity>
 
         {/* Login Button */}
-        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+        <TouchableOpacity
+          style={styles.loginButton}
+          onPress={() => navigation.navigate('MainApp')}>
           <Text style={styles.loginButtonText}>LOGIN</Text>
         </TouchableOpacity>
 
@@ -127,7 +93,7 @@ const LoginScreen = ({ navigation }) => {
               source={require('../../assets/images/icons/logogg.jpg')}
               style={styles.socialIcon}
             />
-            <Text style={styles.socialButtonText}>GOOGLE</Text>
+            <Text style={styles.socialButtonText}>GOOGLE </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -147,6 +113,10 @@ const styles = StyleSheet.create({
     top: 40,
     left: 20,
   },
+  backButtonText: {
+    fontSize: 30,
+    color: '#333',
+  },
   logoContainer: {
     marginBottom: 20,
   },
@@ -165,11 +135,13 @@ const styles = StyleSheet.create({
     color: '#333',
     marginBottom: 20,
     textAlign: 'center',
+    fontFamily: 'nunitoSan',
   },
   label: {
     fontSize: 14,
     color: '#333',
     marginBottom: 5,
+    fontFamily: 'nunitoSan'
   },
   input: {
     height: 50,
@@ -197,6 +169,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginBottom: 15,
     textAlign: 'right',
+    fontFamily: 'nunitoSan'
   },
   loginButton: {
     backgroundColor: '#ff7f50',
@@ -209,6 +182,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+    fontFamily: 'nunitoSan'
   },
   signupContainer: {
     flexDirection: 'row',
@@ -218,27 +192,20 @@ const styles = StyleSheet.create({
   signupText: {
     fontSize: 14,
     color: '#333',
+    fontFamily: 'nunitoSan'
   },
   signupLink: {
     fontSize: 14,
     color: '#ff7f50',
     fontWeight: 'bold',
-  },
-  signInContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 10,
-  },
-  horizontalLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: '#ccc',
-    marginHorizontal: 10,
+    fontFamily: 'nunitoSan'
   },
   signInWithText: {
+    textAlign: 'center',
+    marginVertical: 10,
+    color: '#333',
     fontSize: 14,
-    color: '#666',
-    fontWeight: '500',
+    fontFamily: 'nunitoSan'
   },
   socialButtonsContainer: {
     flexDirection: 'row',
@@ -261,6 +228,23 @@ const styles = StyleSheet.create({
   socialButtonText: {
     fontSize: 14,
     color: '#333',
+    fontFamily: 'nunitoSan'
+  },
+  signInContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 10,
+  },
+  horizontalLine: {
+    flex: 1, // Để đường kẻ chiếm không gian còn lại
+    height: 1, // Độ cao của đường kẻ
+    backgroundColor: '#ccc', // Màu xám nhẹ cho đường kẻ
+    marginHorizontal: 10, // Khoảng cách giữa đường kẻ và chữ
+  },
+  signInWithText: {
+    fontSize: 14,
+    color: '#666', // Màu xám đậm hơn cho chữ
+    fontWeight: '500', // Độ dày của chữ
   },
 });
 

@@ -1,8 +1,8 @@
-import {View, Text, StyleSheet, TouchableOpacity, Alert,Image} from 'react-native';
-import React, {useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert, Image } from 'react-native';
+import React, { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
-const ForgetPass = ({navigation}) => {
+const ForgetPass = ({ navigation }) => {
   // const {navigation} = props;
 
   const [selectedOption, setSelectedOption] = useState(null);
@@ -16,7 +16,7 @@ const ForgetPass = ({navigation}) => {
       Alert.alert(
         'Method Not Selected',
         'Please select your contact method before proceeding.',
-        [{text: 'OK'}],
+        [{ text: 'OK' }],
       );
     } else {
       navigation.navigate('Code');
@@ -88,6 +88,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 5,
     color: '#000',
+    fontFamily: 'nunitoSan'
   },
   container: {
     flex: 1,
@@ -106,6 +107,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     marginVertical: 20,
+    fontFamily: 'nunitoSan'
   },
   imagePlaceholder: {
     height: 150,
@@ -120,12 +122,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginVertical: 10,
     color: '#000000',
+    fontFamily: 'nunitoSan'
   },
   description: {
     fontSize: 16,
     textAlign: 'center',
     color: '#777',
     marginBottom: 20,
+    fontFamily: 'nunitoSan'
   },
   optionUncheck: {
     padding: 20,
@@ -134,7 +138,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     shadowColor: '#000',
     opacity: 0.6,
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 2,
@@ -145,7 +149,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 10,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 2,
@@ -155,10 +159,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 5,
     color: '#F55F44',
+    fontFamily: 'nunitoSan'
   },
   subText: {
     fontSize: 14,
     color: '#777',
+    fontFamily: 'nunitoSan'
   },
   sendButton: {
     padding: 15,
@@ -171,6 +177,7 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 16,
     fontWeight: 'bold',
+    fontFamily: 'nunitoSan'
   },
 });
 

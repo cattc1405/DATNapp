@@ -36,7 +36,7 @@ const Code1 = (props) => {
 
       {/* Nút "Next Step" */}
       <TouchableOpacity style={styles.nextButton}
-       onPress={() => navigation.navigate('YourPass')}>
+        onPress={() => navigation.navigate('YourPass')}>
         <Text style={styles.nextButtonText}>Next Step</Text>
 
       </TouchableOpacity>
@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
   stepText: {
     fontSize: 16,
     textAlign: 'center',
+    fontFamily: 'nunitoSan'
   },
   closeButton: {
     padding: 10,
@@ -88,12 +89,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 10,
+    fontFamily: 'nunitoSan'
   },
   description: {
     fontSize: 16,
     textAlign: 'center',
     color: '#777',
     marginBottom: 20,
+    fontFamily: 'nunitoSan'
   },
   inputContainer: {
     flexDirection: 'row',
@@ -124,15 +127,18 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 16,
     fontWeight: 'bold',
+    fontFamily: 'nunitoSan'
   },
   resendText: {
     textAlign: 'center',
     color: '#777',
     fontSize: 14,
+    fontFamily: 'nunitoSan'
   },
   resendLink: {
     color: '#FF6B6B',
     fontWeight: 'bold',
+    fontFamily: 'nunitoSan'
   },
 });
 

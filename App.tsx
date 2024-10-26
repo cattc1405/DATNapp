@@ -1,9 +1,8 @@
-import React, {useState} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createDrawerNavigator} from '@react-navigation/drawer';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {createStackNavigator} from '@react-navigation/stack';
+import React, { useState } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
 
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import BottomMainTab from './src/main/mainTabs/BottomMainTab';
 import SlideNav from './src/main/slidenav/SlideNav';
 import Restaurant1 from './src/main/mainTabs/Restaurant/Restaurant1';
@@ -24,13 +23,11 @@ import OrderScreen from './src/authen/Checkout/Checkout1';
 import LoginScreen from './src/authen/LoginScreen';
 import SignUpNavigation from './src/authen/SignUp/SignUpNavigation';
 import AuthNavigator from './src/authen/AuthNavigation';
-
-const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 function App(): React.JSX.Element {
-  const [isWelcomeScreenVisible, setWelcomeScreenVisible] = useState(false);
+  const [isWelcomeScreenVisible, setWelcomeScreenVisible] = useState(true);
 
   const hideWelcomeScreen = () => {
     setWelcomeScreenVisible(false);
@@ -40,22 +37,22 @@ function App(): React.JSX.Element {
     <NavigationContainer>
       <Stack.Navigator>
         {isWelcomeScreenVisible ? (
-          <Stack.Screen 
-            name="WelcomeNavigator" 
+          <Stack.Screen
+            name="WelcomeNavigator"
             options={{ headerShown: false }}>
-            {(props) => <WelcomeNavigator {...props} onGetStarted={hideWelcomeScreen} />} 
+            {(props) => <WelcomeNavigator {...props} onGetStarted={hideWelcomeScreen} />}
           </Stack.Screen>
         ) : (
-          <Stack.Screen 
-            name="Auth" 
-            component={AuthNavigator} 
-            options={{ headerShown: false }} 
+          <Stack.Screen
+            name="Auth"
+            component={AuthNavigator}
+            options={{ headerShown: false }}
           />
         )}
         <Stack.Screen
           name="MainApp"
           component={BottomMainTab}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>

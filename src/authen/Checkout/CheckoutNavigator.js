@@ -14,14 +14,14 @@ const Stack = createStackNavigator();
 
 const CheckoutNavigator = () => {
   return (
-      <Stack.Navigator initialRouteName="OrderScreen" screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="OrderScreen" component={OrderScreen}  />
-        <Stack.Screen name="AddressScreen" component={AddressScreen} />
-        <Stack.Screen name="Checkout3" component={Checkout3} />
-        <Stack.Screen name="PaymentScreen" component={PaymentScreen} />
-        <Stack.Screen name="Checkout5" component={Checkout5} />
-        <Stack.Screen name="Checkout6" component={Checkout6} />
-      </Stack.Navigator>
+    <Stack.Navigator initialRouteName="OrderScreen" screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="OrderScreen" component={OrderScreen} />
+      <Stack.Screen name="AddressScreen" component={AddressScreen} />
+      <Stack.Screen name="Checkout3" component={Checkout3} />
+      <Stack.Screen name="PaymentScreen" component={PaymentScreen} />
+      <Stack.Screen name="Checkout5" component={Checkout5} />
+      <Stack.Screen name="Checkout6" component={Checkout6} />
+    </Stack.Navigator>
   );
 };
 

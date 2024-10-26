@@ -6,10 +6,10 @@ import {
   TextInput,
   Image,
 } from 'react-native';
-import React, {useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import React, { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
-const NewPass = ({navigation}) => {
+const NewPass = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isPasswordVisible, setPasswordVisible] = useState(false);
@@ -28,9 +28,9 @@ const NewPass = ({navigation}) => {
           <Image source={require('../../../assets/images/Back.png')} />
         </TouchableOpacity>
         <Text style={styles.stepText}>Step 3/3</Text>
-        <TouchableOpacity style={styles.closeButton}  onPress={() => navigation.navigate('Login')}>
+        <TouchableOpacity style={styles.closeButton} onPress={() => navigation.navigate('Login')}>
           <Image
-            
+
             source={require('../../../assets/images/Exit.png')}
           />
         </TouchableOpacity>
@@ -288,6 +288,7 @@ const styles = StyleSheet.create({
   stepText: {
     fontSize: 16,
     textAlign: 'center',
+    fontFamily: 'nunitoSan'
   },
   closeButton: {
     padding: 10,
@@ -328,7 +329,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     borderRadius: 10,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 2,
@@ -365,6 +366,7 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 16,
     fontWeight: 'bold',
+    fontFamily: 'nunitoSan'
   },
 });
 

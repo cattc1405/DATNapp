@@ -14,9 +14,9 @@ const Code = (props) => {
         <Text style={styles.stepText}>Step 2/3</Text>
         <TouchableOpacity style={styles.closeButton}>
           <Image
-            source={require('../../../assets/images/Exit.png')} 
+            source={require('../../../assets/images/Exit.png')}
             onPress={() => navigation.navigate('LoginScreen')}
-            />
+          />
         </TouchableOpacity>
       </View>
       <Image
@@ -72,6 +72,7 @@ const styles = StyleSheet.create({
   stepText: {
     fontSize: 16,
     textAlign: 'center',
+    fontFamily: 'nunitoSan'
   },
   closeButton: {
     padding: 10,
@@ -90,12 +91,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 10,
+    fontFamily: 'nunitoSan'
   },
   description: {
     fontSize: 16,
     textAlign: 'center',
     color: '#777',
     marginBottom: 20,
+    fontFamily: 'nunitoSan'
   },
   inputContainer: {
     flexDirection: 'row',
@@ -121,12 +124,13 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     alignItems: 'center',
     marginTop: 20,
-    marginBottom:10,
+    marginBottom: 10,
   },
   nextButtonText: {
     color: '#FFF',
     fontSize: 16,
     fontWeight: 'bold',
+    fontFamily: 'nunitoSan'
   },
   resendText: {
     textAlign: 'center',

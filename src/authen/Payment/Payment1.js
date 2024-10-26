@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions } from 'rea
 // Lấy kích thước màn hình để tinh chỉnh cho giao diện linh hoạt hơn
 const { width } = Dimensions.get('window');
 
-const Payment1 = ({navigation}) => {
+const Payment1 = ({ navigation }) => {
     const [selectedPayment1, setSelectedPayment1] = useState(null);
 
     const selectPayment1 = (Payment1) => {
@@ -16,7 +16,7 @@ const Payment1 = ({navigation}) => {
             {/* Header */}
             <View style={styles.header}>
                 <TouchableOpacity style={styles.backButton}
-                  >
+                >
                     <Image source={require('../../../assets/images/Back.png')} style={styles.icon} />
                 </TouchableOpacity>
                 <Text style={styles.stepText}>Step 1/5</Text>
@@ -64,7 +64,7 @@ const Payment1 = ({navigation}) => {
             <TouchableOpacity
                 style={[styles.nextButton, !selectedPayment1 && styles.disabledButton]}
                 disabled={!selectedPayment1}
-                onPress={()=>navigation.navigate('Payment4')}
+                onPress={() => navigation.navigate('Payment4')}
             >
                 <Text style={styles.nextButtonText}>Next Step</Text>
             </TouchableOpacity>
@@ -100,6 +100,7 @@ const styles = StyleSheet.create({
     stepText: {
         fontSize: 16,
         fontWeight: 'bold',
+        fontFamily: 'nunitoSan'
     },
     imageContainer: {
         alignItems: 'center',
@@ -115,12 +116,14 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         marginVertical: 8,
+        fontFamily: 'nunitoSan'
     },
     description: {
         fontSize: 14,
         textAlign: 'center',
         color: '#888',
         marginBottom: 16,
+        fontFamily: 'nunitoSan'
     },
     paymentContainer: {
         flexDirection: 'row',
@@ -152,6 +155,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: 'bold',
         textAlign: 'center',
+        fontFamily: 'nunitoSan'
     },
     nextButton: {
         backgroundColor: '#FF6347',
@@ -168,11 +172,13 @@ const styles = StyleSheet.create({
         color: '#FFF',
         fontSize: 16,
         fontWeight: 'bold',
+        fontFamily: 'nunitoSan'
     },
     skipText: {
         textAlign: 'center',
         color: 'gray',
         marginBottom: 20,
+        fontFamily: 'nunitoSan'
     },
 });
 
