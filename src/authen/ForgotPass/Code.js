@@ -20,7 +20,7 @@ const Code = (props) => {
       <Image source={require('../../../assets/images/Mobile.png')} style={styles.image} resizeMode="contain" />
       <Text style={styles.title}>Enter the Verification Code</Text>
       <Text style={styles.description}>
-        Enter the 4 digit number that we sent{"\n"} to mafalda123@gmail.com.
+        Enter the 4 digit number that we send{"\n"} to (+1) 1-541-754-3010.
       </Text>
 
       <View style={styles.inputContainer}>
@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#989DA3',
     marginLeft: 10,
+    marginLeft: 110,
   },
   closeButton: {
     padding: 10,
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#989DA3',
     fontWeight: '300',
-    marginBottom: 20,
+    marginBottom: 10,
     lineHeight: 25,
   },
   inputContainer: {
@@ -95,7 +96,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     paddingVertical: 15,
     paddingHorizontal: 20,
-    marginBottom: 20,
+    marginBottom: 10,
     marginTop: '10%',
     borderRadius: 10,
     backgroundColor: '#FFF',

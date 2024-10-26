@@ -33,7 +33,7 @@ const Gender = (props) => {
 
       {/* Mô tả */}
       <Text style={styles.description}>
-        To make sure you receive the best personalized offers we need to know your gender.
+        To make sure you receive the best{"\n"} personalized offers we need to know{"\n"} your gender.
       </Text>
 
       {/* Chọn giới tính */}
@@ -98,7 +98,8 @@ const styles = StyleSheet.create({
   },
   stepText: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: '800',
+    color: '#989DA3'
   },
   imageContainer: {
     alignItems: 'center',
@@ -110,16 +111,19 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   title: {
-    fontSize: 22,
-    fontWeight: 'bold',
+    fontSize: 20,
+    fontWeight: '700',
     textAlign: 'center',
     marginVertical: 10,
+    color: '#000000'
   },
   description: {
-    fontSize: 16,
+    fontSize: 15,
     textAlign: 'center',
-    color: '#888',
+    color: '#989DA3',
     marginBottom: 20,
+    lineHeight: 25,
+    fontWeight: '600',
   },
   genderContainer: {
     flexDirection: 'row',
@@ -152,22 +156,24 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   nextButton: {
-    backgroundColor: '#FF6347',
+    backgroundColor: '#F55F44',
     paddingVertical: 15,
-    paddingHorizontal: 100,
+    paddingHorizontal: 120,
     borderRadius: 30,
     alignItems: 'center',
     marginVertical: 10,
   },
   nextButtonText: {
-    color: '#FFF',
-    fontSize: 18,
-    fontWeight: 'bold',
+    color: '#FFFFFF',
+    fontSize: 17,
+    fontWeight: '800',
   },
   skipText: {
     textAlign: 'center',
-    color: 'gray',
+    color: '#F55F44',
     marginBottom: 20,
+    fontSize: 17,
+    fontWeight: '800',
   },
 });
 
