@@ -335,7 +335,7 @@ const Product = () => {
       </ScrollView>
       <TouchableOpacity
         style={styles.addBtn}
-        onPress={() => navigation.navigate('OrderDetail')}>
+        onPress={() => navigation.navigate('CartStack',{Screen: 'OrderDetail'})}>
         <Text style={styles.addText}>Add to Order</Text>
       </TouchableOpacity>
     </View>
