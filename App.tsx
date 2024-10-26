@@ -31,7 +31,7 @@ function App(): React.JSX.Element {
   return (
     <NavigationContainer >
       <StatusBar />
-      <Stack.Navigator initialRouteName="YourPass">
+      <Stack.Navigator initialRouteName="PhoneNumberScreen">
         <Stack.Screen name="ForgetPass" component={ForgetPass} options={{ headerShown: false }} />
         <Stack.Screen name="Code" component={Code} options={{ headerShown: false }} />
         <Stack.Screen name="NewPass" component={NewPass} options={{ headerShown: false }} />
