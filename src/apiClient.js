@@ -23,3 +23,46 @@ export const loginUser = async (email, password) => {
 export const getToken = async () => {
     return await AsyncStorage.getItem('userToken');
 };
+
+// Hàm quên mật khẩu
+export const forgotPassword = async (email) => {
+    try {
+        const response = await axios.post(`${apiUrl}/forgot-password`, { email });
+        return response.data;
+    } catch (error) {
+        console.error('Lỗi khi gửi OTP:', error.response ? error.response.data : error.message);
+        throw error; // Ném lỗi để xử lý phía trên
+    }
+};
+
+// Hàm xác thực OTP
+export const verifyOtp = async (email, otp) => {
+    try {
+        const response = await axios.post(`${apiUrl}/verify-otp`, { email, otp });
+        return response.data;
+    } catch (error) {
+        console.error('Lỗi khi xác thực OTP:', error.response ? error.response.data : error.message);
+        throw error; // Ném lỗi để xử lý phía trên
+    }
+};
+
+// Hàm đặt lại mật khẩu mới
+export const resetPassword = async (email, newPassword) => {
+    try {
+        const response = await axios.post(`${apiUrl}/forgot-password`, { email, newPassword });
+        return response.data;
+    } catch (error) {
+        console.error('Lỗi khi đặt lại mật khẩu:', error.response ? error.response.data : error.message);
+        throw error; // Ném lỗi để xử lý phía trên
+    }
+};
+
+// Hàm đăng xuất
+export const logoutUser = async () => {
+    try {
+        await AsyncStorage.removeItem('userToken'); // Xóa token khỏi AsyncStorage
+        // Có thể thực hiện thêm các bước khác nếu cần
+    } catch (error) {
+        console.error('Lỗi khi đăng xuất:', error.message);
+    }
+};
