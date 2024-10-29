@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import CountryPicker from 'react-native-country-picker-modal';
 
 const PhoneNumberScreen = (props) => {
   const { navigation } = props;
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [countryCode, setCountryCode] = useState('US'); // Default country code
+  const [callingCode, setCallingCode] = useState('1');  // Default calling code
 
   const handlePhoneNumberChange = (text) => {
     setPhoneNumber(text);
@@ -14,7 +17,7 @@ const PhoneNumberScreen = (props) => {
       console.log('Next step');
       navigation.navigate('NextScreen');
     } else {
-      console.log('Please enter valid phone number');
+      console.log('Please enter a valid phone number');
     }
   };
 
@@ -43,13 +46,33 @@ const PhoneNumberScreen = (props) => {
 
       <View style={styles.inputContainer}>
         <Text style={styles.inputLabel}>PHONE NUMBER</Text>
-        <TextInput
-          style={styles.phoneInput}
-          placeholder="1-541-754-3010"
-          keyboardType="numeric"
-          value={phoneNumber}
-          onChangeText={handlePhoneNumberChange}
-        />
+
+        {/* Combined CountryPicker and TextInput */}
+        <View style={styles.phoneInputContainer}>
+          <View style={styles.countryPickerContainer}>
+            <CountryPicker
+              countryCode={countryCode}
+              withFilter
+              withFlag
+              withCallingCode
+              onSelect={(country) => {
+                setCountryCode(country.cca2);
+                setCallingCode(country.callingCode[0]);
+              }}
+              containerButtonStyle={styles.countryPicker}
+            />
+            <Text style={styles.callingCodeText}>+{callingCode}</Text>
+          </View>
+            <View style={styles.gach}></View>
+          <TextInput
+            style={styles.phoneInput}
+            placeholder="1-541-754-3010"
+            keyboardType="numeric"
+            value={phoneNumber}
+            onChangeText={handlePhoneNumberChange}
+          />
+        </View>
+
         <Text style={styles.validationText}>YOUR PHONE NUMBER MUST CONTAIN</Text>
         <Text style={styles.listText}>• An area code</Text>
         <Text style={styles.listText}>• Exactly 11 numbers</Text>
@@ -131,19 +154,46 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   inputLabel: {
-    fontSize: 8.5,
+    fontSize: 10.5,
     fontWeight: '800',
     color: '#F55F44',
   },
-  phoneInput: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#F55F44',
-    padding: 10,
-    fontSize: 16,
+  gach:{
+      width: 1, // Width of the divider
+      height: 50, // Adjust the height to your preference
+      backgroundColor: '#C0C0C0', // Divider color
+      marginHorizontal: 2, // Space around the divider
+  },
+  phoneInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 10,
+    borderWidth: 2,
+    borderRadius: 15,
+    borderColor:'#C0C0C0',
+    paddingHorizontal: 10
+  },
+  countryPickerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 5, // Space between country picker and phone input
+  },
+  callingCodeText: {
+    fontSize: 16,
+    color: '#F55F44',
+    marginLeft: 5, // Adjust margin
+  },
+  countryPicker: {
+    marginRight: -5, // Adjusted margin
+  },
+  phoneInput: {
+    flex: 1, // Takes up remaining space
+
+    fontSize: 16,
+    marginBottom: 0,
   },
   validationText: {
-    fontSize: 9,
+    fontSize: 12,
     fontWeight: '900',
     color: '#979DA3',
     marginBottom: 5,
@@ -152,7 +202,6 @@ const styles = StyleSheet.create({
   listText: {
     fontSize: 11,
     color: '#989DA3',
-    fontWeight: '600',
     marginLeft: 30,
   },
   nextButton: {
@@ -164,6 +213,7 @@ const styles = StyleSheet.create({
   },
   nextButtonDisabled: {
     backgroundColor: '#F55F44',
+    opacity: 0.5,
   },
   buttonText: {
     color: '#FFFFFF',
