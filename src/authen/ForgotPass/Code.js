@@ -1,8 +1,79 @@
-import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
-import React from 'react'
+import React, { useState, useRef } from 'react';
+import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import axios from 'axios';
 
 const Code = (props) => {
   const { navigation } = props;
+  const [code, setCode] = useState(['', '', '', '', '', '']); // 6 ô nhập mã
+  const [loading, setLoading] = useState(false);
+  const inputs = useRef([]);
+
+  const handleCodeChange = (index, value) => {
+    const newCode = [...code];
+    newCode[index] = value;
+
+    // Tự động chuyển tới ô nhập tiếp theo
+    if (value && index < code.length - 1) {
+      setTimeout(() => {
+        inputs.current[index + 1].focus();
+      }, 50);
+    }
+
+    // Tự động quay lại ô nhập trước đó nếu ô hiện tại rỗng
+    if (!value && index > 0) {
+      setTimeout(() => {
+        inputs.current[index - 1].focus();
+      }, 50);
+    }
+
+    setCode(newCode);
+  };
+
+  const handleVerifyCode = async () => {
+    // Kiểm tra xem mã có đủ 6 ký tự không
+    if (code.join('').length < 6) {
+      Alert.alert('Warning', 'Please enter a 6-digit verification code.');
+      return;
+    }
+
+    setLoading(true);
+    const verificationCode = code.join('');
+    try {
+      const response = await axios.post('https://app-datn-gg.onrender.com/api/v1/verify-code', {
+        code: verificationCode,
+      });
+
+      // Kiểm tra nếu response có thuộc tính success
+      if (response.data.success) {
+        Alert.alert('Success', response.data.message);
+        navigation.navigate('NewPass'); // Chuyển tới màn hình đổi mật khẩu
+      } else {
+        Alert.alert('Error', response.data.message); // Thông báo nếu mã không đúng
+      }
+    } catch (error) {
+      console.error('Error details:', error.response); // Xem chi tiết lỗi
+      const errorMessage = error.response?.data?.message || 'Mã xác thực không hợp lệ. Vui lòng kiểm tra lại!';
+      Alert.alert('Error', errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendCode = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.post('https://app-datn-gg.onrender.com/api/v1/resend-code', {
+        // Bạn có thể cần gửi số điện thoại hoặc thông tin khác ở đây
+      });
+      Alert.alert('Success', response.data.message);
+    } catch (error) {
+      console.error('Resend error:', error);
+      Alert.alert('Error', 'Không thể gửi lại mã xác thực. Vui lòng thử lại sau!');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -20,22 +91,30 @@ const Code = (props) => {
       <Image source={require('../../../assets/images/Mobile.png')} style={styles.image} resizeMode="contain" />
       <Text style={styles.title}>Enter the Verification Code</Text>
       <Text style={styles.description}>
-        Enter the 4 digit number that we send{"\n"} to (+1) 1-541-754-3010.
+        Enter the 6-digit number that we sent{"\n"} to (+1) 1-541-754-3010.
       </Text>
 
       <View style={styles.inputContainer}>
-        <TextInput style={styles.input} maxLength={1} keyboardType="numeric" />
-        <TextInput style={styles.input} maxLength={1} keyboardType="numeric" />
-        <TextInput style={styles.input} maxLength={1} keyboardType="numeric" />
-        <TextInput style={styles.input} maxLength={1} keyboardType="numeric" />
+        {code.map((digit, index) => (
+          <TextInput
+            key={index}
+            style={styles.input}
+            maxLength={1}
+            keyboardType="numeric"
+            value={digit}
+            onChangeText={value => handleCodeChange(index, value)}
+            ref={input => (inputs.current[index] = input)}
+          />
+        ))}
       </View>
 
-      <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('NewPass')}>
-        <Text style={styles.nextButtonText}>Next Step</Text>
+      <TouchableOpacity style={styles.nextButton} onPress={handleVerifyCode} disabled={loading}>
+        <Text style={styles.nextButtonText}>{loading ? 'Verifying...' : 'Next Step'}</Text>
       </TouchableOpacity>
 
       <Text style={styles.resendText}>
-        Didn't Receive Anything? <Text style={styles.resendLink}>Resend Code</Text>
+        Didn't Receive Anything? 
+        <Text style={styles.resendLink} onPress={handleResendCode}> Resend Code</Text>
       </Text>
     </View>
   );

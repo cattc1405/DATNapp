@@ -1,189 +1,102 @@
 
-  import {
-    View,
-    Text,
-    TouchableOpacity,
-    StyleSheet,
-    TextInput,
-    Image,
-  } from 'react-native';
-  import React, { useState } from 'react';
-  import { useNavigation } from '@react-navigation/native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  TextInput,
+  Image,
+  Alert,
+} from 'react-native';
+import React, { useState } from 'react';
+import axios from 'axios'; // Import axios
+import { useNavigation } from '@react-navigation/native';
 
-  const NewPass = ({ navigation }) => {
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [isPasswordVisible, setPasswordVisible] = useState(false);
-    const [isConfirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
-    const [inputValue, setInputValue] = useState('');
-    // const navigation = useNavigation();
-    const handleTextChange = text => {
-      setInputValue(text);
-    };
-    return (
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => navigation.goBack()}>
-            <Image source={require('../../../assets/images/Back.png')} />
-          </TouchableOpacity>
-          <Text style={styles.stepText}>Step 3/3</Text>
-          <TouchableOpacity style={styles.closeButton} onPress={() => navigation.navigate('Login')}>
-            <Image
+const NewPass = ({ navigation }) => {
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [inputValue, setInputValue] = useState('');
 
-              source={require('../../../assets/images/Exit.png')}
-            />
-          </TouchableOpacity>
-        </View>
+  const handleTextChange = text => {
+    setInputValue(text);
+  };
 
-        <Image
-          source={require('../../../assets/images/Img2.png')}
-          style={styles.image}
-          resizeMode="contain"
-        />
+  // Hàm xử lý khi nhấn nút "Next Step"
+  const handleNextStep = async () => {
+    if (password !== confirmPassword) {
+      Alert.alert("Mật khẩu không khớp", "Vui lòng kiểm tra lại mật khẩu của bạn.");
+      return;
+    }
 
-        {/* Tiêu đề */}
-        {/* <Text style={styles.title}>Set Your New Password</Text> */}
+    try {
+      // Gọi API để cập nhật mật khẩu
+      const response = await axios.post('https://app-datn-gg.onrender.com/api/v1/users/reset-password', {
+        password: password, // Truyền mật khẩu mới vào body
+      });
 
-        {/* Mô tả */}
-        {/* <Text style={styles.description}>
-          Try to create a new password that you will remember.
-        </Text> */}
+      if (response.status === 200) {
+        Alert.alert("Thành công", "Mật khẩu của bạn đã được cập nhật thành công!");
+        navigation.navigate('Login'); // Chuyển hướng đến màn hình đăng nhập
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert("Lỗi", "Đã có lỗi xảy ra. Vui lòng thử lại sau.");
+    }
+  };
 
-        {/* Ô nhập mật khẩu */}
-        {/* <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>PASSWORD</Text>
-          <View style={styles.passwordWrapper}>
-            <TextInput
-              style={styles.input}
-              secureTextEntry={!isPasswordVisible}
-              value={password}
-              onChangeText={setPassword}
-              placeholder="********"
-            />
-            <TouchableOpacity
-              onPress={() => setPasswordVisible(!isPasswordVisible)}
-              style={styles.iconButton}>
-              <Image source={require('../../../assets/images/NotEye.png')} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => setPassword('')}
-              style={styles.iconButton}>
-              <Image source={require('../../../assets/images/RedExit.png')} />
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        {/* Ô nhập xác nhận mật khẩu */}
-        {/* <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>CONFIRM PASSWORD</Text>
-          <View style={styles.passwordWrapper}>
-            <TextInput
-              style={styles.input}
-              secureTextEntry={!isConfirmPasswordVisible}
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-              placeholder="********"
-            />
-            <TouchableOpacity
-              onPress={() => setConfirmPasswordVisible(!isConfirmPasswordVisible)}
-              style={styles.iconButton}>
-              <Image source={require('../../../assets/images/NotEye.png')} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => setConfirmPassword('')}
-              style={styles.iconButton}>
-              <Image source={require('../../../assets/images/RedExit.png')} />
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        <View style={styles.passwordRequirements}>
-          <Text style={styles.requirementTitle}>YOUR PASSWORD MUST CONTAIN</Text>
-          <Text style={styles.requirement}>• Between 8 and 20 characters</Text>
-          <Text style={styles.requirement}>• 1 upper case letter</Text>
-          <Text style={styles.requirement}>• 1 or more numbers</Text>
-          <Text style={styles.requirement}>• 1 or more special characters</Text>
-        </View>  */}
-
-        <View style={styles.inputNameView}>
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.inputView}
-              secureTextEntry={true}
-              placeholder="Example: John Smith"
-              placeholderTextColor="rgb(177, 189, 199)"
-              onChangeText={handleTextChange}
-              value={inputValue}
-            />
-            <Text style={styles.inputLabel}>Password</Text>
-          </View>
-
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.inputView}
-              placeholder="Example: John Smith"
-              placeholderTextColor="rgb(177, 189, 199)"
-              secureTextEntry={true}
-            />
-            <Text style={styles.inputLabel}>confirm password</Text>
-          </View>
-
-          <Text style={styles.containText}>Your password must contain</Text>
-          <View style={styles.checkView}>
-            <Image
-              style={styles.containCheck}
-              source={
-                inputValue.length >= 8 && inputValue.length <= 20
-                  ? require('../../../assets/images/orangeChecked.png')
-                  : require('../../../assets/images/grayNotChecked.png')
-              }
-            />
-            <Text style={styles.atLeastText}>Between 8 and 20 characters</Text>
-          </View>
-          <View style={styles.checkView}>
-            <Image
-              style={styles.containCheck}
-              source={
-                /[A-Z]/.test(inputValue)
-                  ? require('../../../assets/images/orangeChecked.png')
-                  : require('../../../assets/images/grayNotChecked.png')
-              }
-            />
-            <Text style={styles.atLeastText}>1 upper case letter</Text>
-          </View>
-          <View style={styles.checkView}>
-            <Image
-              style={styles.containCheck}
-              source={
-                /[0-9]/.test(inputValue)
-                  ? require('../../../assets/images/orangeChecked.png')
-                  : require('../../../assets/images/grayNotChecked.png')
-              }
-            />
-            <Text style={styles.atLeastText}>1 or more numbers</Text>
-          </View>
-          <View style={styles.checkView}>
-            <Image
-              style={styles.containCheck}
-              source={
-                /[!@#$%^&*(),.?":{}|<>]/.test(inputValue)
-                  ? require('../../../assets/images/orangeChecked.png')
-                  : require('../../../assets/images/grayNotChecked.png')
-              }
-            />
-            <Text style={styles.atLeastText}>1 or more special characters</Text>
-          </View>
-        </View>
-
-        {/* Nút "Next Step" */}
-        <TouchableOpacity style={styles.nextButton}>
-          <Text style={styles.nextButtonText}>Next Step</Text>
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}>
+          <Image source={require('../../../assets/images/Back.png')} />
+        </TouchableOpacity>
+        <Text style={styles.stepText}>Step 3/3</Text>
+        <TouchableOpacity style={styles.closeButton} onPress={() => navigation.navigate('Login')}>
+          <Image source={require('../../../assets/images/Exit.png')} />
         </TouchableOpacity>
       </View>
-    );
-  };
+
+      <Image
+        source={require('../../../assets/images/Img2.png')}
+        style={styles.image}
+        resizeMode="contain"
+      />
+
+      <View style={styles.inputNameView}>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.inputView}
+            secureTextEntry={true}
+            placeholder="Nhập mật khẩu mới"
+            placeholderTextColor="rgb(177, 189, 199)"
+            onChangeText={setPassword}
+            value={password}
+          />
+          <Text style={styles.inputLabel}>Password</Text>
+        </View>
+
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.inputView}
+            placeholder="Xác nhận mật khẩu"
+            placeholderTextColor="rgb(177, 189, 199)"
+            secureTextEntry={true}
+            onChangeText={setConfirmPassword}
+            value={confirmPassword}
+          />
+          <Text style={styles.inputLabel}>Confirm Password</Text>
+        </View>
+      </View>
+
+      <TouchableOpacity style={styles.nextButton} onPress={handleNextStep}>
+        <Text style={styles.nextButtonText}>Next Step</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
 
   const styles = StyleSheet.create({
     atLeastText: {

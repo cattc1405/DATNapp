@@ -3,10 +3,27 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const apiUrl = 'https://app-datn-gg.onrender.com/api/v1/users'; // URL API của bạn
 
+// Tạo một instance của axios với interceptor
+const axiosInstance = axios.create({
+    baseURL: apiUrl,
+});
+
+// Interceptor để thêm token vào mỗi yêu cầu
+axiosInstance.interceptors.request.use(
+    async (config) => {
+        const token = await AsyncStorage.getItem('userToken'); // Lấy token từ AsyncStorage
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`; // Thêm token vào tiêu đề
+        }
+        return config;
+    },
+    (error) => Promise.reject(error)
+);
+
 // Hàm đăng nhập người dùng
 export const loginUser = async (email, password) => {
     try {
-        const response = await axios.post(`${apiUrl}/login`, { email, password });
+        const response = await axiosInstance.post('/login', { email, password });
         const token = response.data.token;
 
         // Lưu token vào AsyncStorage
@@ -19,15 +36,10 @@ export const loginUser = async (email, password) => {
     }
 };
 
-// Hàm lấy token từ AsyncStorage
-export const getToken = async () => {
-    return await AsyncStorage.getItem('userToken');
-};
-
 // Hàm quên mật khẩu
 export const forgotPassword = async (email) => {
     try {
-        const response = await axios.post(`${apiUrl}/forgot-password`, { email });
+        const response = await axiosInstance.post('/forgot-password', { email });
         return response.data;
     } catch (error) {
         console.error('Lỗi khi gửi OTP:', error.response ? error.response.data : error.message);
@@ -38,7 +50,7 @@ export const forgotPassword = async (email) => {
 // Hàm xác thực OTP
 export const verifyOtp = async (email, otp) => {
     try {
-        const response = await axios.post(`${apiUrl}/verify-otp`, { email, otp });
+        const response = await axiosInstance.post('/verify-otp', { email, otp });
         return response.data;
     } catch (error) {
         console.error('Lỗi khi xác thực OTP:', error.response ? error.response.data : error.message);
@@ -49,7 +61,7 @@ export const verifyOtp = async (email, otp) => {
 // Hàm đặt lại mật khẩu mới
 export const resetPassword = async (email, newPassword) => {
     try {
-        const response = await axios.post(`${apiUrl}/forgot-password`, { email, newPassword });
+        const response = await axiosInstance.post('/forgot-password', { email, newPassword });
         return response.data;
     } catch (error) {
         console.error('Lỗi khi đặt lại mật khẩu:', error.response ? error.response.data : error.message);
@@ -61,7 +73,6 @@ export const resetPassword = async (email, newPassword) => {
 export const logoutUser = async () => {
     try {
         await AsyncStorage.removeItem('userToken'); // Xóa token khỏi AsyncStorage
-        // Có thể thực hiện thêm các bước khác nếu cần
     } catch (error) {
         console.error('Lỗi khi đăng xuất:', error.message);
     }
