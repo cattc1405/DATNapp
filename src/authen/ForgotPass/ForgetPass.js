@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity, Alert, Image, TextInput } from 'react-native';
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { forgotPassword } from '../../apiClient';
+import { forgotPassword } from '../../apiClient'; // Import API client
 
 const ForgetPass = () => {
   const navigation = useNavigation();
@@ -13,35 +13,24 @@ const ForgetPass = () => {
   };
 
   const handleSendCode = async () => {
-    console.log("Nhấn gửi mã xác thực");
     if (!selectedOption) {
-      Alert.alert(
-        'Phương thức chưa được chọn',
-        'Vui lòng chọn phương thức liên hệ trước khi tiếp tục.',
-        [{ text: 'OK' }],
-      );
+      Alert.alert('Phương thức chưa được chọn', 'Vui lòng chọn phương thức liên hệ trước khi tiếp tục.', [{ text: 'OK' }]);
     } else if (!email) {
-      Alert.alert(
-        'Email không hợp lệ',
-        'Vui lòng nhập email của bạn.',
-        [{ text: 'OK' }],
-      );
+      Alert.alert('Email không hợp lệ', 'Vui lòng nhập email của bạn.', [{ text: 'OK' }]);
     } else {
       try {
-        console.log("Gửi yêu cầu quên mật khẩu với email:", email);
         await forgotPassword(email); // Gọi hàm quên mật khẩu với email
-        Alert.alert(
-          'Thành công',
-          'Mã OTP đã được gửi đến email của bạn.',
-          [{ text: 'OK', onPress: () => navigation.navigate('Code') }],
-        );
+        Alert.alert('Thành công', 'Mã OTP đã được gửi đến email của bạn.', [
+          { text: 'OK', onPress: () => navigation.navigate('Code', { email }) }, // Truyền email ở đây
+        ]);
       } catch (error) {
         console.error("Lỗi khi gửi yêu cầu:", error);
-        Alert.alert(
-          'Lỗi',
-          error.response ? error.response.data.message : 'Có lỗi xảy ra. Vui lòng thử lại.',
-          [{ text: 'OK' }]
-        );
+        // Kiểm tra mã lỗi và hiển thị thông báo phù hợp
+        if (error.response && error.response.status === 400 && error.response.data.message === "User not found") {
+          Alert.alert('Lỗi', 'Tài khoản email này chưa được đăng ký. Vui lòng kiểm tra lại hoặc đăng ký tài khoản.', [{ text: 'OK' }]);
+        } else {
+          Alert.alert('Lỗi', error.response ? error.response.data.message : 'Có lỗi xảy ra. Vui lòng thử lại.', [{ text: 'OK' }]);
+        }
       }
     }
   };
@@ -49,10 +38,7 @@ const ForgetPass = () => {
   return (
     <View style={styles.container}>
       <Image source={require('../../../assets/images/Back.png')} />
-      <TouchableOpacity
-        style={styles.backButton}
-        onPress={() => navigation.navigate('Login')}
-      ></TouchableOpacity>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('Login')}></TouchableOpacity>
       <Text style={styles.stepText}>Step 1/3</Text>
       <View style={styles.imagePlaceholder}>
         <Image source={require('../../../assets/images/Img.png')} />
@@ -70,31 +56,17 @@ const ForgetPass = () => {
         onChangeText={setEmail}
       />
 
-      <TouchableOpacity
-        style={selectedOption === 'mobile' ? styles.option : styles.optionUncheck}
-        onPress={() => handleOptionSelect('mobile')}>
-        <Text style={selectedOption === 'mobile' ? styles.optionText : styles.optionTextNonchecked}>
-          1 QUA SỐ DI ĐỘNG
-        </Text>
-        <Text style={styles.subText}>
-          Chúng tôi sẽ gửi mã OTP đến số điện thoại của bạn qua SMS.
-        </Text>
+      <TouchableOpacity style={selectedOption === 'mobile' ? styles.option : styles.optionUncheck} onPress={() => handleOptionSelect('mobile')}>
+        <Text style={selectedOption === 'mobile' ? styles.optionText : styles.optionTextNonchecked}>1 QUA SỐ DI ĐỘNG</Text>
+        <Text style={styles.subText}>Chúng tôi sẽ gửi mã OTP đến số điện thoại của bạn qua SMS.</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity
-        style={selectedOption === 'email' ? styles.option : styles.optionUncheck}
-        onPress={() => handleOptionSelect('email')}>
-        <Text style={selectedOption === 'email' ? styles.optionText : styles.optionTextNonchecked}>
-          2 QUA EMAIL
-        </Text>
-        <Text style={styles.subText}>
-          Chúng tôi sẽ gửi mã OTP đến email của bạn.
-        </Text>
+      <TouchableOpacity style={selectedOption === 'email' ? styles.option : styles.optionUncheck} onPress={() => handleOptionSelect('email')}>
+        <Text style={selectedOption === 'email' ? styles.optionText : styles.optionTextNonchecked}>2 QUA EMAIL</Text>
+        <Text style={styles.subText}>Chúng tôi sẽ gửi mã OTP đến email của bạn.</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.sendButton}
-        onPress={handleSendCode}>
+      <TouchableOpacity style={styles.sendButton} onPress={handleSendCode}>
         <Text style={styles.sendButtonText}>Gửi Mã Xác Thực</Text>
       </TouchableOpacity>
     </View>
