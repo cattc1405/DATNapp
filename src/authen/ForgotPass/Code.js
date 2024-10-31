@@ -2,11 +2,12 @@ import React, { useState, useRef } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { verifyOtp } from '../../apiClient';
 
 const Code = (props) => {
   const { navigation, route } = props;
   const { email } = route.params; // Lấy email từ tham số điều hướng
-  const [code, setCode] = useState(['', '', '', '', '', '']); // 6 ô nhập mã
+  const [code, setCode] = useState(''); // Khởi tạo code là một chuỗi
   const [loading, setLoading] = useState(false);
   const inputs = useRef([]);
 
@@ -14,11 +15,13 @@ const Code = (props) => {
   const handleCodeChange = (index, value) => {
     // Chỉ cho phép nhập số và giới hạn độ dài
     if (value.match(/^[0-9]*$/) && value.length <= 1) {
-      const newCode = [...code];
+      const newCode = code.split('');
       newCode[index] = value;
 
+      console.log(newCode.join("")); // Log mã mới
+
       // Tự động chuyển đến ô tiếp theo
-      if (value && index < code.length - 1) {
+      if (value && index < 5) { // Chỉ chuyển đến ô tiếp theo nếu không phải ô cuối
         setTimeout(() => {
           inputs.current[index + 1].focus();
         }, 50);
@@ -31,52 +34,30 @@ const Code = (props) => {
         }, 50);
       }
 
-      setCode(newCode);
+      setCode(newCode.join("")); // Cập nhật chuỗi mã
     }
   };
 
+  console.log(email, code);
   // Hàm xử lý xác thực mã OTP
   const handleVerifyCode = async () => {
-    // Kiểm tra nếu mã nhập vào chưa đủ 6 chữ số
-    if (code.join('').length < 6) {
+    if (code.length < 6) {
       Alert.alert('Cảnh báo', 'Vui lòng nhập mã xác thực 6 chữ số.');
       return;
     }
 
     setLoading(true);
-    const verificationCode = code.join(''); // Chuyển mã nhập thành chuỗi
-
     try {
-      // Lấy token từ AsyncStorage
-      const token = await AsyncStorage.getItem('userToken');
-      if (!token) {
-        Alert.alert('Lỗi', 'Token không tồn tại. Vui lòng đăng nhập lại.');
-        return;
-      }
+      const response = await verifyOtp(email, code); // Gọi API với chuỗi code
+      console.log('Response from API:', response.data);
 
-      // Gọi API xác thực mã
-      const response = await axios.post('https://app-datn-gg.onrender.com/api/v1/users/verify-otp', {
-        code: verificationCode, // Gửi mã OTP
-        email: email, // Gửi email vào body nếu API yêu cầu
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`, // Thêm token vào headers
-        },
-      });
+      navigation.navigate('NewPass',{email})
 
-      console.log('Response from API:', response.data); // Ghi lại phản hồi từ API
-
-      if (response.data.success) {
-        Alert.alert('Thành công', response.data.message); // Thông báo thành công
-        navigation.navigate('NewPass'); // Điều hướng tới màn hình thay đổi mật khẩu
-      } else {
-        Alert.alert('Lỗi', response.data.message); // Thông báo lỗi từ API
-      }
     } catch (error) {
-      console.error('Lỗi khi xác thực mã:', error.response ? error.response.data : error.message);
-      Alert.alert('Lỗi', error.response?.data?.message || 'Có lỗi xảy ra. Vui lòng thử lại.');
+      console.error('Lỗi khi xác thực mã:', error.message || 'Có lỗi xảy ra. Vui lòng thử lại.');
+      Alert.alert('Lỗi', error.message || 'Có lỗi xảy ra. Vui lòng thử lại.');
     } finally {
-      setLoading(false); // Đặt trạng thái loading về false
+      setLoading(false);
     }
   };
 
@@ -91,12 +72,12 @@ const Code = (props) => {
       <Text style={styles.title}>Nhập mã xác thực</Text>
       <Text style={styles.description}>Mã xác thực đã được gửi đến email {email} của bạn.</Text>
       <View style={styles.codeContainer}>
-        {code.map((digit, index) => (
+        {[...Array(6)].map((_, index) => (
           <TextInput
             key={index}
             ref={ref => (inputs.current[index] = ref)}
             style={styles.codeInput}
-            value={digit}
+            value={code[index] || ''} // Trả về ký tự tương ứng hoặc chuỗi rỗng
             onChangeText={value => handleCodeChange(index, value)}
             keyboardType="number-pad"
             maxLength={1} // Giới hạn độ dài nhập vào

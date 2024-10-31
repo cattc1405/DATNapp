@@ -47,7 +47,7 @@ const Finger = (props) => {
 
             {/* Nút bấm */}
             <TouchableOpacity style={styles.nextButton}
-                onPress={() => navigation.navigate('FavRestaurant')}>
+                onPress={() => navigation.navigate('ChooseRestaurant')}>
                 <Text style={styles.nextButtonText}>Next Step</Text>
             </TouchableOpacity>
 

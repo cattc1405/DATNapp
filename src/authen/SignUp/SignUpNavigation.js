@@ -8,7 +8,8 @@ import Gender from './Gender';
 import Name from './Name';
 import ReceiveNotifi from './ReceiveNotifi';
 import YourPass from './YourPass';
-
+import ChooseRestaurant from './ChooseRestaurant';
+import PhoneNumberScreen from './PhoneNumberScreen';
 const Stack = createStackNavigator();
 
 const SignUpNavigation = () => {
@@ -16,9 +17,11 @@ const SignUpNavigation = () => {
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="Name" component={Name} />
       <Stack.Screen name="Gender" component={Gender} />
+      <Stack.Screen name="PhoneNumberScreen" component={PhoneNumberScreen} />
       <Stack.Screen name="Code1" component={Code1} />
       <Stack.Screen name="YourPass" component={YourPass} />
       <Stack.Screen name="Finger" component={Finger} />
+      <Stack.Screen name="ChooseRestaurant" component={ChooseRestaurant} />
       <Stack.Screen name="FavRestaurant" component={FavRestaurant} />
       <Stack.Screen name="ReceiveNotifi" component={ReceiveNotifi} />
     </Stack.Navigator>

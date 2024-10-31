@@ -1,40 +1,35 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
-// import CheckBox from '@react-native-community/checkbox'; 
+import CountryPicker from 'react-native-country-picker-modal';
 
 const PhoneNumberScreen = (props) => {
   const { navigation } = props;
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [isAccepted, setIsAccepted] = useState(false);
+  const [countryCode, setCountryCode] = useState('US'); // Default country code
+  const [callingCode, setCallingCode] = useState('1');  // Default calling code
 
   const handlePhoneNumberChange = (text) => {
     setPhoneNumber(text);
   };
 
   const handleNextStep = () => {
-    if (phoneNumber.length === 11 && isAccepted) {
+    if (phoneNumber.length === 11) {
       console.log('Next step');
-      // Navigate to the next screen
       navigation.navigate('NextScreen');
     } else {
-      console.log('Please enter valid phone number and accept terms');
+      console.log('Please enter a valid phone number');
     }
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton}
-          onPress={() => navigation.goBack()}>
-          <Image
-            source={require('../../../assets/images/Back.png')}
-          />
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+          <Image source={require('../../../assets/images/Back.png')} />
         </TouchableOpacity>
         <Text style={styles.stepText}>Step 4/10</Text>
         <TouchableOpacity style={styles.closeButton}>
-          <Image
-            source={require('../../../assets/images/Exit.png')}
-          />
+          <Image source={require('../../../assets/images/Exit.png')} />
         </TouchableOpacity>
       </View>
 
@@ -46,42 +41,57 @@ const PhoneNumberScreen = (props) => {
 
       <Text style={styles.title}>Add Your Phone Number</Text>
       <Text style={styles.description}>
-        Enter your phone number in order to send you your OTP security code.
+        Enter your phone number in order to {"\n"} send you your OTP security code.
       </Text>
 
       <View style={styles.inputContainer}>
         <Text style={styles.inputLabel}>PHONE NUMBER</Text>
-        <TextInput
-          style={styles.phoneInput}
-          placeholder="1-541-754-3010"
-          keyboardType="numeric"
-          value={phoneNumber}
-          onChangeText={handlePhoneNumberChange}
-        />
-        <Text style={styles.validationText}>Your phone number must contain:</Text>
+
+        {/* Combined CountryPicker and TextInput */}
+        <View style={styles.phoneInputContainer}>
+          <View style={styles.countryPickerContainer}>
+            <CountryPicker
+              countryCode={countryCode}
+              withFilter
+              withFlag
+              withCallingCode
+              onSelect={(country) => {
+                setCountryCode(country.cca2);
+                setCallingCode(country.callingCode[0]);
+              }}
+              containerButtonStyle={styles.countryPicker}
+            />
+            <Text style={styles.callingCodeText}>+{callingCode}</Text>
+          </View>
+            <View style={styles.gach}></View>
+          <TextInput
+            style={styles.phoneInput}
+            placeholder="1-541-754-3010"
+            keyboardType="numeric"
+            value={phoneNumber}
+            onChangeText={handlePhoneNumberChange}
+          />
+        </View>
+
+        <Text style={styles.validationText}>YOUR PHONE NUMBER MUST CONTAIN</Text>
         <Text style={styles.listText}>• An area code</Text>
         <Text style={styles.listText}>• Exactly 11 numbers</Text>
       </View>
 
-      <View style={styles.checkboxContainer}>
-        <CheckBox
-          value={isAccepted}
-          onValueChange={setIsAccepted}
-          tintColors={{ true: '#F55F44', false: '#989DA3' }}
-        />
-        <Text style={styles.checkboxText}>I Accept the</Text>
-        <TouchableOpacity>
-          <Text style={styles.linkText}>Terms and Conditions</Text>
-        </TouchableOpacity>
-      </View>
-
       <TouchableOpacity
-        style={[styles.nextButton, (!isAccepted || phoneNumber.length !== 11) && styles.nextButtonDisabled]}
+        style={[styles.nextButton, phoneNumber.length !== 11 && styles.nextButtonDisabled]}
         onPress={handleNextStep}
-        disabled={!isAccepted || phoneNumber.length !== 11}
+        disabled={phoneNumber.length !== 11}
       >
         <Text style={styles.buttonText}>Next Step</Text>
       </TouchableOpacity>
+
+      <Text style={styles.termsText}>
+        I Accept the{' '}
+        <Text style={styles.linkText} onPress={() => console.log('Terms and Conditions clicked')}>
+          Terms and Conditions
+        </Text>
+      </Text>
     </View>
   );
 };
@@ -111,17 +121,18 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   image: {
-    width: 142,
-    height: 127,
+    width: 198,
+    height: 209,
     alignSelf: 'center',
-    marginBottom: 20,
+    marginLeft: 60,
+    marginTop: 20,
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: '700',
     textAlign: 'center',
-    color: '#000',
-    marginVertical: 10,
+    color: '#000000',
+    marginVertical: 20,
   },
   description: {
     fontSize: 15,
@@ -132,7 +143,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   inputContainer: {
-    backgroundColor: '#FFF',
+    backgroundColor: '#FFFFFF',
     borderRadius: 20,
     padding: 20,
     shadowColor: '#000',
@@ -143,42 +154,55 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   inputLabel: {
-    fontSize: 8.5,
+    fontSize: 10.5,
     fontWeight: '800',
     color: '#F55F44',
   },
-  phoneInput: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#F55F44',
-    padding: 10,
-    fontSize: 16,
+  gach:{
+      width: 1, // Width of the divider
+      height: 50, // Adjust the height to your preference
+      backgroundColor: '#C0C0C0', // Divider color
+      marginHorizontal: 2, // Space around the divider
+  },
+  phoneInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 10,
+    borderWidth: 2,
+    borderRadius: 15,
+    borderColor:'#C0C0C0',
+    paddingHorizontal: 10
+  },
+  countryPickerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 5, // Space between country picker and phone input
+  },
+  callingCodeText: {
+    fontSize: 16,
+    color: '#F55F44',
+    marginLeft: 5, // Adjust margin
+  },
+  countryPicker: {
+    marginRight: -5, // Adjusted margin
+  },
+  phoneInput: {
+    flex: 1, // Takes up remaining space
+
+    fontSize: 16,
+    marginBottom: 0,
   },
   validationText: {
-    fontSize: 9,
+    fontSize: 12,
     fontWeight: '900',
     color: '#979DA3',
     marginBottom: 5,
+    marginLeft: 30,
   },
   listText: {
     fontSize: 11,
     color: '#989DA3',
-    fontWeight: '600',
-    marginLeft: 20,
-  },
-  checkboxContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-    marginLeft: 50,
-  },
-  checkboxText: {
-    marginLeft: 8,
-    color: '#989DA3',
-  },
-  linkText: {
-    color: '#F55F44',
-    marginLeft: 4,
+    marginLeft: 30,
   },
   nextButton: {
     padding: 15,
@@ -188,11 +212,24 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
   },
   nextButtonDisabled: {
-    backgroundColor: '#E0E0E0',
+    backgroundColor: '#F55F44',
+    opacity: 0.5,
   },
   buttonText: {
     color: '#FFFFFF',
     fontSize: 17,
+    fontWeight: '800',
+  },
+  termsText: {
+    marginTop: 20,
+    textAlign: 'center',
+    color: '#989DA3',
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  linkText: {
+    color: '#F55F44',
+    fontSize: 14,
     fontWeight: '800',
   },
 });

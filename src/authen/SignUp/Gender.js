@@ -24,7 +24,7 @@ const Gender = props => {
         [{ text: 'OK' }],
       );
     } else {
-      navigation.navigate('Code1');
+      navigation.navigate('PhoneNumberScreen');
     }
   };
   return (
@@ -131,14 +131,15 @@ const Gender = props => {
       <TouchableOpacity
         style={styles.nextButton}
         disabled={!selectedGender}
-        onPress={() => navigation.navigate('Code1')}>
+        onPress={() => navigation.navigate('PhoneNumberScreen')}>
         <Text style={styles.nextButtonText} onPress={handleNextStep}>
           Next Step
         </Text>
       </TouchableOpacity>
 
       {/* Skip link */}
-      <TouchableOpacity>
+      <TouchableOpacity
+      >
         <Text style={styles.skipText}>Skip this Step</Text>
       </TouchableOpacity>
     </View>

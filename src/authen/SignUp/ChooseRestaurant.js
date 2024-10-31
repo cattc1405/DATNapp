@@ -13,7 +13,8 @@ const ChooseRestaurant = (props) => {
         <View style={styles.container}>
             {/* Header */}
             <View style={styles.header}>
-                <TouchableOpacity style={styles.backButton}>
+                <TouchableOpacity style={styles.backButton}
+                onPress={() => navigation.navigate('Finger')}>
                     <Image source={require('../../../assets/images/Back.png')} />
                 </TouchableOpacity>
                 <Text style={styles.stepText}>Step 8/10</Text>
@@ -87,7 +88,8 @@ const ChooseRestaurant = (props) => {
             {/* Next Button */}
             <TouchableOpacity
                 style={styles.nextButton}
-                onPress={() => navigation.navigate('NextPage')}>
+                onPress={() => navigation.navigate('FavRestaurant')}
+               >
                 <Text style={styles.nextButtonText}>Next Step</Text>
             </TouchableOpacity>
             <TouchableOpacity>
@@ -197,7 +199,7 @@ const styles = StyleSheet.create({
     nextButtonText: {
         color: 'white',
         fontSize: 17,
-        fontWeight: 800,
+        fontWeight: '800',
     },
     skipText: {
         textAlign: 'center',

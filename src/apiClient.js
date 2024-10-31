@@ -1,6 +1,5 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 const apiUrl = 'https://app-datn-gg.onrender.com/api/v1/users'; // URL API của bạn
 
 // Tạo một instance của axios với interceptor
@@ -63,15 +62,20 @@ export const forgotPassword = async (email) => {
 };
 
 // Hàm xác thực OTP
+// Hàm xác thực OTP
 export const verifyOtp = async (email, otp) => {
-    try {
-        const response = await axiosInstance.post('/verify-otp', { email, otp });
+    try {console.log("api",otp);
+        console.log("api",email)
+        // Chuyển đổi mã OTP thành chuỗi (phòng khi OTP là một mảng)
+        const response = await axiosInstance.post('/verify-otp', { email, otp: otp });
+        
         return response.data; // Trả về dữ liệu phản hồi
     } catch (error) {
         console.error('Lỗi khi xác thực OTP:', error.response ? error.response.data : error.message);
         throw error; // Ném lỗi để xử lý phía trên
     }
 };
+
 
 // Hàm đặt lại mật khẩu mới
 export const resetPassword = async (email, newPassword) => {
