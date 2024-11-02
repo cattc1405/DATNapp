@@ -1,8 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
-const Checkuot5 = ({ navigation }) => {
+const Checkuot5 = ({navigation}) => {
   return (
     <View style={styles.container}>
       {/* Phần đầu (Header) */}
@@ -27,12 +27,15 @@ const Checkuot5 = ({ navigation }) => {
 
       {/* Mô tả chi tiết */}
       <Text style={styles.description}>
-        Your order has been successfully completed. Within moments you will receive a notification
-        with the receipt of your purchase and you can track every step of your order.
+        Your order has been successfully completed. Within moments you will
+        receive a notification with the receipt of your purchase and you can
+        track every step of your order.
       </Text>
 
       {/* Nút hoàn thành */}
-      <TouchableOpacity style={styles.finishButton} onPress={() => navigation.navigate('Checkout6')}>
+      <TouchableOpacity
+        style={styles.finishButton}
+        onPress={() => navigation.navigate('Home')}>
         <Text style={styles.finishButtonText}>Finish Order</Text>
       </TouchableOpacity>
     </View>
@@ -58,7 +61,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#888',
     marginLeft: '40%',
-    fontFamily: 'nunitoSan'
+    fontFamily: 'nunitoSan',
   },
   closeButton: {
     padding: 10,
@@ -66,7 +69,7 @@ const styles = StyleSheet.create({
   closeText: {
     fontSize: 28,
     color: '#000',
-    fontFamily: 'nunitoSan'
+    fontFamily: 'nunitoSan',
   },
   illustrationContainer: {
     justifyContent: 'center',
@@ -83,7 +86,7 @@ const styles = StyleSheet.create({
     color: 'black',
     paddingHorizontal: 20,
     marginBottom: 20,
-    fontFamily: 'nunitoSan'
+    fontFamily: 'nunitoSan',
   },
   description: {
     fontSize: 14,
@@ -91,7 +94,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 22,
     marginBottom: '35%',
-    fontFamily: 'nunitoSan'
+    fontFamily: 'nunitoSan',
   },
   finishButton: {
     backgroundColor: '#FF5733',

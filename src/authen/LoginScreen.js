@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {
   View,
   Text,
@@ -8,38 +8,40 @@ import {
   Image,
   Alert,
 } from 'react-native';
-import { loginUser } from '../apiClient'; // Import the loginUser function
+import {AuthContext} from '../../context/AuthContext';
+import {loginUser} from '../redux/slice/authSlice';
+import {useDispatch, useSelector} from 'react-redux';
 
-const LoginScreen = ({ navigation }) => {
-  const [email, setEmail] = useState('sang@gmail.com');
-  const [password, setPassword] = useState('123456');
+const LoginScreen = ({navigation}) => {
+  const [email, setEmail] = useState('admin@gmail.com');
+  const [password, setPassword] = useState('Bin123456');
+  const dispatch = useDispatch();
+  const status = useSelector(state => state.auth.status); // Accessing auth status from the Redux store
+  const error = useSelector(state => state.auth.error);
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   // Hàm xử lý khi người dùng nhấn vào nút "LOGIN"
   const handleLogin = async () => {
-    // Kiểm tra nếu email hoặc password rỗng
     if (!email || !password) {
       Alert.alert('Error', 'Please enter both email and password.');
       return;
     }
 
     try {
-      const response = await loginUser(email.trim(), password); // Use the loginUser function
-      if (response) {
+      const response = await dispatch(
+        loginUser({email: email.trim(), password}),
+      ).unwrap();
 
-        navigation.navigate('MainApp');   // Navigate to MainApp if login is successful
-        setEmail('');
-        setPassword('');
+      if (response) {
+        console.log('User ID exists:', response.userId);
+        navigation.navigate('MainApp'); // Uncomment this line to enable navigation
+        setEmail(''); // Clear email input
+        setPassword(''); // Clear password input
       }
     } catch (error) {
       console.error('Login error:', error);
-      if (error.response) {
-        // Kiểm tra nếu có response từ API
-        Alert.alert('Login Failed', error.response.data.message || 'Invalid credentials.');
-      } else {
-        // Lỗi không có response (có thể do network hoặc vấn đề khác)
-        Alert.alert('Error', 'Something went wrong. Please try again later.');
-      }
+      const message = error.response?.data?.message || 'Invalid credentials.';
+      Alert.alert('Login Failed', message);
     }
   };
 

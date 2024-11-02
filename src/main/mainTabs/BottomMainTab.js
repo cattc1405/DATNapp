@@ -1,7 +1,7 @@
-import {StyleSheet,Modal, Text, View, Image} from 'react-native';
+import {StyleSheet, Modal, Text, View, Image} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
-import React,{useState} from 'react';
+import React, {useState} from 'react';
 import Home from './Home/Home';
 import OrderDetail from './Order/OrderDetail';
 import Restaurants from './restaurants';
@@ -12,20 +12,18 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Filter from './Home/Filter';
 import SlideNav from '../slidenav/SlideNav';
 import ConfirmOrder from './Order/ConfimOrder';
-import Product from './Order/Product';
 import Order from './Order/Order';
 import Restaurant1 from './Restaurant/Restaurant1';
 import PaymentNavigation from '../../authen/Payment/PaymentNavigation';
 import BrandDetails from './Restaurant/BrandDetails';
 import CheckoutNavigator from '../../authen/Checkout/CheckoutNavigator';
+import ProductDetail from '../../authen/Product/ProductDetail';
+import Product from '../../authen/Product/Product';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 const HomeStack = () => {
-
-
-
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -38,14 +36,15 @@ const HomeStack = () => {
         component={WhatsInToday}
         options={{headerShown: false}}
       />
-      <Stack.Screen
+
+      {/* <Stack.Screen
         name="Filter"
         component={Filter}
         options={{
           headerShown: false,
           tabBarStyle: {display: 'none'},
         }}
-      />
+      /> */}
       <Stack.Screen
         name="SlideNav"
         component={SlideNav}
@@ -63,11 +62,6 @@ const OrderStack = () => {
         component={Order}
         options={{headerShown: false}}
       /> */}
-      <Stack.Screen
-        name="Product"
-        component={Product}
-        options={{headerShown: false}}
-      />
 
       <Stack.Screen
         name="OrderDetail"
@@ -176,6 +170,23 @@ const tabScreenOptions = ({route}) => {
   };
 };
 
+const ProductStack = () => {
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="Product" component={Product} />
+      <Stack.Screen name="ProductDetail" component={ProductDetail} />
+      <Stack.Screen
+        name="filter"
+        component={Filter}
+        options={{
+          headerShown: false,
+          tabBarStyle: {display: 'none'},
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+
 const BottomMainTab = () => {
   return (
     <Tab.Navigator screenOptions={tabScreenOptions}>
@@ -190,14 +201,14 @@ const BottomMainTab = () => {
         options={{title: 'Restaurants'}}
       />
       <Tab.Screen
-        name="OrderStack"
-        component={OrderStack}
-        options={{title: 'Order'}}
-      />
-      <Tab.Screen
         name="CartStack"
         component={CartStack}
         options={{title: 'Cart'}}
+      />
+      <Tab.Screen
+        name="ProductStack"
+        component={ProductStack}
+        options={{title: 'Product'}}
       />
     </Tab.Navigator>
   );
