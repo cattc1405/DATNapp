@@ -20,17 +20,14 @@ export const loginUser = createAsyncThunk('auth/loginUser', async userData => {
 
   return response.data; // Adjust according to your API response
 });
-
+export const logoutUser = createAsyncThunk('auth/logoutUser', async () => {
+  await AsyncStorage.removeItem('userToken'); // Clear token on logout
+});
 // Create the slice
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {
-    logout: state => {
-      state.user = null;
-      AsyncStorage.removeItem('userToken'); // Clear token on logout
-    },
-  },
+  reducers: {},
   extraReducers: builder => {
     builder
       .addCase(loginUser.pending, state => {
@@ -43,6 +40,9 @@ const authSlice = createSlice({
       .addCase(loginUser.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message;
+      })
+      .addCase(logoutUser.fulfilled, state => {
+        state.user = null; // Clear user data on logout
       });
   },
 });

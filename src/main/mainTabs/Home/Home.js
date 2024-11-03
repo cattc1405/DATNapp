@@ -7,18 +7,113 @@ import {
   TouchableOpacity,
   ImageBackground,
   ScrollView,
+  FlatList,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import SlideNav from '../../slidenav/SlideNav';
+import {useSelector} from 'react-redux'; // Import useSelector
 
+import {getBrands, getFeaturedProduct} from '../../../apiClient';
 const Home = () => {
   const navigation = useNavigation();
   const [isSlideNavVisible, setIsSlideNavVisible] = useState(false);
-
+  const [brands, setBrand] = useState([]);
+  const [productF, setProductF] = useState([]);
   const toggleSlideNav = () => {
     setIsSlideNavVisible(!isSlideNavVisible);
   };
+  useEffect(() => {
+    fetchData();
+  }, []); // Empty dependency array ensures this runs once when the component mounts
+
+  const fetchData = async () => {
+    const fetchBrands = async () => {
+      try {
+        const data = await getBrands();
+        setBrand(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    const fetchFeatured = async () => {
+      try {
+        const data = await getFeaturedProduct();
+        setProductF(data);
+      } catch (error) {
+        console.error(error); // Added error variable to log
+      }
+    };
+
+    await Promise.all([fetchFeatured(), fetchBrands()]); // Optional: fetch both simultaneously
+  };
+
+  const renderItemBrand = ({item}) => (
+    <TouchableOpacity
+      onPress={() =>
+        navigation.navigate('RestaurantStack', {
+          screen: 'BrandDetails',
+          params: {brand: item}, // Passing the item data as params
+        })
+      }>
+      <ImageBackground
+        style={styles.itemPopularView}
+        source={{uri: item.image}}
+        imageStyle={{borderRadius: 15}}>
+        <View style={styles.tagBrand}>
+          <View style={styles.bestTag}>
+            <Text style={styles.bestText}>BEST OFFER</Text>
+          </View>
+          <Text style={styles.nameText}>{item.name}</Text>
+          <View style={styles.starView}>
+            {[...Array(5)].map((_, index) => (
+              <Image
+                key={index}
+                style={styles.starIcon}
+                source={
+                  index < item.stars
+                    ? require('../../../../assets/images/icons/StarBold.png')
+                    : require('../../../../assets/images/icons/StarLight.png')
+                }
+              />
+            ))}
+            <Text style={styles.thinText}>
+              ({item.review}) | {item.distance} away
+            </Text>
+          </View>
+        </View>
+      </ImageBackground>
+    </TouchableOpacity>
+  );
+  const renderItemOffer = ({item}) => (
+    <ImageBackground
+      style={styles.itemTodayView}
+      source={{uri: item.image}}
+      imageStyle={{borderRadius: 15}}>
+      <Image style={styles.productImg} source={item.image} />
+      <View style={styles.tagView}>
+        <Image style={styles.logo} source={item.logoImage} />
+        <Text style={styles.tagText}>NEW</Text>
+      </View>
+      <Text style={styles.brandText}>{item.name}</Text>
+      <Text style={styles.describeText}>{item.description}</Text>
+    </ImageBackground>
+  );
+  const cartItems = useSelector(state => state.cart.items);
+
+  // Local state to keep track of the item count
+  const [itemCount, setItemCount] = useState(0);
+
+  // useEffect to update itemCount whenever cartItems changes
+  useEffect(() => {
+    // Calculate the total item count
+    const count = cartItems.reduce(
+      (total, item) => total + (item.quantity || 1),
+      0,
+    );
+    setItemCount(count); // Update local state with the new count
+  }, [cartItems]);
   return (
     <View style={styles.container}>
       <Modal
@@ -48,11 +143,17 @@ const Home = () => {
             source={require('../../../../assets/images/whiteLogo.png')}
           />
 
-          <TouchableOpacity>
-            <Image
-              style={styles.iconMenuView}
-              source={require('../../../../assets/images/Notification.png')}
-            />
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('CartStack', {screen: 'OrderDetail'});
+            }}>
+            <View>
+              <Image
+                style={styles.iconImage}
+                source={require('../../../../assets/images/icons/shopping-bag.png')}
+              />
+              <Text style={styles.iconText}>{itemCount}</Text>
+            </View>
           </TouchableOpacity>
         </View>
         <View style={styles.pointView}>
@@ -88,161 +189,27 @@ const Home = () => {
         </View>
 
         {/* scrollview */}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <ImageBackground
-            style={styles.itemTodayView}
-            source={require('../../../../assets/images/StarbucksOffer.png')}
-            imageStyle={{borderRadius: 15}}>
-            <Image
-              style={styles.productImg}
-              source={require('../../../../assets/images/coffeeStarbucks.png')}
-            />
-            <View style={styles.tagView}>
-              <Image
-                style={styles.logo}
-                source={require('../../../../assets/images/icons/StarbucksLogo.png')}
-              />
-              <Text style={styles.tagText}>NEW</Text>
-            </View>
-            <Text style={styles.brandText}>STARBUCKS</Text>
-            <Text style={styles.describeText}>
-              Buy 2 coffees and get 1 for free!
-            </Text>
-          </ImageBackground>
-
-          <ImageBackground
-            style={styles.itemTodayView}
-            source={require('../../../../assets/images/McDonaldsOffer.png')}
-            imageStyle={{borderRadius: 15}}>
-            <Image
-              style={styles.productImg}
-              source={require('../../../../assets/images/burgurMc.png')}
-            />
-            <View style={styles.tagView}>
-              <Image
-                style={styles.logo}
-                source={require('../../../../assets/images/icons/McDonaldsLogo.png')}
-              />
-              <Text style={styles.tagText}>NEW</Text>
-            </View>
-            <Text style={styles.brandText}>MC DONALD'S</Text>
-            <Text style={styles.describeText}>
-              2 McMenu Texas, CBO or Big Tasty For only 10.99$*
-            </Text>
-          </ImageBackground>
-
-          <ImageBackground
-            style={styles.itemTodayView}
-            source={require('../../../../assets/images/McDonaldsOffer.png')}
-            imageStyle={{borderRadius: 15}}>
-            <Image
-              style={styles.productImg}
-              source={require('../../../../assets/images/burgurMc.png')}
-            />
-            <View style={styles.tagView}>
-              <Image
-                style={styles.logo}
-                source={require('../../../../assets/images/icons/McDonaldsLogo.png')}
-              />
-              <Text style={styles.tagText}>NEW</Text>
-            </View>
-            <Text style={styles.brandText}>MC DONALD'S</Text>
-            <Text style={styles.describeText}>
-              2 McMenu Texas, CBO or Big Tasty For only 10.99$*
-            </Text>
-          </ImageBackground>
-        </ScrollView>
-
+        <FlatList
+          data={productF}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          renderItem={renderItemOffer}
+          keyExtractor={item => item.id}
+        />
         <View style={styles.titleAndViewall}>
           <Text style={styles.titleBoldText}>Popular Restaurants Nearby</Text>
           <TouchableOpacity>
             <Text style={styles.viewallText}>View All</Text>
           </TouchableOpacity>
         </View>
-        <ScrollView
-          style={styles.popularView}
+        <FlatList
+          data={brands}
           horizontal
-          showsHorizontalScrollIndicator={false}>
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate('RestaurantStack', {screen: 'BrandDetails'})
-            }>
-            <ImageBackground
-              style={styles.itemPopularView}
-              source={require('../../../../assets/images/Starbucksimg.png')}
-              imageStyle={{borderRadius: 15}}>
-              <View style={styles.tagBrand}>
-                <View style={styles.bestTag}>
-                  <Text style={styles.bestText}>BEST OFFER</Text>
-                </View>
-                <Text style={styles.nameText}>McDonald's</Text>
-                <View style={styles.starView}>
-                  <Image
-                    style={styles.starIcon}
-                    source={require('../../../../assets/images/icons/StarBold.png')}
-                  />
-                  <Image
-                    style={styles.starIcon}
-                    source={require('../../../../assets/images/icons/StarBold.png')}
-                  />
-                  <Image
-                    style={styles.starIcon}
-                    source={require('../../../../assets/images/icons/StarBold.png')}
-                  />
-                  <Image
-                    style={styles.starIcon}
-                    source={require('../../../../assets/images/icons/StarBold.png')}
-                  />
-                  <Image
-                    style={styles.starIcon}
-                    source={require('../../../../assets/images/icons/StarLight.png')}
-                  />
-                  <Text style={styles.thinText}>(694) | 0.3km away</Text>
-                </View>
-              </View>
-            </ImageBackground>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate('RestaurantStack', {screen: 'BrandDetails'})
-            }>
-            <ImageBackground
-              style={styles.itemPopularView}
-              source={require('../../../../assets/images/Starbucksimg.png')}
-              imageStyle={{borderRadius: 15}}>
-              <View style={styles.tagBrand}>
-                <View style={styles.bestTag}>
-                  <Text style={styles.bestText}>BEST OFFER</Text>
-                </View>
-                <Text style={styles.nameText}>McDonald's</Text>
-                <View style={styles.starView}>
-                  <Image
-                    style={styles.starIcon}
-                    source={require('../../../../assets/images/icons/StarBold.png')}
-                  />
-                  <Image
-                    style={styles.starIcon}
-                    source={require('../../../../assets/images/icons/StarBold.png')}
-                  />
-                  <Image
-                    style={styles.starIcon}
-                    source={require('../../../../assets/images/icons/StarBold.png')}
-                  />
-                  <Image
-                    style={styles.starIcon}
-                    source={require('../../../../assets/images/icons/StarBold.png')}
-                  />
-                  <Image
-                    style={styles.starIcon}
-                    source={require('../../../../assets/images/icons/StarLight.png')}
-                  />
-                  <Text style={styles.thinText}>(694) | 0.3km away</Text>
-                </View>
-              </View>
-            </ImageBackground>
-          </TouchableOpacity>
-        </ScrollView>
+          showsHorizontalScrollIndicator={false}
+          renderItem={({item}) => renderItemBrand({item})}
+          keyExtractor={item => item.id}
+          style={styles.popularView}
+        />
       </View>
     </View>
   );
@@ -457,6 +424,18 @@ const styles = StyleSheet.create({
   iconLogo: {
     width: 200,
     height: 50,
+  },
+  iconImage: {
+    width: 25,
+    height: 25,
+  },
+  iconText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+    position: 'absolute',
+    left: 15,
+    top: 10,
   },
   menuView: {
     width: '90%',

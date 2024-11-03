@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {getCategories} from '../../../apiClient';
+import {getFeaturedProduct} from '../../../apiClient';
 
 const WhatsInToday = () => {
   const navigation = useNavigation();
@@ -17,7 +17,7 @@ const WhatsInToday = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const data = await getCategories();
+        const data = await getFeaturedProduct();
         setCategories(data);
       } catch (error) {
         console.error('Error fetching categories:', error);
@@ -27,9 +27,12 @@ const WhatsInToday = () => {
   }, []);
   const renderCategoryItem = ({item}) => (
     <TouchableOpacity
-      onPress={() => {
-        navigation.navigate('Product');
-      }}>
+      onPress={() =>
+        navigation.navigate('ProductStack', {
+          screen: 'Product',
+          // Passing the item data as params
+        })
+      }>
       <ImageBackground
         style={styles.itemTodayView}
         source={{uri: item.image}}
@@ -39,8 +42,8 @@ const WhatsInToday = () => {
           <Image style={styles.logo} source={{uri: item.logoUrl}} />
           <Text style={styles.tagText}>{item.tagText || 'NEW'}</Text>
         </View>
-        <Text style={styles.brandText}>{item.brand}</Text>
-        <Text style={styles.describeText}>{item.name}</Text>
+        <Text style={styles.brandText}>{item.name}</Text>
+        <Text style={styles.describeText}>{item.description}</Text>
       </ImageBackground>
     </TouchableOpacity>
   );

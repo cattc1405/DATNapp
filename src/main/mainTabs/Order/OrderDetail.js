@@ -8,16 +8,27 @@ import {
 } from 'react-native';
 import React, {useEffect, useState, useContext} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {getUserCart} from '../../../apiClient'; // Assuming you have a function to get product by ID
+import {
+  getUserCart,
+  updateUserCart,
+  removeUserCartItem,
+} from '../../../apiClient'; // Assuming you have a function to get product by ID
 import {AuthContext} from '../../../../context/AuthContext';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {useFocusEffect} from '@react-navigation/native';
+import {
+  setCartItems,
+  incrementQuantity,
+  decrementQuantity,
+  removeCartItem,
+} from '../../../redux/slice/cartSlice';
 
 const OrderDetail = ({route}) => {
   const userId = useSelector(state => state.auth.user?.userId); // Retrieve the userId from the Redux store
   const token = useSelector(state => state.auth.user?.token); // Retrieve the token at the top level
   const navigation = useNavigation();
-  const [cartItems, setCartItems] = useState([]);
+  const cartItems = useSelector(state => state.cart.items); // or state.cart.cartItems depending on your slice structure
+  const dispatch = useDispatch();
   console.log(userId);
   console.log(token);
   const [loading, setLoading] = useState(true); // Loading state
@@ -28,7 +39,7 @@ const OrderDetail = ({route}) => {
     try {
       setLoading(true);
       const data = await getUserCart(userId, token);
-      setCartItems(data.cart);
+      dispatch(setCartItems(data.cart));
     } catch (err) {
       console.error('Error fetching user cart:', err);
     } finally {
@@ -40,27 +51,28 @@ const OrderDetail = ({route}) => {
       fetchUserCart();
     }, [userId, token]),
   );
+  const handleIncrement = async id => {
+    dispatch(incrementQuantity(id)); // Update in Redux store
+
+    // Find the item and update API
+    const item = cartItems.find(item => item.id === id);
+    if (item) {
+      await updateUserCart(userId, token, id, {quantity: item.quantity + 1});
+    }
+  };
+
+  const handleDecrement = async id => {
+    const item = cartItems.find(item => item.id === id);
+    if (item && item.quantity > 1) {
+      dispatch(decrementQuantity(id)); // Update in Redux store
+      await updateUserCart(userId, token, id, {quantity: item.quantity - 1});
+    }
+  };
+
   const calculateTotalPrice = () => {
     return cartItems.reduce(
       (total, item) => total + item.price * item.quantity,
       0,
-    );
-  };
-  const handleIncrement = id => {
-    setCartItems(prevItems =>
-      prevItems.map(item =>
-        item.id === id ? {...item, quantity: item.quantity + 1} : item,
-      ),
-    );
-  };
-
-  const handleDecrement = id => {
-    setCartItems(prevItems =>
-      prevItems.map(item =>
-        item.id === id && item.quantity > 1
-          ? {...item, quantity: item.quantity - 1}
-          : item,
-      ),
     );
   };
   const [editingItemId, setEditingItemId] = useState(null);
@@ -68,15 +80,17 @@ const OrderDetail = ({route}) => {
   const handleEditToggle = id => {
     setEditingItemId(editingItemId === id ? null : id);
   };
-  const handleDelete = id => {
-    setCartItems(prevItems => prevItems.filter(item => item.id !== id));
+  const handleDelete = async id => {
+    console.log('cartitem', id);
+    await removeUserCartItem(userId, token, id);
+
+    dispatch(removeCartItem(id));
   };
   const handleInfoRightPress = id => {
     if (editingItemId === id) {
       setEditingItemId(null);
     }
   };
-  const totalPrice = calculateTotalPrice();
   const renderItem = ({item}) => {
     const isEditing = editingItemId === item.id;
 
@@ -110,6 +124,7 @@ const OrderDetail = ({route}) => {
           onPress={() => handleInfoRightPress(item.id)}>
           <Text style={styles.nameItem}>{item.name}</Text>
           <Text style={styles.thinGrayText}>Size: {item.size}</Text>
+
           <Text style={styles.thinGrayText}>Quantity: x{item.quantity}</Text>
           <Text style={styles.thinGrayText}>Customization</Text>
           <Text style={styles.thinGrayText}>{item.note}</Text>
@@ -175,7 +190,7 @@ const OrderDetail = ({route}) => {
           renderItem={renderItem}
         />
         <Text style={styles.totalText}>Total Amount:</Text>
-        <Text style={styles.totalText}>{totalPrice}$</Text>
+        <Text style={styles.totalText}>${calculateTotalPrice()}</Text>
       </View>
 
       <View style={styles.footerView}>

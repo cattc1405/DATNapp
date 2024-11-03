@@ -18,6 +18,7 @@ import {addUserCart} from '../../apiClient';
 const ProductDetail = ({route}) => {
   const navigation = useNavigation();
   const [selectedType, setSelectedType] = useState();
+
   const [selectedDrink, setSelectedDrink] = useState(null);
   const [selectedItems, setSelectedItems] = useState([]);
   const userId = useSelector(state => state.auth.user?.userId);
@@ -28,7 +29,7 @@ const ProductDetail = ({route}) => {
   const [size, setSize] = useState();
   const [localUserId, setLocalUserId] = useState(null);
   const token = useSelector(state => state.auth.user?.token); // Retrieve the token at the top level
-
+  console.log('type', selectedType);
   // Send to cartUser
   const [itemOrder, setItemOrder] = useState([]);
   const addToCart = async () => {
@@ -37,6 +38,8 @@ const ProductDetail = ({route}) => {
         id: Math.random().toString(),
         drink: selectedDrink,
         excluded: selectedItems,
+        attributeId: selectedType,
+
         image: product.image,
         name: product.name,
         price: price,
@@ -48,10 +51,6 @@ const ProductDetail = ({route}) => {
       setItemOrder(prevItems =>
         Array.isArray(prevItems) ? [...prevItems, newItem] : [newItem],
       );
-
-      setTimeout(() => {
-        navigation.navigate('CartStack', {screen: 'OrderDetail'});
-      }, 500);
     } catch (error) {
       console.error('Error in addToCart:', error);
     }
@@ -394,7 +393,7 @@ const ProductDetail = ({route}) => {
             onPress={async () => {
               const itemOrder = {
                 productId: product._id,
-                attributeId: selectedType,
+                attributeId: product.attributes,
                 drink: selectedDrink,
                 excluded: selectedItems,
                 quantity: 1,
@@ -402,8 +401,10 @@ const ProductDetail = ({route}) => {
                 price: price,
                 size: size,
                 name: product.name,
+
                 userId: localUserId,
               };
+              console.log('art', product.attributes);
               setItemOrder(itemOrder);
               addToCart();
             }}>

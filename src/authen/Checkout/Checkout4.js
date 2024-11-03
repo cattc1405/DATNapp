@@ -7,39 +7,44 @@ import {
   TextInput,
   Image,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import {submitOrder, clearCart} from '../../apiClient';
 const PaymentScreen = ({cartItems}) => {
+  const route = useRoute(); // Move this line up here to define route first
+  const cartItems2 = useSelector(state => state.cart.items); // or state.cart.cartItems depending on your slice structure
+
   const [cardNumber, setCardNumber] = useState('');
   const [cardHolder, setCardHolder] = useState('');
   const [expirationDate, setExpirationDate] = useState('');
   const [cvv, setCvv] = useState('');
   const [selectedCard, setSelectedCard] = useState(null); // State to track selected card
-
+  const {selectedBrand, pickupTime, selectedContact} = route.params;
+  console.log('Pay', selectedBrand._id);
   const userId = useSelector(state => state.auth.user?.userId); // Retrieve the userId from the Redux store
   const token = useSelector(state => state.auth.user?.token);
-  const attribute = '671f1d5cc97d28d8768e4057';
   console.log(userId);
   console.log(token);
+  console.log('cartitem2', cartItems2);
   const handleCardSelect = cardType => {
     setSelectedCard(cardType); // Update selected card state
   };
   console.log(selectedCard);
+  const restaurant2 = selectedBrand._id;
+  const contactString = selectedContact.selectedContact;
+  console.log(contactString, 'res');
+
   const orderItems = cartItems.map(item => ({
     quantity: item.quantity,
     drink: item.drink,
     excluded: item.excluded,
-    // Add attribute if you have a corresponding value
-    attribute: attribute,
-    // Replace with the actual attribute value as needed
+    attribute: item.attributeId,
   }));
   const handleSubmitOrder = async () => {
-    const shippingAddress = 'Your Shipping Address'; // Replace as needed
-    const restaurant = '671e1da83cae0aee7d2e57da'; // Replace as needed
+    const shippingAddress = `${contactString}`;
+    const restaurant = `${restaurant2}`;
     const paymentMethod = selectedCard;
-
+    console.log(shippingAddress, restaurant, paymentMethod);
     try {
       await Promise.all([
         submitOrder(

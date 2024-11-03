@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
 import Slider from '@react-native-community/slider'; // Đã sửa lỗi import Slider
-import { useNavigation } from '@react-navigation/native';
-
-const Checkuot3 = ({ navigation }) => {
-  const [pickupTime, setPickupTime] = useState(1); // Thời gian ban đầu được đặt là 1 phút
-
+import {useNavigation} from '@react-navigation/native';
+import {useRoute} from '@react-navigation/native';
+const Checkuot3 = ({navigation}) => {
+  const [pickupTime, setPickupTime] = useState(1);
+  const route = useRoute(); // Thời gian ban đầu được đặt là 1 phút
+  const {selectedBrand, selectedContact} = route.params;
+  console.log('Checkuot3', selectedBrand, pickupTime);
   return (
     <View style={styles.container}>
       {/* Phần đầu (Header) */}
@@ -22,20 +24,26 @@ const Checkuot3 = ({ navigation }) => {
       {/* Minh họa */}
       <View style={styles.illustrationContainer}>
         <Image
-          source={require('../../../assets/images/backroundcheckuot3.png')} />
+          source={require('../../../assets/images/backroundcheckuot3.png')}
+        />
       </View>
 
       {/* Tiêu đề */}
-      <Text style={styles.title}>Bạn sẽ mất bao lâu để lấy đơn hàng của mình?</Text>
+      <Text style={styles.title}>
+        Bạn sẽ mất bao lâu để lấy đơn hàng của mình?
+      </Text>
 
       {/* Mô tả */}
       <Text style={styles.description}>
-        Để đảm bảo bạn nhận được đơn hàng một cách tốt nhất và còn nóng, chúng tôi cần một ước tính về thời gian bạn sẽ đến lấy đơn hàng.
+        Để đảm bảo bạn nhận được đơn hàng một cách tốt nhất và còn nóng, chúng
+        tôi cần một ước tính về thời gian bạn sẽ đến lấy đơn hàng.
       </Text>
 
       {/* Thanh trượt thời gian */}
       <View style={styles.sliderContainer}>
-        <Text style={styles.timeText}>{pickupTime} phút{pickupTime > 1 ? '' : ''}</Text>
+        <Text style={styles.timeText}>
+          {pickupTime} phút{pickupTime > 1 ? '' : ''}
+        </Text>
         <Slider
           style={styles.slider}
           minimumValue={1}
@@ -49,7 +57,15 @@ const Checkuot3 = ({ navigation }) => {
       </View>
 
       {/* Nút "Tiếp tục" */}
-      <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('PaymentScreen')}>
+      <TouchableOpacity
+        style={styles.nextButton}
+        onPress={() =>
+          navigation.navigate('PaymentScreen', {
+            selectedBrand,
+            pickupTime,
+            selectedContact,
+          })
+        }>
         <Text style={styles.nextButtonText}>Tiếp tục</Text>
       </TouchableOpacity>
     </View>
@@ -79,18 +95,18 @@ const styles = StyleSheet.create({
   backText: {
     fontSize: 24,
     color: '#000',
-    fontFamily: 'nunitoSan'
+    fontFamily: 'nunitoSan',
   },
   closeText: {
     fontSize: 28,
     color: '#000',
-    fontFamily: 'nunitoSan'
+    fontFamily: 'nunitoSan',
   },
   stepText: {
     fontSize: 16,
     fontWeight: '600',
     color: '#888',
-    fontFamily: 'nunitoSan'
+    fontFamily: 'nunitoSan',
   },
   illustrationContainer: {
     height: 200,
@@ -109,14 +125,14 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     textAlign: 'center',
     marginBottom: 10,
-    fontFamily: 'nunitoSan'
+    fontFamily: 'nunitoSan',
   },
   description: {
     fontSize: 14,
     textAlign: 'center',
     color: '#777',
     marginBottom: 20,
-    fontFamily: 'nunitoSan'
+    fontFamily: 'nunitoSan',
   },
   sliderContainer: {
     alignItems: 'center',
@@ -141,6 +157,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
-    fontFamily: 'nunitoSan'
+    fontFamily: 'nunitoSan',
   },
 });

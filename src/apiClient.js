@@ -48,6 +48,37 @@ export const getCategories = async () => {
     throw error;
   }
 };
+export const getBrands = async () => {
+  try {
+    const response = await apiInstance.get('/restaurants/get/active');
+    console.log('Brand response:', response); // Log the full response
+    return response.data; // Return only the data
+  } catch (error) {
+    console.error('Error fetching brands:', error);
+    console.error(
+      'Error details:',
+      error.response ? error.response.data : error.message, // Log the error data if available
+    );
+    throw error; // Rethrow the error for further handling
+  }
+};
+
+export const getFeaturedProduct = async () => {
+  try {
+    const num = 3; // The number of featured products to fetch
+    const response = await apiInstance.get(`/products/get/featured/${num}`);
+    console.log('Featured product response:', response); // Log the full response
+    return response.data; // Return only the data
+  } catch (error) {
+    console.error('Error fetching featured products:', error);
+    console.error(
+      'Error details:',
+      error.response ? error.response.data : error.message, // Log the error data if available
+    );
+    throw error; // Rethrow the error for further handling
+  }
+};
+
 export const getProduct = async () => {
   try {
     const response = await apiInstance.get('/products/get/active');
@@ -129,6 +160,66 @@ export const getUserCart = async (id, token) => {
     throw error; // Rethrow the error for further handling
   }
 };
+export const getUserOrder = async (id, token, params) => {
+  try {
+    // Construct the request URL with the provided ID and parameters
+    const url = `https://app-datn-gg.onrender.com/api/v1/orders/user/${id}?status=${params.status}`;
+
+    // Send a GET request with the authorization token
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`, // Include the token for authentication
+      },
+    });
+
+    // Check if the response is OK (status code 200-299)
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} - ${response.statusText}`);
+    }
+
+    // Parse the JSON response
+    const data = await response.json();
+
+    // Return the data based on the status
+    if (params.status) {
+      return data; // Return the data if a status is provided
+    } else {
+      throw new Error('Status parameter is required.');
+    }
+  } catch (error) {
+    console.error('Failed to fetch user orders:', error);
+    throw error; // Rethrow the error for further handling if necessary
+  }
+};
+// Refactored useEffect with dependencies
+
+// Refactored getUserInfo without unnecessary checks
+export const getUserInfo = async (id, token) => {
+  try {
+    const url = `https://app-datn-gg.onrender.com/api/v1/users/${id}`; // Updated URL
+    console.log('Fetching user info from URL:', url);
+    console.log('Authorization token:', token);
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} - ${response.statusText}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Failed to fetch user:', error);
+    throw error;
+  }
+};
 
 export const submitOrder = async (
   orderItems,
@@ -161,6 +252,40 @@ export const submitOrder = async (
       console.error('Error response data:', error.response.data);
       console.error('Error response status:', error.response.status);
     }
+    throw error; // Rethrow the error for further handling
+  }
+};
+export const updateUserCart = async (id, token, cartId, updateFields) => {
+  try {
+    const response = await apiInstance.put(
+      `/users/${id}/cart/${cartId}`,
+      {
+        updateFields, // Sends the fields to update (e.g., quantity, size, excluded items)
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    return response.data; // Return the updated data
+  } catch (err) {
+    console.error('Error updating cart item:', err); // Log error response
+    throw err; // Rethrow the error for further handling
+  }
+};
+export const removeUserCartItem = async (id, token, cartId) => {
+  try {
+    const response = await apiInstance.delete(`/users/${id}/cart/${cartId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log('Removing cart item response:', response.data); // Log full response
+    return response.data; // Return the response data
+  } catch (error) {
+    console.error('Error removing cart item:', error); // Log any errors
     throw error; // Rethrow the error for further handling
   }
 };

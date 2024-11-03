@@ -6,53 +6,75 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import React, { useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import React, {useState, useEffect} from 'react';
+import {useNavigation} from '@react-navigation/native';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import {useSelector} from 'react-redux';
+import {getUserOrder} from '../../../apiClient';
+const Tab = createMaterialTopTabNavigator();
+const OrderScreen = ({status}) => {
+  const navigation = useNavigation(); // Get navigation here
+  const userId = useSelector(state => state.auth.user?.userId);
+  const token = useSelector(state => state.auth.user?.token);
+  const [orders, setOrders] = useState([]);
+  // Adjust as needed if items have a quantity property
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const fetchedOrders = await getUserOrder(userId, token, {status});
+        setOrders(fetchedOrders); // Store the fetched orders in state
+      } catch (err) {
+        console.error('Error fetching orders:', err);
+      }
+    };
+
+    fetchOrders();
+  }, [userId, token, status]); // Rerun the effect if userId, token, or status changes
+
+  const handlePress = item => {
+    // Navigate to OrderItemScreen and pass the item data
+    navigation.navigate('OrderItemScreen', {item});
+  };
+
+  const renderOrderItem = ({item}) => (
+    <TouchableOpacity
+      style={styles.itemContainer}
+      onPress={() => handlePress(item)}>
+      <Text>{item.transactionId}</Text>
+      <Text>
+        Size: {item.paymentMethod} - Price: ${item.totalPrice}
+      </Text>
+    </TouchableOpacity>
+  );
+
+  return (
+    <View style={styles.tabContent}>
+      <FlatList
+        data={orders}
+        keyExtractor={item => item.id} // Assuming each order has a unique 'id'
+        renderItem={renderOrderItem}
+      />
+    </View>
+  );
+};
 
 const Order = () => {
   const navigation = useNavigation();
+  const cartItems = useSelector(state => state.cart.items);
 
+  // Local state to keep track of the item count
+  const [itemCount, setItemCount] = useState(0);
 
-  const [productData, setProductData] = useState([
-    {
-      id: '1',
-      name: 'Big Mac Menu',
-      size: 'Normal',
-      quantity: 1,
-      price: 12.5,
-      note: 'No pickles',
-      imgSrc: require('../../../../assets/images/BigMac.png'),
-    },
-    {
-      id: '2',
-      name: 'Double Cheeseburger',
-      size: 'Double',
-      quantity: 1,
-      note: 'No Onions',
-      price: 2.0,
-      imgSrc: require('../../../../assets/images/CheesseB.png'),
-    },
-    {
-      id: '3',
-      name: 'Big Mac Menu',
-      size: 'Normal',
-      quantity: 1,
-      price: 12.5,
-      note: 'No pickles',
-      imgSrc: require('../../../../assets/images/BigMac.png'),
-    },
-    {
-      id: '4',
-      name: 'Double Cheeseburger',
-      size: 'Double',
-      quantity: 1,
-      note: 'No Onions',
-      price: 2.0,
-      imgSrc: require('../../../../assets/images/CheesseB.png'),
-    },
-  ]);
-
-
+  // useEffect to update itemCount whenever cartItems changes
+  useEffect(() => {
+    // Calculate the total item count
+    const count = cartItems.reduce(
+      (total, item) => total + (item.quantity || 1),
+      0,
+    );
+    setItemCount(count); // Update local state with the new count
+  }, [cartItems]);
   return (
     <View style={styles.container}>
       <View style={styles.headView}>
@@ -67,35 +89,38 @@ const Order = () => {
             />
           </TouchableOpacity>
 
-          <TouchableOpacity>
-            <Image
-              source={require('../../../../assets/images/icons/SearchIcon.png')}
-            />
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('CartStack', {screen: 'OrderDetail'});
+            }}>
+            <View>
+              <Image
+                style={styles.iconImage}
+                source={require('../../../../assets/images/icons/shopping-bag.png')}
+              />
+              <Text style={styles.iconText}>{itemCount}</Text>
+            </View>
           </TouchableOpacity>
         </View>
-
         <Text style={styles.titleBoldText}>Order</Text>
       </View>
-
-      <View style={styles.mainView}>
-
-      </View>
-
-      <View style={styles.footerView}>
-
-
-        <View style={styles.brandTag}>
-          <Text style={styles.orderText}>Order From</Text>
-          <View style={styles.locateView}>
-            <Text style={styles.locateText}>McDonald’s - Flat Bush Street</Text>
-            <View style={styles.bagView}>
-              <Image
-                source={require('../../../../assets/images/icons/shoppingBag.png')}
-              />
-              <Text style={styles.quantityItem}>2 items</Text>
-            </View>
-          </View>
-        </View>
+      <View style={styles.bodyView}>
+        <Tab.Navigator
+          screenOptions={{
+            tabBarActiveTintColor: 'tomato',
+            tabBarLabelStyle: {fontSize: 14},
+            tabBarStyle: {backgroundColor: 'white'},
+          }}>
+          <Tab.Screen name="Pending">
+            {() => <OrderScreen status="Pending" />}
+          </Tab.Screen>
+          <Tab.Screen name="Success">
+            {() => <OrderScreen status="Success" />}
+          </Tab.Screen>
+          <Tab.Screen name="Failed">
+            {() => <OrderScreen status="Failed" />}
+          </Tab.Screen>
+        </Tab.Navigator>
       </View>
     </View>
   );
@@ -104,6 +129,32 @@ const Order = () => {
 export default Order;
 
 const styles = StyleSheet.create({
+  iconImage: {
+    width: 25,
+    height: 25,
+  },
+  iconText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+    position: 'absolute',
+    left: 15,
+    top: 10,
+  },
+  itemContainer: {
+    backgroundColor: 'red',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    marginBottom: 10,
+    width: 300,
+    height: 100,
+    borderBlockColor: 'red',
+  },
+  tabContent: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   bagView: {
     flexDirection: 'row',
     position: 'absolute',
@@ -116,7 +167,7 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     fontSize: 12,
     fontWeight: 'bold',
-    fontFamily: 'nunitoSan'
+    fontFamily: 'nunitoSan',
   },
   locateView: {
     flexDirection: 'row',
@@ -129,7 +180,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'white',
     borderBottomWidth: 1,
     fontWeight: 'bold',
-    fontFamily: 'nunitoSan'
+    fontFamily: 'nunitoSan',
   },
   orderText: {
     color: '#fff',
@@ -138,7 +189,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     fontSize: 13,
     fontWeight: 'bold',
-    fontFamily: 'nunitoSan'
+    fontFamily: 'nunitoSan',
   },
   mgnL15: {
     fontSize: 14,
@@ -266,7 +317,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginLeft: '5%',
     marginTop: '3%',
-
   },
 
   menuView: {
@@ -286,7 +336,11 @@ const styles = StyleSheet.create({
   headView: {
     width: '100%',
     height: '23%',
-    backgroundColor: 'blue',
+    backgroundColor: 'white',
+  },
+  bodyView: {
+    backgroundColor: 'white',
+    flex: 1,
   },
   redFoodBgr: {
     width: '100%',

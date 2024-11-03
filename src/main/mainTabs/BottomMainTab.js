@@ -8,7 +8,10 @@ import Restaurants from './restaurants';
 import Rewards from './rewards';
 import WhatsInToday from './Home/WhatsInToday';
 
-import {createStackNavigator} from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  CardStyleInterpolators,
+} from '@react-navigation/stack';
 import Filter from './Home/Filter';
 import SlideNav from '../slidenav/SlideNav';
 import ConfirmOrder from './Order/ConfimOrder';
@@ -19,7 +22,8 @@ import BrandDetails from './Restaurant/BrandDetails';
 import CheckoutNavigator from '../../authen/Checkout/CheckoutNavigator';
 import ProductDetail from '../../authen/Product/ProductDetail';
 import Product from '../../authen/Product/Product';
-
+import OrderItemScreen from './Order/OrderItemScreen';
+import Profile from '../../authen/Profile/Profile';
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -36,7 +40,11 @@ const HomeStack = () => {
         component={WhatsInToday}
         options={{headerShown: false}}
       />
-
+      <Stack.Screen
+        name="ProductStack"
+        component={ProductStack}
+        options={{headerShown: false}}
+      />
       {/* <Stack.Screen
         name="Filter"
         component={Filter}
@@ -64,24 +72,34 @@ const OrderStack = () => {
       /> */}
 
       <Stack.Screen
-        name="OrderDetail"
-        component={OrderDetail}
+        name="Order"
+        component={Order}
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="ConfirmOrder"
-        component={ConfirmOrder}
+        name="OrderItemScreen"
+        component={OrderItemScreen}
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="CheckoutNavigator"
-        component={CheckoutNavigator}
+        name="CartStack"
+        component={CartStack}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
   );
 };
-
+const ProfileStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Profile"
+        component={Profile}
+        options={{headerShown: false}}
+      />
+    </Stack.Navigator>
+  );
+};
 const RestaurantStack = () => {
   return (
     <Stack.Navigator>
@@ -105,21 +123,33 @@ const RestaurantStack = () => {
 };
 const CartStack = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen
         name="OrderDetail"
         component={OrderDetail}
-        options={{headerShown: false}}
+        options={{
+          animationTypeForReplace: 'pop',
+          cardStyleInterpolator:
+            CardStyleInterpolators.forFadeFromBottomAndroid, // Scale transition
+        }}
       />
       <Stack.Screen
         name="ConfirmOrder"
         component={ConfirmOrder}
-        options={{headerShown: false}}
+        options={{
+          animationTypeForReplace: 'pop',
+          cardStyleInterpolator:
+            CardStyleInterpolators.forFadeFromBottomAndroid, // Scale transition
+        }}
       />
       <Stack.Screen
         name="CheckoutNavigator"
         component={CheckoutNavigator}
-        options={{headerShown: false}}
+        options={{
+          animationTypeForReplace: 'pop',
+          cardStyleInterpolator:
+            CardStyleInterpolators.forFadeFromBottomAndroid, // Scale transition
+        }}
       />
     </Stack.Navigator>
   );
@@ -173,14 +203,32 @@ const tabScreenOptions = ({route}) => {
 const ProductStack = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="Product" component={Product} />
-      <Stack.Screen name="ProductDetail" component={ProductDetail} />
+      <Stack.Screen
+        name="Product"
+        component={Product}
+        options={{
+          animationTypeForReplace: 'pop',
+          cardStyleInterpolator:
+            CardStyleInterpolators.forFadeFromBottomAndroid, // Scale transition
+        }}
+      />
+      <Stack.Screen
+        name="ProductDetail"
+        component={ProductDetail}
+        options={{
+          animationTypeForReplace: 'pop',
+          cardStyleInterpolator:
+            CardStyleInterpolators.forFadeFromBottomAndroid, // Scale transition
+        }}
+      />
       <Stack.Screen
         name="filter"
         component={Filter}
         options={{
-          headerShown: false,
           tabBarStyle: {display: 'none'},
+          animationTypeForReplace: 'pop',
+          cardStyleInterpolator:
+            CardStyleInterpolators.forFadeFromBottomAndroid, // Fade transition
         }}
       />
     </Stack.Navigator>
@@ -201,14 +249,14 @@ const BottomMainTab = () => {
         options={{title: 'Restaurants'}}
       />
       <Tab.Screen
-        name="CartStack"
-        component={CartStack}
-        options={{title: 'Cart'}}
+        name="OrderStack"
+        component={OrderStack}
+        options={{title: 'Order'}}
       />
       <Tab.Screen
-        name="ProductStack"
-        component={ProductStack}
-        options={{title: 'Product'}}
+        name="ProfileStack"
+        component={ProfileStack}
+        options={{title: 'Profile'}}
       />
     </Tab.Navigator>
   );
