@@ -7,15 +7,44 @@ import {
   Image,
   StyleSheet,
 } from 'react-native';
-import {useDispatch} from 'react-redux';
-import {setName} from '../../redux/slice/userSlice';
-const Name = props => {
+import {useDispatch, useSelector} from 'react-redux';
+import {register} from '../../apiClient';
+import {setEmail} from '../../redux/slice/userSlice';
+const Email = props => {
   const {navigation} = props;
   const [inputValue, setInputValue] = useState('');
   const dispatch = useDispatch();
-
+  const name = useSelector(state => state.user.name);
+  const password = useSelector(state => state.user.password);
+  const phone = useSelector(state => state.user.phone);
+  const gender = useSelector(state => state.user.gender);
+  const email = useSelector(state => state.user.email);
+  const admin = false;
   const handleTextChange = text => {
     setInputValue(text);
+  };
+  const handleRegister = () => {
+    // Dispatching actions to store user information
+    dispatch(setEmail(inputValue));
+
+    // Prepare the user object for registration
+    const userDetails = {
+      name: name,
+      email: email,
+      password: password, // Ensure this is hashed before sending
+      phone: phone,
+      gender: gender,
+      isAdmin: admin,
+    };
+
+    register(userDetails)
+      .then(() => {
+        navigation.navigate('Code1');
+      })
+      .catch(error => {
+        console.error('Registration Error: ', error);
+        // Handle registration error
+      });
   };
   return (
     <View style={styles.container}>
@@ -27,7 +56,7 @@ const Name = props => {
             style={styles.icon}
           />
         </TouchableOpacity>
-        <Text style={styles.stepText}>Step 1/10</Text>
+        <Text style={styles.stepText}>Step 8/10</Text>
         <TouchableOpacity onPress={() => navigation.navigate('Login')}>
           <Image
             source={require('../../../assets/images/Exit.png')}
@@ -45,21 +74,21 @@ const Name = props => {
         style={styles.twopeopleShadow}
         source={require('../../../assets/images/twopeopleShadow.png')}
       />
-      <Text style={styles.title}>What is Your Name?</Text>
+      <Text style={styles.title}>What is Your Email?</Text>
       <Text style={styles.description}>
-        In order to help us identify you, we need to know your real name.
+        In order to help us verify you, we need to know your real email.
       </Text>
       <View style={styles.inputContainer}>
         <View style={styles.inputNameView}>
           <TextInput
             style={styles.inputView}
-            secureTextEntry={true}
-            placeholder="Example: John Smith"
+            secureTextEntry={false}
+            placeholder="Example: JohnSmith@gmail.com"
             placeholderTextColor="rgb(177, 189, 199)"
             onChangeText={handleTextChange}
             value={inputValue}
           />
-          <Text style={styles.inputLabel}>Name</Text>
+          <Text style={styles.inputLabel}>Email</Text>
         </View>
         <Text style={styles.inputHint}>Your name must contain</Text>
 
@@ -77,12 +106,7 @@ const Name = props => {
       </View>
 
       {/* Nút tiếp tục */}
-      <TouchableOpacity
-        style={styles.nextButton}
-        onPress={() => {
-          dispatch(setName(inputValue));
-          navigation.navigate('Gender');
-        }}>
+      <TouchableOpacity style={styles.nextButton} onPress={handleRegister}>
         <Text style={styles.nextButtonText}>Next Step</Text>
       </TouchableOpacity>
     </View>
@@ -230,4 +254,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Name;
+export default Email;

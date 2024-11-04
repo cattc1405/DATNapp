@@ -74,7 +74,7 @@ const ProductDetail = ({route}) => {
 
     addCart();
   }, [itemOrder, userId, token]);
-
+  console.log(itemOrder);
   useEffect(() => {
     console.log('Updated Item Order:', itemOrder);
   }, [itemOrder]);

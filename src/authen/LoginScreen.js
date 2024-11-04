@@ -19,6 +19,7 @@ const LoginScreen = ({navigation}) => {
   const status = useSelector(state => state.auth.status); // Accessing auth status from the Redux store
   const error = useSelector(state => state.auth.error);
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const authStatus = useSelector(state => state.auth.status);
 
   // Hàm xử lý khi người dùng nhấn vào nút "LOGIN"
   const handleLogin = async () => {
@@ -151,6 +152,7 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     marginBottom: 20,
+    marginLeft: 20,
   },
   logo: {
     width: 350,

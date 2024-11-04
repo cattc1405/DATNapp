@@ -8,8 +8,8 @@ import {
   StyleSheet,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
-import {setName} from '../../redux/slice/userSlice';
-const Name = props => {
+import {setPhone} from '../../redux/slice/userSlice';
+const Phone = props => {
   const {navigation} = props;
   const [inputValue, setInputValue] = useState('');
   const dispatch = useDispatch();
@@ -27,7 +27,7 @@ const Name = props => {
             style={styles.icon}
           />
         </TouchableOpacity>
-        <Text style={styles.stepText}>Step 1/10</Text>
+        <Text style={styles.stepText}>Step 8/10</Text>
         <TouchableOpacity onPress={() => navigation.navigate('Login')}>
           <Image
             source={require('../../../assets/images/Exit.png')}
@@ -45,23 +45,24 @@ const Name = props => {
         style={styles.twopeopleShadow}
         source={require('../../../assets/images/twopeopleShadow.png')}
       />
-      <Text style={styles.title}>What is Your Name?</Text>
+      <Text style={styles.title}>What is Your Phone?</Text>
       <Text style={styles.description}>
-        In order to help us identify you, we need to know your real name.
+        In order to help us verify you, we need to know your real email.
       </Text>
       <View style={styles.inputContainer}>
         <View style={styles.inputNameView}>
           <TextInput
             style={styles.inputView}
-            secureTextEntry={true}
-            placeholder="Example: John Smith"
+            secureTextEntry={false}
+            placeholder="+91 4587341"
             placeholderTextColor="rgb(177, 189, 199)"
             onChangeText={handleTextChange}
             value={inputValue}
+            keyboardType="phone-pad"
           />
-          <Text style={styles.inputLabel}>Name</Text>
+          <Text style={styles.inputLabel}>Phone</Text>
         </View>
-        <Text style={styles.inputHint}>Your name must contain</Text>
+        <Text style={styles.inputHint}>Your Phone must contain</Text>
 
         <View style={styles.checkView}>
           <Image
@@ -80,8 +81,8 @@ const Name = props => {
       <TouchableOpacity
         style={styles.nextButton}
         onPress={() => {
-          dispatch(setName(inputValue));
-          navigation.navigate('Gender');
+          dispatch(setPhone(inputValue));
+          navigation.navigate('Email');
         }}>
         <Text style={styles.nextButtonText}>Next Step</Text>
       </TouchableOpacity>
@@ -230,4 +231,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Name;
+export default Phone;

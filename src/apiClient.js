@@ -128,7 +128,7 @@ export const addUserCart = async (id, itemOrder, token) => {
     console.log('Payload being sent:', payload); // Log the payload for debugging
 
     // Set the request headers to include the Bearer token
-    const response = await apiInstance.post(`/users/userCart/${id}`, payload, {
+    const response = await apiInstance.post(`/client/userCart/${id}`, payload, {
       headers: {
         Authorization: `Bearer ${token}`, // Include the Bearer token
       },
@@ -143,7 +143,7 @@ export const addUserCart = async (id, itemOrder, token) => {
 };
 export const getUserCart = async (id, token) => {
   try {
-    const response = await apiInstance.get(`/users/${id}`, {
+    const response = await apiInstance.get(`/client/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`, // Add the token here
       },
@@ -163,7 +163,7 @@ export const getUserCart = async (id, token) => {
 export const getUserOrder = async (id, token, params) => {
   try {
     // Construct the request URL with the provided ID and parameters
-    const url = `https://app-datn-gg.onrender.com/api/v1/orders/user/${id}?status=${params.status}`;
+    const url = `https://app-datn-gg.onrender.com/api/v1/client/user/${id}?status=${params.status}`;
 
     // Send a GET request with the authorization token
     const response = await fetch(url, {
@@ -198,7 +198,7 @@ export const getUserOrder = async (id, token, params) => {
 // Refactored getUserInfo without unnecessary checks
 export const getUserInfo = async (id, token) => {
   try {
-    const url = `https://app-datn-gg.onrender.com/api/v1/users/${id}`; // Updated URL
+    const url = `https://app-datn-gg.onrender.com/api/v1/client/${id}`; // Updated URL
     console.log('Fetching user info from URL:', url);
     console.log('Authorization token:', token);
 
@@ -258,7 +258,7 @@ export const submitOrder = async (
 export const updateUserCart = async (id, token, cartId, updateFields) => {
   try {
     const response = await apiInstance.put(
-      `/users/${id}/cart/${cartId}`,
+      `/client/${id}/cart/${cartId}`,
       {
         updateFields, // Sends the fields to update (e.g., quantity, size, excluded items)
       },
@@ -277,7 +277,7 @@ export const updateUserCart = async (id, token, cartId, updateFields) => {
 };
 export const removeUserCartItem = async (id, token, cartId) => {
   try {
-    const response = await apiInstance.delete(`/users/${id}/cart/${cartId}`, {
+    const response = await apiInstance.delete(`/client/${id}/cart/${cartId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -291,7 +291,7 @@ export const removeUserCartItem = async (id, token, cartId) => {
 };
 export const clearCart = async (id, token) => {
   try {
-    const response = await apiInstance.delete(`/users/${id}/cart`, {
+    const response = await apiInstance.delete(`/client/${id}/cart`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -303,7 +303,40 @@ export const clearCart = async (id, token) => {
     throw error; // Rethrow the error for further handling
   }
 };
+// User registration function
+export const register = async form => {
+  try {
+    // Sending POST request to register endpoint with user data
+    const response = await apiInstance.post('/users/register', form);
 
+    console.log('Registration response:', response.data); // Log response data for debugging
+
+    return response.data; // Return response data
+  } catch (error) {
+    console.error('Error during registration:', error); // Log errors
+    if (error.response) {
+      console.error('Error response data:', error.response.data);
+      console.error('Error response status:', error.response.status);
+    }
+    throw error; // Rethrow error for handling in calling function
+  }
+};
+export const verifyEmail = async (email, otp, password) => {
+  try {
+    const response = await apiInstance.post(
+      'https://app-datn-gg.onrender.com/api/v1/users/verify-email',
+      {
+        email: email,
+        otp: otp,
+        password: password,
+      },
+    );
+    console.log('Verification success:', response.data);
+    // Navigate to the next screen upon successful verification
+  } catch (error) {
+    console.error('Verification failed:', error.response.data);
+  }
+};
 export const getToken = async () => {
   return await AsyncStorage.getItem('userToken');
 };
