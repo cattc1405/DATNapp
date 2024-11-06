@@ -1,5 +1,6 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Alert} from 'react-native';
 
 const apiUrl = 'https://app-datn-gg.onrender.com/api/v1';
 // const apiUrl = 'http://localhost:3000/api/v1';
@@ -134,6 +135,7 @@ export const updateUser = async (id, userForm, token) => {
     console.error('Error updating user:', error.response.data); // Log error response
   }
 };
+
 export const addUserCart = async (id, itemOrder, token) => {
   try {
     const payload = {cart: itemOrder}; // Prepare the payload
@@ -291,6 +293,32 @@ export const getUserInfo = async (id, token) => {
   } catch (error) {
     console.error('Failed to fetch user:', error);
     throw error;
+  }
+};
+
+// Assuming this is the structure of your API call
+export const uploadAvatar = async (userId, formData, token) => {
+  try {
+    const response = await axios.put(
+      `https://app-datn-gg.onrender.com/api/v1/client/uploadAvatar/${userId}`, // Use the correct endpoint with userId
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      },
+    );
+
+    // Ensure the response structure matches your expectations
+    if (response && response.data) {
+      return response.data; // Return the data directly
+    } else {
+      throw new Error('Invalid response structure');
+    }
+  } catch (error) {
+    console.error('Error uploading avatar:', error);
+    throw error; // Propagate error to the caller
   }
 };
 

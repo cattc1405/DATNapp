@@ -24,6 +24,7 @@ import ProductDetail from '../../authen/Product/ProductDetail';
 import Product from '../../authen/Product/Product';
 import OrderItemScreen from './Order/OrderItemScreen';
 import Profile from '../../authen/Profile/Profile';
+import TestPhoto from '../../authen/Profile/TestPhoto';
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 

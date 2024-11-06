@@ -42,10 +42,17 @@ const OrderScreen = ({status}) => {
     <TouchableOpacity
       style={styles.itemContainer}
       onPress={() => handlePress(item)}>
-      <Text>{item.transactionId}</Text>
-      <Text>
-        Size: {item.paymentMethod} - Price: ${item.totalPrice}
-      </Text>
+      {/* Transaction ID */}
+      <Text style={styles.transactionId}>{item.transactionId}</Text>
+
+      {/* Payment method and Price */}
+      <View style={styles.detailsContainer}>
+        <Text style={styles.detailsText}>{item.paymentMethob}</Text>
+        <Text style={styles.detailsText}>Total: ${item.totalPrice}</Text>
+      </View>
+
+      {/* Add separator or icon if needed */}
+      <View style={styles.separator} />
     </TouchableOpacity>
   );
 
@@ -426,5 +433,36 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     position: 'absolute',
+  },
+  itemContainer: {
+    backgroundColor: '#fff', // White background
+    borderRadius: 12, // Rounded corners for a cleaner look
+    padding: 16, // Add padding for spacing inside the item
+    marginVertical: 8, // Space between items
+    shadowColor: '#000', // Subtle shadow effect
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3, // Elevation for Android
+  },
+  transactionId: {
+    fontSize: 16, // Slightly larger font for the transaction ID
+    fontWeight: 'bold', // Bold text for emphasis
+    color: '#333', // Dark text color for contrast
+    marginBottom: 8, // Add space between transaction ID and details
+  },
+  detailsContainer: {
+    flexDirection: 'row', // Align items horizontally
+    justifyContent: 'space-between', // Space out the details
+    marginTop: 4,
+  },
+  detailsText: {
+    fontSize: 14, // Smaller font for details
+    color: '#666', // Lighter color for less emphasis
+  },
+  separator: {
+    marginTop: 12, // Space between the item content and separator
+    height: 1, // Thin line to separate items
+    backgroundColor: '#ddd', // Light gray color for the separator
   },
 });
