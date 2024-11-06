@@ -150,9 +150,13 @@ const AddressScreen = ({navigation}) => {
       {/* Next Button */}
       <TouchableOpacity
         style={styles.nextButton}
-        onPress={() =>
-          navigation.navigate('Checkout3', {selectedBrand, selectedContact})
-        }>
+        onPress={() => {
+          if (!selectedBrand) {
+            alert('Please select a brand');
+            return; // Prevent proceeding if no brand is selected
+          }
+          navigation.navigate('Checkout3', {selectedBrand, selectedContact});
+        }}>
         <Text style={styles.nextButtonText}>Next Step</Text>
       </TouchableOpacity>
     </View>

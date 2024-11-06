@@ -9,11 +9,11 @@ import {
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
-import {submitOrder, clearCart} from '../../apiClient';
+import {submitOrder, removeUserCartItem} from '../../apiClient';
 const PaymentScreen = ({cartItems}) => {
   const route = useRoute(); // Move this line up here to define route first
   const cartItems2 = useSelector(state => state.cart.items); // or state.cart.cartItems depending on your slice structure
-
+  const navigate = useNavigation();
   const [cardNumber, setCardNumber] = useState('');
   const [cardHolder, setCardHolder] = useState('');
   const [expirationDate, setExpirationDate] = useState('');
@@ -33,14 +33,20 @@ const PaymentScreen = ({cartItems}) => {
   const restaurant2 = selectedBrand._id;
   const contactString = selectedContact.selectedContact;
   console.log(contactString, 'res');
+  console.log(cartItems2, 'this is cartItems2');
 
-  const orderItems = cartItems.map(item => ({
+  const orderItems = cartItems2.map(item => ({
     quantity: item.quantity,
     drink: item.drink,
     excluded: item.excluded,
     attribute: item.attributeId,
   }));
+  console.log(orderItems, 'this is orderItems');
   const handleSubmitOrder = async () => {
+    if (!selectedCard) {
+      alert('Please select a payment method');
+      return; // Prevent the order submission if no card is selected
+    }
     const shippingAddress = `${contactString}`;
     const restaurant = `${restaurant2}`;
     const paymentMethod = selectedCard;
@@ -55,9 +61,12 @@ const PaymentScreen = ({cartItems}) => {
           restaurant,
           token,
         ),
-        clearCart(userId, token),
       ]);
+      for (const item of cartItems2) {
+        await removeUserCartItem(userId, token, item.id); // Pass userId and item.id
+      }
       console.log('Order submitted and cart cleared successfully');
+      navigate.navigate('Checkout5');
       // Optionally navigate or show success message here
     } catch (error) {
       console.error('Failed to submit order:', error); // User-friendly message could be shown here

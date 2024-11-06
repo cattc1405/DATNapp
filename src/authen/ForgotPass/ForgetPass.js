@@ -1,27 +1,68 @@
-import { View, Text, StyleSheet, TouchableOpacity, Alert, Image } from 'react-native';
-import React, { useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+  Image,
+  TextInput,
+} from 'react-native';
+import React, {useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
+import {forgotPassword} from '../../apiClient'; // Import API client
 
-const ForgetPass = ({ navigation }) => {
-  // const {navigation} = props;
-
+const ForgetPass = () => {
+  const navigation = useNavigation();
   const [selectedOption, setSelectedOption] = useState(null);
+  const [email, setEmail] = useState('');
 
   const handleOptionSelect = option => {
     setSelectedOption(option);
   };
 
-  const handleSendcode = () => {
+  const handleSendCode = async () => {
     if (!selectedOption) {
       Alert.alert(
-        'Method Not Selected',
-        'Please select your contact method before proceeding.',
-        [{ text: 'OK' }],
+        'Phương thức chưa được chọn',
+        'Vui lòng chọn phương thức liên hệ trước khi tiếp tục.',
+        [{text: 'OK'}],
       );
+    } else if (!email) {
+      Alert.alert('Email không hợp lệ', 'Vui lòng nhập email của bạn.', [
+        {text: 'OK'},
+      ]);
     } else {
-      navigation.navigate('Code');
+      try {
+        await forgotPassword(email); // Gọi hàm quên mật khẩu với email
+        Alert.alert('Thành công', 'Mã OTP đã được gửi đến email của bạn.', [
+          {text: 'OK', onPress: () => navigation.navigate('Code', {email})}, // Truyền email ở đây
+        ]);
+      } catch (error) {
+        console.error('Lỗi khi gửi yêu cầu:', error);
+        // Kiểm tra mã lỗi và hiển thị thông báo phù hợp
+        if (
+          error.response &&
+          error.response.status === 400 &&
+          error.response.data.message === 'User not found'
+        ) {
+          Alert.alert(
+            'Lỗi',
+            'Tài khoản email này chưa được đăng ký. Vui lòng kiểm tra lại hoặc đăng ký tài khoản.',
+            [{text: 'OK'}],
+          );
+        } else {
+          Alert.alert(
+            'Lỗi',
+            error.response
+              ? error.response.data.message
+              : 'Có lỗi xảy ra. Vui lòng thử lại.',
+            [{text: 'OK'}],
+          );
+        }
+      }
     }
   };
+
   return (
     <View style={styles.container}>
       <Image source={require('../../../assets/images/Back.png')} />
@@ -32,11 +73,19 @@ const ForgetPass = ({ navigation }) => {
       <View style={styles.imagePlaceholder}>
         <Image source={require('../../../assets/images/Img.png')} />
       </View>
-      <Text style={styles.title}>Forgot Your Password?</Text>
+      <Text style={styles.title}>Quên mật khẩu?</Text>
       <Text style={styles.description}>
-        Choose from the two contact methods in order to send you an OTP code to
-        restore your password.
+        Chọn một trong hai phương thức liên hệ để gửi mã OTP phục hồi mật khẩu
+        của bạn.
       </Text>
+
+      {/* Trường nhập email */}
+      <TextInput
+        style={styles.input}
+        placeholder="Nhập email của bạn"
+        value={email}
+        onChangeText={setEmail}
+      />
 
       <TouchableOpacity
         style={
@@ -49,10 +98,10 @@ const ForgetPass = ({ navigation }) => {
               ? styles.optionText
               : styles.optionTextNonchecked
           }>
-          1 VIA MOBILE NUMBER
+          1 QUA SỐ DI ĐỘNG
         </Text>
         <Text style={styles.subText}>
-          We will send you your OTP number via SMS.
+          Chúng tôi sẽ gửi mã OTP đến số điện thoại của bạn qua SMS.
         </Text>
       </TouchableOpacity>
 
@@ -67,28 +116,35 @@ const ForgetPass = ({ navigation }) => {
               ? styles.optionText
               : styles.optionTextNonchecked
           }>
-          2 VIA EMAIL
+          2 QUA EMAIL
         </Text>
         <Text style={styles.subText}>
-          We will send you your OTP number via EMAIL.
+          Chúng tôi sẽ gửi mã OTP đến email của bạn.
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.sendButton}
-        onPress={handleSendcode}>
-        <Text style={styles.sendButtonText}>Send Verification Code</Text>
+
+      <TouchableOpacity style={styles.sendButton} onPress={handleSendCode}>
+        <Text style={styles.sendButtonText}>Gửi Mã Xác Thực</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  input: {
+    height: 40,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+    marginBottom: 20,
+    paddingHorizontal: 10,
+  },
   optionTextNonchecked: {
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 5,
     color: '#000',
-    fontFamily: 'nunitoSan'
+    fontFamily: 'nunitoSan',
   },
   container: {
     flex: 1,
@@ -100,14 +156,11 @@ const styles = StyleSheet.create({
     top: 20,
     left: 10,
   },
-  backText: {
-    fontSize: 24,
-  },
   stepText: {
     fontSize: 16,
     textAlign: 'center',
     marginVertical: 20,
-    fontFamily: 'nunitoSan'
+    fontFamily: 'nunitoSan',
   },
   imagePlaceholder: {
     height: 150,
@@ -122,14 +175,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginVertical: 10,
     color: '#000000',
-    fontFamily: 'nunitoSan'
+    fontFamily: 'nunitoSan',
   },
   description: {
     fontSize: 16,
     textAlign: 'center',
     color: '#777',
     marginBottom: 20,
-    fontFamily: 'nunitoSan'
+    fontFamily: 'nunitoSan',
   },
   optionUncheck: {
     padding: 20,
@@ -138,7 +191,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     shadowColor: '#000',
     opacity: 0.6,
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 2,
@@ -149,7 +202,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 10,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 2,
@@ -159,12 +212,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 5,
     color: '#F55F44',
-    fontFamily: 'nunitoSan'
+    fontFamily: 'nunitoSan',
   },
   subText: {
     fontSize: 14,
     color: '#777',
-    fontFamily: 'nunitoSan'
+    fontFamily: 'nunitoSan',
   },
   sendButton: {
     padding: 15,
@@ -177,7 +230,7 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 16,
     fontWeight: 'bold',
-    fontFamily: 'nunitoSan'
+    fontFamily: 'nunitoSan',
   },
 });
 

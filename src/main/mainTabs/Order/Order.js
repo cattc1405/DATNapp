@@ -5,6 +5,7 @@ import {
   Image,
   TouchableOpacity,
   FlatList,
+  ImageBackground,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
@@ -58,7 +59,74 @@ const OrderScreen = ({status}) => {
     </View>
   );
 };
+function CustomTabBar({state, descriptors, navigation, position}) {
+  return (
+    <ImageBackground
+      source={require('../../../../assets/images/redFoodBgr.png')} // Replace with your image path
+      style={{
+        height: 40,
+        flexDirection: 'row',
+        backgroundColor: 'orange',
+        borderBottomLeftRadius: 16,
+        borderBottomRightRadius: 16,
+      }} // Set style as needed
+    >
+      {state.routes.map((route, index) => {
+        const {options} = descriptors[route.key];
+        const label =
+          options.tabBarLabel !== undefined
+            ? options.tabBarLabel
+            : options.title !== undefined
+            ? options.title
+            : route.name;
 
+        const isFocused = state.index === index;
+
+        const onPress = () => {
+          const event = navigation.emit({
+            type: 'tabPress',
+            target: route.key,
+          });
+
+          if (!isFocused && !event.defaultPrevented) {
+            navigation.navigate(route.name);
+          }
+        };
+
+        return (
+          <View
+            key={index}
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              paddingVertical: 10,
+            }}>
+            <Text
+              onPress={onPress}
+              style={{
+                color: isFocused ? 'white' : '#989DA3',
+                fontSize: 15,
+                fontWeight: isFocused ? 'bold' : 'normal',
+                fontFamily: 'nunitoSan',
+              }}>
+              {label}
+            </Text>
+            {isFocused && (
+              <View
+                style={{
+                  height: 2, // Thickness of the indicator line
+                  width: '45%', // Width of the line relative to the text or container
+                  backgroundColor: 'white', // Color of the indicator line
+                  marginTop: 4, // Space between the text and indicator
+                }}
+              />
+            )}
+          </View>
+        );
+      })}
+    </ImageBackground>
+  );
+}
 const Order = () => {
   const navigation = useNavigation();
   const cartItems = useSelector(state => state.cart.items);
@@ -106,10 +174,22 @@ const Order = () => {
       </View>
       <View style={styles.bodyView}>
         <Tab.Navigator
+          tabBar={props => <CustomTabBar {...props} />}
           screenOptions={{
-            tabBarActiveTintColor: 'tomato',
-            tabBarLabelStyle: {fontSize: 14},
-            tabBarStyle: {backgroundColor: 'white'},
+            tabBarActiveTintColor: 'white',
+            tabBarLabelStyle: {
+              fontSize: 14,
+              color: 'white',
+              textAlign: 'center',
+            },
+            tabBarStyle: {
+              backgroundColor: 'orange',
+            },
+            tabBarIndicatorStyle: {
+              backgroundColor: 'white', // Set indicator color
+              height: 3, // Adjust thickness of the indicator line
+              borderRadius: 1.5, // Smooth indicator line edges
+            },
           }}>
           <Tab.Screen name="Pending">
             {() => <OrderScreen status="Pending" />}

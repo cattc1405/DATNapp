@@ -180,37 +180,41 @@ const Home = () => {
           </View>
         </View>
       </View>
-      <View style={styles.mainView}>
-        <View style={styles.titleAndViewall}>
-          <Text style={styles.titleBoldText}>What's in Today?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('WhatsInToday')}>
-            <Text style={styles.viewallText}>View All</Text>
-          </TouchableOpacity>
-        </View>
+      <ScrollView>
+        <View style={styles.mainView}>
+          <View style={styles.titleAndViewall}>
+            <Text style={styles.titleBoldText}>What's in Today?</Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('WhatsInToday')}>
+              <Text style={styles.viewallText}>View All</Text>
+            </TouchableOpacity>
+          </View>
 
-        {/* scrollview */}
-        <FlatList
-          data={productF}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          renderItem={renderItemOffer}
-          keyExtractor={item => item.id}
-        />
-        <View style={styles.titleAndViewall}>
-          <Text style={styles.titleBoldText}>Popular Restaurants Nearby</Text>
-          <TouchableOpacity>
-            <Text style={styles.viewallText}>View All</Text>
-          </TouchableOpacity>
+          {/* scrollview */}
+
+          <FlatList
+            data={productF}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            renderItem={renderItemOffer}
+            keyExtractor={item => item.id}
+          />
+          <View style={styles.titleAndViewall}>
+            <Text style={styles.titleBoldText}>Popular Restaurants Nearby</Text>
+            <TouchableOpacity>
+              <Text style={styles.viewallText}>View All</Text>
+            </TouchableOpacity>
+          </View>
+          <FlatList
+            data={brands}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            renderItem={({item}) => renderItemBrand({item})}
+            keyExtractor={item => item.id}
+            style={styles.popularView}
+          />
         </View>
-        <FlatList
-          data={brands}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          renderItem={({item}) => renderItemBrand({item})}
-          keyExtractor={item => item.id}
-          style={styles.popularView}
-        />
-      </View>
+      </ScrollView>
     </View>
   );
 };

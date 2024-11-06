@@ -9,6 +9,12 @@ import {
 import React, {useState, useEffect} from 'react';
 import {getBrands} from '../../../apiClient';
 import {useSelector} from 'react-redux'; // Import useSelector
+import Animated, {
+  Easing,
+  useSharedValue,
+  withTiming,
+  useAnimatedStyle,
+} from 'react-native-reanimated';
 
 const Restaurant1 = ({navigation}) => {
   const [brands, setBrand] = useState([]);

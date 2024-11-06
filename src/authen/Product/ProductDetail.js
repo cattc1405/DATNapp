@@ -151,7 +151,7 @@ const ProductDetail = ({route}) => {
       return (
         <ScrollView style={styles.productContainer}>
           <Image style={styles.productImage} source={{uri: product.image}} />
-          <Text style={styles.titleBoldText}>{product._id}</Text>
+          <Text style={styles.titleBoldText}>{product.name}</Text>
           <Text style={styles.grayThinText}>{product.description}</Text>
           <View style={styles.ingredientsListView}>
             <View style={styles.ingredientView}>

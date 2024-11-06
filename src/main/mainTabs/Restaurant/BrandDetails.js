@@ -130,6 +130,12 @@ const BrandDetails = ({route}) => {
               )}
             </View>
           </View>
+          <View style={styles.titleAndViewall}>
+            <Text style={styles.titleBoldText}>Recent Photos</Text>
+            <TouchableOpacity>
+              <Text style={styles.viewallText}>View All</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </View>

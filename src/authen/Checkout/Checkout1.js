@@ -7,8 +7,9 @@ import {
   TouchableOpacity,
   FlatList,
   Dimensions,
+  TextInput,
 } from 'react-native';
-import {getUserInfo} from '../../apiClient';
+import {getUserInfo, updateUser} from '../../apiClient';
 import Animated, {
   Easing,
   useSharedValue,
@@ -22,11 +23,13 @@ const {width, height} = Dimensions.get('window');
 
 const OrderScreen = ({navigation}) => {
   const [showContacts, setShowContacts] = useState(false);
-  const animationValue = useSharedValue(0);
   const [user, setUser] = useState({});
   const [selectedContact, setSelectedContact] = useState(null);
+  const [newContact, setNewContact] = useState('');
   const userId = useSelector(state => state.auth.user?.userId);
   const token = useSelector(state => state.auth.user?.token);
+
+  const animationValue = useSharedValue(0);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -40,7 +43,36 @@ const OrderScreen = ({navigation}) => {
     if (userId && token) fetchUser();
   }, [userId, token]);
 
-  const renderItem = ({item}) => (
+  const handleAddContact = async () => {
+    if (newContact.trim()) {
+      const updatedContacts = {
+        ...user.contact,
+        [`Contact ${Object.keys(user.contact || {}).length + 1}`]: newContact,
+      };
+      const updatedUser = {...user, contact: updatedContacts};
+
+      try {
+        await updateUser(userId, updatedUser, token);
+        setUser(updatedUser); // Update local state with new contact
+        setNewContact(''); // Clear input
+      } catch (error) {
+        console.error('Error updating user:', error);
+      }
+    }
+  };
+  const handleRemoveContact = async index => {
+    const updatedContacts = user.contact.filter((_, i) => i !== index);
+    const updatedUser = {...user, contact: updatedContacts};
+
+    try {
+      await updateUser(userId, updatedUser, token);
+      setUser(updatedUser); // Update state with the removed contact
+    } catch (error) {
+      console.error('Error removing contact:', error);
+    }
+  };
+
+  const renderItem = ({item, index}) => (
     <TouchableOpacity
       style={styles.contactCard}
       onPress={() => {
@@ -48,6 +80,11 @@ const OrderScreen = ({navigation}) => {
         setShowContacts(false);
       }}>
       <Text style={styles.contactName}>{item}</Text>
+      <TouchableOpacity
+        style={styles.removeButton}
+        onPress={() => handleRemoveContact(index)}>
+        <Text style={styles.removeButtonText}>Remove</Text>
+      </TouchableOpacity>
     </TouchableOpacity>
   );
 
@@ -61,9 +98,8 @@ const OrderScreen = ({navigation}) => {
 
   const toggleContacts = () => {
     setShowContacts(prev => !prev);
-    animationValue.value = showContacts ? 0 : 1;
   };
-  console.log(selectedContact);
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -107,18 +143,43 @@ const OrderScreen = ({navigation}) => {
         </TouchableOpacity>
 
         <Animated.View style={[styles.contactOptionsContainer, animatedStyle]}>
-          <FlatList
-            data={user.contact} // Change to user.contact
-            keyExtractor={(item, index) => index.toString()} // Use index for key extractor
-            renderItem={renderItem}
-            contentContainerStyle={styles.scrollContainer}
-          />
+          {user.contact && Object.keys(user.contact).length > 0 ? (
+            <View>
+              <FlatList
+                data={Object.values(user.contact)}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={renderItem}
+                contentContainerStyle={styles.scrollContainer}
+              />
+            </View>
+          ) : (
+            <Text>No contacts available. Add a new one below.</Text>
+          )}
         </Animated.View>
+        <View style={styles.addContactContainer}>
+          <TextInput
+            style={styles.contactInput}
+            placeholder="Enter new contact"
+            value={newContact}
+            onChangeText={setNewContact}
+          />
+          <TouchableOpacity
+            style={styles.changeContactButton}
+            onPress={handleAddContact}>
+            <Text style={styles.addContactButtonText}>Add Contact</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       <TouchableOpacity
         style={styles.nextButton}
-        onPress={() => navigation.navigate('AddressScreen', {selectedContact})}>
+        onPress={() => {
+          if (!selectedContact) {
+            alert('Please select a contact.');
+            return;
+          }
+          navigation.navigate('AddressScreen', {selectedContact});
+        }}>
         <Text style={styles.nextButtonText}>Bước Tiếp Theo</Text>
       </TouchableOpacity>
     </View>
@@ -139,7 +200,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 100,
     justifyContent: 'center',
   },
   stepText: {
@@ -239,6 +300,17 @@ const styles = StyleSheet.create({
   },
   contactName: {
     fontSize: 14,
+    fontFamily: 'nunitoSan',
+  },
+  removeButton: {
+    position: 'absolute',
+    right: 10,
+    top: 10,
+    backgroundColor: '#ff6347',
+    borderRadius: 5,
+    padding: 5,
+    color: '#fff',
+    fontSize: 12,
     fontFamily: 'nunitoSan',
   },
 });

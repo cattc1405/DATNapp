@@ -113,11 +113,6 @@ const RestaurantStack = () => {
         component={BrandDetails}
         options={{headerShown: false}}
       />
-      <Stack.Screen
-        name="Filter"
-        component={Filter}
-        options={{headerShown: false}}
-      />
     </Stack.Navigator>
   );
 };

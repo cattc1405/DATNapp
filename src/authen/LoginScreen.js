@@ -49,9 +49,6 @@ const LoginScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       {/* Back Button (optional) */}
-      <TouchableOpacity style={styles.backButton}>
-        <Image source={require('../../assets/images/backArrow.png')} />
-      </TouchableOpacity>
 
       {/* Logo Section */}
       <View style={styles.logoContainer}>
@@ -60,53 +57,49 @@ const LoginScreen = ({navigation}) => {
           style={styles.logo}
         />
       </View>
+      <Text style={styles.welcomeText}>Welcome!</Text>
+      <Text style={styles.decribeText}>Sign in to continue using the app.</Text>
 
-      {/* Login Form */}
-      <View style={styles.formContainer}>
-        <Text style={styles.loginText}>Login</Text>
-
-        {/* E-mail Input */}
-        <Text style={styles.label}>E-mail</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Your email or phone"
-          placeholderTextColor="#ccc"
-          value={email}
-          onChangeText={setEmail} // Cập nhật email khi người dùng nhập
-        />
-
-        {/* Password Input with Visibility Toggle */}
-        <Text style={styles.label}>Password</Text>
-        <View style={styles.passwordContainer}>
+      <View style={styles.inputNameView}>
+        <View style={styles.inputContainer}>
           <TextInput
-            style={styles.input}
-            placeholder="Password"
-            secureTextEntry={!passwordVisible}
-            placeholderTextColor="#ccc"
+            style={styles.inputView}
+            placeholder="Example: John Smith"
+            placeholderTextColor="rgb(177, 189, 199)"
+            onChangeText={setEmail}
+            value={email}
+          />
+          <Text style={styles.inputLabel}>Email</Text>
+        </View>
+
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.inputView}
+            placeholder="Example: John Smith"
+            placeholderTextColor="rgb(177, 189, 199)"
+            secureTextEntry={passwordVisible}
+            onChangeText={setPassword}
             value={password}
-            onChangeText={setPassword} // Cập nhật password khi người dùng nhập
           />
           <TouchableOpacity
             style={styles.eyeIcon}
             onPress={() => setPasswordVisible(!passwordVisible)}>
             <Text>{passwordVisible ? '🙈' : '👁️'}</Text>
           </TouchableOpacity>
+          <Text style={styles.inputLabel}>Password</Text>
         </View>
-
-        {/* Forgot Password */}
-        <TouchableOpacity onPress={() => navigation.navigate('ForgotPassNavi')}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('ForgotPassNavigation')}>
           <Text style={styles.forgotPassword}>Forgot password?</Text>
         </TouchableOpacity>
 
-        {/* Login Button */}
         <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
           <Text style={styles.loginButtonText}>LOGIN</Text>
         </TouchableOpacity>
-
-        {/* Sign Up Section */}
         <View style={styles.signupContainer}>
           <Text style={styles.signupText}>Don't have an account? </Text>
-          <TouchableOpacity onPress={() => navigation.navigate('SignUpNavi')}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('SignUpNavigation')}>
             <Text style={styles.signupLink}>Sign Up</Text>
           </TouchableOpacity>
         </View>
@@ -133,15 +126,55 @@ const LoginScreen = ({navigation}) => {
             <Text style={styles.socialButtonText}>GOOGLE</Text>
           </TouchableOpacity>
         </View>
+
+        {/* Sign Up Section */}
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  inputView: {
+    paddingHorizontal: 25,
+    color: 'black',
+    fontWeight: '400',
+  },
+  inputLabel: {
+    textTransform: 'uppercase',
+    position: 'absolute',
+    fontFamily: 'nunitoSan',
+    left: 20,
+    fontWeight: '700',
+    color: '#F55F44',
+    top: -11,
+    paddingHorizontal: 4,
+    backgroundColor: '#fff',
+  },
+  inputLabel1: {
+    textTransform: 'uppercase',
+    position: 'absolute',
+    fontFamily: 'nunitoSan',
+    left: 200,
+    fontWeight: '700',
+    color: '#F55F44',
+    top: -11,
+    paddingHorizontal: 4,
+    backgroundColor: '#fff',
+    fontSize: 20,
+  },
+  inputContainer: {
+    marginTop: '10%',
+    width: '80%',
+    marginLeft: '10%',
+    marginBottom: '-4%',
+    height: 50,
+    borderRadius: 25,
+    borderWidth: 1.8,
+    borderColor: 'rgb(211, 222, 232)',
+  },
   container: {
     flex: 1,
-    backgroundColor: '#EEEEEE',
+    backgroundColor: '#FFFFFF',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -152,7 +185,8 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     marginBottom: 20,
-    marginLeft: 20,
+    marginLeft: 30,
+    marginTop: 50,
   },
   logo: {
     width: 350,
@@ -199,15 +233,19 @@ const styles = StyleSheet.create({
   forgotPassword: {
     color: '#ff7f50',
     fontSize: 14,
-    marginBottom: 15,
+    marginTop: 25,
+    marginRight: 39,
     textAlign: 'right',
   },
   loginButton: {
     backgroundColor: '#ff7f50',
     paddingVertical: 15,
-    borderRadius: 30,
+    borderRadius: 15,
+    width: '70%',
     alignItems: 'center',
     marginBottom: 10,
+    marginTop: 20,
+    alignSelf: 'center',
   },
   loginButtonText: {
     color: '#fff',
@@ -265,6 +303,213 @@ const styles = StyleSheet.create({
   socialButtonText: {
     fontSize: 14,
     color: '#333',
+  },
+  atLeastText: {
+    paddingLeft: 10,
+    fontSize: 13,
+    fontFamily: 'nunitoSan',
+  },
+  containCheck: {
+    width: 17,
+    height: 17,
+  },
+  checkView: {
+    width: '70%',
+    height: 25,
+    marginLeft: '10%',
+    marginTop: '1.2%',
+    marginBottom: '-1%',
+    flexDirection: 'row',
+    // backgroundColor: 'pink',
+    alignItems: 'center',
+  },
+  containText: {
+    marginLeft: '10%',
+    fontWeight: '700',
+    fontFamily: 'nunitoSan',
+    textTransform: 'uppercase',
+    fontSize: 12,
+    marginTop: '8%',
+    color: '#989DA3',
+  },
+  inputView: {
+    paddingHorizontal: 25,
+    color: 'black',
+    fontWeight: '400',
+  },
+  inputLabel: {
+    textTransform: 'uppercase',
+    position: 'absolute',
+    fontFamily: 'nunitoSan',
+    left: 20,
+    fontWeight: '700',
+    color: '#F55F44',
+    top: -11,
+    paddingHorizontal: 4,
+    backgroundColor: '#fff',
+  },
+  inputContainer: {
+    marginTop: '10%',
+    width: '80%',
+    marginLeft: '10%',
+    marginBottom: '-4%',
+    height: 50,
+    borderRadius: 25,
+    borderWidth: 1.8,
+    borderColor: 'rgb(211, 222, 232)',
+  },
+
+  checkedgenderText: {
+    color: 'black',
+    alignSelf: 'center',
+    fontWeight: '700',
+    fontSize: 17,
+    lineHeight: 28,
+    fontFamily: 'nunitoSan',
+  },
+
+  checkedBlank: {
+    width: '20%',
+    marginLeft: '70%',
+    height: '70%',
+    resizeMode: 'contain',
+  },
+  genderView: {
+    width: '45%',
+    height: '100%',
+    borderRadius: 15,
+    backgroundColor: '#fff',
+  },
+  inputNameView: {
+    marginBottom: 10,
+    width: '100%',
+    backgroundColor: 'white',
+    borderRadius: 20,
+    elevation: 4,
+    height: '55%',
+    marginTop: 30,
+  },
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#F9F9F9',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  backButton: {
+    padding: 10,
+  },
+  backText: {
+    fontSize: 24,
+  },
+  stepText: {
+    fontSize: 16,
+    textAlign: 'center',
+    fontFamily: 'nunitoSan',
+  },
+  closeButton: {
+    padding: 10,
+  },
+  closeText: {
+    fontSize: 24,
+    fontFamily: 'nunitoSan',
+  },
+  image: {
+    width: 200,
+    height: 150,
+    alignSelf: 'center',
+    marginBottom: 20,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginVertical: 10,
+    fontFamily: 'nunitoSan',
+  },
+  description: {
+    fontSize: 16,
+    textAlign: 'center',
+    color: '#777',
+    marginBottom: 20,
+    fontFamily: 'nunitoSan',
+  },
+  // inputContainer: {
+  //   marginBottom: 20,
+  // },
+  // inputLabel: {
+  //   fontSize: 14,
+  //   fontWeight: 'bold',
+  //   color: '#FF6B6B',
+  //   marginBottom: 10,
+  // },
+  passwordWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFF',
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 2,
+  },
+  input: {
+    flex: 1,
+    padding: 15,
+    fontSize: 18,
+  },
+  iconButton: {
+    padding: 10,
+  },
+  passwordRequirements: {
+    marginBottom: 20,
+  },
+  requirementTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  requirement: {
+    fontSize: 14,
+    marginBottom: 5,
+    color: '#555',
+  },
+  nextButton: {
+    padding: 15,
+    backgroundColor: '#F55F44',
+    borderRadius: 30,
+    marginTop: 10,
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  nextButtonText: {
+    color: '#FFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+    fontFamily: 'nunitoSan',
+  },
+  decribeText: {
+    color: '#989DA3',
+    fontWeight: '400',
+    fontSize: 17,
+    lineHeight: 28,
+    fontFamily: 'nunitoSan',
+    textAlign: 'center',
+  },
+  welcomeText: {
+    color: 'black',
+    fontWeight: '700',
+    fontSize: 20,
+    marginTop: '15%',
+    marginBottom: '2%',
+    fontFamily: 'nunitoSan',
+
+    textAlign: 'center',
   },
 });
 

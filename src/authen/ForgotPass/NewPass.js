@@ -1,4 +1,3 @@
-
 import {
   View,
   Text,
@@ -6,20 +5,43 @@ import {
   StyleSheet,
   TextInput,
   Image,
+  Alert,
 } from 'react-native';
-import React, { useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
-
-const NewPass = ({ navigation }) => {
+import React, {useState} from 'react';
+import axios from 'axios'; // Import axios
+import {useNavigation} from '@react-navigation/native';
+import {useRoute} from '@react-navigation/native';
+import {resetPassword} from '../../apiClient';
+const NewPass = ({navigation}) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [isPasswordVisible, setPasswordVisible] = useState(false);
-  const [isConfirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [inputValue, setInputValue] = useState('');
-  // const navigation = useNavigation();
+  const router = useRoute();
+  const {email} = router.params;
+  console.log('email is:', email);
   const handleTextChange = text => {
     setInputValue(text);
   };
+  {
+  }
+  // Hàm xử lý khi nhấn nút "Next Step"
+  const handleNextStep = async () => {
+    if (password !== confirmPassword) {
+      Alert.alert(
+        'Mật khẩu không khớp',
+        'Vui lòng kiểm tra lại mật khẩu của bạn.',
+      );
+      return;
+    }
+
+    try {
+      resetPassword(email, confirmPassword);
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Lỗi', 'Đã có lỗi xảy ra. Vui lòng thử lại sau.');
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -29,11 +51,10 @@ const NewPass = ({ navigation }) => {
           <Image source={require('../../../assets/images/Back.png')} />
         </TouchableOpacity>
         <Text style={styles.stepText}>Step 3/3</Text>
-        <TouchableOpacity style={styles.closeButton} onPress={() => navigation.navigate('Login')}>
-          <Image
-
-            source={require('../../../assets/images/Exit.png')}
-          />
+        <TouchableOpacity
+          style={styles.closeButton}
+          onPress={() => navigation.navigate('Login')}>
+          <Image source={require('../../../assets/images/Exit.png')} />
         </TouchableOpacity>
       </View>
 
@@ -43,79 +64,15 @@ const NewPass = ({ navigation }) => {
         resizeMode="contain"
       />
 
-      {/* Tiêu đề */}
-      {/* <Text style={styles.title}>Set Your New Password</Text> */}
-
-      {/* Mô tả */}
-      {/* <Text style={styles.description}>
-        Try to create a new password that you will remember.
-      </Text> */}
-
-      {/* Ô nhập mật khẩu */}
-      {/* <View style={styles.inputContainer}>
-        <Text style={styles.inputLabel}>PASSWORD</Text>
-        <View style={styles.passwordWrapper}>
-          <TextInput
-            style={styles.input}
-            secureTextEntry={!isPasswordVisible}
-            value={password}
-            onChangeText={setPassword}
-            placeholder="********"
-          />
-          <TouchableOpacity
-            onPress={() => setPasswordVisible(!isPasswordVisible)}
-            style={styles.iconButton}>
-            <Image source={require('../../../assets/images/NotEye.png')} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setPassword('')}
-            style={styles.iconButton}>
-            <Image source={require('../../../assets/images/RedExit.png')} />
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      {/* Ô nhập xác nhận mật khẩu */}
-      {/* <View style={styles.inputContainer}>
-        <Text style={styles.inputLabel}>CONFIRM PASSWORD</Text>
-        <View style={styles.passwordWrapper}>
-          <TextInput
-            style={styles.input}
-            secureTextEntry={!isConfirmPasswordVisible}
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-            placeholder="********"
-          />
-          <TouchableOpacity
-            onPress={() => setConfirmPasswordVisible(!isConfirmPasswordVisible)}
-            style={styles.iconButton}>
-            <Image source={require('../../../assets/images/NotEye.png')} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setConfirmPassword('')}
-            style={styles.iconButton}>
-            <Image source={require('../../../assets/images/RedExit.png')} />
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <View style={styles.passwordRequirements}>
-        <Text style={styles.requirementTitle}>YOUR PASSWORD MUST CONTAIN</Text>
-        <Text style={styles.requirement}>• Between 8 and 20 characters</Text>
-        <Text style={styles.requirement}>• 1 upper case letter</Text>
-        <Text style={styles.requirement}>• 1 or more numbers</Text>
-        <Text style={styles.requirement}>• 1 or more special characters</Text>
-      </View>  */}
-
       <View style={styles.inputNameView}>
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.inputView}
             secureTextEntry={true}
-            placeholder="Example: John Smith"
+            placeholder="Nhập mật khẩu mới"
             placeholderTextColor="rgb(177, 189, 199)"
-            onChangeText={handleTextChange}
-            value={inputValue}
+            onChangeText={setPassword}
+            value={password}
           />
           <Text style={styles.inputLabel}>Password</Text>
         </View>
@@ -123,62 +80,17 @@ const NewPass = ({ navigation }) => {
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.inputView}
-            placeholder="Example: John Smith"
+            placeholder="Xác nhận mật khẩu"
             placeholderTextColor="rgb(177, 189, 199)"
             secureTextEntry={true}
+            onChangeText={setConfirmPassword}
+            value={confirmPassword}
           />
-          <Text style={styles.inputLabel}>confirm password</Text>
-        </View>
-
-        <Text style={styles.containText}>Your password must contain</Text>
-        <View style={styles.checkView}>
-          <Image
-            style={styles.containCheck}
-            source={
-              inputValue.length >= 8 && inputValue.length <= 20
-                ? require('../../../assets/images/orangeChecked.png')
-                : require('../../../assets/images/grayNotChecked.png')
-            }
-          />
-          <Text style={styles.atLeastText}>Between 8 and 20 characters</Text>
-        </View>
-        <View style={styles.checkView}>
-          <Image
-            style={styles.containCheck}
-            source={
-              /[A-Z]/.test(inputValue)
-                ? require('../../../assets/images/orangeChecked.png')
-                : require('../../../assets/images/grayNotChecked.png')
-            }
-          />
-          <Text style={styles.atLeastText}>1 upper case letter</Text>
-        </View>
-        <View style={styles.checkView}>
-          <Image
-            style={styles.containCheck}
-            source={
-              /[0-9]/.test(inputValue)
-                ? require('../../../assets/images/orangeChecked.png')
-                : require('../../../assets/images/grayNotChecked.png')
-            }
-          />
-          <Text style={styles.atLeastText}>1 or more numbers</Text>
-        </View>
-        <View style={styles.checkView}>
-          <Image
-            style={styles.containCheck}
-            source={
-              /[!@#$%^&*(),.?":{}|<>]/.test(inputValue)
-                ? require('../../../assets/images/orangeChecked.png')
-                : require('../../../assets/images/grayNotChecked.png')
-            }
-          />
-          <Text style={styles.atLeastText}>1 or more special characters</Text>
+          <Text style={styles.inputLabel}>Confirm Password</Text>
         </View>
       </View>
 
-      {/* Nút "Next Step" */}
-      <TouchableOpacity style={styles.nextButton}>
+      <TouchableOpacity style={styles.nextButton} onPress={handleNextStep}>
         <Text style={styles.nextButtonText}>Next Step</Text>
       </TouchableOpacity>
     </View>
@@ -289,7 +201,7 @@ const styles = StyleSheet.create({
   stepText: {
     fontSize: 16,
     textAlign: 'center',
-    fontFamily: 'nunitoSan'
+    fontFamily: 'nunitoSan',
   },
   closeButton: {
     padding: 10,
@@ -330,7 +242,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     borderRadius: 10,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 2,
@@ -367,7 +279,7 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 16,
     fontWeight: 'bold',
-    fontFamily: 'nunitoSan'
+    fontFamily: 'nunitoSan',
   },
 });
 

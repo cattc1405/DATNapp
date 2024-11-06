@@ -61,6 +61,13 @@ const Filter = () => {
     </View>
   );
 
+  const handleApplyFilters = () => {
+    // Navigate back to the previous screen with selected category IDs
+    navigation.navigate('Product', {
+      selectedCategories: selectedCategories, // This should be an array of category IDs
+    });
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.headView}>

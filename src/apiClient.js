@@ -122,6 +122,18 @@ export const getAttributeByProductId = async id => {
   }
 };
 // Update user information
+export const updateUser = async (id, userForm, token) => {
+  try {
+    const response = await apiInstance.put(`/client/edituser/${id}`, userForm, {
+      headers: {
+        Authorization: `Bearer ${token}`, // Include the Bearer token
+      },
+    });
+    console.log('User update response:', response.data); // Log the updated data response
+  } catch (error) {
+    console.error('Error updating user:', error.response.data); // Log error response
+  }
+};
 export const addUserCart = async (id, itemOrder, token) => {
   try {
     const payload = {cart: itemOrder}; // Prepare the payload
@@ -193,9 +205,70 @@ export const getUserOrder = async (id, token, params) => {
     throw error; // Rethrow the error for further handling if necessary
   }
 };
-// Refactored useEffect with dependencies
+// Forgot thread
+export const forgotPassword = async email => {
+  try {
+    const response = await apiInstance.post('/client/forgot-password', {email});
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      if (error.response.status === 400) {
+        if (error.response.data.message === 'User not found') {
+          throw new Error('Tài khoản này chưa được đăng ký.');
+        }
+        // Xử lý các thông báo lỗi khác nếu cần
+        throw new Error(
+          error.response.data.message || 'Có lỗi xảy ra, vui lòng thử lại.',
+        );
+      }
+    }
+    console.error(
+      'Lỗi khi gửi OTP:',
+      error.response ? error.response.data : error.message,
+    );
+    throw error; // Ném lỗi để xử lý phía trên
+  }
+};
+export const verifyOtp = async (email, otp) => {
+  try {
+    console.log('api', otp);
+    console.log('api', email);
+    // Chuyển đổi mã OTP thành chuỗi (phòng khi OTP là một mảng)
+    const response = await apiInstance.post('/client/verify-otp', {
+      email,
+      otp: otp,
+    });
 
-// Refactored getUserInfo without unnecessary checks
+    return response.data; // Trả về dữ liệu phản hồi
+  } catch (error) {
+    console.error(
+      'Lỗi khi xác thực OTP:',
+      error.response ? error.response.data : error.message,
+    );
+    throw error; // Ném lỗi để xử lý phía trên
+  }
+};
+export const resetPassword = async (email, newPassword) => {
+  try {
+    const response = await apiInstance.post('/client/reset-password', {
+      email,
+      newPassword,
+    }); // Đảm bảo endpoint đúng
+
+    console.log(
+      response.data.message || 'Đặt lại mật khẩu thành công!',
+      'Thông báo thành công',
+    );
+    return response.data;
+  } catch (error) {
+    console.error(
+      'Lỗi khi đặt lại mật khẩu:',
+      error.response ? error.response.data : error.message,
+    );
+    throw error; // Ném lỗi để xử lý phía trên
+  }
+};
+// User cart, order management
 export const getUserInfo = async (id, token) => {
   try {
     const url = `https://app-datn-gg.onrender.com/api/v1/client/${id}`; // Updated URL
@@ -303,7 +376,7 @@ export const clearCart = async (id, token) => {
     throw error; // Rethrow the error for further handling
   }
 };
-// User registration function
+// User registration
 export const register = async form => {
   try {
     // Sending POST request to register endpoint with user data
