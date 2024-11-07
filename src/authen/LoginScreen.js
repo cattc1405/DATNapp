@@ -57,6 +57,7 @@ const LoginScreen = ({navigation}) => {
           '133917263525-n79u5m6cmkalco31j6ktlrn2n2a27njh.apps.googleusercontent.com', // Replace with your actual webClientId
         offlineAccess: true, // Optional: Allows Firebase to access user info even when offline
       });
+      const {idToken, accessToken} = await GoogleSignin.signIn();
 
       // Check if the user is already signed in
       const currentUser = await GoogleSignin.getCurrentUser();
@@ -68,10 +69,6 @@ const LoginScreen = ({navigation}) => {
       }
 
       // Proceed with Google Sign-In if the user is not signed in
-      const {idToken, accessToken} = await GoogleSignin.signIn();
-      if (!idToken) {
-        throw new Error('No idToken found');
-      }
 
       // Create Firebase credential using the Google idToken and accessToken
       const googleCredential = auth.GoogleAuthProvider.credential(
