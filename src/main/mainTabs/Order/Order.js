@@ -1,92 +1,92 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  FlatList,
-  ImageBackground,
-} from 'react-native';
-import React, {useState, useEffect} from 'react';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {useSelector} from 'react-redux';
-import {getUserOrder} from '../../../apiClient';
+import { StyleSheet, Text, View, Image, TouchableOpacity, FlatList, ImageBackground, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+import { getUserOrder } from '../../../apiClient';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+
+// Define Tab from createMaterialTopTabNavigator
 const Tab = createMaterialTopTabNavigator();
-const OrderScreen = ({status}) => {
-  const navigation = useNavigation(); // Get navigation here
+
+const OrderScreen = ({ status }) => {
+  const navigation = useNavigation();
   const userId = useSelector(state => state.auth.user?.userId);
   const token = useSelector(state => state.auth.user?.token);
   const [orders, setOrders] = useState([]);
-  // Adjust as needed if items have a quantity property
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const fetchedOrders = await getUserOrder(userId, token, {status});
-        setOrders(fetchedOrders); // Store the fetched orders in state
+        setLoading(true);
+        const fetchedOrders = await getUserOrder(userId, token, { status });
+        setOrders(fetchedOrders);
       } catch (err) {
         console.error('Error fetching orders:', err);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchOrders();
-  }, [userId, token, status]); // Rerun the effect if userId, token, or status changes
+  }, [userId, token, status]);
 
   const handlePress = item => {
-    // Navigate to OrderItemScreen and pass the item data
-    navigation.navigate('OrderItemScreen', {item});
+    navigation.navigate('OrderItemScreen', { item });
   };
 
-  const renderOrderItem = ({item}) => (
-    <TouchableOpacity
-      style={styles.itemContainer}
-      onPress={() => handlePress(item)}>
-      {/* Transaction ID */}
+  const renderOrderItem = ({ item }) => (
+    <TouchableOpacity style={styles.itemContainer} onPress={() => handlePress(item)}>
       <Text style={styles.transactionId}>{item.transactionId}</Text>
-
-      {/* Payment method and Price */}
       <View style={styles.detailsContainer}>
-        <Text style={styles.detailsText}>{item.paymentMethob}</Text>
+        <Text style={styles.detailsText}>{item.paymentMethod}</Text>
         <Text style={styles.detailsText}>Total: ${item.totalPrice}</Text>
       </View>
-
-      {/* Add separator or icon if needed */}
       <View style={styles.separator} />
     </TouchableOpacity>
   );
 
+  const chunkOrders = (orders, chunkSize) => {
+    let result = [];
+    for (let i = 0; i < orders.length; i += chunkSize) {
+      result.push(orders.slice(i, i + chunkSize));
+    }
+    return result;
+  };
+
+  if (loading) {
+    return <ActivityIndicator size="large" color="#0000ff" style={styles.loading} />;
+  }
+
   return (
     <View style={styles.tabContent}>
       <FlatList
-        data={orders}
-        keyExtractor={item => item.id} // Assuming each order has a unique 'id'
-        renderItem={renderOrderItem}
+        data={chunkOrders(orders, 7)}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => (
+          <FlatList
+            data={item}
+            keyExtractor={(subItem) => subItem.id.toString()}
+            renderItem={renderOrderItem}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+          />
+        )}
+        key={status}
       />
     </View>
   );
 };
-function CustomTabBar({state, descriptors, navigation, position}) {
+
+function CustomTabBar({ state, descriptors, navigation }) {
   return (
     <ImageBackground
-      source={require('../../../../assets/images/redFoodBgr.png')} // Replace with your image path
-      style={{
-        height: 40,
-        flexDirection: 'row',
-        backgroundColor: 'orange',
-        borderBottomLeftRadius: 16,
-        borderBottomRightRadius: 16,
-      }} // Set style as needed
+      source={require('../../../../assets/images/redFoodBgr.png')}
+      style={styles.customTabBar}
     >
       {state.routes.map((route, index) => {
-        const {options} = descriptors[route.key];
-        const label =
-          options.tabBarLabel !== undefined
-            ? options.tabBarLabel
-            : options.title !== undefined
-            ? options.title
-            : route.name;
-
+        const { options } = descriptors[route.key];
+        const label = options.tabBarLabel || options.title || route.name;
         const isFocused = state.index === index;
 
         const onPress = () => {
@@ -101,84 +101,51 @@ function CustomTabBar({state, descriptors, navigation, position}) {
         };
 
         return (
-          <View
-            key={index}
-            style={{
-              flex: 1,
-              alignItems: 'center',
-              paddingVertical: 10,
-            }}>
-            <Text
-              onPress={onPress}
-              style={{
-                color: isFocused ? 'white' : '#989DA3',
-                fontSize: 15,
-                fontWeight: isFocused ? 'bold' : 'normal',
-                fontFamily: 'nunitoSan',
-              }}>
+          <View key={index} style={styles.tabItem}>
+            <Text onPress={onPress} style={[styles.tabText, isFocused && styles.tabTextFocused]}>
               {label}
             </Text>
-            {isFocused && (
-              <View
-                style={{
-                  height: 2, // Thickness of the indicator line
-                  width: '45%', // Width of the line relative to the text or container
-                  backgroundColor: 'white', // Color of the indicator line
-                  marginTop: 4, // Space between the text and indicator
-                }}
-              />
-            )}
+            {isFocused && <View style={styles.tabIndicator} />}
           </View>
         );
       })}
     </ImageBackground>
   );
 }
+
 const Order = () => {
   const navigation = useNavigation();
   const cartItems = useSelector(state => state.cart.items);
 
-  // Local state to keep track of the item count
   const [itemCount, setItemCount] = useState(0);
 
-  // useEffect to update itemCount whenever cartItems changes
   useEffect(() => {
-    // Calculate the total item count
-    const count = cartItems.reduce(
-      (total, item) => total + (item.quantity || 1),
-      0,
-    );
-    setItemCount(count); // Update local state with the new count
+    const count = cartItems.reduce((total, item) => total + (item.quantity || 1), 0);
+    setItemCount(count);
   }, [cartItems]);
+
   return (
     <View style={styles.container}>
       <View style={styles.headView}>
-        <Image
-          style={styles.redFoodBgr}
-          source={require('../../../../assets/images/redFoodBgr.png')}
-        />
+        <Image style={styles.redFoodBgr} source={require('../../../../assets/images/redFoodBgr.png')} />
         <View style={styles.menuView}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Image
-              source={require('../../../../assets/images/icons/whiteBackArrow.png')}
-            />
+            <Image source={require('../../../../assets/images/icons/whiteBackArrow.png')} />
           </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('CartStack', {screen: 'OrderDetail'});
-            }}>
+          <Text style={{color:'white', fontSize: 20, fontWeight:'bold'}}>
+            Order
+          </Text>
+          <TouchableOpacity onPress={() => navigation.navigate('CartStack', { screen: 'OrderDetail' })}>
             <View>
-              <Image
-                style={styles.iconImage}
-                source={require('../../../../assets/images/icons/shopping-bag.png')}
-              />
+              <Image style={styles.iconImage} source={require('../../../../assets/images/icons/shopping-bag.png')} />
               <Text style={styles.iconText}>{itemCount}</Text>
             </View>
           </TouchableOpacity>
         </View>
         <Text style={styles.titleBoldText}>Order</Text>
       </View>
+
+      {/* This view now takes the entire space below the header */}
       <View style={styles.bodyView}>
         <Tab.Navigator
           tabBar={props => <CustomTabBar {...props} />}
@@ -193,11 +160,12 @@ const Order = () => {
               backgroundColor: 'orange',
             },
             tabBarIndicatorStyle: {
-              backgroundColor: 'white', // Set indicator color
-              height: 3, // Adjust thickness of the indicator line
-              borderRadius: 1.5, // Smooth indicator line edges
+              backgroundColor: 'white',
+              height: 3,
+              borderRadius: 1.5,
             },
-          }}>
+          }}
+        >
           <Tab.Screen name="Pending">
             {() => <OrderScreen status="Pending" />}
           </Tab.Screen>
@@ -229,240 +197,106 @@ const styles = StyleSheet.create({
     top: 10,
   },
   itemContainer: {
-    backgroundColor: 'red',
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    marginBottom: 10,
-    width: 300,
-    height: 100,
-    borderBlockColor: 'red',
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 16,
+    marginVertical: 8,
+    marginHorizontal: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    minWidth: 100,
+  },
+  row: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  transactionId: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 8,
+  },
+  detailsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 4,
+  },
+  detailsText: {
+    fontSize: 14,
+    color: '#666',
+  },
+  separator: {
+    marginTop: 12,
+    height: 1,
+    backgroundColor: '#ddd',
   },
   tabContent: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  bagView: {
+  customTabBar: {
+    height: 40,
     flexDirection: 'row',
-    position: 'absolute',
-    right: 30,
+    backgroundColor: 'orange',
+    borderBottomLeftRadius: 16,
+    borderBottomRightRadius: 16,
+  },
+  tabItem: {
+    flex: 1,
     alignItems: 'center',
+    paddingVertical: 10,
   },
-  quantityItem: {
-    color: '#fff',
-    marginLeft: 20,
-    paddingVertical: 3,
-    fontSize: 12,
-    fontWeight: 'bold',
-    fontFamily: 'nunitoSan',
-  },
-  locateView: {
-    flexDirection: 'row',
-  },
-  locateText: {
-    color: '#fff',
-    marginLeft: 30,
-    paddingVertical: 3,
-    fontSize: 12,
-    borderBottomColor: 'white',
-    borderBottomWidth: 1,
-    fontWeight: 'bold',
-    fontFamily: 'nunitoSan',
-  },
-  orderText: {
-    color: '#fff',
-    opacity: 0.5,
-    marginLeft: 30,
-    marginTop: 8,
-    fontSize: 13,
-    fontWeight: 'bold',
-    fontFamily: 'nunitoSan',
-  },
-  mgnL15: {
-    fontSize: 14,
-  },
-  brandTag: {
-    height: '60%',
-    backgroundColor: '#F55F44',
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
-  },
-
-  footerView: {
-    width: '100%',
-    height: '12%',
-  },
-  mainView: {
-    height: '70%',
-  },
-  mrginLeft: {
-    width: '80%',
-    marginLeft: 40,
-  },
-  deleteView: {
-    width: 90,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '100%',
-    backgroundColor: '#FF7474',
-    position: 'absolute',
-    right: 0,
-    bottom: 0,
-    borderBottomRightRadius: 20,
-    borderTopRightRadius: 20,
-  },
-  editText: {
-    fontFamily: 'nunitoSan',
-    fontSize: 12,
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  editItemView: {
-    width: 90,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 30,
-    backgroundColor: '#F55F44',
-    position: 'absolute',
-    right: 0,
-    bottom: 0,
-    borderBottomRightRadius: 20,
-    borderTopLeftRadius: 20,
-  },
-  priceText: {
-    fontFamily: 'nunitoSan',
-    fontSize: 14,
-    marginTop: 3,
-    color: 'black',
-    fontWeight: 'bold',
-  },
-  thinGrayText: {
-    fontFamily: 'nunitoSan',
-    fontSize: 12,
-    color: '#9D9D9D',
-    opacity: 0.5,
-    fontWeight: 'bold',
-  },
-  nameItem: {
-    fontFamily: 'nunitoSan',
-    paddingTop: 8,
-    paddingBottom: 5,
+  tabText: {
+    color: 'white',
     fontSize: 15,
-    color: 'black',
-    fontWeight: 'bold',
+    fontWeight: 'normal',
   },
-  quantityText: {
-    fontFamily: 'nunitoSan',
-    fontSize: 18,
-    color: 'black',
-    fontWeight: 'bold',
-  },
-  quantityView: {
-    width: '75%',
-    marginLeft: '20%',
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-  },
-  orangeCircle: {
-    width: 26,
-    height: 26,
-    backgroundColor: '#F55F44',
-    borderRadius: 13,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  productImg: {
-    width: '90%',
-    height: 80,
-    marginLeft: '10%',
-    marginTop: 20,
-    resizeMode: 'contain',
-  },
-  infoRight: {
-    width: '60%',
-    marginLeft: '5%',
-    height: '100%',
-  },
-  imgLeft: {
-    width: '35%',
-    height: '100%',
-  },
-  productItem: {
-    width: '80%',
-    flexDirection: 'row',
-    height: 140,
-    marginTop: '7%',
-    backgroundColor: '#fff',
-    elevation: 5,
-    marginLeft: '10%',
-    borderRadius: 20,
-  },
-  titleBoldText: {
-    fontSize: 23,
-    fontFamily: 'nunitoSan',
+  tabTextFocused: {
     color: 'white',
     fontWeight: 'bold',
-    marginLeft: '5%',
-    marginTop: '3%',
   },
-
-  menuView: {
-    width: '90%',
-    justifyContent: 'space-between',
-    marginLeft: '5%',
-    height: 50,
-    display: 'flex',
-    flexDirection: 'row',
-    marginTop: '18%',
-    alignItems: 'center',
+  tabIndicator: {
+    height: 2,
+    width: '45%',
+    backgroundColor: 'white',
+    marginTop: 4,
   },
   container: {
+    flex: 1,
     width: '100%',
-    height: '100%',
   },
   headView: {
-    width: '100%',
-    height: '23%',
-    backgroundColor: 'white',
+    height: '15%',
+    position: 'relative',
   },
   bodyView: {
-    backgroundColor: 'white',
     flex: 1,
+    backgroundColor: 'white', // The rest of the body will have a white background
   },
   redFoodBgr: {
     width: '100%',
-    height: '100%',
+    height: 190,
     position: 'absolute',
   },
-  itemContainer: {
-    backgroundColor: '#fff', // White background
-    borderRadius: 12, // Rounded corners for a cleaner look
-    padding: 16, // Add padding for spacing inside the item
-    marginVertical: 8, // Space between items
-    shadowColor: '#000', // Subtle shadow effect
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 3, // Elevation for Android
+  menuView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginHorizontal: 15,
+    marginTop: 40,
   },
-  transactionId: {
-    fontSize: 16, // Slightly larger font for the transaction ID
-    fontWeight: 'bold', // Bold text for emphasis
-    color: '#333', // Dark text color for contrast
-    marginBottom: 8, // Add space between transaction ID and details
-  },
-  detailsContainer: {
-    flexDirection: 'row', // Align items horizontally
-    justifyContent: 'space-between', // Space out the details
-    marginTop: 4,
-  },
-  detailsText: {
-    fontSize: 14, // Smaller font for details
-    color: '#666', // Lighter color for less emphasis
-  },
-  separator: {
-    marginTop: 12, // Space between the item content and separator
-    height: 1, // Thin line to separate items
-    backgroundColor: '#ddd', // Light gray color for the separator
+  titleBoldText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'black',
+    textAlign: 'center',
+    marginTop: 120,
   },
 });
