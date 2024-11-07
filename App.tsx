@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -23,6 +23,7 @@ import LoginScreen from './src/authen/LoginScreen';
 import SignUpNavigation from './src/authen/SignUp/SignUpNavigation';
 import AuthNavigator from './src/authen/AuthNavigation';
 import {Provider} from 'react-redux';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -30,6 +31,7 @@ import store from './src/redux/store';
 
 function App(): React.JSX.Element {
   const [isWelcomeScreenVisible, setWelcomeScreenVisible] = useState(true);
+  GoogleSignin.hasPlayServices();
 
   const hideWelcomeScreen = () => {
     setWelcomeScreenVisible(false);

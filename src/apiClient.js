@@ -14,6 +14,32 @@ const apiInstance = axios.create({
   },
 });
 // Hàm đăng nhập người dùng
+export const loginGoogle = async idToken => {
+  try {
+    console.log('send to backend', idToken);
+    // Sending the idToken to the backend for validation and login
+    const response = await apiInstance.post('/users/login/google', {idToken});
+
+    // Assuming the backend returns { user, token, userId }
+    console.log('Backend response:', response.data);
+
+    return response.data; // Returns user info and token from the API
+  } catch (error) {
+    // Log full error for debugging
+    console.error('Google login error:', error);
+
+    // Check if error.response exists, meaning the error is from the backend
+    if (error.response) {
+      // Log backend error details
+      console.error('Backend error response:', error.response.data);
+      throw error.response.data; // Return the specific error from the backend
+    } else {
+      // If no error response, return a general error
+      throw {message: 'Something went wrong', error: error.message};
+    }
+  }
+};
+
 export const loginUser = async (email, password) => {
   try {
     const response = await axios.post(`${apiUrl}/users/login`, {

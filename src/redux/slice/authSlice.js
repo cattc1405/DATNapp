@@ -20,6 +20,20 @@ export const loginUser = createAsyncThunk('auth/loginUser', async userData => {
 
   return response.data; // Adjust according to your API response
 });
+export const loginUserGoogle = createAsyncThunk(
+  'auth/loginUser',
+  async idToken => {
+    console.log('send to back', idToken);
+    const response = await axios.post(
+      'https://app-datn-gg.onrender.com/api/v1/users/login/google',
+      {idToken}, // Ensure the idToken is passed correctly
+    );
+    await AsyncStorage.setItem('userToken', response.data.token);
+
+    return response.data; // Adjust according to your API response
+  },
+);
+
 export const logoutUser = createAsyncThunk('auth/logoutUser', async () => {
   await AsyncStorage.removeItem('userToken'); // Clear token on logout
 });

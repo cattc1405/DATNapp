@@ -8,9 +8,12 @@ import {
   Image,
   Alert,
 } from 'react-native';
-import {AuthContext} from '../../context/AuthContext';
-import {loginUser} from '../redux/slice/authSlice';
+import {loginUser, loginUserGoogle} from '../redux/slice/authSlice';
 import {useDispatch, useSelector} from 'react-redux';
+import {loginGoogle} from '../apiClient';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import auth from '@react-native-firebase/auth'; // Firebase Auth package
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState('admin@gmail.com');
@@ -20,6 +23,7 @@ const LoginScreen = ({navigation}) => {
   const error = useSelector(state => state.auth.error);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const authStatus = useSelector(state => state.auth.status);
+  const [loading, setLoading] = useState(false);
 
   // Hàm xử lý khi người dùng nhấn vào nút "LOGIN"
   const handleLogin = async () => {
@@ -43,6 +47,66 @@ const LoginScreen = ({navigation}) => {
       console.error('Login error:', error);
       const message = error.response?.data?.message || 'Invalid credentials.';
       Alert.alert('Login Failed', message);
+    }
+  };
+  const handleGoogleLogin = async () => {
+    try {
+      // Ensure GoogleSignin is properly configured
+      await GoogleSignin.configure({
+        webClientId:
+          '133917263525-n79u5m6cmkalco31j6ktlrn2n2a27njh.apps.googleusercontent.com', // Replace with your actual webClientId
+        offlineAccess: true, // Optional: Allows Firebase to access user info even when offline
+      });
+
+      // Proceed with Google Sign-In if the user is not signed in
+
+      // Create Firebase credential using the Google idToken and accessToken
+
+      // Check if the user is already signed in
+
+      // Sign in with Firebase using the Google credential
+
+      const currentUser = await GoogleSignin.getCurrentUser();
+      if (currentUser) {
+        console.log('Already signed in:', currentUser);
+        console.log('userToken', currentUser.idToken);
+        // Refresh Firebase token
+        await sendTokenToBackend(currentUser.idToken);
+        console.log('token has send to api');
+      } // Send the Firebase ID token to the backend after successful Firebase login
+    } catch (error) {
+      console.error('Google Sign-In Error:', error);
+      Alert.alert(
+        'Login Failed',
+        error.message || 'An error occurred during login',
+      );
+    }
+  };
+
+  const sendTokenToBackend = async idToken => {
+    try {
+      console.log('This is the token:', idToken);
+
+      // Clear old token from AsyncStorage (optional step)
+      await AsyncStorage.removeItem('userToken');
+
+      // Store the new token in AsyncStorage
+      await AsyncStorage.setItem('userToken', idToken);
+
+      // Dispatch the loginUserGoogle action to send the ID token to your backend
+      const response = await dispatch(loginUserGoogle(idToken)).unwrap();
+
+      if (response) {
+        console.log('User ID exists:', response.userId);
+
+        // Navigate to the MainApp screen after successful login
+        navigation.navigate('MainApp');
+      }
+    } catch (error) {
+      console.error('Error sending token to backend:', error);
+
+      // Provide a meaningful error message to the user
+      Alert.alert('Error', 'An error occurred while logging in');
     }
   };
 
@@ -118,7 +182,9 @@ const LoginScreen = ({navigation}) => {
             />
             <Text style={styles.socialButtonText}>FACEBOOK</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.socialButton}>
+          <TouchableOpacity
+            style={styles.socialButton}
+            onPress={handleGoogleLogin}>
             <Image
               source={require('../../assets/images/icons/logogg.jpg')}
               style={styles.socialIcon}
