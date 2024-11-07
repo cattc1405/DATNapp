@@ -23,6 +23,8 @@ const Home = () => {
   const toggleSlideNav = () => {
     setIsSlideNavVisible(!isSlideNavVisible);
   };
+  const authStatus = useSelector(state => state.auth.user);
+  console.log('check', authStatus);
   useEffect(() => {
     fetchData();
   }, []); // Empty dependency array ensures this runs once when the component mounts

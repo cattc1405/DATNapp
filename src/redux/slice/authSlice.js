@@ -34,9 +34,19 @@ export const loginUserGoogle = createAsyncThunk(
   },
 );
 
-export const logoutUser = createAsyncThunk('auth/logoutUser', async () => {
-  await AsyncStorage.removeItem('userToken'); // Clear token on logout
-});
+export const logoutUser = createAsyncThunk(
+  'auth/logoutUser',
+  async (_, {dispatch}) => {
+    try {
+      // Remove the user token from AsyncStorage
+      await AsyncStorage.removeItem('userToken');
+      dispatch({type: 'auth/logout'}); // Update your store to reflect the logout action
+    } catch (error) {
+      console.error('Error during logout:', error);
+      // Optionally handle error, maybe dispatch an error action to store
+    }
+  },
+);
 // Create the slice
 const authSlice = createSlice({
   name: 'auth',

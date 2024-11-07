@@ -58,22 +58,38 @@ const LoginScreen = ({navigation}) => {
         offlineAccess: true, // Optional: Allows Firebase to access user info even when offline
       });
 
-      // Proceed with Google Sign-In if the user is not signed in
-
-      // Create Firebase credential using the Google idToken and accessToken
-
       // Check if the user is already signed in
-
-      // Sign in with Firebase using the Google credential
-
       const currentUser = await GoogleSignin.getCurrentUser();
       if (currentUser) {
         console.log('Already signed in:', currentUser);
         console.log('userToken', currentUser.idToken);
-        // Refresh Firebase token
-        await sendTokenToBackend(currentUser.idToken);
-        console.log('token has send to api');
-      } // Send the Firebase ID token to the backend after successful Firebase login
+        await sendTokenToBackend(currentUser.idToken); // Pass the token to backend for further processing
+        return; // Return early since the user is already signed in
+      }
+
+      // Proceed with Google Sign-In if the user is not signed in
+      const {idToken, accessToken} = await GoogleSignin.signIn();
+      if (!idToken) {
+        throw new Error('No idToken found');
+      }
+
+      // Create Firebase credential using the Google idToken and accessToken
+      const googleCredential = auth.GoogleAuthProvider.credential(
+        idToken,
+        accessToken,
+      );
+
+      // Sign in with Firebase using the Google credential
+      const userCredential = await auth().signInWithCredential(
+        googleCredential,
+      );
+      console.log('User Credential:', userCredential);
+
+      // Send the Firebase ID token to the backend after successful Firebase login
+      await sendTokenToBackend(userCredential.idToken);
+
+      // Alert user of successful login
+      Alert.alert('Login Successful', 'Welcome back!');
     } catch (error) {
       console.error('Google Sign-In Error:', error);
       Alert.alert(

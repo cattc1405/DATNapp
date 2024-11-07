@@ -1,9 +1,13 @@
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {logout} from '../../redux/slice/authSlice';
+import {logoutUser} from '../../redux/slice/authSlice';
 
 const SlideNav = ({onClose}) => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   return (
     <View style={styles.container}>
@@ -133,7 +137,9 @@ const SlideNav = ({onClose}) => {
             <View style={styles.lineView} />
             <TouchableOpacity
               style={styles.logoutView}
-              onPress={() => navigation.navigate('Login')}>
+              onPress={() => {
+                navigation.navigate('Login'), dispatch(logoutUser());
+              }}>
               <Image
                 style={styles.iconLogout}
                 source={require('../../../assets/images/icons/logoutIcon.png')}
