@@ -151,8 +151,8 @@ const Home = () => {
             }}>
             <View>
               <Image
-                style={styles.iconImage}
-                source={require('../../../../assets/images/icons/shopping-bag.png')}
+                style={styles.iconImage1}
+                source={require('../../../../assets/images/noti.png')}
               />
               <Text style={styles.iconText}>{itemCount}</Text>
             </View>
@@ -242,6 +242,10 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontFamily: 'nunitoSan',
     color: '#9D9D9D',
+  },
+  iconImage1:{
+    width: 25,
+    height: 25,
   },
   starView: {
     marginLeft: 20,
@@ -434,6 +438,7 @@ const styles = StyleSheet.create({
   iconImage: {
     width: 25,
     height: 25,
+
   },
   iconText: {
     color: '#fff',

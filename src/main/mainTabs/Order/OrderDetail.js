@@ -164,13 +164,13 @@ const OrderDetail = ({route}) => {
               source={require('../../../../assets/images/icons/whiteBackArrow.png')}
             />
           </TouchableOpacity>
+        <Text style={styles.titleBoldText}>Order Details</Text>
           <TouchableOpacity>
             <Image
               source={require('../../../../assets/images/icons/3dotsIcon.png')}
             />
           </TouchableOpacity>
         </View>
-        <Text style={styles.titleBoldText}>Order Details</Text>
       </View>
 
       <View style={styles.mainView}>
@@ -280,7 +280,8 @@ const styles = StyleSheet.create({
   },
   checkoutBtn: {
     borderRadius: 20,
-    marginLeft: 30,
+    marginLeft: 70,
+    marginTop: -70,
     backgroundColor: '#F55F44',
   },
   totalText: {
@@ -289,6 +290,7 @@ const styles = StyleSheet.create({
     color: 'black',
     fontWeight: 'bold',
     alignItems: 'center',
+    marginLeft: 40,
   },
   totalView: {
     width: '86%',
@@ -302,7 +304,7 @@ const styles = StyleSheet.create({
     height: '17%',
   },
   mainView: {
-    height: '63%',
+    height: '60%',
   },
   mrginLeft: {
     width: '80%',
@@ -416,7 +418,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     marginLeft: '5%',
-    marginTop: '3%',
   },
 
   menuView: {
