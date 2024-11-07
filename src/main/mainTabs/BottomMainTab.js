@@ -1,7 +1,7 @@
-import {StyleSheet, Modal, Text, View, Image} from 'react-native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {NavigationContainer} from '@react-navigation/native';
-import React, {useState} from 'react';
+import { StyleSheet, Modal, Text, View, Image } from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
+import React, { useState } from 'react';
 import Home from './Home/Home';
 import OrderDetail from './Order/OrderDetail';
 import Restaurants from './restaurants';
@@ -34,17 +34,17 @@ const HomeStack = () => {
       <Stack.Screen
         name="Home"
         component={Home}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="WhatsInToday"
         component={WhatsInToday}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="ProductStack"
         component={ProductStack}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       {/* <Stack.Screen
         name="Filter"
@@ -57,7 +57,7 @@ const HomeStack = () => {
       <Stack.Screen
         name="SlideNav"
         component={SlideNav}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );
@@ -75,17 +75,17 @@ const OrderStack = () => {
       <Stack.Screen
         name="Order"
         component={Order}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="OrderItemScreen"
         component={OrderItemScreen}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="CartStack"
         component={CartStack}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );
@@ -96,7 +96,7 @@ const ProfileStack = () => {
       <Stack.Screen
         name="Profile"
         component={Profile}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );
@@ -107,19 +107,19 @@ const RestaurantStack = () => {
       <Stack.Screen
         name="Restaurant1"
         component={Restaurant1}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="BrandDetails"
         component={BrandDetails}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );
 };
 const CartStack = () => {
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen
         name="OrderDetail"
         component={OrderDetail}
@@ -151,17 +151,17 @@ const CartStack = () => {
   );
 };
 
-const tabScreenOptions = ({route}) => {
+const tabScreenOptions = ({ route }) => {
   return {
     headerShown: false,
-    tabBarStyle: {backgroundColor: '#fff'},
+    tabBarStyle: { backgroundColor: '#fff' },
     tabBarLabelStyle: {
       fontSize: 11,
       fontWeight: '500',
     },
     tabBarActiveTintColor: 'black',
     tabBarInactiveTintColor: 'gray',
-    tabBarIcon: ({focused}) => {
+    tabBarIcon: ({ focused }) => {
       let iconSource;
 
       if (route.name === 'HomeStack') {
@@ -176,17 +176,25 @@ const tabScreenOptions = ({route}) => {
         iconSource = focused
           ? require('../../../assets/images/icons/OrderGreen.png')
           : require('../../../assets/images/icons/OrdersGray.png');
-      } else if (route.name === 'CartStack') {
+      } else if (route.name === 'ProfileStack') {
+        iconSource = focused
+          ? require('../../../assets/images/profileGreen.png')
+          : require('../../../assets/images/profileGray.png');
+      }
+      else if (route.name === 'CartStack') {
         iconSource = require('../../../assets/images/icons/RewardsGray.png');
       }
 
+
+
+
       return (
-        <View style={{alignItems: 'center'}}>
+        <View style={{ alignItems: 'center' }}>
           {focused && <View style={styles.redLine} />}
           <View
             style={[
               styles.iconContainer,
-              focused && {transform: [{scale: 1.2}]},
+              focused && { transform: [{ scale: 1.2 }] },
             ]}>
             <Image source={iconSource} style={styles.icon} />
           </View>
@@ -198,7 +206,7 @@ const tabScreenOptions = ({route}) => {
 
 const ProductStack = () => {
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen
         name="Product"
         component={Product}
@@ -221,7 +229,7 @@ const ProductStack = () => {
         name="filter"
         component={Filter}
         options={{
-          tabBarStyle: {display: 'none'},
+          tabBarStyle: { display: 'none' },
           animationTypeForReplace: 'pop',
           cardStyleInterpolator:
             CardStyleInterpolators.forFadeFromBottomAndroid, // Fade transition
@@ -237,22 +245,22 @@ const BottomMainTab = () => {
       <Tab.Screen
         name="HomeStack"
         component={HomeStack}
-        options={{title: 'Home'}}
+        options={{ title: 'Home' }}
       />
       <Tab.Screen
         name="RestaurantStack"
         component={RestaurantStack}
-        options={{title: 'Restaurants'}}
+        options={{ title: 'Restaurants' }}
       />
       <Tab.Screen
         name="OrderStack"
         component={OrderStack}
-        options={{title: 'Order'}}
+        options={{ title: 'Order' }}
       />
       <Tab.Screen
         name="ProfileStack"
         component={ProfileStack}
-        options={{title: 'Profile'}}
+        options={{ title: 'Profile' }}
       />
     </Tab.Navigator>
   );

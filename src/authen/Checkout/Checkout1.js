@@ -222,17 +222,19 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   questionText: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 20,
+    fontWeight: '700',
     textAlign: 'center',
     fontFamily: 'nunitoSan',
+    color:'#000000'
   },
-  subText: {
-    fontSize: 14,
-    color: '#888',
+subText: {
+    fontSize: 15,
+    color: '#989DA3',
     textAlign: 'center',
     marginBottom: 20,
     fontFamily: 'nunitoSan',
+    fontWeight:'600'
   },
   contactBox: {
     width: '100%',

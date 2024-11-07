@@ -131,10 +131,28 @@ const BrandDetails = ({route}) => {
             </View>
           </View>
           <View style={styles.titleAndViewall}>
-            <Text style={styles.titleBoldText}>Recent Photos</Text>
+            <Text style={styles.titleBoldText}>Reviews</Text>
             <TouchableOpacity>
               <Text style={styles.viewallText}>View All</Text>
             </TouchableOpacity>
+            
+          </View>
+          <View style={styles.ratingSection}>
+            {['Excellent', 'Good', 'Average', 'Below Average', 'Poor'].map((label, index) => (
+              <View key={index} style={styles.ratingRow}>
+                <Text style={styles.ratingLabel}>{label}</Text>
+                <View style={styles.ratingBarBackground}>
+                  <View
+                    style={[
+                      styles.ratingBar,
+                      { width: `${(5 - index) * 20}%` },
+                    ]}
+                  />
+                </View>
+              </View>
+            ))}
+            <Text style={styles.averageRatingText}>4.3/5</Text>
+            <Text style={styles.reviewCountText}>895 reviews</Text>
           </View>
         </View>
       </View>
@@ -360,5 +378,43 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     position: 'absolute',
+  },
+  ratingSection: {
+    marginVertical: 20,
+  },
+  ratingRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  ratingLabel: {
+    width: '30%',
+    fontSize: 16,
+    color: '#000',
+    fontWeight: 'bold',
+  },
+  ratingBarBackground: {
+    width: '70%',
+    height: 8,
+    backgroundColor: '#E0E0E0',
+    borderRadius: 4,
+    overflow: 'hidden',
+  },
+  ratingBar: {
+    height: '100%',
+    backgroundColor: '#F55F44',
+  },
+  averageRatingText: {
+    fontSize: 22,
+    color: '#F55F44',
+    fontWeight: 'bold',
+    marginTop: 10,
+    textAlign: 'center',
+  },
+  reviewCountText: {
+    fontSize: 14,
+    color: '#888',
+    textAlign: 'center',
+    marginTop: 5,
   },
 });
