@@ -42,6 +42,7 @@ const OrderItemScreen = () => {
               style={styles.icon}
             />
           </TouchableOpacity>
+          <Text style={styles.titleBoldText}>Order Item Details</Text>
 
           <TouchableOpacity>
             <Image
@@ -50,7 +51,6 @@ const OrderItemScreen = () => {
             />
           </TouchableOpacity>
         </View>
-        <Text style={styles.titleBoldText}>Order Item Details</Text>
       </View>
 
       {/* Order Info Section */}
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   },
   headView: {
     width: '100%',
-    height: '30%',
+    height: '25%',
     backgroundColor: '#D9534F', // Red color to match the background image
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#fff',
     marginLeft: '5%',
-    marginTop: '3%',
+    marginTop: '0%',
   },
   orderInfo: {
     paddingHorizontal: 20,

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,11 +7,12 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
+  ScrollView,  // Import ScrollView
 } from 'react-native';
-import {useSelector} from 'react-redux';
-import {getUserInfo, updateUser, uploadAvatar} from '../../apiClient';
-import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
-import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
+import { useSelector } from 'react-redux';
+import { getUserInfo, updateUser, uploadAvatar } from '../../apiClient';
+import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
+import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 
 const Profile = () => {
   const userId = useSelector(state => state.auth.user?.userId);
@@ -48,10 +49,10 @@ const Profile = () => {
 
     try {
       await updateUser(userId, userForm, token);
-      Alert.alert('Success', 'Profile updated successfully!');
+      Alert.alert('Thành công', 'Cập nhật thông tin cá nhân thành công!');
     } catch (error) {
       console.error('Error updating user:', error);
-      Alert.alert('Error', 'Failed to update profile!');
+      Alert.alert('Lỗi', 'Không thể cập nhật thông tin cá nhân!');
     }
   };
 
@@ -70,8 +71,8 @@ const Profile = () => {
     );
     if (!hasPermission) {
       Alert.alert(
-        'Permission required',
-        'Permission to access photo library is required!',
+        'Cần quyền truy cập',
+        'Bạn cần cấp quyền truy cập thư viện ảnh!',
       );
       return;
     }
@@ -98,8 +99,8 @@ const Profile = () => {
     const hasPermission = await requestPermission(PERMISSIONS.ANDROID.CAMERA);
     if (!hasPermission) {
       Alert.alert(
-        'Permission required',
-        'Permission to access the camera is required!',
+        'Cần quyền truy cập',
+        'Bạn cần cấp quyền sử dụng máy ảnh!',
       );
       return;
     }
@@ -125,8 +126,8 @@ const Profile = () => {
   const handleUploadAvatar = async () => {
     if (!imageUri) {
       Alert.alert(
-        'No image selected',
-        'Please select or capture an image first!',
+        'Chưa chọn hình ảnh',
+        'Vui lòng chọn hoặc chụp ảnh trước!',
       );
       return;
     }
@@ -141,34 +142,34 @@ const Profile = () => {
     try {
       const updatedUser = await uploadAvatar(userId, formData, token);
       console.log('User updated with new avatar:', updatedUser);
-      Alert.alert('Success', 'Avatar uploaded successfully!');
+      Alert.alert('Thành công', 'Đã tải lên ảnh đại diện!');
     } catch (error) {
       console.error('Error uploading avatar:', error);
-      Alert.alert('Error', 'Failed to upload avatar!');
+      Alert.alert('Lỗi', 'Không thể tải lên ảnh đại diện!');
     }
   };
 
-  if (!userInfo) return <Text>Loading...</Text>;
+  if (!userInfo) return <Text>Đang tải...</Text>;
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       {/* Profile Image */}
       <View style={styles.profileImageContainer}>
-        <Image source={{uri: imageUri || avatar}} style={styles.profileImage} />
+        <Image source={{ uri: imageUri || avatar }} style={styles.profileImage} />
         <TouchableOpacity
           style={styles.editButton}
           onPress={handleUploadAvatar}>
-          <Text style={styles.editButtonText}>Upload</Text>
+          <Text style={styles.editButtonText}>Tải lên</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.editButton} onPress={handlePickImage}>
-          <Text style={styles.editButtonText}>Gallery</Text>
+          <Text style={styles.editButtonText}>Thư viện</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.editButton}
           onPress={handleCaptureImage}>
-          <Text style={styles.editButtonText}>Cam</Text>
+          <Text style={styles.editButtonText}>Máy ảnh</Text>
         </TouchableOpacity>
       </View>
 
@@ -178,7 +179,7 @@ const Profile = () => {
           style={styles.input}
           value={name}
           onChangeText={setName}
-          placeholder="Name"
+          placeholder="Tên"
         />
         <TextInput
           style={styles.input}
@@ -191,52 +192,62 @@ const Profile = () => {
           style={styles.input}
           value={phone}
           onChangeText={setPhone}
-          placeholder="Phone"
+          placeholder="Số điện thoại"
           keyboardType="phone-pad"
         />
         <TouchableOpacity onPress={handleEditPress} style={styles.saveButton}>
-          <Text style={styles.saveButtonText}>Save</Text>
+          <Text style={styles.saveButtonText}>Lưu</Text>
         </TouchableOpacity>
       </View>
 
       {/* Additional Info */}
       <View style={styles.detailsContainer}>
         <Text style={styles.detailLabel}>Email: {userInfo.email}</Text>
-        <Text style={styles.detailLabel}>Phone: {userInfo.phone}</Text>
-        <Text style={styles.detailLabel}>Contact: {userInfo.contact?.[0]}</Text>
+        <Text style={styles.detailLabel}>Số điện thoại: {userInfo.phone}</Text>
+        <Text style={styles.detailLabel}>Liên hệ: {userInfo.contact?.[0]}</Text>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#f7f7f7',
+    flexGrow: 1,
+    backgroundColor: '#e9eff1',
     alignItems: 'center',
     padding: 20,
   },
   profileImageContainer: {
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 25,
   },
   profileImage: {
-    width: 150,
-    height: 150,
-    borderRadius: 75,
-    marginBottom: 10,
+    width: 140,
+    height: 140,
+    borderRadius: 70,
+    marginBottom: 15,
+    borderColor: '#4a90e2',
+    borderWidth: 2,
   },
   editButton: {
-    backgroundColor: '#3498db',
+    backgroundColor: '#5a9ee1',
     paddingVertical: 10,
-    paddingHorizontal: 25,
-    borderRadius: 25,
+    paddingHorizontal: 30,
+    borderRadius: 20,
     marginTop: 10,
     alignItems: 'center',
+    justifyContent: 'center',  // Căn giữa nội dung
+    width: 150,  // Đặt chiều rộng cố định để các nút có kích thước bằng nhau
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
   },
   editButtonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 15,
+    fontWeight: '600',
   },
   infoContainer: {
     width: '100%',
@@ -245,38 +256,49 @@ const styles = StyleSheet.create({
   },
   input: {
     width: '90%',
-    padding: 12,
-    borderRadius: 10,
-    marginBottom: 12,
-    backgroundColor: '#fff',
+    padding: 14,
+    borderRadius: 15,
+    marginBottom: 10,
+    backgroundColor: '#ffffff',
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: '#d0d0d0',
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 2,
   },
   saveButton: {
-    backgroundColor: '#28a745',
+    backgroundColor: '#4caf50',
     paddingVertical: 10,
-    paddingHorizontal: 25,
-    borderRadius: 25,
+    paddingHorizontal: 20,
+    borderRadius: 20,
     marginTop: 10,
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
   },
   saveButtonText: {
     color: '#fff',
     fontSize: 16,
+    fontWeight: '600',
   },
   detailsContainer: {
     width: '100%',
     padding: 20,
-    backgroundColor: '#fff',
-    borderRadius: 15,
+    backgroundColor: '#ffffff',
+    borderRadius: 20,
     shadowColor: '#000',
     shadowOpacity: 0.1,
-    shadowRadius: 5,
+    shadowRadius: 10,
     elevation: 5,
+    marginTop: 15,
   },
   detailLabel: {
-    fontSize: 14,
-    color: '#555',
+    fontSize: 16,
+    color: '#333',
     marginBottom: 5,
   },
 });
