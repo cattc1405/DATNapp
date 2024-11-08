@@ -28,15 +28,21 @@ import {GoogleSignin} from '@react-native-google-signin/google-signin';
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 import store from './src/redux/store';
+import {Settings} from 'react-native-fbsdk-next';
 
 function App(): React.JSX.Element {
   const [isWelcomeScreenVisible, setWelcomeScreenVisible] = useState(true);
   GoogleSignin.hasPlayServices();
-
+  useEffect(() => {
+    Settings.initializeSDK();
+  }, []);
   const hideWelcomeScreen = () => {
     setWelcomeScreenVisible(false);
   };
-
+  useEffect(() => {
+    // Initialize the Facebook SDK
+    Settings.initializeSDK();
+  }, []);
   return (
     <Provider store={store}>
       <NavigationContainer>

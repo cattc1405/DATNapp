@@ -2,6 +2,7 @@ import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {LoginManager} from 'react-native-fbsdk-next'; // Ensure this import is present
 
 // Define the initial state
 const initialState = {
@@ -34,10 +35,24 @@ export const loginUserGoogle = createAsyncThunk(
     return response.data; // Adjust according to your API response
   },
 );
+export const loginUserFacebook = createAsyncThunk(
+  'auth/loginUser',
+  async accessToken => {
+    console.log('send to back', accessToken);
+    const response = await axios.post(
+      'https://app-datn-gg.onrender.com/api/v1/users/login/facebook',
+      {accessToken}, // Ensure the idToken is passed correctly
+    );
+    // Stringify the token before storing it in AsyncStorage
+    await AsyncStorage.setItem('userToken', accessToken); // Store accessToken as-is
 
+    return response.data; // Adjust according to your API response
+  },
+);
 export const logoutUser = createAsyncThunk('auth/logoutUser', async () => {
   await AsyncStorage.removeItem('userToken'); // Clear token on logout
   await GoogleSignin.signOut();
+  await LoginManager.logOut(); // Clear Facebook login session on logout
 });
 // Create the slice
 const authSlice = createSlice({

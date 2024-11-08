@@ -8,12 +8,16 @@ import {
   Image,
   Alert,
 } from 'react-native';
-import {loginUser, loginUserGoogle} from '../redux/slice/authSlice';
+import {
+  loginUser,
+  loginUserGoogle,
+  loginUserFacebook,
+} from '../redux/slice/authSlice';
 import {useDispatch, useSelector} from 'react-redux';
-import {loginGoogle} from '../apiClient';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth'; // Firebase Auth package
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {AccessToken, LoginManager, Settings} from 'react-native-fbsdk-next'; // Facebook SDK imports
 
 const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState('admin@gmail.com');
@@ -24,7 +28,10 @@ const LoginScreen = ({navigation}) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const authStatus = useSelector(state => state.auth.status);
   const [loading, setLoading] = useState(false);
-
+  useEffect(() => {
+    // Initialize the Facebook SDK once when the component mounts
+    Settings.initializeSDK();
+  }, []);
   // Hàm xử lý khi người dùng nhấn vào nút "LOGIN"
   const handleLogin = async () => {
     if (!email || !password) {
@@ -95,6 +102,35 @@ const LoginScreen = ({navigation}) => {
       );
     }
   };
+  const handleFacebookLogin = async () => {
+    try {
+      setLoading(true);
+      const result = await LoginManager.logInWithPermissions([
+        'public_profile',
+        'email',
+      ]);
+
+      if (result.isCancelled) {
+        Alert.alert('Login Cancelled', 'Facebook login was cancelled.');
+        return;
+      }
+
+      const data = await AccessToken.getCurrentAccessToken();
+      if (!data) throw new Error('Failed to obtain access token');
+      console.log('Access token', data.accessToken);
+      // Now send the Facebook access token to your backend
+      await sendTokenToBackendFacebook(data.accessToken); // <-- Send Facebook token here
+      Alert.alert('Login Successful', 'Welcome back!');
+    } catch (error) {
+      console.error('Facebook Login Error:', error);
+      Alert.alert(
+        'Login Failed',
+        error.message || 'An error occurred during login',
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const sendTokenToBackend = async idToken => {
     try {
@@ -122,7 +158,26 @@ const LoginScreen = ({navigation}) => {
       Alert.alert('Error', 'An error occurred while logging in');
     }
   };
-
+  const sendTokenToBackendFacebook = async accessToken => {
+    try {
+      console.log('This is the token:', accessToken);
+      // Clear old token from AsyncStorage (optional step)
+      await AsyncStorage.removeItem('userToken');
+      // Store the new token in AsyncStorage
+      await AsyncStorage.setItem('userToken', accessToken);
+      // Dispatch the loginUserGoogle action to send the ID token to your backend
+      const response = await dispatch(loginUserFacebook(accessToken)).unwrap();
+      if (response) {
+        console.log('User ID exists with facebook:', response.userId);
+        // Navigate to the MainApp screen after successful login
+        navigation.navigate('MainApp');
+      }
+    } catch (error) {
+      console.error('Error sending token to backend:', error);
+      // Provide a meaningful error message to the user
+      Alert.alert('Error', 'An error occurred while logging in');
+    }
+  };
   return (
     <View style={styles.container}>
       {/* Back Button (optional) */}
@@ -188,7 +243,9 @@ const LoginScreen = ({navigation}) => {
           <View style={styles.horizontalLine} />
         </View>
         <View style={styles.socialButtonsContainer}>
-          <TouchableOpacity style={styles.socialButton}>
+          <TouchableOpacity
+            style={styles.socialButton}
+            onPress={handleFacebookLogin}>
             <Image
               source={require('../../assets/images/icons/logogg.jpg')}
               style={styles.socialIcon}
