@@ -13,7 +13,8 @@ import com.facebook.react.flipper.ReactNativeFlipper
 import com.facebook.soloader.SoLoader
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
-
+import com.mobileproject2.OSMMapViewManager;
+import com.mobileproject2.OSMMapViewPackage;
 
 class MainApplication : Application(), ReactApplication {
 
@@ -23,6 +24,7 @@ class MainApplication : Application(), ReactApplication {
             PackageList(this).packages.apply {
               // Packages that cannot be autolinked yet can be added manually here, for example:
               // add(MyReactNativePackage())
+              add(OSMMapViewPackage())
             }
 
         override fun getJSMainModuleName(): String = "index"
@@ -38,6 +40,7 @@ class MainApplication : Application(), ReactApplication {
 
   override fun onCreate() {
     super.onCreate()
+
     FacebookSdk.sdkInitialize(getApplicationContext());
     AppEventsLogger.activateApp(this);
     SoLoader.init(this, false)

@@ -321,6 +321,29 @@ export const getUserInfo = async (id, token) => {
     throw error;
   }
 };
+export const changePassword = async (form, token) => {
+  try {
+    // Sending a POST request to change the password
+    const response = await apiInstance.post(
+      `/client/change-password`, // Endpoint with userId
+      {
+        currentPassword: form.currentPassword, // Include current password
+        newPassword: form.newPassword, // Include new password
+        userId: form.userId, // Include userId in the body
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Authorization header with Bearer token
+          'Content-Type': 'application/json', // Make sure the content type is set to JSON
+        },
+      },
+    );
+    return response.data; // Return response data if needed
+  } catch (error) {
+    console.error('Error changing password:', error);
+    throw new Error('Password change failed'); // Propagate the error
+  }
+};
 
 // Assuming this is the structure of your API call
 export const uploadAvatar = async (userId, formData, token) => {
@@ -464,6 +487,19 @@ export const verifyEmail = async (email, otp, password) => {
     console.error('Verification failed:', error.response.data);
   }
 };
+export const getNearestBranch = async cordinate => {
+  try {
+    const response = await apiInstance.post(
+      `/client/branch/nearest`,
+      cordinate,
+    ); // Send coordinates in body with POST
+    console.log('Get nearest branch success:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Get nearest branch failed:', error);
+  }
+};
+
 export const getToken = async () => {
   return await AsyncStorage.getItem('userToken');
 };

@@ -85,19 +85,18 @@ const Restaurant1 = ({navigation}) => {
 
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('CartStack', {screen: 'OrderDetail'});
+              navigation.navigate('BrandMap');
             }}>
             <View>
               <Image
                 style={styles.iconImage}
-                source={require('../../../../assets/images/icons/shopping-bag.png')}
+                source={require('../../../../assets/images/icons/SearchIcon.png')}
               />
-              <Text style={styles.iconText}>{itemCount}</Text>
             </View>
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.titleBoldText}>Nearby Restaurants</Text>
+        <Text style={styles.titleBoldText}>Nearby Branch</Text>
       </View>
 
       <FlatList

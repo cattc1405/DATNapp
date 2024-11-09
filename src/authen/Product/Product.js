@@ -5,8 +5,9 @@ import {
   Image,
   TouchableOpacity,
   FlatList,
+  TextInput,
 } from 'react-native';
-import React, {useEffect, useState, useMemo} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {getProduct, getCategories} from '../../apiClient';
 import Animated, {
@@ -25,6 +26,7 @@ const Product = () => {
   const filterContainerHeight = useSharedValue(0);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [searchQuery, setSearchQuery] = useState(''); // State for search query
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -46,7 +48,6 @@ const Product = () => {
 
   useEffect(() => {
     if (route.params && route.params.selectedCategories) {
-      console.log('Selected Categories:', route.params.selectedCategories);
       filterProducts(route.params.selectedCategories);
     }
   }, [route.params]);
@@ -56,7 +57,7 @@ const Product = () => {
       product =>
         product.category &&
         (selectedCategories.length === 0 ||
-          selectedCategories.includes(product.category._id)), // Access category._id
+          selectedCategories.includes(product.category._id)),
     );
     setFilteredProducts(newFilteredProducts);
   };
@@ -65,13 +66,25 @@ const Product = () => {
     <TouchableOpacity
       onPress={() => {
         navigation.navigate('ProductDetail', {productId: item._id});
-      }}>
+      }}
+      style={styles.productCardContainer}>
       <View style={styles.productCard}>
         <Image source={{uri: item.image}} style={styles.productImage} />
-        <Text style={styles.productName}>{item.name}</Text>
+        <Text style={styles.productName} numberOfLines={2}>
+          {item.name}
+        </Text>
       </View>
     </TouchableOpacity>
   );
+  const onHandleSearch = text => {
+    setSearchQuery(text); // Update the search query directly
+    const filteredProducts = products.filter(
+      product =>
+        product.name.toLowerCase().includes(text.toLowerCase()) ||
+        product.description.toLowerCase().includes(text.toLowerCase()),
+    );
+    setFilteredProducts(filteredProducts);
+  };
 
   const toggleFilterOptions = () => {
     showFilterOptions ? closeFilterOptions() : openFilterOptions();
@@ -105,7 +118,6 @@ const Product = () => {
       : [...selectedCategories, categoryId];
 
     setSelectedCategories(newSelectedCategories);
-    // Re-filter products after toggling a category
     filterProducts(newSelectedCategories);
   };
 
@@ -114,13 +126,11 @@ const Product = () => {
   };
 
   const handleReset = () => {
-    // Call the filterProducts function to update the filtered products
     setSelectedCategories([]);
   };
 
-  // Update the useEffect to listen to selectedCategories for filtering products
   useEffect(() => {
-    filterProducts(selectedCategories); // Whenever selectedCategories changes, re-filter products
+    filterProducts(selectedCategories);
   }, [selectedCategories]);
 
   const renderCategoryItem = ({item}) => (
@@ -176,6 +186,8 @@ const Product = () => {
         </TouchableOpacity>
       </View>
       <Animated.View style={animatedStyle}>
+        {/* Search Bar for Categories */}
+
         <FlatList
           data={categories}
           renderItem={renderCategoryItem}
@@ -186,10 +198,20 @@ const Product = () => {
           <Text>Reset</Text>
         </TouchableOpacity>
       </Animated.View>
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search product"
+          value={searchQuery}
+          onChangeText={onHandleSearch}
+        />
+      </View>
       <FlatList
         data={filteredProducts}
         renderItem={renderProduct}
         keyExtractor={item => item._id}
+        numColumns={2}
+        columnWrapperStyle={styles.columnWrapper}
       />
     </View>
   );
@@ -244,11 +266,15 @@ const styles = StyleSheet.create({
     height: '100%',
     position: 'absolute',
   },
+  productCardContainer: {
+    flex: 1,
+    padding: 5,
+    alignItems: 'center',
+  },
   productCard: {
     backgroundColor: '#f8f8f8',
     borderRadius: 8,
     padding: 10,
-    margin: 10,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -260,19 +286,69 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   productImage: {
-    width: 100,
-    height: 100,
+    width: 120,
+    height: 120,
     borderRadius: 8,
   },
   productName: {
     marginTop: 5,
     fontSize: 16,
     fontWeight: 'bold',
+    flexWrap: 'wrap',
+    lineHeight: 20,
+  },
+  columnWrapper: {
+    justifyContent: 'space-between', // Spaces out the columns
   },
   productList: {
     paddingBottom: 20,
   },
-  //animated filter
+  titleBoldText: {
+    fontSize: 23,
+    fontFamily: 'nunitoSan',
+    color: 'white',
+    fontWeight: 'bold',
+    marginLeft: '5%',
+    marginTop: '3%',
+  },
+  iconMenuView: {
+    width: 30,
+    height: 30,
+  },
+  containerF: {
+    width: 30,
+    height: 30,
+    borderRadius: 50,
+    backgroundColor: 'green',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: '2%',
+    alignSelf: 'center',
+  },
+  menuView: {
+    width: '90%',
+    justifyContent: 'space-between',
+    marginLeft: '5%',
+    height: 50,
+    flexDirection: 'row',
+    marginTop: '18%',
+    alignItems: 'center',
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  headView: {
+    width: '100%',
+    height: '23%',
+    backgroundColor: 'blue',
+    marginBottom: '10%',
+  },
+  redFoodBgr: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+  }, //animated filter
   filterOptionsContainer: {
     backgroundColor: 'white', // Background color of the filter options
     borderBottomWidth: 1,
@@ -324,5 +400,21 @@ const styles = StyleSheet.create({
     opacity: 0.25,
     borderRadius: 7,
     marginRight: 15,
+  },
+  // Filter and other styles remain unchanged
+  searchInput: {
+    height: 50,
+    borderColor: '#ccc',
+    borderWidth: 2,
+    borderRadius: 8,
+  },
+  searchContainer: {
+    backgroundColor: '#f8f8f8',
+    paddingHorizontal: 10,
+    marginBottom: 10,
+    borderRadius: 8,
+
+    width: '90%',
+    alignSelf: 'center',
   },
 });

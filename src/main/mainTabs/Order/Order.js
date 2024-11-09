@@ -1,42 +1,57 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity, FlatList, ImageBackground, ActivityIndicator } from 'react-native';
-import React, { useState, useEffect } from 'react';
-import { useNavigation } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
-import { getUserOrder } from '../../../apiClient';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  FlatList,
+  ImageBackground,
+  ActivityIndicator,
+  RefreshControl,
+} from 'react-native';
+import React, {useState, useEffect, useCallback} from 'react';
+import {useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
+import {getUserOrder} from '../../../apiClient';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
 // Define Tab from createMaterialTopTabNavigator
 const Tab = createMaterialTopTabNavigator();
 
-const OrderScreen = ({ status }) => {
+const OrderScreen = ({status}) => {
   const navigation = useNavigation();
   const userId = useSelector(state => state.auth.user?.userId);
   const token = useSelector(state => state.auth.user?.token);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const [refreshing, setRefreshing] = useState(false); // Add state for refreshing
+  const fetchOrders = async () => {
+    try {
+      setLoading(true);
+      const fetchedOrders = await getUserOrder(userId, token, {status});
+      setOrders(fetchedOrders);
+    } catch (err) {
+      console.error('Error fetching orders:', err);
+    } finally {
+      setLoading(false);
+      setRefreshing(false); // End refresh when done
+    }
+  };
   useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        setLoading(true);
-        const fetchedOrders = await getUserOrder(userId, token, { status });
-        setOrders(fetchedOrders);
-      } catch (err) {
-        console.error('Error fetching orders:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchOrders();
   }, [userId, token, status]);
-
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchOrders();
+  }, [userId, token, status]);
   const handlePress = item => {
-    navigation.navigate('OrderItemScreen', { item });
+    navigation.navigate('OrderItemScreen', {item});
   };
 
-  const renderOrderItem = ({ item }) => (
-    <TouchableOpacity style={styles.itemContainer} onPress={() => handlePress(item)}>
+  const renderOrderItem = ({item}) => (
+    <TouchableOpacity
+      style={styles.itemContainer}
+      onPress={() => handlePress(item)}>
       <Text style={styles.transactionId}>{item.transactionId}</Text>
       <View style={styles.detailsContainer}>
         <Text style={styles.detailsText}>{item.paymentMethod}</Text>
@@ -55,7 +70,9 @@ const OrderScreen = ({ status }) => {
   };
 
   if (loading) {
-    return <ActivityIndicator size="large" color="#0000ff" style={styles.loading} />;
+    return (
+      <ActivityIndicator size="large" color="#0000ff" style={styles.loading} />
+    );
   }
 
   return (
@@ -63,29 +80,31 @@ const OrderScreen = ({ status }) => {
       <FlatList
         data={chunkOrders(orders, 7)}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
+        renderItem={({item}) => (
           <FlatList
             data={item}
-            keyExtractor={(subItem) => subItem.id.toString()}
+            keyExtractor={subItem => subItem.id.toString()}
             renderItem={renderOrderItem}
             horizontal={true}
             showsHorizontalScrollIndicator={false}
           />
         )}
         key={status}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
     </View>
   );
 };
 
-function CustomTabBar({ state, descriptors, navigation }) {
+function CustomTabBar({state, descriptors, navigation}) {
   return (
     <ImageBackground
       source={require('../../../../assets/images/redFoodBgr.png')}
-      style={styles.customTabBar}
-    >
+      style={styles.customTabBar}>
       {state.routes.map((route, index) => {
-        const { options } = descriptors[route.key];
+        const {options} = descriptors[route.key];
         const label = options.tabBarLabel || options.title || route.name;
         const isFocused = state.index === index;
 
@@ -102,7 +121,9 @@ function CustomTabBar({ state, descriptors, navigation }) {
 
         return (
           <View key={index} style={styles.tabItem}>
-            <Text onPress={onPress} style={[styles.tabText, isFocused && styles.tabTextFocused]}>
+            <Text
+              onPress={onPress}
+              style={[styles.tabText, isFocused && styles.tabTextFocused]}>
               {label}
             </Text>
             {isFocused && <View style={styles.tabIndicator} />}
@@ -120,32 +141,42 @@ const Order = () => {
   const [itemCount, setItemCount] = useState(0);
 
   useEffect(() => {
-    const count = cartItems.reduce((total, item) => total + (item.quantity || 1), 0);
+    const count = cartItems.reduce(
+      (total, item) => total + (item.quantity || 1),
+      0,
+    );
     setItemCount(count);
   }, [cartItems]);
 
   return (
     <View style={styles.container}>
       <View style={styles.headView}>
-        <Image style={styles.redFoodBgr} source={require('../../../../assets/images/redFoodBgr.png')} />
+        <Image
+          style={styles.redFoodBgr}
+          source={require('../../../../assets/images/redFoodBgr.png')}
+        />
         <View style={styles.menuView}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Image source={require('../../../../assets/images/icons/whiteBackArrow.png')} />
+            <Image
+              source={require('../../../../assets/images/icons/whiteBackArrow.png')}
+            />
           </TouchableOpacity>
-          <Text style={{color:'white', fontSize: 20, fontWeight:'bold'}}>
-            Order
-          </Text>
-          <TouchableOpacity onPress={() => navigation.navigate('CartStack', { screen: 'OrderDetail' })}>
+
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('CartStack', {screen: 'OrderDetail'})
+            }>
             <View>
-              <Image style={styles.iconImage} source={require('../../../../assets/images/icons/shopping-bag.png')} />
+              <Image
+                style={styles.iconImage}
+                source={require('../../../../assets/images/icons/shopping-bag.png')}
+              />
               <Text style={styles.iconText}>{itemCount}</Text>
             </View>
           </TouchableOpacity>
         </View>
         <Text style={styles.titleBoldText}>Order</Text>
       </View>
-
-      {/* This view now takes the entire space below the header */}
       <View style={styles.bodyView}>
         <Tab.Navigator
           tabBar={props => <CustomTabBar {...props} />}
@@ -164,8 +195,7 @@ const Order = () => {
               height: 3,
               borderRadius: 1.5,
             },
-          }}
-        >
+          }}>
           <Tab.Screen name="Pending">
             {() => <OrderScreen status="Pending" />}
           </Tab.Screen>
@@ -177,6 +207,7 @@ const Order = () => {
           </Tab.Screen>
         </Tab.Navigator>
       </View>
+      {/* This view now takes the entire space below the header */}
     </View>
   );
 };
@@ -203,7 +234,7 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     marginHorizontal: 8,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 3,
@@ -279,6 +310,7 @@ const styles = StyleSheet.create({
   },
   bodyView: {
     flex: 1,
+
     backgroundColor: 'white', // The rest of the body will have a white background
   },
   redFoodBgr: {
@@ -298,5 +330,32 @@ const styles = StyleSheet.create({
     color: 'black',
     textAlign: 'center',
     marginTop: 120,
+  },
+  headView: {
+    width: '100%',
+    height: '23%',
+    backgroundColor: 'blue',
+  },
+  redFoodBgr: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+  },
+  menuView: {
+    width: '90%',
+    justifyContent: 'space-between',
+    marginLeft: '5%',
+    height: 50,
+    flexDirection: 'row',
+    marginTop: '18%',
+    alignItems: 'center',
+  },
+  titleBoldText: {
+    fontSize: 23,
+    fontFamily: 'nunitoSan',
+    color: 'white',
+    fontWeight: 'bold',
+    marginLeft: '5%',
+    marginTop: '3%',
   },
 });

@@ -147,14 +147,13 @@ const Home = () => {
 
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('CartStack', {screen: 'OrderDetail'});
+              navigation.navigate('Notifications');
             }}>
             <View>
               <Image
                 style={styles.iconImage1}
                 source={require('../../../../assets/images/noti.png')}
               />
-              <Text style={styles.iconText}>{itemCount}</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -243,7 +242,7 @@ const styles = StyleSheet.create({
     fontFamily: 'nunitoSan',
     color: '#9D9D9D',
   },
-  iconImage1:{
+  iconImage1: {
     width: 25,
     height: 25,
   },
@@ -438,7 +437,6 @@ const styles = StyleSheet.create({
   iconImage: {
     width: 25,
     height: 25,
-
   },
   iconText: {
     color: '#fff',

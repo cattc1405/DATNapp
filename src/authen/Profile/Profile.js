@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,12 +7,20 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
-  ScrollView,  // Import ScrollView
+  ScrollView,
+
+  // Import ScrollView
 } from 'react-native';
-import { useSelector } from 'react-redux';
-import { getUserInfo, updateUser, uploadAvatar } from '../../apiClient';
-import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
-import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
+import {useSelector} from 'react-redux';
+import {
+  getUserInfo,
+  updateUser,
+  uploadAvatar,
+  changePassword,
+} from '../../apiClient';
+import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
+import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
+import {useFocusEffect} from '@react-navigation/native';
 
 const Profile = () => {
   const userId = useSelector(state => state.auth.user?.userId);
@@ -24,22 +32,56 @@ const Profile = () => {
   const [imageUri, setImageUri] = useState(null);
   const [avatar, setAvatar] = useState(null);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const data = await getUserInfo(userId, token);
-        setUserInfo(data);
-        setName(data.name);
-        setEmail(data.email);
-        setPhone(data.phone);
-        setAvatar(data.image);
-      } catch (error) {
-        console.error('Error fetching user info:', error);
-      }
-    };
-    fetchUser();
-  }, [userId, token]);
+  // New state for password change
+  const [currentPass, setCurrentPass] = useState('');
+  const [newPass, setNewPass] = useState('');
 
+  const handleChangePassword = async () => {
+    if (!currentPass || !newPass) {
+      Alert.alert('Lỗi', 'Vui lòng điền đầy đủ thông tin mật khẩu!');
+      return;
+    }
+
+    const passwordData = {
+      userId: userId,
+      currentPassword: currentPass,
+      newPassword: newPass,
+    };
+
+    try {
+      await changePassword(passwordData, token);
+      Alert.alert('Thành công', 'Đã thay đổi mật khẩu thành công!');
+      setCurrentPass('');
+      setNewPass('');
+    } catch (error) {
+      console.error('Error changing password:', error);
+      Alert.alert('Lỗi', 'Không thể thay đổi mật khẩu!');
+    }
+  };
+  const fetchUser = async () => {
+    try {
+      const data = await getUserInfo(userId, token);
+      setUserInfo(data);
+      setName(data.name);
+      setEmail(data.email);
+      setPhone(data.phone);
+      setAvatar(data.image);
+    } catch (error) {
+      console.error('Error fetching user info:', error);
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // Your code to run when the screen is focused
+      fetchUser();
+
+      // Optionally, return a cleanup function if needed
+      return () => {
+        // Cleanup code (if any)
+      };
+    }, [userId, token]), // You can add any dependencies here
+  );
   const handleEditPress = async () => {
     const userForm = {
       name,
@@ -50,6 +92,7 @@ const Profile = () => {
     try {
       await updateUser(userId, userForm, token);
       Alert.alert('Thành công', 'Cập nhật thông tin cá nhân thành công!');
+      fetchUser();
     } catch (error) {
       console.error('Error updating user:', error);
       Alert.alert('Lỗi', 'Không thể cập nhật thông tin cá nhân!');
@@ -98,10 +141,7 @@ const Profile = () => {
   const handleCaptureImage = async () => {
     const hasPermission = await requestPermission(PERMISSIONS.ANDROID.CAMERA);
     if (!hasPermission) {
-      Alert.alert(
-        'Cần quyền truy cập',
-        'Bạn cần cấp quyền sử dụng máy ảnh!',
-      );
+      Alert.alert('Cần quyền truy cập', 'Bạn cần cấp quyền sử dụng máy ảnh!');
       return;
     }
 
@@ -125,10 +165,7 @@ const Profile = () => {
 
   const handleUploadAvatar = async () => {
     if (!imageUri) {
-      Alert.alert(
-        'Chưa chọn hình ảnh',
-        'Vui lòng chọn hoặc chụp ảnh trước!',
-      );
+      Alert.alert('Chưa chọn hình ảnh', 'Vui lòng chọn hoặc chụp ảnh trước!');
       return;
     }
 
@@ -155,22 +192,22 @@ const Profile = () => {
     <ScrollView contentContainerStyle={styles.container}>
       {/* Profile Image */}
       <View style={styles.profileImageContainer}>
-        <Image source={{ uri: imageUri || avatar }} style={styles.profileImage} />
+        <Image source={{uri: imageUri || avatar}} style={styles.profileImage} />
         <TouchableOpacity
           style={styles.editButton}
           onPress={handleUploadAvatar}>
           <Text style={styles.editButtonText}>Tải lên</Text>
         </TouchableOpacity>
-
-        <TouchableOpacity style={styles.editButton} onPress={handlePickImage}>
-          <Text style={styles.editButtonText}>Thư viện</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.editButton}
-          onPress={handleCaptureImage}>
-          <Text style={styles.editButtonText}>Máy ảnh</Text>
-        </TouchableOpacity>
+        <View style={{flexDirection: 'row'}}>
+          <TouchableOpacity style={styles.editButton} onPress={handlePickImage}>
+            <Text style={styles.editButtonText}>Thư viện</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.editButton}
+            onPress={handleCaptureImage}>
+            <Text style={styles.editButtonText}>Máy ảnh</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* User Info */}
@@ -199,12 +236,33 @@ const Profile = () => {
           <Text style={styles.saveButtonText}>Lưu</Text>
         </TouchableOpacity>
       </View>
-
+      {/* Change Password */}
+      <View style={styles.infoContainer}>
+        <TextInput
+          style={styles.input}
+          value={currentPass}
+          onChangeText={setCurrentPass}
+          placeholder="Mật khẩu hiện tại"
+          secureTextEntry
+        />
+        <TextInput
+          style={styles.input}
+          value={newPass}
+          onChangeText={setNewPass}
+          placeholder="Mật khẩu mới"
+          secureTextEntry
+        />
+        <TouchableOpacity
+          onPress={handleChangePassword}
+          style={styles.saveButton}>
+          <Text style={styles.saveButtonText}>Thay đổi mật khẩu</Text>
+        </TouchableOpacity>
+      </View>
       {/* Additional Info */}
       <View style={styles.detailsContainer}>
         <Text style={styles.detailLabel}>Email: {userInfo.email}</Text>
+        <Text style={styles.detailLabel}>Name: {userInfo.name}</Text>
         <Text style={styles.detailLabel}>Số điện thoại: {userInfo.phone}</Text>
-        <Text style={styles.detailLabel}>Liên hệ: {userInfo.contact?.[0]}</Text>
       </View>
     </ScrollView>
   );
@@ -236,10 +294,10 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginTop: 10,
     alignItems: 'center',
-    justifyContent: 'center',  // Căn giữa nội dung
-    width: 150,  // Đặt chiều rộng cố định để các nút có kích thước bằng nhau
+    justifyContent: 'center', // Căn giữa nội dung
+    width: 150, // Đặt chiều rộng cố định để các nút có kích thước bằng nhau
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
+    shadowOffset: {width: 0, height: 3},
     shadowOpacity: 0.2,
     shadowRadius: 5,
     elevation: 5,
@@ -275,7 +333,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
+    shadowOffset: {width: 0, height: 3},
     shadowOpacity: 0.2,
     shadowRadius: 5,
     elevation: 5,

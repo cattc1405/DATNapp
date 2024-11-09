@@ -1,4 +1,11 @@
-import {StyleSheet, Text, Image, TouchableOpacity, View} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  Image,
+  TouchableOpacity,
+  View,
+  ScrollView,
+} from 'react-native';
 import React from 'react';
 import colors from '../../../../assets/colors';
 import {black} from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
@@ -135,22 +142,23 @@ const BrandDetails = ({route}) => {
             <TouchableOpacity>
               <Text style={styles.viewallText}>View All</Text>
             </TouchableOpacity>
-            
           </View>
           <View style={styles.ratingSection}>
-            {['Excellent', 'Good', 'Average', 'Below Average', 'Poor'].map((label, index) => (
-              <View key={index} style={styles.ratingRow}>
-                <Text style={styles.ratingLabel}>{label}</Text>
-                <View style={styles.ratingBarBackground}>
-                  <View
-                    style={[
-                      styles.ratingBar,
-                      { width: `${(5 - index) * 20}%` },
-                    ]}
-                  />
+            {['Excellent', 'Good', 'Average', 'Below Average', 'Poor'].map(
+              (label, index) => (
+                <View key={index} style={styles.ratingRow}>
+                  <Text style={styles.ratingLabel}>{label}</Text>
+                  <View style={styles.ratingBarBackground}>
+                    <View
+                      style={[
+                        styles.ratingBar,
+                        {width: `${(5 - index) * 20}%`},
+                      ]}
+                    />
+                  </View>
                 </View>
-              </View>
-            ))}
+              ),
+            )}
             <Text style={styles.averageRatingText}>4.3/5</Text>
             <Text style={styles.reviewCountText}>895 reviews</Text>
           </View>
