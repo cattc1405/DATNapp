@@ -247,7 +247,7 @@ const LoginScreen = ({navigation}) => {
             style={styles.socialButton}
             onPress={handleFacebookLogin}>
             <Image
-              source={require('../../assets/images/icons/logogg.jpg')}
+              source={require('../../assets/images/icons/fbicon.png')}
               style={styles.socialIcon}
             />
             <Text style={styles.socialButtonText}>FACEBOOK</Text>

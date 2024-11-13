@@ -17,16 +17,14 @@ const OrderItemScreen = () => {
   console.log(item);
 
   // Function to render each order item
-  const renderOrderItem = ({item}) => {
-    return (
-      <View style={styles.orderItem}>
-        <Text style={styles.itemTitle}>{item.attribute.size}</Text>
-        <Text style={styles.itemDetail}>Quantity: {item.quantity}</Text>
-        <Text style={styles.itemDetail}>Drink: {item.drink}</Text>
-        <Text style={styles.itemDetail}>Excluded: {item.excluded}</Text>
-      </View>
-    );
-  };
+  const renderOrderItem = ({item}) => (
+    <View style={styles.orderItem}>
+      <Text style={styles.itemTitle}>{item.attribute.size}</Text>
+      <Text style={styles.itemDetail}>Quantity: {item.quantity}</Text>
+      <Text style={styles.itemDetail}>Drink: {item.drink}</Text>
+      <Text style={styles.itemDetail}>Excluded: {item.excluded}</Text>
+    </View>
+  );
 
   return (
     <View style={styles.container}>
@@ -70,7 +68,7 @@ const OrderItemScreen = () => {
           <Text style={styles.boldText}>{item.shippingAddress}</Text>
         </Text>
         <Text style={styles.orderInfoText}>
-          Branch: <Text style={styles.boldText}>{item.restaurant}</Text>
+          Branch: <Text style={styles.boldText}>{item.restaurant?.name}</Text>
         </Text>
         <Text style={styles.orderInfoText}>
           Date: <Text style={styles.boldText}>{item.dateOrdered}</Text>

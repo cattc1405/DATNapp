@@ -1,13 +1,20 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
 import Slider from '@react-native-community/slider'; // Đã sửa lỗi import Slider
 import {useNavigation} from '@react-navigation/native';
 import {useRoute} from '@react-navigation/native';
+import 'react-native-get-random-values';
+import {v4 as uuidv4} from 'uuid';
+import {useSelector} from 'react-redux';
 const Checkuot3 = ({navigation}) => {
-  const [pickupTime, setPickupTime] = useState(1);
-  const route = useRoute(); // Thời gian ban đầu được đặt là 1 phút
+  const [pickupTime, setPickupTime] = useState(1); // Initial pickup time set to 1 minute
+  const route = useRoute();
   const {selectedBrand, selectedContact} = route.params;
-  console.log('Checkuot3', selectedBrand, pickupTime);
+  const transactionId = useSelector(state => state.cart.transactionId); // or state.cart.cartItems depending on your slice structure
+
+  console.log('trans', transactionId);
+  console.log('Checkout3:', selectedBrand, pickupTime);
+
   return (
     <View style={styles.container}>
       {/* Phần đầu (Header) */}
@@ -60,7 +67,7 @@ const Checkuot3 = ({navigation}) => {
       <TouchableOpacity
         style={styles.nextButton}
         onPress={() =>
-          navigation.navigate('PaymentScreen', {
+          navigation.navigate('PaymentOS', {
             selectedBrand,
             pickupTime,
             selectedContact,

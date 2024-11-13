@@ -5,6 +5,7 @@ const cartSlice = createSlice({
   name: 'cart',
   initialState: {
     items: [], // Array of cart items
+    transactionId: null, // Global transaction ID for the cart
   },
   reducers: {
     setCartItems: (state, action) => {
@@ -21,6 +22,13 @@ const cartSlice = createSlice({
     removeCartItem: (state, action) => {
       state.items = state.items.filter(item => item.id !== action.payload);
     },
+    setTransactionId: (state, action) => {
+      state.transactionId = action.payload; // Save transaction ID here
+    },
+    clearCart: state => {
+      state.items = []; // Clears the cart items
+      state.transactionId = null; // Optionally reset the transaction ID
+    },
   },
 });
 
@@ -29,5 +37,7 @@ export const {
   incrementQuantity,
   decrementQuantity,
   removeCartItem,
+  setTransactionId,
+  clearCart, // Export the action to set the transaction ID
 } = cartSlice.actions;
 export default cartSlice.reducer;

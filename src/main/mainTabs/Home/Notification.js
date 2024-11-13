@@ -34,23 +34,46 @@ const Notification = () => {
     fetchOrders();
   }, [userId, token, status]);
 
-  const renderOrderItem = ({item}) => (
-    <View style={styles.orderCard}>
-      <Text style={styles.orderDate}>
-        {new Date(item.dateOrdered).toLocaleDateString()}
-      </Text>
-      <Text style={styles.restaurantName}>Branch: {item.restaurant}</Text>
-      <Text style={styles.orderTotal}>Total: ${item.totalPrice}</Text>
-      <Text style={styles.paymentMethod}>
-        Payment Method: {item.paymentMethob}
-      </Text>
-      <Text style={styles.transactionId}>
-        Transaction ID: {item.transactionId}
-      </Text>
-      <Text style={styles.orderStatus}>Status: {item.status}</Text>
-    </View>
-  );
+  const renderOrderItem = ({item}) => {
+    if (!item.restaurant?.name) {
+      return null; // Do not render this order if the branch name is null or empty
+    }
 
+    return (
+      <View style={styles.orderCard}>
+        <View style={{width: '50%'}}>
+          <Text style={styles.orderDate}>
+            {new Date(item.dateOrdered).toLocaleDateString()}
+          </Text>
+
+          <Text style={styles.restaurantName}>
+            Branch: {item.restaurant.name}
+          </Text>
+          <Image
+            source={{uri: item.restaurant.image}}
+            style={styles.restaurantImage}
+          />
+        </View>
+        <View
+          style={{
+            width: '50%',
+            borderLeftWidth: 1,
+            justifyContent: 'center',
+          }}>
+          <Text style={styles.orderTotal}>Total: ${item.totalPrice}</Text>
+          <Text style={styles.paymentMethod}>
+            Payment Method: {item.paymentMethob}
+          </Text>
+          <Text style={styles.transactionId}>
+            Transaction ID: {item.transactionId}
+          </Text>
+          <Text style={styles.orderStatus}>Status: {item.status}</Text>
+        </View>
+      </View>
+    );
+  };
+
+  console.log(orders);
   return (
     <View style={styles.container}>
       <View style={styles.headView}>
@@ -127,7 +150,21 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 3,
+    flexDirection: 'row',
   },
+  restaurantName: {
+    fontSize: 16,
+    color: '#333',
+    fontWeight: '600',
+    marginBottom: 5,
+  },
+  restaurantImage: {
+    height: 50,
+    width: 50,
+    borderRadius: 10,
+    marginVertical: 10,
+  },
+
   orderDate: {
     fontSize: 16,
     color: '#333',
@@ -142,22 +179,24 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333',
     fontWeight: 'bold',
-    marginTop: 5,
+    marginLeft: 10,
   },
   paymentMethod: {
     fontSize: 14,
     color: '#777',
-    marginTop: 5,
+    marginLeft: 10,
   },
   transactionId: {
     fontSize: 12,
     color: '#888',
     marginTop: 5,
+    marginLeft: 10,
   },
   orderStatus: {
     fontSize: 14,
     color: '#008000',
     fontWeight: 'bold',
     marginTop: 5,
+    marginLeft: 10,
   },
 });

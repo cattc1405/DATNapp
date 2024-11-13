@@ -22,7 +22,7 @@ const ProductDetail = ({route}) => {
   const [selectedDrink, setSelectedDrink] = useState(null);
   const [selectedItems, setSelectedItems] = useState([]);
   const userId = useSelector(state => state.auth.user?.userId);
-
+  const [attributePrice, setAttributePrice] = useState(null);
   const {productId} = route.params; // Retrieve the productId from route parameters
   const [product, setProduct] = useState(null);
   const [price, setPrice] = useState(0);
@@ -106,6 +106,7 @@ const ProductDetail = ({route}) => {
     setSelectedType(type);
     setPrice(price);
     setSize(name);
+    setAttributePrice(price);
   };
 
   const handleSelectDrink = drink => {
@@ -149,7 +150,9 @@ const ProductDetail = ({route}) => {
   const renderProductDetail = () => {
     if (product) {
       return (
-        <ScrollView style={styles.productContainer}>
+        <ScrollView
+          style={styles.productContainer}
+          contentContainerStyle={styles.centeredContent}>
           <Image style={styles.productImage} source={{uri: product.image}} />
           <Text style={styles.titleBoldText}>{product.name}</Text>
           <Text style={styles.grayThinText}>{product.description}</Text>
@@ -164,14 +167,14 @@ const ProductDetail = ({route}) => {
             <View style={styles.ingredientView}>
               <Image
                 style={styles.ingredientImg}
-                source={require('../../../assets/images/BigMacBun.png')}
+                source={require('../../../assets/images/BeefPatty.png')}
               />
               <Text style={styles.nameIngre}>Beef Patty</Text>
             </View>
             <View style={styles.ingredientView}>
               <Image
                 style={styles.ingredientImg}
-                source={require('../../../assets/images/BigMacBun.png')}
+                source={require('../../../assets/images/Lettuce.png')}
               />
               <Text style={styles.nameIngre}>Lettuce</Text>
             </View>
@@ -765,6 +768,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     flexDirection: 'row',
     alignItems: 'center',
+    marginLeft: 30,
   },
   optionView: {
     width: '100%',
@@ -809,6 +813,8 @@ const styles = StyleSheet.create({
     opacity: 0.5,
     fontWeight: 'bold',
     marginLeft: 10,
+    marginRight: 130,
+    width: 260,
   },
   nameIngre: {
     fontFamily: 'nunitoSan',
@@ -833,8 +839,9 @@ const styles = StyleSheet.create({
   },
   ingredientsListView: {
     marginTop: 10,
+    width: '100%',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
   },
   viewallText: {
     fontFamily: 'nunitoSan',
@@ -856,7 +863,6 @@ const styles = StyleSheet.create({
     color: 'black',
     fontWeight: 'bold',
     textTransform: 'uppercase',
-    marginLeft: 10,
   },
   grayThinText: {
     fontFamily: 'nunitoSan',
@@ -878,8 +884,8 @@ const styles = StyleSheet.create({
     marginLeft: '7%',
   },
   productImage: {
-    width: 100,
-    height: 150,
+    width: 180,
+    height: 180,
     position: 'relative',
     alignItems: 'center',
     justifyContent: 'center',
@@ -904,6 +910,10 @@ const styles = StyleSheet.create({
 
     backgroundColor: 'white',
   },
+  centeredContent: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   headView: {
     flex: 1,
     alignItems: 'center',
@@ -923,5 +933,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     alignItems: 'center',
     alignSelf: 'center',
+    left: 5,
   },
 });

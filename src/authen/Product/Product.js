@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   FlatList,
   TextInput,
+  ImageBackground,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -68,12 +69,19 @@ const Product = () => {
         navigation.navigate('ProductDetail', {productId: item._id});
       }}
       style={styles.productCardContainer}>
-      <View style={styles.productCard}>
-        <Image source={{uri: item.image}} style={styles.productImage} />
-        <Text style={styles.productName} numberOfLines={2}>
-          {item.name}
-        </Text>
-      </View>
+      <ImageBackground
+        style={styles.itemPopularView}
+        source={{uri: item.image}}
+        imageStyle={{borderRadius: 15}}>
+        <View style={styles.tagBrand}>
+          <View style={styles.bestTag}>
+            <Text style={styles.bestText}>BEST OFFER</Text>
+          </View>
+          <Text style={styles.nameText}>{item.name}</Text>
+
+          <Text style={styles.thinText}>{item.description}</Text>
+        </View>
+      </ImageBackground>
     </TouchableOpacity>
   );
   const onHandleSearch = text => {
@@ -168,19 +176,14 @@ const Product = () => {
               source={require('../../../assets/images/icons/whiteBackArrow.png')}
             />
           </TouchableOpacity>
-          <TouchableOpacity>
-            <Image
-              style={styles.iconMenuView}
-              source={require('../../../assets/images/icons/FilterIcon.png')}
-            />
-          </TouchableOpacity>
+          <TouchableOpacity></TouchableOpacity>
         </View>
         <Text style={styles.titleBoldText}>What's in Today?</Text>
         <TouchableOpacity onPress={toggleFilterOptions}>
           <View style={styles.containerF}>
             <Image
               style={styles.filter}
-              source={require('../../../assets/images/icons/directionGreen.png')}
+              source={require('../../../assets/images/icons/FilterIcon.png')}
             />
           </View>
         </TouchableOpacity>
@@ -210,8 +213,6 @@ const Product = () => {
         data={filteredProducts}
         renderItem={renderProduct}
         keyExtractor={item => item._id}
-        numColumns={2}
-        columnWrapperStyle={styles.columnWrapper}
       />
     </View>
   );
@@ -236,11 +237,15 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 50,
-    backgroundColor: 'green',
+    backgroundColor: '#FFFFFF',
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: '2%',
     alignSelf: 'center',
+  },
+  filter: {
+    width: 18,
+    height: 18,
   },
   menuView: {
     width: '90%',
@@ -277,6 +282,7 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: 'center',
     shadowColor: '#000',
+
     shadowOffset: {
       width: 0,
       height: 2,
@@ -416,5 +422,63 @@ const styles = StyleSheet.create({
 
     width: '90%',
     alignSelf: 'center',
+  },
+  //itemproducts
+  starView: {
+    marginLeft: 20,
+    marginTop: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  starIcon: {
+    width: 16,
+    height: 16,
+    marginRight: 3,
+  },
+  nameText: {
+    color: 'black',
+    marginTop: 12,
+    marginLeft: 20,
+    fontFamily: 'nunitoSan',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  bestText: {
+    color: 'white',
+    padding: 7,
+    paddingHorizontal: 12,
+    fontSize: 10,
+    fontFamily: 'nunitoSan',
+    fontWeight: 'bold',
+  },
+  bestTag: {
+    borderTopLeftRadius: 5,
+    borderBottomLeftRadius: 5,
+    position: 'absolute',
+    right: -4,
+    top: 8,
+    backgroundColor: '#F55F44',
+  },
+  tagBrand: {
+    width: 230,
+    height: 70,
+    borderRadius: 10,
+    left: 10,
+    backgroundColor: 'white',
+    position: 'absolute',
+    bottom: -20,
+  },
+  itemPopularView: {
+    marginLeft: 20,
+    width: 250,
+    height: 160,
+  },
+  thinText: {
+    paddingLeft: 3,
+    fontSize: 11,
+    fontWeight: '700',
+    fontFamily: 'nunitoSan',
+    color: '#9D9D9D',
+    marginLeft: 16,
   },
 });

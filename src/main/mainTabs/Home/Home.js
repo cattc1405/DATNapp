@@ -89,18 +89,26 @@ const Home = () => {
     </TouchableOpacity>
   );
   const renderItemOffer = ({item}) => (
-    <ImageBackground
-      style={styles.itemTodayView}
-      source={{uri: item.image}}
-      imageStyle={{borderRadius: 15}}>
-      <Image style={styles.productImg} source={item.image} />
-      <View style={styles.tagView}>
-        <Image style={styles.logo} source={item.logoImage} />
-        <Text style={styles.tagText}>NEW</Text>
-      </View>
-      <Text style={styles.brandText}>{item.name}</Text>
-      <Text style={styles.describeText}>{item.description}</Text>
-    </ImageBackground>
+    <TouchableOpacity
+      onPress={() =>
+        navigation.navigate('ProductStack', {
+          screen: 'ProductDetail',
+          params: {productId: item._id}, // Passing the item data as params
+        })
+      }>
+      <ImageBackground
+        style={styles.itemTodayView}
+        source={{uri: item.image}}
+        imageStyle={{borderRadius: 15}}>
+        <Image style={styles.productImg} source={item.image} />
+        <View style={styles.tagView}>
+          <Image style={styles.logo} source={item.logoImage} />
+          <Text style={styles.tagText}>NEW</Text>
+        </View>
+        <Text style={styles.brandText}>{item.name}</Text>
+        <Text style={styles.describeText}>{item.description}</Text>
+      </ImageBackground>
+    </TouchableOpacity>
   );
   const cartItems = useSelector(state => state.cart.items);
 
@@ -298,15 +306,15 @@ const styles = StyleSheet.create({
   describeText: {
     fontSize: 16,
     width: '45%',
-    color: 'white',
+    color: 'black',
     fontWeight: 'bold',
     marginLeft: 15,
     marginTop: -5,
     fontFamily: 'nunitoSan',
   },
   brandText: {
-    color: 'white',
-    fontSize: 20,
+    color: 'black',
+    fontSize: 17,
     fontWeight: '700',
     margin: 15,
     fontFamily: 'nunitoSan',

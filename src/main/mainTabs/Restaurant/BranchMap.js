@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import OSMMapView from './OSMMapView'; // Import your OSMMapView component
-import {getNearestBranch} from '../../../apiClient';
+import {getBrands} from '../../../apiClient';
 
 const BranchMap = () => {
   const [branchList, setBranchList] = useState([]); // Initialize branch list state
@@ -21,14 +21,9 @@ const BranchMap = () => {
     // Fetch nearest branches
     const fetchNearestBranch = async () => {
       try {
-        const data = await getNearestBranch(userCoordinates);
+        const data = await getBrands();
         console.log('GET From API:', data); // Check if data is correct
-
-        if (data && data.data) {
-          setBranchList(data.data); // Update the branch list with data from the API
-        } else {
-          console.log('No branch data found.');
-        }
+        setBranchList(data); // Update the branch list with data from the API
       } catch (error) {
         console.error('Failed to fetch nearest branch:', error);
       } finally {
@@ -67,10 +62,6 @@ const BranchMap = () => {
             {item.review} reviews
           </Text>
           {/* Display coordinates */}
-          <Text style={{fontSize: 12, color: '#555'}}>
-            Coordinates: {item.location.coordinates[1].toFixed(4)},{' '}
-            {item.location.coordinates[0].toFixed(4)}
-          </Text>
         </View>
       </TouchableOpacity>
     );
@@ -86,12 +77,7 @@ const BranchMap = () => {
       <OSMMapView
         style={styles.map} // Take up 2/3 of the screen space
         center={
-          selectedBranch
-            ? {
-                latitude: selectedBranch.location.coordinates[1],
-                longitude: selectedBranch.location.coordinates[0],
-              } // Use selected branch coordinates
-            : userCoordinates // Fallback to user coordinates if no branch is selected
+          userCoordinates // Fallback to user coordinates if no branch is selected
         }
         zoom={15} // Set initial zoom level
       ></OSMMapView>

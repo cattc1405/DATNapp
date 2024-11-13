@@ -21,6 +21,7 @@ import {
   incrementQuantity,
   decrementQuantity,
   removeCartItem,
+  setTransactionId,
 } from '../../../redux/slice/cartSlice';
 
 const OrderDetail = ({route}) => {
@@ -32,7 +33,8 @@ const OrderDetail = ({route}) => {
   console.log(userId);
   console.log(token);
   const [loading, setLoading] = useState(true); // Loading state
-
+  const transactionId = useSelector(state => state.transactionId); // or state.cart.cartItems depending on your slice structure
+  console.log('red', transactionId);
   const fetchUserCart = async () => {
     if (!userId || !token) return;
 
@@ -150,6 +152,35 @@ const OrderDetail = ({route}) => {
       </View>
     );
   };
+  const handleCheckout = () => {
+    try {
+      const createTransactionId = () => {
+        const maxOrderCode = 9007199254740991;
+
+        // Generate a random integer order code within the valid range (1 to maxOrderCode)
+        const orderCode = Math.floor(Math.random() * maxOrderCode) + 1;
+
+        // Ensure that the generated order code is within bounds and is a valid integer
+        if (
+          !Number.isInteger(orderCode) ||
+          orderCode <= 0 ||
+          orderCode > maxOrderCode
+        ) {
+          throw new Error('Generated order code is invalid.');
+        }
+
+        return orderCode;
+      };
+      const newTransactionId = createTransactionId();
+      dispatch(setTransactionId(newTransactionId));
+      console.log('New Transaction ID:', newTransactionId);
+      navigation.navigate('ConfirmOrder', {cartItems});
+    } catch (err) {
+      console.error('Error creating transaction ID:', err);
+    }
+  };
+  // Function to create a new transaction ID
+
   return (
     <View style={styles.container}>
       <View style={styles.headView}>
@@ -164,7 +195,7 @@ const OrderDetail = ({route}) => {
               source={require('../../../../assets/images/icons/whiteBackArrow.png')}
             />
           </TouchableOpacity>
-        <Text style={styles.titleBoldText}>Order Details</Text>
+          <Text style={styles.titleBoldText}>Order Details</Text>
           <TouchableOpacity>
             <Image
               source={require('../../../../assets/images/icons/3dotsIcon.png')}
@@ -198,9 +229,7 @@ const OrderDetail = ({route}) => {
           <Text style={styles.totalText}>
             {/* Total Amount: <Text style={styles.mgnL15}>${totalAmount}</Text> */}
           </Text>
-          <TouchableOpacity
-            style={styles.checkoutBtn}
-            onPress={() => navigation.navigate('ConfirmOrder', {cartItems})}>
+          <TouchableOpacity style={styles.checkoutBtn} onPress={handleCheckout}>
             <Text style={styles.checkoutText}>Checkout</Text>
           </TouchableOpacity>
         </View>

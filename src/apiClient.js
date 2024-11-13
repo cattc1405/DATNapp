@@ -377,6 +377,8 @@ export const submitOrder = async (
   userId,
   shippingAddress,
   restaurant,
+  status,
+  transactionId,
   token,
 ) => {
   try {
@@ -385,6 +387,8 @@ export const submitOrder = async (
       paymentMethob: paymentMethob,
       userId,
       shippingAddress,
+      status,
+      transactionId,
       restaurant,
     };
 
@@ -405,6 +409,76 @@ export const submitOrder = async (
     throw error; // Rethrow the error for further handling
   }
 };
+
+export const createPayment = async (paymentData, token) => {
+  try {
+    const response = await apiInstance.post(
+      '/payment/create-payment',
+      paymentData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    console.log('Payment response:', response.data);
+    return response.data;
+  } catch (error) {
+    throw new Error('Error creating payment: ' + error.message);
+  }
+};
+
+// 2. Get Payment Info
+export const getPaymentInfo = async (id, token) => {
+  try {
+    const response = await apiInstance.get(`/payment/payment-info/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log('data', response.data);
+    return response.data;
+  } catch (error) {
+    throw new Error('Error getting payment info: ' + error.message);
+  }
+};
+
+// 3. Cancel Payment
+export const cancelPayment = async (id, token) => {
+  try {
+    const response = await apiInstance.post(
+      `/payment/payment-cancel/${id}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    console.log('data', response.data);
+    return response.data;
+  } catch (error) {
+    throw new Error('Error canceling payment: ' + error.message);
+  }
+};
+
+// 4. Webhook (handle payment status updates from the provider)
+export const handleWebhook = async (webhookData, token) => {
+  try {
+    const response = await apiInstance.post('/webhook', webhookData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error('Error handling webhook: ' + error.message);
+  }
+};
+
 export const updateUserCart = async (id, token, cartId, updateFields) => {
   try {
     const response = await apiInstance.put(

@@ -43,34 +43,36 @@ const PaymentScreen = ({cartItems}) => {
   }));
   console.log(orderItems, 'this is orderItems');
   const handleSubmitOrder = async () => {
-    if (!selectedCard) {
-      alert('Please select a payment method');
-      return; // Prevent the order submission if no card is selected
-    }
-    const shippingAddress = `${contactString}`;
-    const restaurant = `${restaurant2}`;
-    const paymentMethod = selectedCard;
-    console.log(shippingAddress, restaurant, paymentMethod);
-    try {
-      await Promise.all([
-        submitOrder(
-          orderItems,
-          paymentMethod,
-          userId,
-          shippingAddress,
-          restaurant,
-          token,
-        ),
-      ]);
-      for (const item of cartItems2) {
-        await removeUserCartItem(userId, token, item.id); // Pass userId and item.id
-      }
-      console.log('Order submitted and cart cleared successfully');
-      navigate.navigate('Checkout5');
-      // Optionally navigate or show success message here
-    } catch (error) {
-      console.error('Failed to submit order:', error); // User-friendly message could be shown here
-    }
+    // if (!selectedCard) {
+    //   alert('Please select a payment method');
+    //   return; // Prevent the order submission if no card is selected
+    // }
+    // const shippingAddress = `${contactString}`;
+    // const restaurant = `${restaurant2}`;
+    // const paymentMethod = selectedCard;
+    // console.log(shippingAddress, restaurant, paymentMethod);
+    // try {
+    //   await Promise.all([
+    //     submitOrder(
+    //       orderItems,
+    //       paymentMethod,
+    //       userId,
+    //       shippingAddress,
+    //       restaurant,
+    //       token,
+    //     ),
+    //   ]);
+    //   for (const item of cartItems2) {
+    //     await removeUserCartItem(userId, token, item.id); // Pass userId and item.id
+    //   }
+    //   console.log('Order submitted and cart cleared successfully');
+    //   navigate.navigate('Checkout5');
+    //   // Optionally navigate or show success message here
+    // } catch (error) {
+    //   console.error('Failed to submit order:', error); // User-friendly message could be shown here
+    // }
+    const amount = 1000;
+    navigate.navigate('PaymentOS');
   };
   console.log(orderItems);
   return (
