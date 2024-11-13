@@ -1,18 +1,80 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, Image } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-
-const PaymentScreen = ({ navigation }) => {
+import React, {useState} from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  TextInput,
+  Image,
+} from 'react-native';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
+import {submitOrder, removeUserCartItem} from '../../apiClient';
+const PaymentScreen = ({cartItems}) => {
+  const route = useRoute(); // Move this line up here to define route first
+  const cartItems2 = useSelector(state => state.cart.items); // or state.cart.cartItems depending on your slice structure
+  const navigate = useNavigation();
   const [cardNumber, setCardNumber] = useState('');
   const [cardHolder, setCardHolder] = useState('');
   const [expirationDate, setExpirationDate] = useState('');
   const [cvv, setCvv] = useState('');
   const [selectedCard, setSelectedCard] = useState(null); // State to track selected card
-
-  const handleCardSelect = (cardType) => {
+  const {selectedBrand, pickupTime, selectedContact} = route.params;
+  console.log('Pay', selectedBrand._id);
+  const userId = useSelector(state => state.auth.user?.userId); // Retrieve the userId from the Redux store
+  const token = useSelector(state => state.auth.user?.token);
+  console.log(userId);
+  console.log(token);
+  console.log('cartitem2', cartItems2);
+  const handleCardSelect = cardType => {
     setSelectedCard(cardType); // Update selected card state
   };
+  console.log(selectedCard);
+  const restaurant2 = selectedBrand._id;
+  const contactString = selectedContact.selectedContact;
+  console.log(contactString, 'res');
+  console.log(cartItems2, 'this is cartItems2');
 
+  const orderItems = cartItems2.map(item => ({
+    quantity: item.quantity,
+    drink: item.drink,
+    excluded: item.excluded,
+    attribute: item.attributeId,
+  }));
+  console.log(orderItems, 'this is orderItems');
+  const handleSubmitOrder = async () => {
+    // if (!selectedCard) {
+    //   alert('Please select a payment method');
+    //   return; // Prevent the order submission if no card is selected
+    // }
+    // const shippingAddress = `${contactString}`;
+    // const restaurant = `${restaurant2}`;
+    // const paymentMethod = selectedCard;
+    // console.log(shippingAddress, restaurant, paymentMethod);
+    // try {
+    //   await Promise.all([
+    //     submitOrder(
+    //       orderItems,
+    //       paymentMethod,
+    //       userId,
+    //       shippingAddress,
+    //       restaurant,
+    //       token,
+    //     ),
+    //   ]);
+    //   for (const item of cartItems2) {
+    //     await removeUserCartItem(userId, token, item.id); // Pass userId and item.id
+    //   }
+    //   console.log('Order submitted and cart cleared successfully');
+    //   navigate.navigate('Checkout5');
+    //   // Optionally navigate or show success message here
+    // } catch (error) {
+    //   console.error('Failed to submit order:', error); // User-friendly message could be shown here
+    // }
+    const amount = 1000;
+    navigate.navigate('PaymentOS');
+  };
+  console.log(orderItems);
   return (
     <View style={styles.container}>
       {/* Phần đầu (Header) */}
@@ -40,7 +102,7 @@ const PaymentScreen = ({ navigation }) => {
 
       {/* Phương thức thanh toán */}
       <View style={styles.paymentMethods}>
-        <TouchableOpacity onPress={() => handleCardSelect('apple')}>
+        <TouchableOpacity onPress={() => handleCardSelect('Credit Card')}>
           <Image
             source={require('../../../assets/images/cardapple.png')}
             style={[
@@ -49,7 +111,7 @@ const PaymentScreen = ({ navigation }) => {
             ]}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleCardSelect('paypal')}>
+        <TouchableOpacity onPress={() => handleCardSelect('PayPal')}>
           <Image
             source={require('../../../assets/images/cardpaypal.png')}
             style={[
@@ -58,7 +120,7 @@ const PaymentScreen = ({ navigation }) => {
             ]}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleCardSelect('visa')}>
+        <TouchableOpacity onPress={() => handleCardSelect('Bank Transfer')}>
           <Image
             source={require('../../../assets/images/cardvisa.png')}
             style={[
@@ -67,7 +129,7 @@ const PaymentScreen = ({ navigation }) => {
             ]}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleCardSelect('master')}>
+        <TouchableOpacity onPress={() => handleCardSelect('Cash')}>
           <Image
             source={require('../../../assets/images/cardmaster.png')}
             style={[
@@ -79,8 +141,12 @@ const PaymentScreen = ({ navigation }) => {
       </View>
       <View>
         <Text
-          style={{ marginBottom: 15, fontWeight: 'bold', color: '#808080', fontFamily: 'nunitoSan' }}
-        >
+          style={{
+            marginBottom: 15,
+            fontWeight: 'bold',
+            color: '#808080',
+            fontFamily: 'nunitoSan',
+          }}>
           PAYMENT DETAILS
         </Text>
       </View>
@@ -118,8 +184,8 @@ const PaymentScreen = ({ navigation }) => {
       </View>
 
       {/* Nút thanh toán */}
-      <TouchableOpacity style={styles.payButton} onPress={() => navigation.navigate('Checkout5')}>
-        <Text style={styles.payButtonText}>Thanh toán $14.50</Text>
+      <TouchableOpacity style={styles.payButton} onPress={handleSubmitOrder}>
+        <Text style={styles.payButtonText}>Thanh toán </Text>
       </TouchableOpacity>
     </View>
   );
@@ -148,18 +214,18 @@ const styles = StyleSheet.create({
   backText: {
     fontSize: 24,
     color: '#000',
-    fontFamily: 'nunitoSan'
+    fontFamily: 'nunitoSan',
   },
   closeText: {
     fontSize: 28,
     color: '#000',
-    fontFamily: 'nunitoSan'
+    fontFamily: 'nunitoSan',
   },
   stepText: {
     fontSize: 16,
     fontWeight: '600',
     color: '#888',
-    fontFamily: 'nunitoSan'
+    fontFamily: 'nunitoSan',
   },
   illustrationContainer: {
     height: 150,
@@ -176,7 +242,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     textAlign: 'center',
     marginBottom: 10,
-    fontFamily: 'nunitoSan'
+    fontFamily: 'nunitoSan',
   },
   paymentMethods: {
     flexDirection: 'row',

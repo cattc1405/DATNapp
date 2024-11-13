@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useRef } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import axios from 'axios';
@@ -65,12 +66,101 @@ const Code = (props) => {
     <View style={styles.container}>
       <Image source={require('../../../assets/images/Back.png')} />
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()} />
+=======
+import React, {useState, useRef} from 'react';
+import {
+  View,
+  Text,
+  Image,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from 'react-native';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {verifyOtp} from '../../apiClient';
+
+const Code = props => {
+  const {navigation, route} = props;
+  const {email} = route.params; // Lấy email từ tham số điều hướng
+  const [code, setCode] = useState(''); // Khởi tạo code là một chuỗi
+  const [loading, setLoading] = useState(false);
+  const inputs = useRef([]);
+
+  // Hàm xử lý khi người dùng nhập mã
+  const handleCodeChange = (index, value) => {
+    // Chỉ cho phép nhập số và giới hạn độ dài
+    if (value.match(/^[0-9]*$/) && value.length <= 1) {
+      const newCode = code.split('');
+      newCode[index] = value;
+
+      console.log(newCode.join('')); // Log mã mới
+
+      // Tự động chuyển đến ô tiếp theo
+      if (value && index < 5) {
+        // Chỉ chuyển đến ô tiếp theo nếu không phải ô cuối
+        setTimeout(() => {
+          inputs.current[index + 1].focus();
+        }, 50);
+      }
+
+      // Tự động chuyển về ô trước đó nếu ô hiện tại bị xóa
+      if (!value && index > 0) {
+        setTimeout(() => {
+          inputs.current[index - 1].focus();
+        }, 50);
+      }
+
+      setCode(newCode.join('')); // Cập nhật chuỗi mã
+    }
+  };
+
+  console.log(email, code);
+  // Hàm xử lý xác thực mã OTP
+  const handleVerifyCode = async () => {
+    if (code.length < 6) {
+      Alert.alert('Cảnh báo', 'Vui lòng nhập mã xác thực 6 chữ số.');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await verifyOtp(email, code); // Gọi API với chuỗi code
+      console.log('Response from API:', response.data);
+
+      navigation.navigate('NewPass', {email});
+    } catch (error) {
+      console.error(
+        'Lỗi khi xác thực mã:',
+        error.message || 'Có lỗi xảy ra. Vui lòng thử lại.',
+      );
+      Alert.alert('Lỗi', error.message || 'Có lỗi xảy ra. Vui lòng thử lại.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Image source={require('../../../assets/images/Back.png')} />
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => navigation.goBack()}
+      />
+>>>>>>> 52365ba6a92d41d56661c28438e356cd73131afd
       <Text style={styles.stepText}>Bước 2/3</Text>
       <View style={styles.imagePlaceholder}>
         <Image source={require('../../../assets/images/Img.png')} />
       </View>
       <Text style={styles.title}>Nhập mã xác thực</Text>
+<<<<<<< HEAD
       <Text style={styles.description}>Mã xác thực đã được gửi đến email {email} của bạn.</Text>
+=======
+      <Text style={styles.description}>
+        Mã xác thực đã được gửi đến email {email} của bạn.
+      </Text>
+>>>>>>> 52365ba6a92d41d56661c28438e356cd73131afd
       <View style={styles.codeContainer}>
         {[...Array(6)].map((_, index) => (
           <TextInput
@@ -85,8 +175,18 @@ const Code = (props) => {
           />
         ))}
       </View>
+<<<<<<< HEAD
       <TouchableOpacity style={styles.verifyButton} onPress={handleVerifyCode} disabled={loading}>
         <Text style={styles.verifyButtonText}>{loading ? 'Đang xác thực...' : 'Xác thực mã'}</Text>
+=======
+      <TouchableOpacity
+        style={styles.verifyButton}
+        onPress={handleVerifyCode}
+        disabled={loading}>
+        <Text style={styles.verifyButtonText}>
+          {loading ? 'Đang xác thực...' : 'Xác thực mã'}
+        </Text>
+>>>>>>> 52365ba6a92d41d56661c28438e356cd73131afd
       </TouchableOpacity>
     </View>
   );

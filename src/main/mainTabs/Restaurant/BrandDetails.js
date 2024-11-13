@@ -1,146 +1,166 @@
-import { StyleSheet, Text, Image, TouchableOpacity, View } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  Image,
+  TouchableOpacity,
+  View,
+  ScrollView,
+} from 'react-native';
 import React from 'react';
 import colors from '../../../../assets/colors';
-import { black } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
-import { useNavigation } from '@react-navigation/native';
+import {black} from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
+import {useNavigation} from '@react-navigation/native';
 
-const BrandDetails = ({ navigation }) => {
+const BrandDetails = ({route}) => {
+  const {brand} = route.params;
+  console.log(brand, 'datahere');
+  const navigation = useNavigation();
+
   return (
-    <View style={styles.container}>
-      <View style={styles.headView}>
-        <Image
-          style={styles.brandImgBgr}
-          source={require('../../../../assets/images/DetailStarbuckImg.png')}
-        />
-        <View style={styles.menuView}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Image
-              source={require('../../../../assets/images/icons/whiteBackArrow.png')}
-            />
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.favoriteIconContainer}>
-            <Image
-              style={styles.iconMenuView}
-              source={require('../../../../assets/images/icons/redheart.png')}
-            />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.statusRestaurantView}>
-          <View style={styles.nameView}>
-            <Text style={styles.nameBrandText}>Starbucks</Text>
-            <Text style={styles.statusResText}>Open Right Now</Text>
-          </View>
-          <Text style={styles.locateText}>
-            Tillary Street, Brooklyn, New York
-          </Text>
-          <View style={styles.rateView}>
-            <View style={styles.rateStars}>
-              <Image
-                style={styles.starIcon}
-                source={require('../../../../assets/images/icons/StarBold.png')}
-              />
-              <Image
-                style={styles.starIcon}
-                source={require('../../../../assets/images/icons/StarBold.png')}
-              />
-              <Image
-                style={styles.starIcon}
-                source={require('../../../../assets/images/icons/StarBold.png')}
-              />
-              <Image
-                style={styles.starIcon}
-                source={require('../../../../assets/images/icons/StarBold.png')}
-              />
-              <Image
-                style={styles.starIcon}
-                source={require('../../../../assets/images/icons/StarLight.png')}
-              />
-            </View>
-            <Text style={styles.grayBoldText}>4.3</Text>
-            <Text style={styles.grayBoldText}>(895 views)</Text>
-          </View>
-          <View style={styles.grayLine}></View>
-          <View style={styles.contactView}>
-            <TouchableOpacity style={styles.contactMethodView}>
-              <View style={styles.contactIconContainer}>
-                <Image
-                  style={styles.contactIcon}
-                  source={require('../../../../assets/images/icons/phoneGreen.png')}
-                />
-              </View>
-              <Text style={styles.contactText}>Call</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.contactMethodView}>
-              <View style={styles.contactIconContainer}>
-                <Image
-                  style={styles.contactIcon}
-                  source={require('../../../../assets/images/icons/directionGreen.png')}
-                />
-              </View>
-              <Text style={styles.contactText}>Directions</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.contactMethodView}>
-              <View style={styles.contactIconContainer}>
-                <Image
-                  style={styles.contactIcon}
-                  source={require('../../../../assets/images/icons/couponGreen.png')}
-                />
-              </View>
-              <Text style={styles.contactText}>Coupons</Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.tagContainer}>
-            <Text style={styles.tagText}>Popular</Text>
-          </View>
-        </View>
+    <View style={styles.headView}>
+      <Image
+        style={styles.brandImgBgr}
+        source={{uri: brand.image}} // Set the main brand image from brand data
+      />
+      <View style={styles.menuView}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Image
+            source={require('../../../../assets/images/icons/whiteBackArrow.png')}
+          />
+        </TouchableOpacity>
       </View>
 
-      <View style={styles.mainView}>
-        <View style={styles.titleAndViewall}>
-          <Text style={styles.titleBoldText}>Recent Photos</Text>
-          <TouchableOpacity>
-            <Text style={styles.viewallText}>View All</Text>
-          </TouchableOpacity>
+      <View style={styles.statusRestaurantView}>
+        <View style={styles.nameView}>
+          <Text style={styles.nameBrandText}>{brand.name}</Text>
+          <Text style={styles.statusResText}>Open Right Now</Text>
         </View>
-        <View style={styles.photosView}>
-          <View style={styles.firstPhotosView}>
-            <View style={styles.photoContainer1}>
+        <Text style={styles.locateText}>{brand.address}</Text>
+        <View style={styles.rateView}>
+          <View style={styles.rateStars}>
+            {/* Render stars based on review count */}
+            {Array.from({length: 4}, (_, index) => (
               <Image
-                style={styles.recentPhoto}
-                source={require('../../../../assets/images/starbuckPhoto1.png')}
+                key={index}
+                style={styles.starIcon}
+                source={require('../../../../assets/images/icons/StarBold.png')}
               />
-            </View>
-            <View style={styles.photoContainer2}>
-              <Image
-                style={styles.recentPhoto}
-                source={require('../../../../assets/images/starbuckPhoto1.png')}
-              />
-            </View>
-          </View>
-          <View style={styles.secondPhotosView}>
+            ))}
             <Image
-              style={styles.recentPhoto}
-              source={require('../../../../assets/images/starbuckPhoto1.png')}
+              style={styles.starIcon}
+              source={require('../../../../assets/images/icons/StarLight.png')}
             />
           </View>
-          <View style={styles.thirdPhotosView}>
-            <View style={styles.photoContainer3}>
+          <Text style={styles.grayBoldText}>
+            {(brand.review / 100).toFixed(1)}
+          </Text>
+          <Text style={styles.grayBoldText}>{brand.review} Viewed</Text>
+        </View>
+        <View style={styles.grayLine}></View>
+        <View style={styles.contactView}>
+          <TouchableOpacity style={styles.contactMethodView}>
+            <View style={styles.contactIconContainer}>
               <Image
-                style={styles.recentPhoto}
-                source={require('../../../../assets/images/starbuckPhoto1.png')}
+                style={styles.contactIcon}
+                source={require('../../../../assets/images/icons/phoneGreen.png')}
               />
             </View>
-            <View style={styles.photoContainer3}>
+            <Text style={styles.contactText}>Call</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.contactMethodView}>
+            <View style={styles.contactIconContainer}>
               <Image
-                style={styles.recentPhoto}
-                source={require('../../../../assets/images/starbuckPhoto1.png')}
+                style={styles.contactIcon}
+                source={require('../../../../assets/images/icons/directionGreen.png')}
               />
             </View>
+            <Text style={styles.contactText}>Directions</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.contactMethodView}>
+            <View style={styles.contactIconContainer}>
+              <Image
+                style={styles.contactIcon}
+                source={require('../../../../assets/images/icons/couponGreen.png')}
+              />
+            </View>
+            <Text style={styles.contactText}>Coupons</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.tagContainer}>
+          <Text style={styles.tagText}>Popular</Text>
+        </View>
+
+        <View style={styles.mainView}>
+          <View style={styles.titleAndViewall}>
+            <Text style={styles.titleBoldText}>Recent Photos</Text>
+            <TouchableOpacity>
+              <Text style={styles.viewallText}>View All</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.photosView}>
+            <View style={styles.firstPhotosView}>
+              <View style={styles.photoContainer1}>
+                <Image
+                  style={styles.recentPhoto}
+                  source={{uri: brand.gallery[0]}} // Use the first image from the gallery
+                />
+              </View>
+              <View style={styles.photoContainer2}>
+                <Image
+                  style={styles.recentPhoto}
+                  source={{uri: brand.gallery[1]}} // Use the second image from the gallery
+                />
+              </View>
+            </View>
+            <View style={styles.secondPhotosView}>
+              <Image
+                style={styles.recentPhoto}
+                source={{uri: brand.gallery[2]}} // Use the third image from the gallery
+              />
+            </View>
+            <View style={styles.thirdPhotosView}>
+              {brand.gallery.slice(3).map(
+                (
+                  image,
+                  index, // Render remaining images starting from the fourth
+                ) => (
+                  <View key={index} style={styles.photoContainer3}>
+                    <Image
+                      style={styles.recentPhoto}
+                      source={{uri: image}} // Render each image from the gallery
+                    />
+                  </View>
+                ),
+              )}
+            </View>
+          </View>
+          <View style={styles.titleAndViewall}>
+            <Text style={styles.titleBoldText}>Reviews</Text>
+            <TouchableOpacity>
+              <Text style={styles.viewallText}>View All</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.ratingSection}>
+            {['Excellent', 'Good', 'Average', 'Below Average', 'Poor'].map(
+              (label, index) => (
+                <View key={index} style={styles.ratingRow}>
+                  <Text style={styles.ratingLabel}>{label}</Text>
+                  <View style={styles.ratingBarBackground}>
+                    <View
+                      style={[
+                        styles.ratingBar,
+                        {width: `${(5 - index) * 20}%`},
+                      ]}
+                    />
+                  </View>
+                </View>
+              ),
+            )}
+            <Text style={styles.averageRatingText}>4.3/5</Text>
+            <Text style={styles.reviewCountText}>895 reviews</Text>
           </View>
         </View>
       </View>
@@ -191,7 +211,7 @@ const styles = StyleSheet.create({
     color: '#F55F44',
     fontSize: 15,
     fontWeight: '600',
-    fontFamily: 'nunitoSan'
+    fontFamily: 'nunitoSan',
   },
   titleBoldText: {
     fontSize: 20,
@@ -209,7 +229,7 @@ const styles = StyleSheet.create({
   mainView: {
     width: '86%',
     marginLeft: '7%',
-    marginTop: 180,
+    marginTop: 20,
     height: 400,
   },
   tagText: {
@@ -366,5 +386,43 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     position: 'absolute',
+  },
+  ratingSection: {
+    marginVertical: 20,
+  },
+  ratingRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  ratingLabel: {
+    width: '30%',
+    fontSize: 16,
+    color: '#000',
+    fontWeight: 'bold',
+  },
+  ratingBarBackground: {
+    width: '70%',
+    height: 8,
+    backgroundColor: '#E0E0E0',
+    borderRadius: 4,
+    overflow: 'hidden',
+  },
+  ratingBar: {
+    height: '100%',
+    backgroundColor: '#F55F44',
+  },
+  averageRatingText: {
+    fontSize: 22,
+    color: '#F55F44',
+    fontWeight: 'bold',
+    marginTop: 10,
+    textAlign: 'center',
+  },
+  reviewCountText: {
+    fontSize: 14,
+    color: '#888',
+    textAlign: 'center',
+    marginTop: 5,
   },
 });
