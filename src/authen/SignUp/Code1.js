@@ -1,20 +1,41 @@
-import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
-import React from 'react'
+import {
+  View,
+  Text,
+  Image,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
+import React, {useState} from 'react';
+import {useSelector} from 'react-redux';
+import {verifyEmail} from '../../apiClient';
+const Code1 = props => {
+  const {navigation} = props;
+  const email = useSelector(state => state.user.email);
+  const password = useSelector(state => state.user.password);
+  const [otp, setOtp] = useState(['', '', '', '', '', '']); // Array to hold OTP inputs
+  // Handler for input change
+  const handleOtpChange = (text, index) => {
+    const newOtp = [...otp];
+    newOtp[index] = text; // Update the specific index
+    setOtp(newOtp);
+  };
 
-const Code1 = (props) => {
-  const { navigation } = props
+  // Combine the OTP array into a single string
+  const combinedOtp = otp.join('');
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton} onPress={()=>navigation.goBack()}
-        >
-          <Image
-            source={require('../../../assets/images/Back.png')} />
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}>
+          <Image source={require('../../../assets/images/Back.png')} />
         </TouchableOpacity>
-        <Text style={styles.stepText}>Step 5/10</Text>
-        <TouchableOpacity style={styles.closeButton}>
-          <Image
-            source={require('../../../assets/images/Exit.png')} />
+        <Text style={styles.stepText}>Step 9/10</Text>
+        <TouchableOpacity
+          style={styles.closeButton}
+          onPress={() => navigation.navigate('Login')}>
+          <Image source={require('../../../assets/images/Exit.png')} />
         </TouchableOpacity>
       </View>
       <Image
@@ -24,26 +45,37 @@ const Code1 = (props) => {
       />
       <Text style={styles.title}>Enter the Verification Code</Text>
       <Text style={styles.description}>
-        Enter the 4 digit number that we sent to mafalda123@gmail.com.
+        {`Enter the 4 digit number that we sent to ${email}`}
       </Text>
 
       <View style={styles.inputContainer}>
-        <TextInput style={styles.input} maxLength={1} keyboardType="numeric" />
-        <TextInput style={styles.input} maxLength={1} keyboardType="numeric" />
-        <TextInput style={styles.input} maxLength={1} keyboardType="numeric" />
-        <TextInput style={styles.input} maxLength={1} keyboardType="numeric" />
+        {otp.map((digit, index) => (
+          <TextInput
+            key={index}
+            style={styles.input}
+            maxLength={1}
+            keyboardType="numeric"
+            value={digit}
+            onChangeText={text => handleOtpChange(text, index)} // Handle input changes
+          />
+        ))}
       </View>
 
       {/* Nút "Next Step" */}
-      <TouchableOpacity style={styles.nextButton}
-        onPress={() => navigation.navigate('YourPass')}>
-        <Text style={styles.nextButtonText}>Next Step</Text>
+      <TouchableOpacity
+        style={styles.nextButton}
+        onPress={() => {
+          verifyEmail(email, combinedOtp, password);
 
+          navigation.navigate('Login');
+        }}>
+        <Text style={styles.nextButtonText}>Next Step</Text>
       </TouchableOpacity>
 
       {/* Liên kết gửi lại mã */}
       <Text style={styles.resendText}>
-        Didn't Receive Anything? <Text style={styles.resendLink}>Resend Code</Text>
+        Didn't Receive Anything?{' '}
+        <Text style={styles.resendLink}>Resend Code</Text>
       </Text>
     </View>
   );
@@ -70,7 +102,7 @@ const styles = StyleSheet.create({
   stepText: {
     fontSize: 16,
     textAlign: 'center',
-    fontFamily: 'nunitoSan'
+    fontFamily: 'nunitoSan',
   },
   closeButton: {
     padding: 10,
@@ -89,14 +121,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 10,
-    fontFamily: 'nunitoSan'
+    fontFamily: 'nunitoSan',
   },
   description: {
     fontSize: 16,
     textAlign: 'center',
     color: '#777',
     marginBottom: 20,
-    fontFamily: 'nunitoSan'
+    fontFamily: 'nunitoSan',
   },
   inputContainer: {
     flexDirection: 'row',
@@ -111,7 +143,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 18,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 2,
@@ -127,19 +159,19 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 16,
     fontWeight: 'bold',
-    fontFamily: 'nunitoSan'
+    fontFamily: 'nunitoSan',
   },
   resendText: {
     textAlign: 'center',
     color: '#777',
     fontSize: 14,
-    fontFamily: 'nunitoSan'
+    fontFamily: 'nunitoSan',
   },
   resendLink: {
     color: '#FF6B6B',
     fontWeight: 'bold',
-    fontFamily: 'nunitoSan'
+    fontFamily: 'nunitoSan',
   },
 });
 
-export default Code1
+export default Code1;

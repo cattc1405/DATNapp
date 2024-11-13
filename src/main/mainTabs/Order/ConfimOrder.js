@@ -6,60 +6,59 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
+import {getUserCart} from '../../../apiClient'; // Assuming you have a function to get product by ID
+import {useSelector} from 'react-redux';
+import {useRoute} from '@react-navigation/native';
 
 const ConfirmOrder = () => {
+  const route = useRoute(); // Access route using the hook
+
+  const userId = useSelector(state => state.auth.user?.userId); // Retrieve the userId from the Redux store
+  const token = useSelector(state => state.auth.user?.token); // Retrieve the token at the top level
   const navigation = useNavigation();
+  const {cartItems} = route.params; // Retrieve cartItems from route params
+  console.log(userId);
+  console.log(token);
+
+  const calculateTotalPrice = () => {
+    return cartItems.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0,
+    );
+  };
+  const handleIncrement = id => {
+    setCartItems(prevItems =>
+      prevItems.map(item =>
+        item.id === id ? {...item, quantity: item.quantity + 1} : item,
+      ),
+    );
+  };
+
+  const handleDecrement = id => {
+    setCartItems(prevItems =>
+      prevItems.map(item =>
+        item.id === id && item.quantity > 1
+          ? {...item, quantity: item.quantity - 1}
+          : item,
+      ),
+    );
+  };
   const [editingItemId, setEditingItemId] = useState(null);
 
   const handleEditToggle = id => {
     setEditingItemId(editingItemId === id ? null : id);
   };
-
+  const handleDelete = id => {
+    setCartItems(prevItems => prevItems.filter(item => item.id !== id));
+  };
   const handleInfoRightPress = id => {
     if (editingItemId === id) {
       setEditingItemId(null);
     }
   };
-  const [productData, setProductData] = useState([
-    {
-      id: '1',
-      name: 'Big Mac Menu',
-      size: 'Normal',
-      quantity: 1,
-      price: 12.5,
-      note: 'No pickles',
-      imgSrc: require('../../../../assets/images/BigMac.png'),
-    },
-    {
-      id: '2',
-      name: 'Double Cheeseburger',
-      size: 'Double',
-      quantity: 1,
-      note: 'No Onions',
-      price: 2.0,
-      imgSrc: require('../../../../assets/images/CheesseB.png'),
-    },
-    {
-      id: '3',
-      name: 'Big Mac Menu',
-      size: 'Normal',
-      quantity: 1,
-      price: 12.5,
-      note: 'No pickles',
-      imgSrc: require('../../../../assets/images/BigMac.png'),
-    },
-    {
-      id: '4',
-      name: 'Double Cheeseburger',
-      size: 'Double',
-      quantity: 1,
-      note: 'No Onions',
-      price: 2.0,
-      imgSrc: require('../../../../assets/images/CheesseB.png'),
-    },
-  ]);
+  const totalPrice = calculateTotalPrice();
 
   const renderProductItem = ({item}) => {
     const isEditing = editingItemId === item.id;
@@ -68,7 +67,7 @@ const ConfirmOrder = () => {
       <View style={styles.productItem}>
         <View
           style={[styles.imgLeft, isEditing && {width: 0, display: 'none'}]}>
-          <Image style={styles.productImg} source={item.imgSrc} />
+          <Image style={styles.productImg} source={{uri: item.image}} />
           <View style={styles.quantityView}>
             <TouchableOpacity style={styles.orangeCircle}>
               <Image
@@ -140,7 +139,7 @@ const ConfirmOrder = () => {
 
       <View style={styles.mainView}>
         <FlatList
-          data={productData}
+          data={cartItems}
           renderItem={renderProductItem}
           keyExtractor={item => item.id}
           contentContainerStyle={{paddingBottom: 20}}
@@ -151,13 +150,15 @@ const ConfirmOrder = () => {
         <View style={styles.totalView}>
           <Text style={styles.couponText}>Coupon</Text>
           <Text style={styles.couponText}>-$2.50</Text>
-              </View>
-              <View style={styles.lineGray}></View>
+        </View>
+        <View style={styles.lineGray}></View>
         <View style={styles.totalView}>
           <Text style={styles.totalText}>Total Amount:</Text>
-          <Text style={styles.totalText}>$14.50</Text>
+          <Text style={styles.totalText}>${totalPrice}</Text>
         </View>
-        <TouchableOpacity style={styles.payBtn} onPress={()=>navigation.navigate('CheckoutNavigator')}>
+        <TouchableOpacity
+          style={styles.payBtn}
+          onPress={() => navigation.navigate('CheckoutNavigator', {cartItems})}>
           <Text style={styles.payText}>Proceed to Payment</Text>
         </TouchableOpacity>
         <View style={styles.brandTag}>
@@ -180,21 +181,21 @@ const ConfirmOrder = () => {
 export default ConfirmOrder;
 
 const styles = StyleSheet.create({
-    lineGray: {
-        width: '86%',
-        marginLeft: '7%',
-        marginVertical:4,
-        height: 0.4,
-      backgroundColor:'#9D9D9D'
-    },
-    couponText: {
-        fontFamily: 'nunitoSan',
-        opacity:0.75,
+  lineGray: {
+    width: '86%',
+    marginLeft: '7%',
+    marginVertical: 4,
+    height: 0.4,
+    backgroundColor: '#9D9D9D',
+  },
+  couponText: {
+    fontFamily: 'nunitoSan',
+    opacity: 0.75,
     fontSize: 14,
     color: '#9D9D9D',
     fontWeight: 'bold',
     alignItems: 'center',
-    },
+  },
   bagView: {
     flexDirection: 'row',
     position: 'absolute',
@@ -245,14 +246,14 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     fontWeight: 'bold',
   },
-    payBtn: {
-        height: 45,
-        width: '66%',
-        marginLeft: '17%',
-        marginTop:5,
-        marginBottom:20,
-        alignItems: 'center',
-        justifyContent:'center',
+  payBtn: {
+    height: 45,
+    width: '66%',
+    marginLeft: '17%',
+    marginTop: 5,
+    marginBottom: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: 30,
     backgroundColor: '#F55F44',
   },
@@ -264,8 +265,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   totalView: {
-      width: '86%',
-      marginVertical:10,
+    width: '86%',
+    marginVertical: 10,
     justifyContent: 'space-between',
     marginLeft: '7%',
     flexDirection: 'row',

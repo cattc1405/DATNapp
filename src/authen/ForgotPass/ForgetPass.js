@@ -1,7 +1,22 @@
+<<<<<<< HEAD
 import { View, Text, StyleSheet, TouchableOpacity, Alert, Image, TextInput } from 'react-native';
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { forgotPassword } from '../../apiClient'; // Import API client
+=======
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+  Image,
+  TextInput,
+} from 'react-native';
+import React, {useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
+import {forgotPassword} from '../../apiClient'; // Import API client
+>>>>>>> 52365ba6a92d41d56661c28438e356cd73131afd
 
 const ForgetPass = () => {
   const navigation = useNavigation();
@@ -14,13 +29,26 @@ const ForgetPass = () => {
 
   const handleSendCode = async () => {
     if (!selectedOption) {
+<<<<<<< HEAD
       Alert.alert('Phương thức chưa được chọn', 'Vui lòng chọn phương thức liên hệ trước khi tiếp tục.', [{ text: 'OK' }]);
     } else if (!email) {
       Alert.alert('Email không hợp lệ', 'Vui lòng nhập email của bạn.', [{ text: 'OK' }]);
+=======
+      Alert.alert(
+        'Phương thức chưa được chọn',
+        'Vui lòng chọn phương thức liên hệ trước khi tiếp tục.',
+        [{text: 'OK'}],
+      );
+    } else if (!email) {
+      Alert.alert('Email không hợp lệ', 'Vui lòng nhập email của bạn.', [
+        {text: 'OK'},
+      ]);
+>>>>>>> 52365ba6a92d41d56661c28438e356cd73131afd
     } else {
       try {
         await forgotPassword(email); // Gọi hàm quên mật khẩu với email
         Alert.alert('Thành công', 'Mã OTP đã được gửi đến email của bạn.', [
+<<<<<<< HEAD
           { text: 'OK', onPress: () => navigation.navigate('Code', { email }) }, // Truyền email ở đây
         ]);
       } catch (error) {
@@ -30,6 +58,31 @@ const ForgetPass = () => {
           Alert.alert('Lỗi', 'Tài khoản email này chưa được đăng ký. Vui lòng kiểm tra lại hoặc đăng ký tài khoản.', [{ text: 'OK' }]);
         } else {
           Alert.alert('Lỗi', error.response ? error.response.data.message : 'Có lỗi xảy ra. Vui lòng thử lại.', [{ text: 'OK' }]);
+=======
+          {text: 'OK', onPress: () => navigation.navigate('Code', {email})}, // Truyền email ở đây
+        ]);
+      } catch (error) {
+        console.error('Lỗi khi gửi yêu cầu:', error);
+        // Kiểm tra mã lỗi và hiển thị thông báo phù hợp
+        if (
+          error.response &&
+          error.response.status === 400 &&
+          error.response.data.message === 'User not found'
+        ) {
+          Alert.alert(
+            'Lỗi',
+            'Tài khoản email này chưa được đăng ký. Vui lòng kiểm tra lại hoặc đăng ký tài khoản.',
+            [{text: 'OK'}],
+          );
+        } else {
+          Alert.alert(
+            'Lỗi',
+            error.response
+              ? error.response.data.message
+              : 'Có lỗi xảy ra. Vui lòng thử lại.',
+            [{text: 'OK'}],
+          );
+>>>>>>> 52365ba6a92d41d56661c28438e356cd73131afd
         }
       }
     }
@@ -45,7 +98,12 @@ const ForgetPass = () => {
       </View>
       <Text style={styles.title}>Quên mật khẩu?</Text>
       <Text style={styles.description}>
+<<<<<<< HEAD
         Chọn một trong hai phương thức liên hệ để gửi mã OTP phục hồi mật khẩu của bạn.
+=======
+        Chọn một trong hai phương thức liên hệ để gửi mã OTP phục hồi mật khẩu
+        của bạn.
+>>>>>>> 52365ba6a92d41d56661c28438e356cd73131afd
       </Text>
 
       {/* Trường nhập email */}
@@ -56,6 +114,7 @@ const ForgetPass = () => {
         onChangeText={setEmail}
       />
 
+<<<<<<< HEAD
       <TouchableOpacity style={selectedOption === 'mobile' ? styles.option : styles.optionUncheck} onPress={() => handleOptionSelect('mobile')}>
         <Text style={selectedOption === 'mobile' ? styles.optionText : styles.optionTextNonchecked}>1 QUA SỐ DI ĐỘNG</Text>
         <Text style={styles.subText}>Chúng tôi sẽ gửi mã OTP đến số điện thoại của bạn qua SMS.</Text>
@@ -64,6 +123,42 @@ const ForgetPass = () => {
       <TouchableOpacity style={selectedOption === 'email' ? styles.option : styles.optionUncheck} onPress={() => handleOptionSelect('email')}>
         <Text style={selectedOption === 'email' ? styles.optionText : styles.optionTextNonchecked}>2 QUA EMAIL</Text>
         <Text style={styles.subText}>Chúng tôi sẽ gửi mã OTP đến email của bạn.</Text>
+=======
+      <TouchableOpacity
+        style={
+          selectedOption === 'mobile' ? styles.option : styles.optionUncheck
+        }
+        onPress={() => handleOptionSelect('mobile')}>
+        <Text
+          style={
+            selectedOption === 'mobile'
+              ? styles.optionText
+              : styles.optionTextNonchecked
+          }>
+          1 QUA SỐ DI ĐỘNG
+        </Text>
+        <Text style={styles.subText}>
+          Chúng tôi sẽ gửi mã OTP đến số điện thoại của bạn qua SMS.
+        </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={
+          selectedOption === 'email' ? styles.option : styles.optionUncheck
+        }
+        onPress={() => handleOptionSelect('email')}>
+        <Text
+          style={
+            selectedOption === 'email'
+              ? styles.optionText
+              : styles.optionTextNonchecked
+          }>
+          2 QUA EMAIL
+        </Text>
+        <Text style={styles.subText}>
+          Chúng tôi sẽ gửi mã OTP đến email của bạn.
+        </Text>
+>>>>>>> 52365ba6a92d41d56661c28438e356cd73131afd
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.sendButton} onPress={handleSendCode}>
@@ -134,7 +229,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     shadowColor: '#000',
     opacity: 0.6,
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 2,
@@ -145,7 +240,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 10,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 2,

@@ -7,10 +7,13 @@ import {
   Image,
   StyleSheet,
 } from 'react-native';
-
+import {useDispatch} from 'react-redux';
+import {setName} from '../../redux/slice/userSlice';
 const Name = props => {
   const {navigation} = props;
   const [inputValue, setInputValue] = useState('');
+  const dispatch = useDispatch();
+
   const handleTextChange = text => {
     setInputValue(text);
   };
@@ -25,7 +28,7 @@ const Name = props => {
           />
         </TouchableOpacity>
         <Text style={styles.stepText}>Step 1/10</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
           <Image
             source={require('../../../assets/images/Exit.png')}
             style={styles.icon}
@@ -76,7 +79,10 @@ const Name = props => {
       {/* Nút tiếp tục */}
       <TouchableOpacity
         style={styles.nextButton}
-        onPress={() => navigation.navigate('Gender')}>
+        onPress={() => {
+          dispatch(setName(inputValue));
+          navigation.navigate('Gender');
+        }}>
         <Text style={styles.nextButtonText}>Next Step</Text>
       </TouchableOpacity>
     </View>
