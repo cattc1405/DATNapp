@@ -1,103 +1,14 @@
-import React, {useEffect, useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  FlatList,
-  Dimensions,
-  TextInput,
-} from 'react-native';
-import {getUserInfo, updateUser} from '../../apiClient';
-import Animated, {
-  Easing,
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-} from 'react-native-reanimated';
-import {useNavigation} from '@react-navigation/native';
-import {useSelector} from 'react-redux';
+import React, { useState } from 'react';
+import { StyleSheet, View, Text, Image, TouchableOpacity, Dimensions } from 'react-native';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window'); // Lấy chiều rộng và chiều cao của màn hình
+import { useNavigation } from '@react-navigation/native';
 
-const OrderScreen = ({navigation}) => {
-  const [showContacts, setShowContacts] = useState(false);
-  const [user, setUser] = useState({});
-  const [selectedContact, setSelectedContact] = useState(null);
-  const [newContact, setNewContact] = useState('');
-  const userId = useSelector(state => state.auth.user?.userId);
-  const token = useSelector(state => state.auth.user?.token);
+const OrderScreen = ({ navigation }) => {
+  const [selectedOption, setSelectedOption] = useState(null);
 
-  const animationValue = useSharedValue(0);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const data = await getUserInfo(userId, token);
-        setUser(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    if (userId && token) fetchUser();
-  }, [userId, token]);
-
-  const handleAddContact = async () => {
-    if (newContact.trim()) {
-      const updatedContacts = {
-        ...user.contact,
-        [`Contact ${Object.keys(user.contact || {}).length + 1}`]: newContact,
-      };
-      const updatedUser = {...user, contact: updatedContacts};
-
-      try {
-        await updateUser(userId, updatedUser, token);
-        setUser(updatedUser); // Update local state with new contact
-        setNewContact(''); // Clear input
-      } catch (error) {
-        console.error('Error updating user:', error);
-      }
-    }
-  };
-  const handleRemoveContact = async index => {
-    const updatedContacts = user.contact.filter((_, i) => i !== index);
-    const updatedUser = {...user, contact: updatedContacts};
-
-    try {
-      await updateUser(userId, updatedUser, token);
-      setUser(updatedUser); // Update state with the removed contact
-    } catch (error) {
-      console.error('Error removing contact:', error);
-    }
-  };
-
-  const renderItem = ({item, index}) => (
-    <TouchableOpacity
-      style={styles.contactCard}
-      onPress={() => {
-        setSelectedContact(item);
-        setShowContacts(false);
-      }}>
-      <Text style={styles.contactName}>{item}</Text>
-      <TouchableOpacity
-        style={styles.removeButton}
-        onPress={() => handleRemoveContact(index)}>
-        <Text style={styles.removeButtonText}>Remove</Text>
-      </TouchableOpacity>
-    </TouchableOpacity>
-  );
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    height: withTiming(showContacts ? 200 : 0, {
-      duration: 300,
-      easing: Easing.inOut(Easing.ease),
-    }),
-    overflow: 'hidden',
-  }));
-
-  const toggleContacts = () => {
-    setShowContacts(prev => !prev);
+  const handleOptionPress = (option) => {
+    setSelectedOption(option);
   };
 
   return (
@@ -113,73 +24,42 @@ const OrderScreen = ({navigation}) => {
         source={require('../../../assets/images/hamburger.png')}
         style={styles.hamburger}
       />
-      <Text style={styles.questionText}>
-        How Do You Want To Receive Your Order?
-      </Text>
+      <Text style={styles.questionText}>How Do You Want To Receive Your Order?</Text>
       <Text style={styles.subText}>
-        Choose one of the following methods to contact you.
+        Choose one of the following methods to receive your order.
       </Text>
 
-      <View style={styles.contactBox}>
-        <Text style={styles.contactHeader}>CHOOSE YOUR CONTACT</Text>
-        {selectedContact ? (
-          <View style={styles.contactContent}>
-            <Text style={styles.contactTitle}>{selectedContact}</Text>
-            <TouchableOpacity onPress={() => setSelectedContact(null)}>
-              <Image
-                source={require('../../../assets/images/redcircle.png')}
-                style={styles.deleteIcon}
-              />
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <Text style={styles.contactTitle}>Select a contact</Text>
-        )}
-
+      <View style={styles.optionsContainer}>
         <TouchableOpacity
-          style={styles.changeContactButton}
-          onPress={toggleContacts}>
-          <Text style={styles.changeContactButtonText}>Change Contact</Text>
+          style={[
+            styles.option,
+            selectedOption === 'store' && styles.optionSelected,
+          ]}
+          onPress={() => handleOptionPress('store')}
+        >
+          <Image
+            source={require('../../../assets/images/mcdonal.png')}
+            style={styles.icon}
+          />
+          <Text style={styles.optionText}>Nhận tại cửa hàng</Text>
         </TouchableOpacity>
 
-        <Animated.View style={[styles.contactOptionsContainer, animatedStyle]}>
-          {user.contact && Object.keys(user.contact).length > 0 ? (
-            <View>
-              <FlatList
-                data={Object.values(user.contact)}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={renderItem}
-                contentContainerStyle={styles.scrollContainer}
-              />
-            </View>
-          ) : (
-            <Text>No contacts available. Add a new one below.</Text>
-          )}
-        </Animated.View>
-        <View style={styles.addContactContainer}>
-          <TextInput
-            style={styles.contactInput}
-            placeholder="Enter new contact"
-            value={newContact}
-            onChangeText={setNewContact}
+        <TouchableOpacity
+          style={[
+            styles.option,
+            selectedOption === 'uber' && styles.optionSelected,
+          ]}
+          onPress={() => handleOptionPress('uber')}
+        >
+          <Image
+            source={require('../../../assets/images/uber.png')}
+            style={styles.icon}
           />
-          <TouchableOpacity
-            style={styles.changeContactButton}
-            onPress={handleAddContact}>
-            <Text style={styles.addContactButtonText}>Add Contact</Text>
-          </TouchableOpacity>
-        </View>
+          <Text style={styles.optionText}>Uber Eats</Text>
+        </TouchableOpacity>
       </View>
 
-      <TouchableOpacity
-        style={styles.nextButton}
-        onPress={() => {
-          if (!selectedContact) {
-            alert('Please select a contact.');
-            return;
-          }
-          navigation.navigate('AddressScreen', {selectedContact});
-        }}>
+      <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('AddressScreen')}>
         <Text style={styles.nextButtonText}>Bước Tiếp Theo</Text>
       </TouchableOpacity>
     </View>
@@ -188,26 +68,26 @@ const OrderScreen = ({navigation}) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1, // Để chiếm toàn bộ chiều cao màn hình
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
     padding: 20,
-    width: '100%',
-    height: '100%',
+    width: '100%', // Chiếm toàn bộ chiều ngang màn hình
+    height: '100%', // Chiếm toàn bộ chiều cao màn hình
   },
   headerContainer: {
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 100,
+    marginBottom: 10,
     justifyContent: 'center',
   },
   stepText: {
     fontSize: 16,
     color: '#999',
     marginBottom: 10,
-    fontFamily: 'nunitoSan',
+    fontFamily: 'nunitoSan'
   },
   closeIcon: {
     width: 20,
@@ -219,101 +99,63 @@ const styles = StyleSheet.create({
   hamburger: {
     marginTop: 20,
     marginBottom: 40,
-    resizeMode: 'contain',
+    resizeMode: 'contain', // Đảm bảo hình ảnh không bị cắt mất
   },
   questionText: {
-    fontSize: 20,
-    fontWeight: '700',
-    textAlign: 'center',
-    fontFamily: 'nunitoSan',
-    color:'#000000'
-  },
-subText: {
-    fontSize: 15,
-    color: '#989DA3',
-    textAlign: 'center',
-    marginBottom: 20,
-    fontFamily: 'nunitoSan',
-    fontWeight:'600'
-  },
-  contactBox: {
-    width: '100%',
-    backgroundColor: '#f8f8f8',
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 20,
-  },
-  contactHeader: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 10,
-    fontFamily: 'nunitoSan',
+    textAlign: 'center',
+    fontFamily: 'nunitoSan'
   },
-  contactTitle: {
+  subText: {
     fontSize: 14,
-    fontFamily: 'nunitoSan',
+    color: '#888',
+    textAlign: 'center',
+    marginBottom: 20,
+    fontFamily: 'nunitoSan'
   },
-  contactContent: {
+  optionsContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 10,
+    width: '100%',
+    marginBottom: 20,
   },
-  changeContactButton: {
-    marginTop: 10,
-    backgroundColor: '#ff6347',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 8,
+  option: {
+    flex: 1,
     alignItems: 'center',
+    padding: 50,
+    backgroundColor: '#f8f8f8',
+    borderRadius: 8,
+    marginRight: 10,
+    borderWidth: 2,
+    borderColor: 'transparent',
   },
-  changeContactButtonText: {
-    color: '#fff',
+  optionSelected: {
+    borderColor: 'black',
+  },
+  icon: {
+    width: width * 0.2, // Kích thước icon là 20% chiều rộng màn hình
+    height: width * 0.2,
+    marginBottom: 10,
+    resizeMode: 'contain', // Đảm bảo hình ảnh không bị cắt
+  },
+  optionText: {
     fontSize: 14,
-    fontFamily: 'nunitoSan',
-  },
-  contactOptionsContainer: {
-    overflow: 'hidden',
-  },
-  scrollContainer: {
-    paddingBottom: 10,
+    color: '#333',
+    fontFamily: 'nunitoSan'
   },
   nextButton: {
     backgroundColor: '#ff6347',
     paddingVertical: 15,
+    paddingHorizontal: 30,
     borderRadius: 8,
-    alignItems: 'center',
-    width: '100%',
-    marginTop: 40,
+    width: '100%', // Nút chiếm toàn bộ chiều ngang
+    alignItems: 'center', // Canh giữa văn bản trong nút
   },
   nextButtonText: {
     color: '#fff',
     fontSize: 16,
-    fontFamily: 'nunitoSan',
-  },
-  deleteIcon: {
-    width: 20,
-    height: 20,
-  },
-  contactCard: {
-    padding: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
-  contactName: {
-    fontSize: 14,
-    fontFamily: 'nunitoSan',
-  },
-  removeButton: {
-    position: 'absolute',
-    right: 10,
-    top: 10,
-    backgroundColor: '#ff6347',
-    borderRadius: 5,
-    padding: 5,
-    color: '#fff',
-    fontSize: 12,
-    fontFamily: 'nunitoSan',
+    fontFamily: 'nunitoSan'
   },
 });
 

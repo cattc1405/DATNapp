@@ -1,12 +1,12 @@
 import {StyleSheet, Text, View, Image} from 'react-native';
-import React, {useEffect} from 'react';
+import React,{useEffect} from 'react';
 
-const WelcomeScreen = ({navigation}) => {
+const WelcomeScreen = ({ navigation }) => {
   // const {navigation} = props;
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigation.navigate('WelcomeSlideShow');
+      navigation.navigate('Welcome1');
     }, 3000);
 
     return () => clearTimeout(timer);

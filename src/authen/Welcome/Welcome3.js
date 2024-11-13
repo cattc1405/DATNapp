@@ -1,7 +1,9 @@
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
 
-const Welcome3 = ({onGetStarted}) => {
+
+
+const Welcome3 = ({ onGetStarted }) => {
   return (
     <View style={styles.container}>
       <Image
@@ -21,7 +23,7 @@ const Welcome3 = ({onGetStarted}) => {
         <Text style={styles.decribeText}>and coupons that you can only</Text>
         <Text style={styles.decribeText}>find in here!</Text>
       </View>
-      <View style={styles.btnView}>
+      <View style={styles.btnView}> 
         <TouchableOpacity style={styles.btnContainer} onPress={onGetStarted}>
           <Text style={styles.continueText}>Get Started!</Text>
         </TouchableOpacity>

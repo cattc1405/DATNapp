@@ -6,114 +6,78 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import React, {useEffect, useState, useContext} from 'react';
-import {useNavigation} from '@react-navigation/native';
-import {
-  getUserCart,
-  updateUserCart,
-  removeUserCartItem,
-} from '../../../apiClient'; // Assuming you have a function to get product by ID
-import {AuthContext} from '../../../../context/AuthContext';
-import {useSelector, useDispatch} from 'react-redux';
-import {useFocusEffect} from '@react-navigation/native';
-import {
-  setCartItems,
-  incrementQuantity,
-  decrementQuantity,
-  removeCartItem,
-  setTransactionId,
-} from '../../../redux/slice/cartSlice';
+import React, { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
-const OrderDetail = ({route}) => {
-  const userId = useSelector(state => state.auth.user?.userId); // Retrieve the userId from the Redux store
-  const token = useSelector(state => state.auth.user?.token); // Retrieve the token at the top level
+const OrderDetail = () => {
   const navigation = useNavigation();
-  const cartItems = useSelector(state => state.cart.items); // or state.cart.cartItems depending on your slice structure
-  const dispatch = useDispatch();
-  console.log(userId);
-  console.log(token);
-  const [loading, setLoading] = useState(true); // Loading state
-  const transactionId = useSelector(state => state.transactionId); // or state.cart.cartItems depending on your slice structure
-  console.log('red', transactionId);
-  const fetchUserCart = async () => {
-    if (!userId || !token) return;
-
-    try {
-      setLoading(true);
-      const data = await getUserCart(userId, token);
-      dispatch(setCartItems(data.cart));
-    } catch (err) {
-      console.error('Error fetching user cart:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-  useFocusEffect(
-    React.useCallback(() => {
-      fetchUserCart();
-    }, [userId, token]),
-  );
-  const handleIncrement = async id => {
-    dispatch(incrementQuantity(id)); // Update in Redux store
-
-    // Find the item and update API
-    const item = cartItems.find(item => item.id === id);
-    if (item) {
-      await updateUserCart(userId, token, id, {quantity: item.quantity + 1});
-    }
-  };
-
-  const handleDecrement = async id => {
-    const item = cartItems.find(item => item.id === id);
-    if (item && item.quantity > 1) {
-      dispatch(decrementQuantity(id)); // Update in Redux store
-      await updateUserCart(userId, token, id, {quantity: item.quantity - 1});
-    }
-  };
-
-  const calculateTotalPrice = () => {
-    return cartItems.reduce(
-      (total, item) => total + item.price * item.quantity,
-      0,
-    );
-  };
   const [editingItemId, setEditingItemId] = useState(null);
 
   const handleEditToggle = id => {
     setEditingItemId(editingItemId === id ? null : id);
   };
-  const handleDelete = async id => {
-    console.log('cartitem', id);
-    await removeUserCartItem(userId, token, id);
 
-    dispatch(removeCartItem(id));
-  };
   const handleInfoRightPress = id => {
     if (editingItemId === id) {
       setEditingItemId(null);
     }
   };
-  const renderItem = ({item}) => {
+  const [productData, setProductData] = useState([
+    {
+      id: '1',
+      name: 'Big Mac Menu',
+      size: 'Normal',
+      quantity: 1,
+      price: 12.5,
+      note: 'No pickles',
+      imgSrc: require('../../../../assets/images/BigMac.png'),
+    },
+    {
+      id: '2',
+      name: 'Double Cheeseburger',
+      size: 'Double',
+      quantity: 1,
+      note: 'No Onions',
+      price: 2.0,
+      imgSrc: require('../../../../assets/images/CheesseB.png'),
+    },
+    {
+      id: '3',
+      name: 'Big Mac Menu',
+      size: 'Normal',
+      quantity: 1,
+      price: 12.5,
+      note: 'No pickles',
+      imgSrc: require('../../../../assets/images/BigMac.png'),
+    },
+    {
+      id: '4',
+      name: 'Double Cheeseburger',
+      size: 'Double',
+      quantity: 1,
+      note: 'No Onions',
+      price: 2.0,
+      imgSrc: require('../../../../assets/images/CheesseB.png'),
+    },
+  ]);
+
+  const renderProductItem = ({ item }) => {
     const isEditing = editingItemId === item.id;
 
     return (
       <View style={styles.productItem}>
         <View
-          style={[styles.imgLeft, isEditing && {width: 0, display: 'none'}]}>
-          <Image style={styles.productImg} source={{uri: item.image}} />
+          style={[styles.imgLeft, isEditing && { width: 0, display: 'none' }]}>
+          <Image style={styles.productImg} source={item.imgSrc} />
           <View style={styles.quantityView}>
-            <TouchableOpacity
-              style={styles.orangeCircle}
-              onPress={() => handleDecrement(item.id)}>
+            <TouchableOpacity style={styles.orangeCircle}>
               <Image
                 style={styles.iconQuantity}
                 source={require('../../../../assets/images/icons/minusIcon.png')}
               />
             </TouchableOpacity>
             <Text style={styles.quantityText}>{item.quantity}</Text>
-            <TouchableOpacity
-              style={styles.orangeCircle}
-              onPress={() => handleIncrement(item.id)}>
+            <TouchableOpacity style={styles.orangeCircle}>
               <Image
                 style={styles.iconQuantity}
                 source={require('../../../../assets/images/icons/plusIcon.png')}
@@ -121,12 +85,12 @@ const OrderDetail = ({route}) => {
             </TouchableOpacity>
           </View>
         </View>
+
         <TouchableOpacity
           style={[styles.infoRight, isEditing && styles.mrginLeft]}
           onPress={() => handleInfoRightPress(item.id)}>
           <Text style={styles.nameItem}>{item.name}</Text>
           <Text style={styles.thinGrayText}>Size: {item.size}</Text>
-
           <Text style={styles.thinGrayText}>Quantity: x{item.quantity}</Text>
           <Text style={styles.thinGrayText}>Customization</Text>
           <Text style={styles.thinGrayText}>{item.note}</Text>
@@ -134,9 +98,7 @@ const OrderDetail = ({route}) => {
         </TouchableOpacity>
 
         {isEditing ? (
-          <TouchableOpacity
-            style={styles.deleteView}
-            onPress={() => handleDelete(item.id)}>
+          <TouchableOpacity style={styles.deleteView}>
             <Image
               style={styles.iconQuantity}
               source={require('../../../../assets/images/icons/deleteItemIcon.png')}
@@ -152,35 +114,6 @@ const OrderDetail = ({route}) => {
       </View>
     );
   };
-  const handleCheckout = () => {
-    try {
-      const createTransactionId = () => {
-        const maxOrderCode = 9007199254740991;
-
-        // Generate a random integer order code within the valid range (1 to maxOrderCode)
-        const orderCode = Math.floor(Math.random() * maxOrderCode) + 1;
-
-        // Ensure that the generated order code is within bounds and is a valid integer
-        if (
-          !Number.isInteger(orderCode) ||
-          orderCode <= 0 ||
-          orderCode > maxOrderCode
-        ) {
-          throw new Error('Generated order code is invalid.');
-        }
-
-        return orderCode;
-      };
-      const newTransactionId = createTransactionId();
-      dispatch(setTransactionId(newTransactionId));
-      console.log('New Transaction ID:', newTransactionId);
-      navigation.navigate('ConfirmOrder', {cartItems});
-    } catch (err) {
-      console.error('Error creating transaction ID:', err);
-    }
-  };
-  // Function to create a new transaction ID
-
   return (
     <View style={styles.container}>
       <View style={styles.headView}>
@@ -188,51 +121,44 @@ const OrderDetail = ({route}) => {
           style={styles.redFoodBgr}
           source={require('../../../../assets/images/redFoodBgr.png')}
         />
-
         <View style={styles.menuView}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Image
               source={require('../../../../assets/images/icons/whiteBackArrow.png')}
             />
           </TouchableOpacity>
-          <Text style={styles.titleBoldText}>Order Details</Text>
+
           <TouchableOpacity>
             <Image
               source={require('../../../../assets/images/icons/3dotsIcon.png')}
             />
           </TouchableOpacity>
         </View>
+
+        <Text style={styles.titleBoldText}>Order Details</Text>
       </View>
 
       <View style={styles.mainView}>
-        {/* <FlatList
-          data={products} // Data should be an array of product objects
-          renderItem={renderProductItem}
-          keyExtractor={item => item.id.toString()}
-        /> */}
-        {/* <FlatList
-          data={cartItems}
-          keyExtractor={item => item.id}
-          renderItem={renderItem}
-        /> */}
         <FlatList
-          data={cartItems}
-          keyExtractor={item => item.id.toString()}
-          renderItem={renderItem}
+          data={productData}
+          renderItem={renderProductItem}
+          keyExtractor={item => item.id}
+          contentContainerStyle={{ paddingBottom: 20 }}
         />
-        <Text style={styles.totalText}>Total Amount:</Text>
-        <Text style={styles.totalText}>${calculateTotalPrice()}</Text>
       </View>
 
       <View style={styles.footerView}>
         <View style={styles.totalView}>
           <Text style={styles.totalText}>
-            {/* Total Amount: <Text style={styles.mgnL15}>${totalAmount}</Text> */}
+            Total Amount: <Text style={styles.mgnL15}>$14.50</Text>
           </Text>
-          <TouchableOpacity style={styles.checkoutBtn} onPress={handleCheckout}>
+          <TouchableOpacity
+            style={styles.checkoutBtn}
+            onPress={() => navigation.navigate('ConfirmOrder')}>
             <Text style={styles.checkoutText}>Checkout</Text>
           </TouchableOpacity>
         </View>
+
         <View style={styles.brandTag}>
           <Text style={styles.orderText}>Order From</Text>
           <View style={styles.locateView}>
@@ -241,7 +167,7 @@ const OrderDetail = ({route}) => {
               <Image
                 source={require('../../../../assets/images/icons/shoppingBag.png')}
               />
-              {/* <Text style={styles.quantityItem}>{products.length} items</Text> */}
+              <Text style={styles.quantityItem}>2 items</Text>
             </View>
           </View>
         </View>
@@ -265,7 +191,7 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     fontSize: 12,
     fontWeight: 'bold',
-    fontFamily: 'nunitoSan',
+    fontFamily: 'nunitoSan'
   },
   locateView: {
     flexDirection: 'row',
@@ -278,7 +204,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'white',
     borderBottomWidth: 1,
     fontWeight: 'bold',
-    fontFamily: 'nunitoSan',
+    fontFamily: 'nunitoSan'
   },
   orderText: {
     color: '#fff',
@@ -287,7 +213,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     fontSize: 13,
     fontWeight: 'bold',
-    fontFamily: 'nunitoSan',
+    fontFamily: 'nunitoSan'
   },
   mgnL15: {
     fontSize: 14,
@@ -297,7 +223,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F55F44',
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
-    fontFamily: 'nunitoSan',
+    fontFamily: 'nunitoSan'
   },
   checkoutText: {
     fontFamily: 'nunitoSan',
@@ -309,8 +235,7 @@ const styles = StyleSheet.create({
   },
   checkoutBtn: {
     borderRadius: 20,
-    marginLeft: 70,
-    marginTop: -70,
+    marginLeft: 30,
     backgroundColor: '#F55F44',
   },
   totalText: {
@@ -319,7 +244,6 @@ const styles = StyleSheet.create({
     color: 'black',
     fontWeight: 'bold',
     alignItems: 'center',
-    marginLeft: 40,
   },
   totalView: {
     width: '86%',
@@ -333,7 +257,7 @@ const styles = StyleSheet.create({
     height: '17%',
   },
   mainView: {
-    height: '60%',
+    height: '63%',
   },
   mrginLeft: {
     width: '80%',
@@ -375,7 +299,7 @@ const styles = StyleSheet.create({
     marginTop: 3,
     color: 'black',
     fontWeight: 'bold',
-    fontFamily: 'nunitoSan',
+    fontFamily: 'nunitoSan'
   },
   thinGrayText: {
     fontFamily: 'nunitoSan',
@@ -383,7 +307,7 @@ const styles = StyleSheet.create({
     color: '#9D9D9D',
     opacity: 0.5,
     fontWeight: 'bold',
-    fontFamily: 'nunitoSan',
+    fontFamily: 'nunitoSan'
   },
   nameItem: {
     fontFamily: 'nunitoSan',
@@ -398,10 +322,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'black',
     fontWeight: 'bold',
-    fontFamily: 'nunitoSan',
+    fontFamily: 'nunitoSan'
   },
   quantityView: {
-    width: '32%',
+    width: '75%',
     marginLeft: '20%',
     justifyContent: 'space-between',
     flexDirection: 'row',
@@ -415,12 +339,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   productImg: {
-    width: 50,
+    width: '90%',
     height: 80,
     marginLeft: '10%',
     marginTop: 20,
     resizeMode: 'contain',
-    marginLeft: 30,
   },
   infoRight: {
     width: '60%',
@@ -447,6 +370,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     marginLeft: '5%',
+    marginTop: '3%',
   },
 
   menuView: {
@@ -472,33 +396,5 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     position: 'absolute',
-  },
-  //test
-  itemContainer: {
-    flexDirection: 'row',
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
-  itemImage: {
-    width: 50,
-    height: 50,
-    marginRight: 10,
-  },
-  itemDetails: {
-    justifyContent: 'center',
-  },
-  itemName: {
-    fontWeight: 'bold',
-  },
-  button: {
-    backgroundColor: '#F55F44',
-    padding: 10,
-    borderRadius: 20,
-    marginTop: 10,
-    marginLeft: 10,
-    width: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });

@@ -1,36 +1,31 @@
-import {StyleSheet, Modal, Text, View, Image} from 'react-native';
+import {StyleSheet,Modal, Text, View, Image} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
-import React, {useState} from 'react';
+import React,{useState} from 'react';
 import Home from './Home/Home';
 import OrderDetail from './Order/OrderDetail';
 import Restaurants from './restaurants';
 import Rewards from './rewards';
 import WhatsInToday from './Home/WhatsInToday';
 
-import {
-  createStackNavigator,
-  CardStyleInterpolators,
-} from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 import Filter from './Home/Filter';
 import SlideNav from '../slidenav/SlideNav';
 import ConfirmOrder from './Order/ConfimOrder';
+import Product from './Order/Product';
 import Order from './Order/Order';
 import Restaurant1 from './Restaurant/Restaurant1';
 import PaymentNavigation from '../../authen/Payment/PaymentNavigation';
 import BrandDetails from './Restaurant/BrandDetails';
 import CheckoutNavigator from '../../authen/Checkout/CheckoutNavigator';
-import ProductDetail from '../../authen/Product/ProductDetail';
-import Product from '../../authen/Product/Product';
-import OrderItemScreen from './Order/OrderItemScreen';
-import Profile from '../../authen/Profile/Profile';
-import TestPhoto from '../../authen/Profile/TestPhoto';
-import BranchMap from './Restaurant/BranchMap';
-import Notification from './Home/Notification';
+
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 const HomeStack = () => {
+
+
+
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -44,22 +39,12 @@ const HomeStack = () => {
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="ProductStack"
-        component={ProductStack}
-        options={{headerShown: false}}
-      />
-      {/* <Stack.Screen
         name="Filter"
         component={Filter}
         options={{
           headerShown: false,
           tabBarStyle: {display: 'none'},
         }}
-      /> */}
-      <Stack.Screen
-        name="Notifications"
-        component={Notification}
-        options={{headerShown: false}}
       />
       <Stack.Screen
         name="SlideNav"
@@ -78,36 +63,31 @@ const OrderStack = () => {
         component={Order}
         options={{headerShown: false}}
       /> */}
+      <Stack.Screen
+        name="Product"
+        component={Product}
+        options={{headerShown: false}}
+      />
 
       <Stack.Screen
-        name="Order"
-        component={Order}
+        name="OrderDetail"
+        component={OrderDetail}
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="OrderItemScreen"
-        component={OrderItemScreen}
+        name="ConfirmOrder"
+        component={ConfirmOrder}
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="CartStack"
-        component={CartStack}
+        name="CheckoutNavigator"
+        component={CheckoutNavigator}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
   );
 };
-const ProfileStack = () => {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Profile"
-        component={Profile}
-        options={{headerShown: false}}
-      />
-    </Stack.Navigator>
-  );
-};
+
 const RestaurantStack = () => {
   return (
     <Stack.Navigator>
@@ -122,8 +102,8 @@ const RestaurantStack = () => {
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="BrandMap"
-        component={BranchMap}
+        name="Filter"
+        component={Filter}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
@@ -131,33 +111,21 @@ const RestaurantStack = () => {
 };
 const CartStack = () => {
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Stack.Navigator>
       <Stack.Screen
         name="OrderDetail"
         component={OrderDetail}
-        options={{
-          animationTypeForReplace: 'pop',
-          cardStyleInterpolator:
-            CardStyleInterpolators.forFadeFromBottomAndroid, // Scale transition
-        }}
+        options={{headerShown: false}}
       />
       <Stack.Screen
         name="ConfirmOrder"
         component={ConfirmOrder}
-        options={{
-          animationTypeForReplace: 'pop',
-          cardStyleInterpolator:
-            CardStyleInterpolators.forFadeFromBottomAndroid, // Scale transition
-        }}
+        options={{headerShown: false}}
       />
       <Stack.Screen
         name="CheckoutNavigator"
         component={CheckoutNavigator}
-        options={{
-          animationTypeForReplace: 'pop',
-          cardStyleInterpolator:
-            CardStyleInterpolators.forFadeFromBottomAndroid, // Scale transition
-        }}
+        options={{headerShown: false}}
       />
     </Stack.Navigator>
   );
@@ -188,10 +156,6 @@ const tabScreenOptions = ({route}) => {
         iconSource = focused
           ? require('../../../assets/images/icons/OrderGreen.png')
           : require('../../../assets/images/icons/OrdersGray.png');
-      } else if (route.name === 'ProfileStack') {
-        iconSource = focused
-          ? require('../../../assets/images/profileGreen.png')
-          : require('../../../assets/images/profileGray.png');
       } else if (route.name === 'CartStack') {
         iconSource = require('../../../assets/images/icons/RewardsGray.png');
       }
@@ -210,41 +174,6 @@ const tabScreenOptions = ({route}) => {
       );
     },
   };
-};
-
-const ProductStack = () => {
-  return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen
-        name="Product"
-        component={Product}
-        options={{
-          animationTypeForReplace: 'pop',
-          cardStyleInterpolator:
-            CardStyleInterpolators.forFadeFromBottomAndroid, // Scale transition
-        }}
-      />
-      <Stack.Screen
-        name="ProductDetail"
-        component={ProductDetail}
-        options={{
-          animationTypeForReplace: 'pop',
-          cardStyleInterpolator:
-            CardStyleInterpolators.forFadeFromBottomAndroid, // Scale transition
-        }}
-      />
-      <Stack.Screen
-        name="filter"
-        component={Filter}
-        options={{
-          tabBarStyle: {display: 'none'},
-          animationTypeForReplace: 'pop',
-          cardStyleInterpolator:
-            CardStyleInterpolators.forFadeFromBottomAndroid, // Fade transition
-        }}
-      />
-    </Stack.Navigator>
-  );
 };
 
 const BottomMainTab = () => {
@@ -266,9 +195,9 @@ const BottomMainTab = () => {
         options={{title: 'Order'}}
       />
       <Tab.Screen
-        name="ProfileStack"
-        component={ProfileStack}
-        options={{title: 'Profile'}}
+        name="CartStack"
+        component={CartStack}
+        options={{title: 'Cart'}}
       />
     </Tab.Navigator>
   );

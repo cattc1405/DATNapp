@@ -7,7 +7,6 @@ import {
   Image,
   Alert,
 } from 'react-native';
-<<<<<<< HEAD
 import React, { useState } from 'react';
 import axios from 'axios'; // Import axios
 import { useNavigation } from '@react-navigation/native';
@@ -28,47 +27,14 @@ const NewPass = ({ navigation }) => {
   const handleNextStep = async () => {
     if (password !== confirmPassword) {
       Alert.alert("Mật khẩu không khớp", "Vui lòng kiểm tra lại mật khẩu của bạn.");
-=======
-import React, {useState} from 'react';
-import axios from 'axios'; // Import axios
-import {useNavigation} from '@react-navigation/native';
-import {useRoute} from '@react-navigation/native';
-import {resetPassword} from '../../apiClient';
-const NewPass = ({navigation}) => {
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [inputValue, setInputValue] = useState('');
-  const router = useRoute();
-  const {email} = router.params;
-  console.log('email is:', email);
-  const handleTextChange = text => {
-    setInputValue(text);
-  };
-  {
-  }
-  // Hàm xử lý khi nhấn nút "Next Step"
-  const handleNextStep = async () => {
-    if (password !== confirmPassword) {
-      Alert.alert(
-        'Mật khẩu không khớp',
-        'Vui lòng kiểm tra lại mật khẩu của bạn.',
-      );
->>>>>>> 52365ba6a92d41d56661c28438e356cd73131afd
       return;
     }
 
     try {
-<<<<<<< HEAD
       resetPassword(confirmPassword,email)
     } catch (error) {
       console.error(error);
       Alert.alert("Lỗi", "Đã có lỗi xảy ra. Vui lòng thử lại sau.");
-=======
-      resetPassword(email, confirmPassword);
-    } catch (error) {
-      console.error(error);
-      Alert.alert('Lỗi', 'Đã có lỗi xảy ra. Vui lòng thử lại sau.');
->>>>>>> 52365ba6a92d41d56661c28438e356cd73131afd
     }
   };
 
@@ -81,13 +47,7 @@ const NewPass = ({navigation}) => {
           <Image source={require('../../../assets/images/Back.png')} />
         </TouchableOpacity>
         <Text style={styles.stepText}>Step 3/3</Text>
-<<<<<<< HEAD
         <TouchableOpacity style={styles.closeButton} onPress={() => navigation.navigate('Login')}>
-=======
-        <TouchableOpacity
-          style={styles.closeButton}
-          onPress={() => navigation.navigate('Login')}>
->>>>>>> 52365ba6a92d41d56661c28438e356cd73131afd
           <Image source={require('../../../assets/images/Exit.png')} />
         </TouchableOpacity>
       </View>
@@ -235,7 +195,7 @@ const styles = StyleSheet.create({
   stepText: {
     fontSize: 16,
     textAlign: 'center',
-    fontFamily: 'nunitoSan',
+    fontFamily: 'nunitoSan'
   },
   closeButton: {
     padding: 10,
@@ -276,7 +236,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     borderRadius: 10,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 2,
@@ -313,7 +273,7 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 16,
     fontWeight: 'bold',
-    fontFamily: 'nunitoSan',
+    fontFamily: 'nunitoSan'
   },
 });
 

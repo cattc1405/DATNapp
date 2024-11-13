@@ -5,44 +5,27 @@ import {
   StyleSheet,
   TextInput,
   Image,
-  Alert,
 } from 'react-native';
-import React, {useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
-import {setPassword} from '../../redux/slice/userSlice';
+import React, { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+
 const YourPass = () => {
+
   const [inputValue, setInputValue] = useState('');
-  const [confirmValue, setConfirmValue] = useState('');
   const navigation = useNavigation();
-  const dispatch = useDispatch(); // Get the dispatch function from Redux store
   const handleTextChange = text => {
     setInputValue(text);
-  };
-  const handleConfirmChange = text => {
-    setConfirmValue(text);
-  };
-  const checkPasswordMatch = () => {
-    if (inputValue === confirmValue) {
-      Alert.alert('Password match');
-      dispatch(setPassword(inputValue)); // Set password to Redux store
-      navigation.navigate('Finger');
-    } else {
-      Alert.alert('Password doesnt match');
-    }
   };
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => navigation.goBack()}>
+          onPress={()=>navigation.goBack()}>
           <Image source={require('../../../assets/images/Back.png')} />
         </TouchableOpacity>
-        <Text style={styles.stepText}>Step 4/10</Text>
-        <TouchableOpacity
-          style={styles.closeButton}
-          onPress={() => navigation.navigate('Login')}>
+        <Text style={styles.stepText}>Step 6/10</Text>
+        <TouchableOpacity style={styles.closeButton}>
           <Image source={require('../../../assets/images/Exit.png')} />
         </TouchableOpacity>
       </View>
@@ -145,8 +128,6 @@ const YourPass = () => {
             placeholder="Example: John Smith"
             placeholderTextColor="rgb(177, 189, 199)"
             secureTextEntry={true}
-            onChangeText={handleConfirmChange}
-            value={confirmValue}
           />
           <Text style={styles.inputLabel}>confirm password</Text>
         </View>
@@ -199,7 +180,9 @@ const YourPass = () => {
       </View>
 
       {/* Nút "Next Step" */}
-      <TouchableOpacity style={styles.nextButton} onPress={checkPasswordMatch}>
+      <TouchableOpacity
+        style={styles.nextButton}
+        onPress={() => navigation.navigate('Finger')}>
         <Text style={styles.nextButtonText}>Next Step</Text>
       </TouchableOpacity>
     </View>
@@ -284,7 +267,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   inputNameView: {
-    marginBottom: 10,
+    marginBottom:10,
     width: '100%',
     backgroundColor: 'white',
     borderRadius: 20,
@@ -311,14 +294,14 @@ const styles = StyleSheet.create({
   stepText: {
     fontSize: 16,
     textAlign: 'center',
-    fontFamily: 'nunitoSan',
+    fontFamily: 'nunitoSan'
   },
   closeButton: {
     padding: 10,
   },
   closeText: {
     fontSize: 24,
-    fontFamily: 'nunitoSan',
+    fontFamily: 'nunitoSan'
   },
   image: {
     width: 200,
@@ -331,14 +314,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 10,
-    fontFamily: 'nunitoSan',
+    fontFamily: 'nunitoSan'
   },
   description: {
     fontSize: 16,
     textAlign: 'center',
     color: '#777',
     marginBottom: 20,
-    fontFamily: 'nunitoSan',
+    fontFamily: 'nunitoSan'
   },
   // inputContainer: {
   //   marginBottom: 20,
@@ -355,7 +338,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     borderRadius: 10,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 2,
@@ -393,7 +376,7 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 16,
     fontWeight: 'bold',
-    fontFamily: 'nunitoSan',
+    fontFamily: 'nunitoSan'
   },
 });
 

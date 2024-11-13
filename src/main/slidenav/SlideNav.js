@@ -1,13 +1,9 @@
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
-import {useNavigation} from '@react-navigation/native';
-import {useDispatch, useSelector} from 'react-redux';
-import {logout} from '../../redux/slice/authSlice';
-import {logoutUser} from '../../redux/slice/authSlice';
+import { useNavigation } from '@react-navigation/native';
 
-const SlideNav = ({onClose}) => {
+const SlideNav = ({ onClose }) => {
   const navigation = useNavigation();
-  const dispatch = useDispatch();
 
   return (
     <View style={styles.container}>
@@ -135,11 +131,7 @@ const SlideNav = ({onClose}) => {
               </TouchableOpacity>
             </View>
             <View style={styles.lineView} />
-            <TouchableOpacity
-              style={styles.logoutView}
-              onPress={() => {
-                navigation.navigate('Login'), dispatch(logoutUser());
-              }}>
+            <TouchableOpacity style={styles.logoutView} onPress={() => navigation.navigate('Auth')}>
               <Image
                 style={styles.iconLogout}
                 source={require('../../../assets/images/icons/logoutIcon.png')}
@@ -287,19 +279,19 @@ const styles = StyleSheet.create({
   rightContainer: {
     width: '20%',
     backgroundColor: 'white',
-    opacity: 0.5,
+    opacity:0.5,
     height: '100%',
   },
   leftContainer: {
     width: '80%',
     height: '100%',
-    backgroundColor: 'none',
+    backgroundColor:'none'
   },
   container: {
     width: '100%',
     height: '100%',
-
-    flexDirection: 'row',
+    
+    flexDirection:'row'
   },
   headView: {
     width: '100%',

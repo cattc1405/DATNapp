@@ -1,8 +1,3 @@
 <resources>
     <string name="app_name">MobileProject2</string>
-    <string name="default_web_client_id">133917263525-rds6m5umj0g3la9qctl8ot5edl1j8cdb.apps.googleusercontent.com</string>
-
-    <string name="facebook_app_id">1075282923797091</string>
-    <string name="fb_login_protocol_scheme">fb1075282923797091</string>
-    <string name="facebook_client_token">1075282923797091</string>
 </resources>

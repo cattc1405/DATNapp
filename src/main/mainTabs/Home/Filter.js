@@ -1,71 +1,37 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  FlatList,
-} from 'react-native';
-import React, {useState, useEffect} from 'react';
+import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {getCategories} from '../../../apiClient';
 
 const Filter = () => {
   const navigation = useNavigation();
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const [categories, setCategories] = useState([]);
+
+  const [selectedType, setSelectedType] = useState('Eat in');
+  const [selectedCategories, setSelectedCategories] = useState(['All']);
   const [selectedDistance, setSelectedDistance] = useState('1-3km');
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await getCategories();
-        setCategories(response);
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-      }
-    };
-    fetchCategories();
-  }, []);
+  const toggleDistance = distance => {
+    setSelectedDistance(distance);
+  };
 
-  const toggleCategory = categoryId => {
-    if (selectedCategories.includes(categoryId)) {
+  const isDistanceSelected = distance => selectedDistance === distance;
+  const handleSelectType = type => {
+    setSelectedType(type);
+  };
+  const toggleCategory = category => {
+    if (selectedCategories.includes(category)) {
       setSelectedCategories(
-        selectedCategories.filter(item => item !== categoryId),
+        selectedCategories.filter(item => item !== category),
       );
     } else {
-      setSelectedCategories([...selectedCategories, categoryId]);
+      setSelectedCategories([...selectedCategories, category]);
     }
   };
-
-  const isCategorySelected = categoryId => {
-    return selectedCategories.includes(categoryId);
+  const isCategorySelected = category => {
+    return selectedCategories.includes(category);
   };
 
-  const renderCategoryItem = ({item}) => (
-    <View style={styles.buttonContainer}>
-      <TouchableOpacity
-        style={[
-          styles.optionCateBtn,
-          isCategorySelected(item._id) && styles.optionFocusBtn, // Use item._id
-        ]}
-        onPress={() => toggleCategory(item._id)}>
-        <Text
-          style={[
-            styles.optionText,
-            isCategorySelected(item._id) && styles.optionFocusText, // Check with item._id
-          ]}>
-          {item.name}
-        </Text>
-      </TouchableOpacity>
-    </View>
-  );
-
-  const handleApplyFilters = () => {
-    // Navigate back to the previous screen with selected category IDs
-    navigation.navigate('Product', {
-      selectedCategories: selectedCategories, // This should be an array of category IDs
-    });
+  const clearAllCategories = () => {
+    setSelectedCategories(['All']);
   };
 
   return (
@@ -92,21 +58,247 @@ const Filter = () => {
       </View>
       <View style={styles.mainView}>
         <View style={styles.clearView}>
-          <Text style={styles.grayBoldText}>Categories</Text>
+          <Text style={styles.grayBoldText}>Type</Text>
           <TouchableOpacity>
             <Text style={styles.grayThinText}>Clear All</Text>
           </TouchableOpacity>
         </View>
+        <View style={styles.optionView}>
+          <TouchableOpacity
+            style={[
+              styles.optionBtn,
+              selectedType === 'Eat in' && styles.optionFocusBtn,
+            ]}
+            onPress={() => handleSelectType('Eat in')}>
+            <Text
+              style={[
+                styles.optionText,
+                selectedType === 'Eat in' && styles.optionFocusText,
+              ]}>
+              Eat in
+            </Text>
+          </TouchableOpacity>
 
-        <FlatList
-          data={categories}
-          renderItem={renderCategoryItem}
-          keyExtractor={
-            item => (item.id ? item.id.toString() : item.name) // Ensure unique key
-          }
-          numColumns={3}
-        />
+          <TouchableOpacity
+            style={[
+              styles.optionBtn,
+              selectedType === 'Delivery' && styles.optionFocusBtn,
+            ]}
+            onPress={() => handleSelectType('Delivery')}>
+            <Text
+              style={[
+                styles.optionText,
+                selectedType === 'Delivery' && styles.optionFocusText,
+              ]}>
+              Delivery
+            </Text>
+          </TouchableOpacity>
 
+          <TouchableOpacity
+            style={[
+              styles.optionBtn,
+              selectedType === 'Pick-Up' && styles.optionFocusBtn,
+            ]}
+            onPress={() => handleSelectType('Pick-Up')}>
+            <Text
+              style={[
+                styles.optionText,
+                selectedType === 'Pick-Up' && styles.optionFocusText,
+              ]}>
+              Pick-Up
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.clearView}>
+          <Text style={styles.grayBoldText}>Categories</Text>
+          <TouchableOpacity>
+            <Text
+              style={styles.grayThinText}
+              onPress={() => clearAllCategories()}>
+              Clear All
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.optionCateView}>
+          <View style={styles.optionGroup4View}>
+            <TouchableOpacity
+              style={[
+                styles.optionCateBtn,
+                isCategorySelected('All') && styles.optionFocusBtn,
+              ]}
+              onPress={() => toggleCategory('All')}>
+              <Text
+                style={[
+                  styles.optionText,
+                  isCategorySelected('All') && styles.optionFocusText,
+                ]}>
+                All
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.optionCateBtn,
+                isCategorySelected('Fast Food') && styles.optionFocusBtn,
+              ]}
+              onPress={() => toggleCategory('Fast Food')}>
+              <Text
+                style={[
+                  styles.optionText,
+                  isCategorySelected('Fast Food') && styles.optionFocusText,
+                ]}>
+                Fast Food
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.optionCateBtn,
+                isCategorySelected('Pizza') && styles.optionFocusBtn,
+              ]}
+              onPress={() => toggleCategory('Pizza')}>
+              <Text
+                style={[
+                  styles.optionText,
+                  isCategorySelected('Pizza') && styles.optionFocusText,
+                ]}>
+                Pizza
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.optionCateBtn,
+                isCategorySelected('Sushi') && styles.optionFocusBtn,
+              ]}
+              onPress={() => toggleCategory('Sushi')}>
+              <Text
+                style={[
+                  styles.optionText,
+                  isCategorySelected('Sushi') && styles.optionFocusText,
+                ]}>
+                Sushi
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.optionGroup4View}>
+            <TouchableOpacity
+              style={[
+                styles.optionCateBtn,
+                isCategorySelected('Coffee') && styles.optionFocusBtn,
+              ]}
+              onPress={() => toggleCategory('Coffee')}>
+              <Text
+                style={[
+                  styles.optionText,
+                  isCategorySelected('Coffee') && styles.optionFocusText,
+                ]}>
+                Coffee
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.optionCateBtn,
+                isCategorySelected('Desserts') && styles.optionFocusBtn,
+              ]}
+              onPress={() => toggleCategory('Desserts')}>
+              <Text
+                style={[
+                  styles.optionText,
+                  isCategorySelected('Desserts') && styles.optionFocusText,
+                ]}>
+                Desserts
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.optionCateBtn,
+                isCategorySelected('Breakfast') && styles.optionFocusBtn,
+              ]}
+              onPress={() => toggleCategory('Breakfast')}>
+              <Text
+                style={[
+                  styles.optionText,
+                  isCategorySelected('Breakfast') && styles.optionFocusText,
+                ]}>
+                Breakfast
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.optionCateBtn,
+                isCategorySelected('Soup') && styles.optionFocusBtn,
+              ]}
+              onPress={() => toggleCategory('Soup')}>
+              <Text
+                style={[
+                  styles.optionText,
+                  isCategorySelected('Soup') && styles.optionFocusText,
+                ]}>
+                Soup
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.optionGroup4View}>
+            <TouchableOpacity
+              style={[
+                styles.optionCateBtn,
+                isCategorySelected('Vegan') && styles.optionFocusBtn,
+              ]}
+              onPress={() => toggleCategory('Vegan')}>
+              <Text
+                style={[
+                  styles.optionText,
+                  isCategorySelected('Vegan') && styles.optionFocusText,
+                ]}>
+                Vegan
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.optionCateBtn,
+                isCategorySelected('Burgurs') && styles.optionFocusBtn,
+              ]}
+              onPress={() => toggleCategory('Burgurs')}>
+              <Text
+                style={[
+                  styles.optionText,
+                  isCategorySelected('Burgurs') && styles.optionFocusText,
+                ]}>
+                Burgurs
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.optionCateBtn,
+                isCategorySelected('Dinner') && styles.optionFocusBtn,
+              ]}
+              onPress={() => toggleCategory('Dinner')}>
+              <Text
+                style={[
+                  styles.optionText,
+                  isCategorySelected('Dinner') && styles.optionFocusText,
+                ]}>
+                Dinner
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.optionCateBtn,
+                isCategorySelected('Healthy') && styles.optionFocusBtn,
+              ]}
+              onPress={() => toggleCategory('Healthy')}>
+              <Text
+                style={[
+                  styles.optionText,
+                  isCategorySelected('Healthy') && styles.optionFocusText,
+                ]}>
+                Healthy
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
         <View style={[styles.clearView, styles.mginT]}>
           <Text style={styles.grayBoldText}>Distance From Your Location</Text>
           <TouchableOpacity>
@@ -114,7 +306,71 @@ const Filter = () => {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity style={styles.applyBtn} onPress={handleApplyFilters}>
+        {/* Distance */}
+        <View style={styles.optionCateView}>
+          <View style={styles.optionGroup4View}>
+            <TouchableOpacity
+              style={[
+                styles.optionCateBtn,
+                isDistanceSelected('1-3km') && styles.optionFocusBtn,
+              ]}
+              onPress={() => toggleDistance('1-3km')}>
+              <Text
+                style={[
+                  styles.optionText,
+                  isDistanceSelected('1-3km') && styles.optionFocusText,
+                ]}>
+                1-3km
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.optionCateBtn,
+                isDistanceSelected('3-6km') && styles.optionFocusBtn,
+              ]}
+              onPress={() => toggleDistance('3-6km')}>
+              <Text
+                style={[
+                  styles.optionText,
+                  isDistanceSelected('3-6km') && styles.optionFocusText,
+                ]}>
+                3-6km
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.optionCateBtn,
+                isDistanceSelected('6-9km') && styles.optionFocusBtn,
+              ]}
+              onPress={() => toggleDistance('6-9km')}>
+              <Text
+                style={[
+                  styles.optionText,
+                  isDistanceSelected('6-9km') && styles.optionFocusText,
+                ]}>
+                6-9km
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.optionCateBtn,
+                isDistanceSelected('>10km') && styles.optionFocusBtn,
+              ]}
+              onPress={() => toggleDistance('>10km')}>
+              <Text
+                style={[
+                  styles.optionText,
+                  isDistanceSelected('>10km') && styles.optionFocusText,
+                ]}>
+                &gt;10km
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <TouchableOpacity style={styles.applyBtn}>
           <Text style={styles.applyText}>Apply filters</Text>
         </TouchableOpacity>
       </View>
@@ -273,10 +529,5 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     position: 'absolute',
-  },
-  buttonContainer: {
-    margin: 5,
-
-    alignItems: 'center',
   },
 });

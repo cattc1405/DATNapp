@@ -5,148 +5,53 @@ import {
   Image,
   TouchableOpacity,
   FlatList,
-  ImageBackground,
-  ActivityIndicator,
-  RefreshControl,
 } from 'react-native';
-import React, {useState, useEffect, useCallback} from 'react';
-import {useNavigation} from '@react-navigation/native';
-import {useSelector} from 'react-redux';
-import {getUserOrder} from '../../../apiClient';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-
-// Define Tab from createMaterialTopTabNavigator
-const Tab = createMaterialTopTabNavigator();
-
-const OrderScreen = ({status}) => {
-  const navigation = useNavigation();
-  const userId = useSelector(state => state.auth.user?.userId);
-  const token = useSelector(state => state.auth.user?.token);
-  const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false); // Add state for refreshing
-  const fetchOrders = async () => {
-    try {
-      setLoading(true);
-      const fetchedOrders = await getUserOrder(userId, token, {status});
-      setOrders(fetchedOrders);
-    } catch (err) {
-      console.error('Error fetching orders:', err);
-    } finally {
-      setLoading(false);
-      setRefreshing(false); // End refresh when done
-    }
-  };
-  useEffect(() => {
-    fetchOrders();
-  }, [userId, token, status]);
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    fetchOrders();
-  }, [userId, token, status]);
-  const handlePress = item => {
-    navigation.navigate('OrderItemScreen', {item});
-  };
-
-  const renderOrderItem = ({item}) => (
-    <TouchableOpacity
-      style={styles.itemContainer}
-      onPress={() => handlePress(item)}>
-      <Text style={styles.transactionId}>{item.transactionId}</Text>
-      <View style={styles.detailsContainer}>
-        <Text style={styles.detailsText}>{item.paymentMethod}</Text>
-        <Text style={styles.detailsText}>Total: ${item.totalPrice}</Text>
-      </View>
-      <View style={styles.separator} />
-    </TouchableOpacity>
-  );
-
-  const chunkOrders = (orders, chunkSize) => {
-    let result = [];
-    for (let i = 0; i < orders.length; i += chunkSize) {
-      result.push(orders.slice(i, i + chunkSize));
-    }
-    return result;
-  };
-
-  if (loading) {
-    return (
-      <ActivityIndicator size="large" color="#0000ff" style={styles.loading} />
-    );
-  }
-
-  return (
-    <View style={styles.tabContent}>
-      <FlatList
-        data={chunkOrders(orders, 7)}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({item}) => (
-          <FlatList
-            data={item}
-            keyExtractor={subItem => subItem.id.toString()}
-            renderItem={renderOrderItem}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-          />
-        )}
-        key={status}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      />
-    </View>
-  );
-};
-
-function CustomTabBar({state, descriptors, navigation}) {
-  return (
-    <ImageBackground
-      source={require('../../../../assets/images/redFoodBgr.png')}
-      style={styles.customTabBar}>
-      {state.routes.map((route, index) => {
-        const {options} = descriptors[route.key];
-        const label = options.tabBarLabel || options.title || route.name;
-        const isFocused = state.index === index;
-
-        const onPress = () => {
-          const event = navigation.emit({
-            type: 'tabPress',
-            target: route.key,
-          });
-
-          if (!isFocused && !event.defaultPrevented) {
-            navigation.navigate(route.name);
-          }
-        };
-
-        return (
-          <View key={index} style={styles.tabItem}>
-            <Text
-              onPress={onPress}
-              style={[styles.tabText, isFocused && styles.tabTextFocused]}>
-              {label}
-            </Text>
-            {isFocused && <View style={styles.tabIndicator} />}
-          </View>
-        );
-      })}
-    </ImageBackground>
-  );
-}
+import React, { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 const Order = () => {
   const navigation = useNavigation();
-  const cartItems = useSelector(state => state.cart.items);
 
-  const [itemCount, setItemCount] = useState(0);
 
-  useEffect(() => {
-    const count = cartItems.reduce(
-      (total, item) => total + (item.quantity || 1),
-      0,
-    );
-    setItemCount(count);
-  }, [cartItems]);
+  const [productData, setProductData] = useState([
+    {
+      id: '1',
+      name: 'Big Mac Menu',
+      size: 'Normal',
+      quantity: 1,
+      price: 12.5,
+      note: 'No pickles',
+      imgSrc: require('../../../../assets/images/BigMac.png'),
+    },
+    {
+      id: '2',
+      name: 'Double Cheeseburger',
+      size: 'Double',
+      quantity: 1,
+      note: 'No Onions',
+      price: 2.0,
+      imgSrc: require('../../../../assets/images/CheesseB.png'),
+    },
+    {
+      id: '3',
+      name: 'Big Mac Menu',
+      size: 'Normal',
+      quantity: 1,
+      price: 12.5,
+      note: 'No pickles',
+      imgSrc: require('../../../../assets/images/BigMac.png'),
+    },
+    {
+      id: '4',
+      name: 'Double Cheeseburger',
+      size: 'Double',
+      quantity: 1,
+      note: 'No Onions',
+      price: 2.0,
+      imgSrc: require('../../../../assets/images/CheesseB.png'),
+    },
+  ]);
+
 
   return (
     <View style={styles.container}>
@@ -162,52 +67,36 @@ const Order = () => {
             />
           </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate('CartStack', {screen: 'OrderDetail'})
-            }>
-            <View>
-              <Image
-                style={styles.iconImage}
-                source={require('../../../../assets/images/icons/shopping-bag.png')}
-              />
-              <Text style={styles.iconText}>{itemCount}</Text>
-            </View>
+          <TouchableOpacity>
+            <Image
+              source={require('../../../../assets/images/icons/SearchIcon.png')}
+            />
           </TouchableOpacity>
         </View>
+
         <Text style={styles.titleBoldText}>Order</Text>
       </View>
-      <View style={styles.bodyView}>
-        <Tab.Navigator
-          tabBar={props => <CustomTabBar {...props} />}
-          screenOptions={{
-            tabBarActiveTintColor: 'white',
-            tabBarLabelStyle: {
-              fontSize: 14,
-              color: 'white',
-              textAlign: 'center',
-            },
-            tabBarStyle: {
-              backgroundColor: 'orange',
-            },
-            tabBarIndicatorStyle: {
-              backgroundColor: 'white',
-              height: 3,
-              borderRadius: 1.5,
-            },
-          }}>
-          <Tab.Screen name="Pending">
-            {() => <OrderScreen status="Pending" />}
-          </Tab.Screen>
-          <Tab.Screen name="Success">
-            {() => <OrderScreen status="Success" />}
-          </Tab.Screen>
-          <Tab.Screen name="Failed">
-            {() => <OrderScreen status="Failed" />}
-          </Tab.Screen>
-        </Tab.Navigator>
+
+      <View style={styles.mainView}>
+
       </View>
-      {/* This view now takes the entire space below the header */}
+
+      <View style={styles.footerView}>
+
+
+        <View style={styles.brandTag}>
+          <Text style={styles.orderText}>Order From</Text>
+          <View style={styles.locateView}>
+            <Text style={styles.locateText}>McDonald’s - Flat Bush Street</Text>
+            <View style={styles.bagView}>
+              <Image
+                source={require('../../../../assets/images/icons/shoppingBag.png')}
+              />
+              <Text style={styles.quantityItem}>2 items</Text>
+            </View>
+          </View>
+        </View>
+      </View>
     </View>
   );
 };
@@ -215,121 +104,184 @@ const Order = () => {
 export default Order;
 
 const styles = StyleSheet.create({
-  iconImage: {
-    width: 25,
-    height: 25,
+  bagView: {
+    flexDirection: 'row',
+    position: 'absolute',
+    right: 30,
+    alignItems: 'center',
   },
-  iconText: {
+  quantityItem: {
     color: '#fff',
-    fontSize: 18,
+    marginLeft: 20,
+    paddingVertical: 3,
+    fontSize: 12,
     fontWeight: 'bold',
-    position: 'absolute',
-    left: 15,
-    top: 10,
+    fontFamily: 'nunitoSan'
   },
-  itemContainer: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 16,
-    marginVertical: 8,
-    marginHorizontal: 8,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 3,
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    minWidth: 100,
-  },
-  row: {
+  locateView: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
   },
-  transactionId: {
-    fontSize: 16,
+  locateText: {
+    color: '#fff',
+    marginLeft: 30,
+    paddingVertical: 3,
+    fontSize: 12,
+    borderBottomColor: 'white',
+    borderBottomWidth: 1,
     fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 8,
+    fontFamily: 'nunitoSan'
   },
-  detailsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 4,
+  orderText: {
+    color: '#fff',
+    opacity: 0.5,
+    marginLeft: 30,
+    marginTop: 8,
+    fontSize: 13,
+    fontWeight: 'bold',
+    fontFamily: 'nunitoSan'
   },
-  detailsText: {
+  mgnL15: {
     fontSize: 14,
-    color: '#666',
   },
-  separator: {
-    marginTop: 12,
-    height: 1,
-    backgroundColor: '#ddd',
+  brandTag: {
+    height: '60%',
+    backgroundColor: '#F55F44',
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
   },
-  tabContent: {
-    flex: 1,
+
+  footerView: {
+    width: '100%',
+    height: '12%',
+  },
+  mainView: {
+    height: '70%',
+  },
+  mrginLeft: {
+    width: '80%',
+    marginLeft: 40,
+  },
+  deleteView: {
+    width: 90,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
+    backgroundColor: '#FF7474',
+    position: 'absolute',
+    right: 0,
+    bottom: 0,
+    borderBottomRightRadius: 20,
+    borderTopRightRadius: 20,
+  },
+  editText: {
+    fontFamily: 'nunitoSan',
+    fontSize: 12,
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  editItemView: {
+    width: 90,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 30,
+    backgroundColor: '#F55F44',
+    position: 'absolute',
+    right: 0,
+    bottom: 0,
+    borderBottomRightRadius: 20,
+    borderTopLeftRadius: 20,
+  },
+  priceText: {
+    fontFamily: 'nunitoSan',
+    fontSize: 14,
+    marginTop: 3,
+    color: 'black',
+    fontWeight: 'bold',
+  },
+  thinGrayText: {
+    fontFamily: 'nunitoSan',
+    fontSize: 12,
+    color: '#9D9D9D',
+    opacity: 0.5,
+    fontWeight: 'bold',
+  },
+  nameItem: {
+    fontFamily: 'nunitoSan',
+    paddingTop: 8,
+    paddingBottom: 5,
+    fontSize: 15,
+    color: 'black',
+    fontWeight: 'bold',
+  },
+  quantityText: {
+    fontFamily: 'nunitoSan',
+    fontSize: 18,
+    color: 'black',
+    fontWeight: 'bold',
+  },
+  quantityView: {
+    width: '75%',
+    marginLeft: '20%',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+  },
+  orangeCircle: {
+    width: 26,
+    height: 26,
+    backgroundColor: '#F55F44',
+    borderRadius: 13,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  customTabBar: {
-    height: 40,
+  productImg: {
+    width: '90%',
+    height: 80,
+    marginLeft: '10%',
+    marginTop: 20,
+    resizeMode: 'contain',
+  },
+  infoRight: {
+    width: '60%',
+    marginLeft: '5%',
+    height: '100%',
+  },
+  imgLeft: {
+    width: '35%',
+    height: '100%',
+  },
+  productItem: {
+    width: '80%',
     flexDirection: 'row',
-    backgroundColor: 'orange',
-    borderBottomLeftRadius: 16,
-    borderBottomRightRadius: 16,
-  },
-  tabItem: {
-    flex: 1,
-    alignItems: 'center',
-    paddingVertical: 10,
-  },
-  tabText: {
-    color: 'white',
-    fontSize: 15,
-    fontWeight: 'normal',
-  },
-  tabTextFocused: {
-    color: 'white',
-    fontWeight: 'bold',
-  },
-  tabIndicator: {
-    height: 2,
-    width: '45%',
-    backgroundColor: 'white',
-    marginTop: 4,
-  },
-  container: {
-    flex: 1,
-    width: '100%',
-  },
-  headView: {
-    height: '15%',
-    position: 'relative',
-  },
-  bodyView: {
-    flex: 1,
-
-    backgroundColor: 'white', // The rest of the body will have a white background
-  },
-  redFoodBgr: {
-    width: '100%',
-    height: 190,
-    position: 'absolute',
-  },
-  menuView: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginHorizontal: 15,
-    marginTop: 40,
+    height: 140,
+    marginTop: '7%',
+    backgroundColor: '#fff',
+    elevation: 5,
+    marginLeft: '10%',
+    borderRadius: 20,
   },
   titleBoldText: {
-    fontSize: 20,
+    fontSize: 23,
+    fontFamily: 'nunitoSan',
+    color: 'white',
     fontWeight: 'bold',
-    color: 'black',
-    textAlign: 'center',
-    marginTop: 120,
+    marginLeft: '5%',
+    marginTop: '3%',
+
+  },
+
+  menuView: {
+    width: '90%',
+    justifyContent: 'space-between',
+    marginLeft: '5%',
+    height: 50,
+    display: 'flex',
+    flexDirection: 'row',
+    marginTop: '18%',
+    alignItems: 'center',
+  },
+  container: {
+    width: '100%',
+    height: '100%',
   },
   headView: {
     width: '100%',
@@ -340,22 +292,5 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     position: 'absolute',
-  },
-  menuView: {
-    width: '90%',
-    justifyContent: 'space-between',
-    marginLeft: '5%',
-    height: 50,
-    flexDirection: 'row',
-    marginTop: '18%',
-    alignItems: 'center',
-  },
-  titleBoldText: {
-    fontSize: 23,
-    fontFamily: 'nunitoSan',
-    color: 'white',
-    fontWeight: 'bold',
-    marginLeft: '5%',
-    marginTop: '3%',
   },
 });

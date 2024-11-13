@@ -1,52 +1,11 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  ImageBackground,
-  FlatList,
-} from 'react-native';
-import React, {useState, useEffect} from 'react';
-import {useNavigation} from '@react-navigation/native';
-import {getFeaturedProduct} from '../../../apiClient';
+import { StyleSheet, Text, View, Image, TouchableOpacity, ImageBackground } from 'react-native';
+import React from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 const WhatsInToday = () => {
+
   const navigation = useNavigation();
-  const [categories, setCategories] = useState([]);
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const data = await getFeaturedProduct();
-        setCategories(data);
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-      }
-    };
-    fetchCategories();
-  }, []);
-  const renderCategoryItem = ({item}) => (
-    <TouchableOpacity
-      onPress={() =>
-        navigation.navigate('ProductStack', {
-          screen: 'Product',
-          // Passing the item data as params
-        })
-      }>
-      <ImageBackground
-        style={styles.itemTodayView}
-        source={{uri: item.image}}
-        imageStyle={{borderRadius: 15}}>
-        <Image style={styles.productImg} source={{uri: item.productImageUrl}} />
-        <View style={styles.tagView}>
-          <Image style={styles.logo} source={{uri: item.logoUrl}} />
-          <Text style={styles.tagText}>{item.tagText || 'NEW'}</Text>
-        </View>
-        <Text style={styles.brandText}>{item.name}</Text>
-        <Text style={styles.describeText}>{item.description}</Text>
-      </ImageBackground>
-    </TouchableOpacity>
-  );
+
   return (
     <View style={styles.container}>
       <View style={styles.headView}>
@@ -62,7 +21,8 @@ const WhatsInToday = () => {
             />
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => navigation.navigate('Filter')}>
+
+          <TouchableOpacity onPress={() => navigation.navigate("Filter")}>
             <Image
               style={styles.iconMenuView}
               source={require('../../../../assets/images/icons/FilterIcon.png')}
@@ -72,14 +32,69 @@ const WhatsInToday = () => {
 
         <Text style={styles.titleBoldText}>What's in Today?</Text>
       </View>
-      <FlatList
-        data={categories}
-        renderItem={renderCategoryItem}
-        keyExtractor={(item, index) =>
-          item.id ? item.id.toString() : index.toString()
-        }
-        contentContainerStyle={{paddingBottom: 20}}
-      />
+      <ImageBackground
+        style={styles.itemTodayView}
+        source={require('../../../../assets/images/StarbucksOffer.png')}
+        imageStyle={{ borderRadius: 15 }}>
+        <Image
+          style={styles.productImg}
+          source={require('../../../../assets/images/coffeeStarbucks.png')}
+        />
+        <View style={styles.tagView}>
+          <Image
+            style={styles.logo}
+            source={require('../../../../assets/images/icons/StarbucksLogo.png')}
+          />
+          <Text style={styles.tagText}>NEW</Text>
+        </View>
+        <Text style={styles.brandText}>STARBUCKS</Text>
+        <Text style={styles.describeText}>
+          Buy 2 coffees and get 1 for free!
+        </Text>
+      </ImageBackground>
+
+      <ImageBackground
+        style={styles.itemTodayView}
+        source={require('../../../../assets/images/McDonaldsOffer.png')}
+        imageStyle={{ borderRadius: 15 }}>
+        <Image
+          style={styles.productImg}
+          source={require('../../../../assets/images/burgurMc.png')}
+        />
+        <View style={styles.tagView}>
+          <Image
+            style={styles.logo}
+            source={require('../../../../assets/images/icons/McDonaldsLogo.png')}
+          />
+          <Text style={styles.tagText}>NEW</Text>
+        </View>
+        <Text style={styles.brandText}>McDonald'S</Text>
+        <Text style={styles.describeText}>
+          2 McMenu Texas, CBO or Big Tasty For only 10.99$*
+        </Text>
+      </ImageBackground>
+
+      <ImageBackground
+        style={styles.itemTodayView}
+        source={require('../../../../assets/images/PizzaOffer.png')}
+        imageStyle={{ borderRadius: 15 }}>
+        <Image
+          style={styles.productImg}
+          source={require('../../../../assets/images/PizzaDomino.png')}
+        />
+        <View style={styles.tagView}>
+          <Image
+            style={styles.logo}
+            source={require('../../../../assets/images/icons/DominoLogo.png')}
+          />
+          <Text style={styles.tagText}>BEST DEAL</Text>
+        </View>
+        <Text style={styles.brandText}>Domino's</Text>
+        <Text style={styles.describeText}>
+          Buy 3 pizzas and
+          get 1 for free!
+        </Text>
+      </ImageBackground>
     </View>
   );
 };
@@ -122,7 +137,7 @@ const styles = StyleSheet.create({
     marginRight: 20,
     fontWeight: '600',
     color: 'white',
-    fontFamily: 'nunitoSan',
+    fontFamily: 'nunitoSan'
   },
   tagView: {
     borderTopLeftRadius: 20,
@@ -141,7 +156,7 @@ const styles = StyleSheet.create({
     height: 145,
     marginLeft: '10%',
     borderRadius: 15,
-    marginTop: '3%',
+    marginTop: '3%'
   },
   titleBoldText: {
     fontSize: 23,
@@ -149,7 +164,8 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     marginLeft: '5%',
-    marginTop: '3%',
+    marginTop: '3%'
+
   },
   iconLogo: {
     width: 200,
@@ -173,7 +189,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '23%',
     backgroundColor: 'blue',
-    marginBottom: '10%',
+    marginBottom: '10%'
   },
   redFoodBgr: {
     width: '100%',

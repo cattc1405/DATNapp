@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -7,35 +7,24 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import {useRoute} from '@react-navigation/native';
-import {useDispatch, useSelector} from 'react-redux';
-import {setGender} from '../../redux/slice/userSlice';
+
 const Gender = props => {
-  const {navigation} = props;
-  const route = useRoute();
-  const dispatch = useDispatch();
-  const name = useSelector(state => state.user.name);
-  const gender = useSelector(state => state.user.gender);
+  const { navigation } = props;
   const [selectedGender, setSelectedGender] = useState(null);
+
   const handleSelectGender = gender => {
     setSelectedGender(gender);
   };
-  console.log(name);
+
   const handleNextStep = () => {
     if (!selectedGender) {
       Alert.alert(
         'Gender Not Selected',
         'Please select your gender before proceeding.',
-        [{text: 'OK'}],
+        [{ text: 'OK' }],
       );
     } else {
-<<<<<<< HEAD
       navigation.navigate('PhoneNumberScreen');
-=======
-      dispatch(setGender(selectedGender));
-
-      navigation.navigate('ReceiveNotifi');
->>>>>>> 52365ba6a92d41d56661c28438e356cd73131afd
     }
   };
   return (
@@ -51,9 +40,7 @@ const Gender = props => {
           />
         </TouchableOpacity>
         <Text style={styles.stepText}>Step 2/10</Text>
-        <TouchableOpacity
-          style={styles.closeButton}
-          onPress={() => navigation.navigate('Login')}>
+        <TouchableOpacity style={styles.closeButton}>
           <Image
             source={require('../../../assets/images/Exit.png')}
             style={styles.icon}
@@ -144,15 +131,10 @@ const Gender = props => {
       <TouchableOpacity
         style={styles.nextButton}
         disabled={!selectedGender}
-<<<<<<< HEAD
         onPress={() => navigation.navigate('PhoneNumberScreen')}>
         <Text style={styles.nextButtonText} onPress={handleNextStep}>
           Next Step
         </Text>
-=======
-        onPress={handleNextStep}>
-        <Text style={styles.nextButtonText}>Next Step</Text>
->>>>>>> 52365ba6a92d41d56661c28438e356cd73131afd
       </TouchableOpacity>
 
       {/* Skip link */}
@@ -237,7 +219,7 @@ const styles = StyleSheet.create({
   stepText: {
     fontSize: 16,
     fontWeight: 'bold',
-    fontFamily: 'nunitoSan',
+    fontFamily: 'nunitoSan'
   },
   imageContainer: {
     alignItems: 'center',
@@ -253,14 +235,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 10,
-    fontFamily: 'nunitoSan',
+    fontFamily: 'nunitoSan'
   },
   description: {
     fontSize: 16,
     textAlign: 'center',
     color: '#888',
     marginBottom: 20,
-    fontFamily: 'nunitoSan',
+    fontFamily: 'nunitoSan'
   },
   genderContainer: {
     flexDirection: 'row',
@@ -304,13 +286,13 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 18,
     fontWeight: 'bold',
-    fontFamily: 'nunitoSan',
+    fontFamily: 'nunitoSan'
   },
   skipText: {
     textAlign: 'center',
     color: 'gray',
     marginBottom: 20,
-    fontFamily: 'nunitoSan',
+    fontFamily: 'nunitoSan'
   },
 });
 

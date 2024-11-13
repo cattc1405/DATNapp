@@ -6,48 +6,71 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
-import {getBrands} from '../../../apiClient';
-import {useSelector} from 'react-redux'; // Import useSelector
-import Animated, {
-  Easing,
-  useSharedValue,
-  withTiming,
-  useAnimatedStyle,
-} from 'react-native-reanimated';
+import React from 'react';
 
-const Restaurant1 = ({navigation}) => {
-  const [brands, setBrand] = useState([]);
-
-  useEffect(() => {
-    const fetchBrands = async () => {
-      try {
-        const data = await getBrands();
-        setBrand(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchBrands();
-  }, []);
+const Restaurant1 = ({ navigation }) => {
   // Dữ liệu mẫu cho danh sách nhà hàng
+  const restaurantData = [
+    {
+      _id: '1',
+      name: 'Starbucks',
+      address: 'Tillary Street, Brooklyn, NY',
+      reviews: '895 reviews',
+      offers: 'Best Offers',
+      rating: 4.5,
+      image: require('../../../../assets/images/Starbucks.png'),
+    },
+    {
+      _id: '2',
+      name: 'Burger King',
+      address: 'Johnston Street, Brooklyn, NY',
+      reviews: '548 reviews',
+      offers: 'Best Offers',
+      rating: 4.0,
+      image: require('../../../../assets/images/Burguer.png'),
+    },
+    {
+      _id: '3',
+      name: "Wendy's",
+      address: 'Duffield Street, Brooklyn, NY',
+      reviews: '491 reviews',
+      offers: 'New Offers',
+      rating: 4.2,
+      image: require('../../../../assets/images/Wendy.png'),
+    },
+    {
+      _id: '4',
+      name: "Domino's",
+      address: 'Concord Street, Brooklyn, NY',
+      reviews: '699 reviews',
+      offers: 'New Offers',
+      rating: 4.3,
+      image: require('../../../../assets/images/Domino.png'),
+    },
+    {
+      _id: '5',
+      name: "McDonald's",
+      address: 'Flat Bush Street, Brooklyn, NY',
+      reviews: '946 reviews',
+      offers: 'Best Offers',
+      rating: 4.5,
+      image: require('../../../../assets/images/Mcdonalds.png'),
+    },
+  ];
 
-  const renderItem = ({item}) => (
+  const renderItem = ({ item }) => (
     <TouchableOpacity
       style={styles.restaurantCard}
       onPress={() =>
-        navigation.navigate('RestaurantStack', {
-          screen: 'BrandDetails',
-          params: {brand: item},
-        })
+        navigation.navigate('RestaurantStack', { screen: 'BrandDetails' })
       }>
-      <Image source={{uri: item.image}} style={styles.logo} />
+      <Image source={item.image} style={styles.logo} />
       <View style={styles.infoContainer}>
         <Text style={styles.restaurantName}>{item.name}</Text>
         <Text style={styles.restaurantAddress}>{item.address}</Text>
         <View style={styles.ratingContainer}>
           <Text style={styles.ratingStars}>⭐⭐⭐⭐⭐</Text>
-          <Text style={styles.reviewText}>({item.review})</Text>
+          <Text style={styles.reviewText}>({item.reviews})</Text>
         </View>
       </View>
       <View style={styles.offerBadge}>
@@ -55,20 +78,7 @@ const Restaurant1 = ({navigation}) => {
       </View>
     </TouchableOpacity>
   );
-  const cartItems = useSelector(state => state.cart.items);
 
-  // Local state to keep track of the item count
-  const [itemCount, setItemCount] = useState(0);
-
-  // useEffect to update itemCount whenever cartItems changes
-  useEffect(() => {
-    // Calculate the total item count
-    const count = cartItems.reduce(
-      (total, item) => total + (item.quantity || 1),
-      0,
-    );
-    setItemCount(count); // Update local state with the new count
-  }, [cartItems]);
   return (
     <View style={styles.container}>
       <View style={styles.headView}>
@@ -83,24 +93,18 @@ const Restaurant1 = ({navigation}) => {
             />
           </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('BrandMap');
-            }}>
-            <View>
-              <Image
-                style={styles.iconImage}
-                source={require('../../../../assets/images/icons/SearchIcon.png')}
-              />
-            </View>
+          <TouchableOpacity onPress={() => navigation.navigate('Filter')}>
+            <Image
+              source={require('../../../../assets/images/icons/FilterIcon.png')}
+            />
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.titleBoldText}>Nearby Branch</Text>
+        <Text style={styles.titleBoldText}>Nearby Restaurants</Text>
       </View>
 
       <FlatList
-        data={brands}
+        data={restaurantData}
         keyExtractor={item => item._id}
         renderItem={renderItem}
         contentContainerStyle={styles.scrollContainer} // giống ScrollView của bạn
@@ -112,18 +116,6 @@ const Restaurant1 = ({navigation}) => {
 export default Restaurant1;
 
 const styles = StyleSheet.create({
-  iconImage: {
-    width: 25,
-    height: 25,
-  },
-  iconText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-    position: 'absolute',
-    left: 15,
-    top: 10,
-  },
   titleBoldText: {
     fontSize: 23,
     fontFamily: 'nunitoSan',
@@ -184,7 +176,7 @@ const styles = StyleSheet.create({
     padding: 12,
     marginBottom: 16,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 6,
     elevation: 3,
@@ -218,7 +210,7 @@ const styles = StyleSheet.create({
   },
   reviewText: {
     color: '#888',
-    fontFamily: 'nunitoSan',
+    fontFamily: 'nunitoSan'
   },
   offerBadge: {
     backgroundColor: '#F55F44',
@@ -232,6 +224,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     marginVertical: 3,
     fontWeight: 'bold',
-    fontFamily: 'nunitoSan',
+    fontFamily: 'nunitoSan'
   },
 });
