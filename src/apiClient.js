@@ -120,6 +120,20 @@ export const getProduct = async () => {
     throw error;
   }
 };
+export const getProductSameDeal = async () => {
+  try {
+    const response = await apiInstance.get('/products/get/active/price');
+    console.log('Product response:', response); // Log the full response
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching Product:', error);
+    console.error(
+      'Error details:',
+      error.response ? error.response : error.message,
+    );
+    throw error;
+  }
+};
 export const getProductById = async id => {
   try {
     const response = await apiInstance.get(`/products/${id}`);

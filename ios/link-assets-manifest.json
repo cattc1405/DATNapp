@@ -1,0 +1,13 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/BeVietnamPro-Black.ttf",
+      "sha1": "405a6e7828f292099161bf5cccb5402ec19f1833"
+    },
+    {
+      "path": "assets/fonts/nunitoSan.ttf",
+      "sha1": "d62a0308bdb9c00754cc6b1265b70465c7f05e25"
+    }
+  ]
+}
