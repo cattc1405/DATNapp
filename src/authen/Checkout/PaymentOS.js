@@ -1,5 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, Alert, StyleSheet, ActivityIndicator} from 'react-native';
+import {
+  View,
+  Text,
+  Alert,
+  Image,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import QRCode from 'react-native-qrcode-svg';
@@ -9,6 +16,7 @@ import {
   submitOrder,
   removeUserCartItem,
   cancelPayment,
+  sendTransactions,
 } from '../../apiClient';
 import {setTransactionId} from '../../redux/slice/cartSlice';
 
@@ -26,23 +34,33 @@ const PaymentOS = () => {
   const transactionId = useSelector(state => state.cart.transactionId);
   const cartItems2 = useSelector(state => state.cart.items);
   const dispatch = useDispatch();
-  const route = useRoute();
-  const {selectedBrand, pickupTime, selectedContact} = route.params;
-  const restaurant2 = selectedBrand._id;
-  const contactString = selectedContact.selectedContact;
-  const [cartIds, setCartIds] = useState([]);
 
+  // const restaurant2 = selectedBrand._id;
+  // const contactString = selectedContact.selectedContact;
+  const [cartIds, setCartIds] = useState([]);
+  const attributeIds = cartItems2.map(item => item.attributeId);
+  const [dataOrder, setDataOrder] = useState();
+  const [orderId, setOrderId] = useState();
+  ///
+  const [amount, setAmount] = useState();
+  const [accountNumber, setAccountNumber] = useState();
+  const [counterAccountName, setCounterAccountName] = useState();
+  const [counterAccountNumber, setCounterAccountNumber] = useState();
+  const [description, Setdescription] = useState();
+
+  const [reference, Setreference] = useState();
+  const [transactionDateTime, setTransactionDateTime] = useState();
+
+  // Log to see the result
+  console.log('pa', paymentData);
   useEffect(() => {
     const ids = cartItems2.map(item => item.id);
     setCartIds(ids);
   }, [cartItems2]);
 
-  const orderItems = cartItems2.map(item => ({
-    quantity: item.quantity,
-    drink: item.drink,
-    excluded: item.excluded,
-    attribute: item.attributeId,
-  }));
+  // Log the extracted IDs
+  console.log('data2', dataOrder);
+  console.log('data', attributeIds);
 
   const handleCreatePayment = async () => {
     setLoading(true);
@@ -81,27 +99,6 @@ const PaymentOS = () => {
     }
   };
 
-  const handleSubmitOrder = async () => {
-    const shippingAddress = `${contactString}`;
-    const restaurant = `${restaurant2}`;
-    const paymentMethod = 'Bank Transfer';
-    const status = 'Success';
-    try {
-      await submitOrder(
-        orderItems,
-        paymentMethod,
-        userId,
-        shippingAddress,
-        restaurant,
-        status,
-        transactionId,
-        token,
-      );
-    } catch (error) {
-      console.error('Failed to submit order:', error);
-    }
-  };
-
   useEffect(() => {
     handleCreatePayment();
   }, []);
@@ -129,11 +126,12 @@ const PaymentOS = () => {
 
   useEffect(() => {
     if (isPaymentSuccessful) {
-      handleSubmitOrder();
-      handleRemoveAllItems();
+      // handleSubmitOrder();
+      // handleRemoveAllItems();
+      navigate.navigate('Checkout5');
     }
   }, [isPaymentSuccessful]);
-
+  console.log('data', dataOrder);
   const handleRemoveAllItems = async () => {
     try {
       for (const id of cartIds) {
@@ -149,7 +147,10 @@ const PaymentOS = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Payment Status</Text>
+      <Image
+        style={styles.qrBanner}
+        source={require('../../../assets/images/qrlogo.png')}></Image>
+
       {loading && (
         <ActivityIndicator
           size="large"
@@ -182,7 +183,7 @@ const PaymentOS = () => {
           />
         </View>
       )}
-      <Text style={styles.footerText}>Thank you for your patience!</Text>
+      <Text style={styles.footerText}>Thank youfor your patience!</Text>
     </View>
   );
 };
@@ -196,6 +197,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 16,
+  },
+  qrBanner: {
+    width: 212,
+    height: 74,
   },
   title: {
     fontSize: 24,

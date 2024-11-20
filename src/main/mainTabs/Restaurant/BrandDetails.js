@@ -33,7 +33,7 @@ const BrandDetails = ({route}) => {
       <View style={styles.statusRestaurantView}>
         <View style={styles.nameView}>
           <Text style={styles.nameBrandText}>{brand.name}</Text>
-          <Text style={styles.statusResText}>Open Right Now</Text>
+          <Text style={styles.statusResText}>Open</Text>
         </View>
         <Text style={styles.locateText}>{brand.address}</Text>
         <View style={styles.rateView}>

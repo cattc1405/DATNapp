@@ -11,6 +11,7 @@ import Checkout5 from './Checkout5';
 import Home from '../../main/mainTabs/Home/Home';
 import {useRoute} from '@react-navigation/native';
 import PaymentOS from './PaymentOS';
+import Checkout4 from './Checkout4';
 
 const Stack = createStackNavigator();
 
@@ -23,7 +24,7 @@ const CheckoutNavigator = () => {
       screenOptions={{headerShown: false}}>
       <Stack.Screen name="OrderScreen" component={OrderScreen} />
       <Stack.Screen name="AddressScreen" component={AddressScreen} />
-      <Stack.Screen name="Checkout3" component={Checkout3} />
+      <Stack.Screen name="Checkout4" component={Checkout4} />
       <Stack.Screen name="PaymentScreen">
         {props => <PaymentScreen {...props} cartItems={cartItems} />}
       </Stack.Screen>

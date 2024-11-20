@@ -6,6 +6,7 @@ const cartSlice = createSlice({
   initialState: {
     items: [], // Array of cart items
     transactionId: null, // Global transaction ID for the cart
+    dataOrder: null, // Add this line to track the order
   },
   reducers: {
     setCartItems: (state, action) => {
@@ -29,6 +30,9 @@ const cartSlice = createSlice({
       state.items = []; // Clears the cart items
       state.transactionId = null; // Optionally reset the transaction ID
     },
+    setDataOrder(state, action) {
+      state.dataOrder = action.payload; // Update the dataOrder
+    },
   },
 });
 
@@ -38,6 +42,7 @@ export const {
   decrementQuantity,
   removeCartItem,
   setTransactionId,
-  clearCart, // Export the action to set the transaction ID
+  clearCart,
+  Orderdata, // Export the action to set the transaction ID
 } = cartSlice.actions;
 export default cartSlice.reducer;

@@ -1,293 +1,246 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
-  Text,
   View,
-  TouchableOpacity,
-  TextInput,
+  Text,
   Image,
+  TouchableOpacity,
+  Dimensions,
 } from 'react-native';
-import {useNavigation, useRoute} from '@react-navigation/native';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {submitOrder, removeUserCartItem} from '../../apiClient';
-const PaymentScreen = ({cartItems}) => {
-  const route = useRoute(); // Move this line up here to define route first
-  const cartItems2 = useSelector(state => state.cart.items); // or state.cart.cartItems depending on your slice structure
-  const navigate = useNavigation();
-  const [cardNumber, setCardNumber] = useState('');
-  const [cardHolder, setCardHolder] = useState('');
-  const [expirationDate, setExpirationDate] = useState('');
-  const [cvv, setCvv] = useState('');
-  const [selectedCard, setSelectedCard] = useState(null); // State to track selected card
-  const {selectedBrand, pickupTime, selectedContact} = route.params;
-  console.log('Pay', selectedBrand._id);
-  const userId = useSelector(state => state.auth.user?.userId); // Retrieve the userId from the Redux store
-  const token = useSelector(state => state.auth.user?.token);
-  console.log(userId);
-  console.log(token);
-  console.log('cartitem2', cartItems2);
-  const handleCardSelect = cardType => {
-    setSelectedCard(cardType); // Update selected card state
-  };
-  console.log(selectedCard);
-  const restaurant2 = selectedBrand._id;
-  const contactString = selectedContact.selectedContact;
-  console.log(contactString, 'res');
-  console.log(cartItems2, 'this is cartItems2');
 
+const {width, height} = Dimensions.get('window'); // Lấy chiều rộng và chiều cao của màn hình
+import {useNavigation} from '@react-navigation/native';
+import {useRoute} from '@react-navigation/native';
+const Checkout4 = ({navigation}) => {
+  const [selectedOption, setSelectedOption] = useState(null);
+  const route = useRoute();
+  const {brand, contact} = route.params;
+  console.log('Received brand:', brand);
+  console.log('Received contact:', contact);
+
+  const handleOptionPress = option => {
+    setSelectedOption(option);
+  };
+  const handleChangeScreen = () => {
+    if (selectedOption === 'Bank Transfer') {
+      handleSubmitOrder();
+      navigation.navigate('PaymentOS');
+      console.log('Go payos');
+    }
+    if (selectedOption === 'Cash') {
+      handleSubmitOrder();
+      navigation.navigate('Checkout5');
+      console.log('Go cash');
+    }
+  };
+  //order
+  const transactionId = useSelector(state => state.cart.transactionId);
+  const [cartIds, setCartIds] = useState([]);
+  const [orderId, setOrderId] = useState();
+  const token = useSelector(state => state.auth.user?.token);
+  const userId = useSelector(state => state.auth.user?.userId);
+  const cartItems2 = useSelector(state => state.cart.items);
   const orderItems = cartItems2.map(item => ({
     quantity: item.quantity,
     drink: item.drink,
     excluded: item.excluded,
-    attribute: item.attributeId,
+    attribute: item.attributeId.map(attribute => attribute.id), // Pass all attribute IDs
   }));
-  console.log(orderItems, 'this is orderItems');
+
   const handleSubmitOrder = async () => {
-    // if (!selectedCard) {
-    //   alert('Please select a payment method');
-    //   return; // Prevent the order submission if no card is selected
-    // }
-    // const shippingAddress = `${contactString}`;
-    // const restaurant = `${restaurant2}`;
-    // const paymentMethod = selectedCard;
-    // console.log(shippingAddress, restaurant, paymentMethod);
-    // try {
-    //   await Promise.all([
-    //     submitOrder(
-    //       orderItems,
-    //       paymentMethod,
-    //       userId,
-    //       shippingAddress,
-    //       restaurant,
-    //       token,
-    //     ),
-    //   ]);
-    //   for (const item of cartItems2) {
-    //     await removeUserCartItem(userId, token, item.id); // Pass userId and item.id
-    //   }
-    //   console.log('Order submitted and cart cleared successfully');
-    //   navigate.navigate('Checkout5');
-    //   // Optionally navigate or show success message here
-    // } catch (error) {
-    //   console.error('Failed to submit order:', error); // User-friendly message could be shown here
-    // }
-    const amount = 1000;
-    navigate.navigate('PaymentOS');
+    const shippingAddress = `${contact}`;
+    const restaurant = `${brand}`;
+    const paymentMethob = `${selectedOption}`;
+    const status = 'Coming';
+    const transactionId = `${transactionId}`;
+    try {
+      const orderResponse = await submitOrder(
+        orderItems,
+        paymentMethob,
+        userId,
+        shippingAddress,
+        restaurant,
+        status,
+        transactionId,
+        token,
+      );
+
+      console.log('Order Response:', orderResponse); // Log the response
+
+      setOrderId(orderResponse._id);
+      handleRemoveAllItems();
+    } catch (error) {
+      console.error('Failed to submit order:', error);
+    }
   };
-  console.log(orderItems);
+  useEffect(() => {
+    const ids = cartItems2.map(item => item.id);
+    setCartIds(ids);
+  }, [cartItems2]);
+  const handleRemoveAllItems = async () => {
+    try {
+      for (const id of cartIds) {
+        await removeUserCartItem(userId, token, id);
+        console.log(`Item with ID ${id} removed from cart.`);
+      }
+      console.log('All items removed from cart successfully.');
+      navigate.navigate('Checkout5');
+    } catch (error) {
+      console.error('Error removing items:', error);
+    }
+  };
+  console.log('orderId', orderId);
   return (
     <View style={styles.container}>
-      {/* Phần đầu (Header) */}
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton}>
-          <Text style={styles.backText}>←</Text>
+      <View style={styles.headerContainer}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Image
+            source={require('../../../assets/images/backArrow.png')}
+            style={styles.backIcon}
+          />
         </TouchableOpacity>
-        <Text style={styles.stepText}>Step 4/5</Text>
-        <TouchableOpacity style={styles.closeButton}>
-          <Text style={styles.closeText}>×</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Minh họa */}
-      <View style={styles.illustrationContainer}>
+        <Text style={styles.stepText}>Step 3/3</Text>
         <Image
-          source={require('../../../assets/images/backroundcheckout4.png')}
-          style={styles.illustrationImage}
-          resizeMode="contain"
+          source={require('../../../assets/images/closeArrow.png')}
+          style={styles.closeIcon}
         />
       </View>
+      <Image
+        source={require('../../../assets/images/hamburger.png')}
+        style={styles.hamburger}
+      />
+      <Text style={styles.questionText}>
+        How Do You Want To Pay For Your Order?
+      </Text>
+      <Text style={styles.subText}>
+        Choose one of the following methods to payment your order.
+      </Text>
 
-      {/* Tiêu đề */}
-      <Text style={styles.title}>What is Your Payment Method?</Text>
+      <View style={styles.optionsContainer}>
+        <TouchableOpacity
+          style={[
+            styles.option,
+            selectedOption === 'Cash' && styles.optionSelected,
+          ]}
+          onPress={() => handleOptionPress('Cash')}>
+          <Image
+            source={require('../../../assets/images/mcdonal.png')}
+            style={styles.icon}
+          />
+          <Text style={styles.optionText}>Nhận tại cửa hàng</Text>
+        </TouchableOpacity>
 
-      {/* Phương thức thanh toán */}
-      <View style={styles.paymentMethods}>
-        <TouchableOpacity onPress={() => handleCardSelect('Credit Card')}>
+        <TouchableOpacity
+          style={[
+            styles.option,
+            selectedOption === 'Bank Transfer' && styles.optionSelected,
+          ]}
+          onPress={() => handleOptionPress('Bank Transfer')}>
           <Image
-            source={require('../../../assets/images/cardapple.png')}
-            style={[
-              styles.paymentIcon,
-              selectedCard === 'apple' && styles.selectedPaymentIcon, // Apply selected style
-            ]}
+            source={require('../../../assets/images/uber.png')}
+            style={styles.icon}
           />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleCardSelect('PayPal')}>
-          <Image
-            source={require('../../../assets/images/cardpaypal.png')}
-            style={[
-              styles.paymentIcon,
-              selectedCard === 'paypal' && styles.selectedPaymentIcon, // Apply selected style
-            ]}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleCardSelect('Bank Transfer')}>
-          <Image
-            source={require('../../../assets/images/cardvisa.png')}
-            style={[
-              styles.paymentIcon,
-              selectedCard === 'visa' && styles.selectedPaymentIcon, // Apply selected style
-            ]}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleCardSelect('Cash')}>
-          <Image
-            source={require('../../../assets/images/cardmaster.png')}
-            style={[
-              styles.paymentIcon,
-              selectedCard === 'master' && styles.selectedPaymentIcon, // Apply selected style
-            ]}
-          />
+          <Text style={styles.optionText}>Uber Eats</Text>
         </TouchableOpacity>
       </View>
-      <View>
-        <Text
-          style={{
-            marginBottom: 15,
-            fontWeight: 'bold',
-            color: '#808080',
-            fontFamily: 'nunitoSan',
-          }}>
-          PAYMENT DETAILS
-        </Text>
-      </View>
-      {/* Thông tin thẻ */}
-      <View style={styles.cardDetailsContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Số thẻ"
-          value={cardNumber}
-          onChangeText={setCardNumber}
-          keyboardType="numeric"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Tên chủ thẻ"
-          value={cardHolder}
-          onChangeText={setCardHolder}
-        />
-        <View style={styles.cardInfoRow}>
-          <TextInput
-            style={[styles.input, styles.smallInput]}
-            placeholder="Ngày hết hạn"
-            value={expirationDate}
-            onChangeText={setExpirationDate}
-            keyboardType="numeric"
-          />
-          <TextInput
-            style={[styles.input, styles.smallInput]}
-            placeholder="CVV"
-            value={cvv}
-            onChangeText={setCvv}
-            keyboardType="numeric"
-          />
-        </View>
-      </View>
 
-      {/* Nút thanh toán */}
-      <TouchableOpacity style={styles.payButton} onPress={handleSubmitOrder}>
-        <Text style={styles.payButtonText}>Thanh toán </Text>
+      <TouchableOpacity style={styles.nextButton} onPress={handleChangeScreen}>
+        <Text style={styles.nextButtonText}>Bước Tiếp Theo</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
-export default PaymentScreen;
-
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1, // Để chiếm toàn bộ chiều cao màn hình
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: '#fff',
     padding: 20,
+    width: '100%', // Chiếm toàn bộ chiều ngang màn hình
+    height: '100%', // Chiếm toàn bộ chiều cao màn hình
   },
-  header: {
+  headerContainer: {
+    width: '100%',
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 20,
-  },
-  backButton: {
-    padding: 10,
-  },
-  closeButton: {
-    padding: 10,
-  },
-  backText: {
-    fontSize: 24,
-    color: '#000',
-    fontFamily: 'nunitoSan',
-  },
-  closeText: {
-    fontSize: 28,
-    color: '#000',
-    fontFamily: 'nunitoSan',
+
+    justifyContent: 'space-between',
   },
   stepText: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#888',
+    color: '#999',
+
     fontFamily: 'nunitoSan',
   },
-  illustrationContainer: {
-    height: 150,
-    justifyContent: 'center',
-    alignItems: 'center',
+  closeIcon: {
+    width: 20,
+    height: 20,
+  },
+  hamburger: {
+    marginTop: 20,
     marginBottom: 40,
+    resizeMode: 'contain', // Đảm bảo hình ảnh không bị cắt mất
   },
-  illustrationImage: {
-    width: 250,
-    height: 250,
-  },
-  title: {
+  questionText: {
     fontSize: 18,
-    fontWeight: '700',
+    fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 10,
     fontFamily: 'nunitoSan',
   },
-  paymentMethods: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+  subText: {
+    fontSize: 14,
+    color: '#888',
+    textAlign: 'center',
     marginBottom: 20,
+    fontFamily: 'nunitoSan',
   },
-  paymentIcon: {
-    width: 75,
-    height: 50,
-  },
-  selectedPaymentIcon: {
-    borderColor: '#FF9966', // Change color to highlight the selected card
-    borderWidth: 2,
-    borderRadius: 10,
-  },
-  cardDetailsContainer: {
-    backgroundColor: '#f5f5f5',
-    borderRadius: 10,
-    padding: 20,
-    marginBottom: 20,
-  },
-  input: {
-    backgroundColor: '#fff',
-    padding: 10,
-    borderRadius: 5,
-    marginBottom: 10,
-    borderWidth: 1,
-    borderColor: '#ddd',
-  },
-  cardInfoRow: {
+  optionsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    width: '100%',
+    marginBottom: 20,
   },
-  smallInput: {
-    width: '45%',
-  },
-  payButton: {
-    backgroundColor: '#FF5733',
-    paddingVertical: 15,
-    borderRadius: 10,
+  option: {
+    flex: 1,
     alignItems: 'center',
+    padding: 50,
+    backgroundColor: '#f8f8f8',
+    borderRadius: 8,
+    marginRight: 10,
+    borderWidth: 2,
+    borderColor: 'transparent',
   },
-  payButtonText: {
+  optionSelected: {
+    borderColor: 'black',
+  },
+  icon: {
+    width: width * 0.2, // Kích thước icon là 20% chiều rộng màn hình
+    height: width * 0.2,
+    marginBottom: 10,
+    resizeMode: 'contain', // Đảm bảo hình ảnh không bị cắt
+  },
+  optionText: {
+    fontSize: 14,
+    color: '#333',
+    fontFamily: 'nunitoSan',
+  },
+  nextButton: {
+    backgroundColor: '#ff6347',
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 8,
+    width: '100%', // Nút chiếm toàn bộ chiều ngang
+    alignItems: 'center', // Canh giữa văn bản trong nút
+  },
+  nextButtonText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: '600',
+    fontFamily: 'nunitoSan',
   },
 });
+
+export default Checkout4;

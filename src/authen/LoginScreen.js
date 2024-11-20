@@ -21,7 +21,7 @@ import {AccessToken, LoginManager, Settings} from 'react-native-fbsdk-next'; // 
 
 const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState('admin@gmail.com');
-  const [password, setPassword] = useState('Bin1234567');
+  const [password, setPassword] = useState('Bin123456');
   const dispatch = useDispatch();
   const status = useSelector(state => state.auth.status); // Accessing auth status from the Redux store
   const error = useSelector(state => state.auth.error);

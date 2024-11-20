@@ -1,54 +1,141 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
+import {getPaymentInfo, sendTransactions} from '../../apiClient';
+import {useRoute} from '@react-navigation/native';
+// const data = {
+//   orderCode: 'ORD-001',
+//   amount: 1000000,
+//   transactions: [
+//     {
+//       accountNumber: '1234567890',
+//       reference: 'ABC-12345',
+//       description: 'Payment for order 12345',
+//       transactionDateTime: '2022-01-01 10:00:00',
+//     },
+//   ],
+// };
+const Checkout5 = ({navigation}) => {
+  const transactionId = useSelector(state => state.cart.transactionId);
+  const [data, setData] = useState();
+  const token = useSelector(state => state.auth.user?.token);
 
-const Checkuot5 = ({navigation}) => {
+  const route = useRoute();
+
+  console.log('Payment Data:', JSON.stringify(data, null, 2));
+  console.log('Payment id:', transactionId);
+  useEffect(async () => {
+    const response = await getPaymentInfo(transactionId, token);
+    setData(response);
+  }, [transactionId, token]);
+  // useEffect(() => {
+  //   const processTransaction = async () => {
+  //     if (paymentData?.transactions?.length > 0) {
+  //       const transactionData = {
+  //         orderId: orderId,
+  //         accountNumber: paymentData.transactions[0]?.accountNumber || '',
+  //         amount: paymentData.amount || 0,
+  //         counterAccountBankId:
+  //           paymentData.transactions[0]?.counterAccountBankId || '',
+  //         counterAccountBankName:
+  //           paymentData.transactions[0]?.counterAccountBankName || '',
+  //         counterAccountName:
+  //           paymentData.transactions[0]?.counterAccountName || '',
+  //         counterAccountNumber:
+  //           paymentData.transactions[0]?.counterAccountNumber || '',
+  //         description: paymentData.transactions[0]?.description || '',
+  //         reference: paymentData.transactions[0]?.reference || '',
+  //         transactionDateTime:
+  //           paymentData.transactions[0]?.transactionDateTime || '',
+  //         virtualAccountName:
+  //           paymentData.transactions[0]?.virtualAccountName || '',
+  //         virtualAccountNumber:
+  //           paymentData.transactions[0]?.virtualAccountNumber || '',
+  //       };
+
+  //       try {
+  //         // Assuming sendTransactions is a function you import
+  //         await sendTransactions(token, transactionData);
+  //         console.log('Transaction sent successfully.');
+  //       } catch (error) {
+  //         console.error('Error sending transaction:', error);
+  //       }
+  //     } else {
+  //       console.error('No transactions found in paymentData');
+  //     }
+  //   };
+
+  //   // Call the transaction processing function when the component loads
+  //   processTransaction();
+  // }, [orderId, paymentData, token]);
   return (
     <View style={styles.container}>
-      {/* Phần đầu (Header) */}
-      <View style={styles.header}>
-        <Text style={styles.stepText}>Step 4/4</Text>
-        <TouchableOpacity style={styles.closeButton}>
-          <Text style={styles.closeText}>×</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Hình ảnh minh họa */}
+      {/* Header */}
       <View style={styles.illustrationContainer}>
         <Image
-          source={require('../../../assets/images/backroundcheckout5.png')} // Thay thế bằng ảnh minh họa của bạn
+          source={require('../../../assets/images/backroundcheckout5.png')}
           style={styles.illustrationImage}
           resizeMode="contain"
         />
       </View>
+      {/* Payment Information Container */}
+      {data && (
+        <View style={styles.paymentInfoContainer}>
+          <Text style={styles.paymentInfoTitle}>Payment Information</Text>
+          <Text style={styles.transactionText}>
+            Order Code: {data.orderCode}
+          </Text>
+          <Text style={styles.transactionText}>Amount: {data.amount} VND</Text>
 
-      {/* Tiêu đề thông báo */}
-      <Text style={styles.title}>Your Order Has Been Placed Successfully!</Text>
+          {data.transactions && data.transactions.length > 0 && (
+            <View>
+              <Text style={styles.paymentInfoSubTitle}>
+                Transaction Details:
+              </Text>
+              {data.transactions.map((transaction, index) => (
+                <View key={index} style={styles.transactionItem}>
+                  <Text style={styles.transactionText}>
+                    Account Number: {transaction.accountNumber}
+                  </Text>
+                  <Text style={styles.transactionText}>
+                    Transaction Reference: {transaction.reference}
+                  </Text>
+                  <Text style={styles.transactionText}>
+                    Description: {transaction.description}
+                  </Text>
+                  <Text style={styles.transactionText}>
+                    Transaction Date: {transaction.transactionDateTime}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          )}
+        </View>
+      )}
 
-      {/* Mô tả chi tiết */}
-      <Text style={styles.description}>
-        Your order has been successfully completed. Within moments you will
-        receive a notification with the receipt of your purchase and you can
-        track every step of your order.
-      </Text>
+      {/* Illustration */}
 
-      {/* Nút hoàn thành */}
+      {/* Finish Button */}
       <TouchableOpacity
         style={styles.finishButton}
         onPress={() => navigation.navigate('Home')}>
-        <Text style={styles.finishButtonText}>Finish Order</Text>
+        <Text style={styles.finishButtonText}>Back to home</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
-export default Checkuot5;
+export default Checkout5;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
     padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center ',
   },
   header: {
     flexDirection: 'row',
@@ -71,37 +158,62 @@ const styles = StyleSheet.create({
     color: '#000',
     fontFamily: 'nunitoSan',
   },
+  paymentInfoContainer: {
+    backgroundColor: '#f9f9f9',
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 20,
+  },
+  paymentInfoTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    marginBottom: 10,
+    fontFamily: 'nunitoSan',
+  },
+  paymentInfoText: {
+    fontSize: 14,
+    color: '#333',
+    marginBottom: 5,
+    fontFamily: 'nunitoSan',
+  },
+  paymentInfoSubTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginTop: 10,
+    marginBottom: 5,
+    fontFamily: 'nunitoSan',
+  },
+  transactionItem: {
+    marginBottom: 10,
+  },
+  transactionText: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 3,
+    fontFamily: 'nunitoSan',
+  },
   illustrationContainer: {
     justifyContent: 'center',
     alignItems: 'center',
   },
   illustrationImage: {
     width: 300,
-    height: 300, // Tùy chỉnh kích thước hình ảnh
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: '700',
-    textAlign: 'center',
-    color: 'black',
-    paddingHorizontal: 20,
-    marginBottom: 20,
-    fontFamily: 'nunitoSan',
-  },
-  description: {
-    fontSize: 14,
-    color: '#666',
-    textAlign: 'center',
-    lineHeight: 22,
-    marginBottom: '35%',
-    fontFamily: 'nunitoSan',
+    height: 300,
+    position: 'relative',
+    marginBottom: 30,
   },
   finishButton: {
     backgroundColor: '#FF5733',
-    paddingVertical: 15,
+
     borderRadius: 10,
+
+    position: 'absolute',
+    width: '90%',
+    bottom: 20,
     alignItems: 'center',
-    marginBottom: 20,
+    justifyContent: 'center',
+
+    height: 60,
   },
   finishButtonText: {
     color: '#fff',

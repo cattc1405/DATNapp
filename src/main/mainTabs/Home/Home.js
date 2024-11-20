@@ -9,7 +9,7 @@ import {
   ScrollView,
   FlatList,
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import SlideNav from '../../slidenav/SlideNav';
 import {useSelector} from 'react-redux'; // Import useSelector
@@ -24,6 +24,9 @@ const Home = () => {
     setIsSlideNavVisible(!isSlideNavVisible);
   };
   const authStatus = useSelector(state => state.auth.user);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const flatListRef = useRef(null);
+
   console.log('check', authStatus);
   useEffect(() => {
     fetchData();
@@ -88,28 +91,36 @@ const Home = () => {
       </ImageBackground>
     </TouchableOpacity>
   );
-  const renderItemOffer = ({item}) => (
+  const renderItemOffer = ({item, index}) => (
     <TouchableOpacity
       onPress={() =>
         navigation.navigate('ProductStack', {
           screen: 'ProductDetail',
-          params: {productId: item._id}, // Passing the item data as params
+          params: {productId: item._id},
         })
       }>
-      <ImageBackground
-        style={styles.itemTodayView}
-        source={{uri: item.image}}
-        imageStyle={{borderRadius: 15}}>
-        <Image style={styles.productImg} source={item.image} />
-        <View style={styles.tagView}>
-          <Image style={styles.logo} source={item.logoImage} />
-          <Text style={styles.tagText}>NEW</Text>
+      <View
+        style={[
+          styles.itemTodayView,
+          {
+            backgroundColor: index % 2 === 0 ? '#F55F44' : '#FFC425',
+          },
+        ]}>
+        <View style={styles.bestTag}>
+          <Text style={styles.bestText}>BEST OFFER</Text>
         </View>
         <Text style={styles.brandText}>{item.name}</Text>
-        <Text style={styles.describeText}>{item.description}</Text>
-      </ImageBackground>
+        <Text style={styles.describeText}>For only 30.000 VND</Text>
+        <Image style={styles.productImg} source={{uri: item.image}} />
+      </View>
     </TouchableOpacity>
   );
+  const handleScroll = event => {
+    const offsetX = event.nativeEvent.contentOffset.x;
+    const itemWidth = 200; // Adjust this based on your item width
+    const index = Math.round(offsetX / itemWidth);
+    setCurrentIndex(index);
+  };
   const cartItems = useSelector(state => state.cart.items);
 
   // Local state to keep track of the item count
@@ -182,9 +193,7 @@ const Home = () => {
               <Text style={styles.pointText}>
                 Currently you have 125 points,
               </Text>
-              <Text style={styles.pointText}>
-                keep going to win amazing rewards!
-              </Text>
+              <Text style={styles.pointText}>keep going to win rewards!</Text>
             </View>
           </View>
         </View>
@@ -202,12 +211,31 @@ const Home = () => {
           {/* scrollview */}
 
           <FlatList
+            ref={flatListRef}
             data={productF}
             horizontal
             showsHorizontalScrollIndicator={false}
             renderItem={renderItemOffer}
             keyExtractor={item => item.id}
+            onScroll={handleScroll}
+            snapToAlignment="center"
+            snapToInterval={200} // Adjust this to match the width of each item
+            decelerationRate="fast"
+            pagingEnabled
           />
+
+          {/* Paginator */}
+          <View style={styles.paginator}>
+            {productF.map((_, index) => (
+              <View
+                key={index}
+                style={[
+                  styles.dot,
+                  {opacity: index === currentIndex ? 1 : 0.3},
+                ]}
+              />
+            ))}
+          </View>
           <View style={styles.titleAndViewall}>
             <Text style={styles.titleBoldText}>Popular Restaurants Nearby</Text>
             <TouchableOpacity>
@@ -231,6 +259,20 @@ const Home = () => {
 export default Home;
 
 const styles = StyleSheet.create({
+  //Pagination for offer
+  paginator: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 20,
+  },
+  dot: {
+    width: 28,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#F55F44',
+    marginHorizontal: 4,
+  },
+  //
   modalContainer: {
     flex: 1,
     flexDirection: 'row',
@@ -287,7 +329,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: -4,
     top: 8,
-    backgroundColor: '#F55F44',
+    backgroundColor: '#59CA6A',
   },
   tagBrand: {
     width: 230,
@@ -306,14 +348,14 @@ const styles = StyleSheet.create({
   describeText: {
     fontSize: 16,
     width: '45%',
-    color: 'black',
+    color: 'white',
     fontWeight: 'bold',
     marginLeft: 15,
     marginTop: -5,
     fontFamily: 'nunitoSan',
   },
   brandText: {
-    color: 'black',
+    color: 'white',
     fontSize: 17,
     fontWeight: '700',
     margin: 15,
@@ -321,11 +363,11 @@ const styles = StyleSheet.create({
   },
   productImg: {
     position: 'absolute',
-    right: 0,
-    bottom: 0,
-    width: '55%',
-    height: '100%',
-    resizeMode: 'contain',
+    marginLeft: 145,
+    marginTop: 45,
+
+    width: 128,
+    height: 80,
   },
   logo: {
     width: 20,
@@ -357,6 +399,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     borderRadius: 15,
     marginRight: 10,
+    backgroundColor: '#FFC425',
   },
   viewallText: {
     color: '#F55F44',
@@ -441,6 +484,12 @@ const styles = StyleSheet.create({
   iconLogo: {
     width: 200,
     height: 50,
+  },
+  iconLogoItem: {
+    width: 140,
+    height: 18,
+    marginTop: 10,
+    marginLeft: 15,
   },
   iconImage: {
     width: 25,

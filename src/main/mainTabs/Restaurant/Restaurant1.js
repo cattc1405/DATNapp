@@ -51,7 +51,9 @@ const Restaurant1 = ({navigation}) => {
         </View>
       </View>
       <View style={styles.offerBadge}>
-        <Text style={styles.offerText}>{item.offers}</Text>
+        <Image
+          style={styles.offerText}
+          source={require('../../../../assets/images/icons/infoIcon.png')}></Image>
       </View>
     </TouchableOpacity>
   );
@@ -221,17 +223,13 @@ const styles = StyleSheet.create({
     fontFamily: 'nunitoSan',
   },
   offerBadge: {
-    backgroundColor: '#F55F44',
-    borderRadius: 4,
     paddingVertical: 4,
     paddingHorizontal: 8,
+    borderRadius: 180,
   },
   offerText: {
     color: '#fff',
-    fontSize: 12,
-    marginHorizontal: 5,
-    marginVertical: 3,
-    fontWeight: 'bold',
-    fontFamily: 'nunitoSan',
+    width: 19,
+    height: 19,
   },
 });

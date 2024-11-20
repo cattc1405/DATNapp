@@ -7,7 +7,9 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import {getBrands} from '../../apiClient';
+import {getBrands, submitOrder, removeUserCartItem} from '../../apiClient';
+import {useDispatch, useSelector} from 'react-redux';
+
 import Animated, {
   Easing,
   useSharedValue,
@@ -22,6 +24,13 @@ const AddressScreen = ({navigation}) => {
   const [selectedBrand, setSelectedBrand] = useState(null); // State to store the selected brand
   const router = useRoute();
   const selectedContact = router.params;
+  const token = useSelector(state => state.auth.user?.token);
+  const userId = useSelector(state => state.auth.user?.userId);
+
+  const restaurant2 = selectedBrand;
+  const contact = selectedContact.selectedContact;
+  console.log('res1', restaurant2);
+  //
   useEffect(() => {
     const fetchBrands = async () => {
       try {
@@ -41,17 +50,27 @@ const AddressScreen = ({navigation}) => {
         setSelectedBrand(item); // Set the selected brand
         setShowBrands(false); // Close the brands list after selection
       }}>
-      <Image source={{uri: item.image}} style={styles.logo} />
-      <View style={styles.infoContainer}>
-        <Text style={styles.restaurantName}>{item.name}</Text>
-        <Text style={styles.restaurantAddress}>{item.address}</Text>
-        <View style={styles.ratingContainer}>
-          <Text style={styles.ratingStars}>⭐⭐⭐⭐⭐</Text>
-          <Text style={styles.reviewText}>({item.review})</Text>
+      <View style={{flexDirection: 'row', padding: 10}}>
+        <Image source={{uri: item.image}} style={styles.logo} />
+        <View style={styles.infoContainer}>
+          <Text
+            style={styles.restaurantName}
+            numberOfLines={2}
+            ellipsizeMode="tail">
+            {item.name}
+          </Text>
+          <View>
+            <Text
+              style={styles.restaurantAddress}
+              numberOfLines={3}
+              ellipsizeMode="tail">
+              {item.address}
+            </Text>
+          </View>
         </View>
-      </View>
-      <View style={styles.offerBadge}>
-        <Text style={styles.offerText}>{item.offers}</Text>
+        <View style={styles.offerBadge}>
+          <Text style={styles.offerText}>{item.offers}</Text>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -81,7 +100,7 @@ const AddressScreen = ({navigation}) => {
             style={styles.backIcon}
           />
         </TouchableOpacity>
-        <Text style={styles.stepText}>Step 2/4</Text>
+        <Text style={styles.stepText}>Step 2/3</Text>
         <Image
           source={require('../../../assets/images/closeArrow.png')}
           style={styles.closeIcon}
@@ -122,9 +141,6 @@ const AddressScreen = ({navigation}) => {
         {selectedBrand && ( // Only show address details if a brand is selected
           <>
             <Text style={styles.addressDetails}>{selectedBrand.address}</Text>
-            <Text style={styles.addressDetails}>
-              Zip Code - {selectedBrand.zipCode || 'Not available'}
-            </Text>
           </>
         )}
 
@@ -137,7 +153,6 @@ const AddressScreen = ({navigation}) => {
 
         {/* Animated Brand Options */}
         <Animated.View style={[styles.brandOptionsContainer, animatedStyle]}>
-          <Text>aa</Text>
           <FlatList
             data={brands}
             keyExtractor={item => item._id}
@@ -155,7 +170,9 @@ const AddressScreen = ({navigation}) => {
             alert('Please select a brand');
             return; // Prevent proceeding if no brand is selected
           }
-          navigation.navigate('Checkout3', {selectedBrand, selectedContact});
+          const brand = selectedBrand._id;
+          console.log(brand, contact);
+          navigation.navigate('Checkout4', {brand, contact});
         }}>
         <Text style={styles.nextButtonText}>Next Step</Text>
       </TouchableOpacity>
@@ -171,12 +188,43 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
   },
+  restaurantCard: {
+    width: '90%',
+
+    borderRadius: 10,
+    marginBottom: 10,
+    padding: 10,
+  },
+
+  restaurantName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
+    fontFamily: 'nunitoSan',
+    textAlign: 'center',
+    marginLeft: 10,
+  },
+  restaurantAddress: {
+    fontSize: 14,
+    color: '#888',
+    marginBottom: 5,
+    fontFamily: 'nunitoSan',
+    marginLeft: 10,
+    flex: 1,
+  },
+  logo: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: '#F9F9F9',
+  },
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     width: '100%',
     marginBottom: 20,
+    marginTop: 10,
   },
   backIcon: {
     width: 20,
