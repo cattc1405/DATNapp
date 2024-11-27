@@ -86,10 +86,14 @@ const WhatsInToday = () => {
         <View style={styles.productImage}>
           <Image source={{uri: item.image}} style={styles.productImage}></Image>
         </View>
-        <Text style={styles.productName}>{item.name}</Text>
+        <Text numberOfLines={1} style={styles.productName}>
+          {item.name}
+        </Text>
         <Text style={styles.productDescription}>{item.description}</Text>
 
-        <Text style={styles.productPrice}>${item.price}</Text>
+        <Text style={styles.productPrice}>
+          {new Intl.NumberFormat('vi-VN').format(item.price)} VNĐ
+        </Text>
         <View style={styles.button}>
           <ImageBackground
             source={require('../../../../assets/images/icons/ov_shape.png')}
@@ -128,75 +132,75 @@ const WhatsInToday = () => {
         <Text style={styles.titleBoldText}>What's in Today?</Text>
       </View>
 
-      <ScrollView style={styles.scrollContainer}>
-        <View style={styles.menuView}>
-          <Text style={styles.titleBoldText1}>Popular Featured</Text>
-          <TouchableOpacity onPress={handleToggleExpandFeatured}>
-            <Text style={styles.viewallText}>
-              {isExpandedF ? 'Show Less' : 'View All'}
-            </Text>
-          </TouchableOpacity>
-        </View>
-        {/* FlatList for initial items */}
+      {/* <ScrollView style={styles.scrollContainer}> */}
+      <View style={styles.menuView}>
+        <Text style={styles.titleBoldText1}>Popular Featured</Text>
+        <TouchableOpacity onPress={handleToggleExpandFeatured}>
+          <Text style={styles.viewallText}>
+            {isExpandedF ? 'Show Less' : 'View All'}
+          </Text>
+        </TouchableOpacity>
+      </View>
+      {/* FlatList for initial items */}
+    
+      <View style={styles.sectionContainer}>
+        <FlatList
+          data={productF.slice(0, 3)}
+          renderItem={renderProductItem}
+          keyExtractor={item => item.id?.toString()}
+          showsVerticalScrollIndicator={true}
+          numColumns={3}
+        />
+      </View>
 
-        <View style={styles.sectionContainer}>
-          <FlatList
-            data={productF.slice(0, 3)}
-            renderItem={renderProductItem}
-            keyExtractor={item => item.id?.toString()}
-            showsVerticalScrollIndicator={true}
-            numColumns={3} // Show 3 items in a row
-          />
-        </View>
+      {/* Animated container for additional items */}
+      <View style={styles.scrollContainer}>
+      <Animated.View style={[styles.expandedContainer, animatedStyle]}>
+        <FlatList
+          data={productF.slice(3)} // Show the remaining items
+          renderItem={renderProductItem}
+          keyExtractor={item => item.id?.toString()}
+          showsVerticalScrollIndicator={false}
+          numColumns={3}
+        />
+      </Animated.View>
+      </View>
+      {/*--------------------Same----------------------- */}
+      <View style={styles.menuView}>
+        <Text style={styles.titleBoldText1}>1$ Deal</Text>
+        <TouchableOpacity onPress={handleToggleExpandSameDeal}>
+          <Text style={styles.viewallText}>
+            {isExpanded ? 'Show Less' : 'View All'}
+          </Text>
+        </TouchableOpacity>
+      </View>
+      {/* FlatList for initial items */}
 
-        {/* Animated container for additional items */}
-        <ScrollView style={styles.scrollContainer}>
-          <Animated.View style={[styles.expandedContainer, animatedStyle]}>
-            <FlatList
-              data={productF.slice(3)} // Show the remaining items
-              renderItem={renderProductItem}
-              keyExtractor={item => item.id?.toString()}
-              showsVerticalScrollIndicator={false}
-              numColumns={3}
-            />
-          </Animated.View>
-        </ScrollView>
-        {/*--------------------Same----------------------- */}
-        <View style={styles.menuView}>
-          <Text style={styles.titleBoldText1}>1$ Deal</Text>
-          <TouchableOpacity onPress={handleToggleExpandSameDeal}>
-            <Text style={styles.viewallText}>
-              {isExpanded ? 'Show Less' : 'View All'}
-            </Text>
-          </TouchableOpacity>
-        </View>
-        {/* FlatList for initial items */}
+      <View style={styles.sectionContainer}>
+        <FlatList
+          data={productSD.slice(0, 3)}
+          renderItem={renderProductItem}
+          keyExtractor={item => item.id?.toString()}
+          showsVerticalScrollIndicator={true}
+          numColumns={3} // Show 3 items in a row
+        />
+      </View>
 
-        <View style={styles.sectionContainer}>
-          <FlatList
-            data={productSD.slice(0, 3)}
-            renderItem={renderProductItem}
-            keyExtractor={item => item.id?.toString()}
-            showsVerticalScrollIndicator={true}
-            numColumns={3} // Show 3 items in a row
-          />
-        </View>
+      {/* Animated container for additional items */}
+      {/* <ScrollView style={styles.scrollContainer}> */}
+      <Animated.View style={[styles.expandedContainer, animatedStyle]}>
+        <FlatList
+          data={productSD.slice(3)} // Show the remaining items
+          renderItem={renderProductItem}
+          keyExtractor={item => item.id?.toString()}
+          showsVerticalScrollIndicator={false}
+          numColumns={3}
+        />
+      </Animated.View>
+      {/* </ScrollView> */}
 
-        {/* Animated container for additional items */}
-        <ScrollView style={styles.scrollContainer}>
-          <Animated.View style={[styles.expandedContainer, animatedStyle]}>
-            <FlatList
-              data={productSD.slice(3)} // Show the remaining items
-              renderItem={renderProductItem}
-              keyExtractor={item => item.id?.toString()}
-              showsVerticalScrollIndicator={false}
-              numColumns={3}
-            />
-          </Animated.View>
-        </ScrollView>
-
-        {/*--------------------ALL----------------------- */}
-      </ScrollView>
+      {/*--------------------ALL----------------------- */}
+      {/* </ScrollView> */}
       <View style={styles.menuView}>
         <Text style={styles.titleBoldText1}>View all</Text>
         <TouchableOpacity
@@ -228,23 +232,17 @@ export default WhatsInToday;
 const styles = StyleSheet.create({
   scrollContainer: {
     width: '100%',
-    height: '100%',
   },
-  productName: {
-    fontWeight: 'bold',
-    fontSize: 10,
-    fontFamily: 'nunitoSan',
-    color: '#000000',
-  },
+
   productDescription: {
-    fontWeight: 'bold',
-    fontSize: 10,
+    fontWeight: '200',
+    fontSize: 9,
     fontFamily: 'nunitoSan',
     color: '#9D9D9D',
   },
   productPrice: {
-    fontWeight: 'bold',
-    fontSize: 10,
+    fontWeight: '700',
+    fontSize: 12,
     fontFamily: 'nunitoSan',
     color: '#000000',
   },
@@ -262,6 +260,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 140,
     borderRadius: 20,
+    elevation: 4,
     backgroundColor: 'white',
 
     margin: 10,
@@ -362,10 +361,9 @@ const styles = StyleSheet.create({
   },
   productName: {
     marginTop: 5,
-    fontSize: 16,
-    fontWeight: 'bold',
-    flexWrap: 'wrap',
-    lineHeight: 20,
+    fontSize: 13,
+    fontWeight: '700',
+    color: 'black',
   },
   columnWrapper: {
     justifyContent: 'space-between', // Spaces out the columns
@@ -386,11 +384,14 @@ const styles = StyleSheet.create({
   iconMenuView: {
     width: 25,
     height: 25,
+  resizeMode:'contain',
     marginTop: 50,
   },
   iconMenuView2: {
     width: 25,
     height: 25,
+    resizeMode:'contain',
+
     marginLeft: '5%',
     marginTop: 50,
   },

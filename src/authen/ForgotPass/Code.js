@@ -74,19 +74,30 @@ const Code = props => {
 
   return (
     <View style={styles.container}>
-      <Image source={require('../../../assets/images/Back.png')} />
-      <TouchableOpacity
-        style={styles.backButton}
-        onPress={() => navigation.goBack()}
-      />
-      <Text style={styles.stepText}>Bước 2/3</Text>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Image
+            source={require('../../../assets/images/Back.png')}
+            style={styles.icon}
+          />
+        </TouchableOpacity>
+        <Text style={styles.stepText}>Step 2/3</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+          <Image
+            source={require('../../../assets/images/Exit.png')}
+            style={styles.icon}
+          />
+        </TouchableOpacity>
+      </View>
       <View style={styles.imagePlaceholder}>
         <Image source={require('../../../assets/images/Img.png')} />
       </View>
       <Text style={styles.title}>Nhập mã xác thực</Text>
-      <Text style={styles.description}>
-        Mã xác thực đã được gửi đến email {email} của bạn.
-      </Text>
+      <Text style={styles.description}>Mã xác thực đã được gửi đến email</Text>
+      <View style={styles.mailStView}>
+        <Text style={styles.emailDescription}>{email}</Text>
+        <Text style={styles.description}> của bạn.</Text>
+      </View>
       <View style={styles.codeContainer}>
         {[...Array(6)].map((_, index) => (
           <TextInput
@@ -115,6 +126,11 @@ const Code = props => {
 
 // Các kiểu dáng cho thành phần
 const styles = StyleSheet.create({
+  mailStView: {
+    width: '100%',
+    justifyContent:'center',
+    flexDirection: 'row',
+  },
   container: {
     flex: 1,
     padding: 20,
@@ -146,14 +162,22 @@ const styles = StyleSheet.create({
     color: '#000000',
     fontFamily: 'nunitoSan',
   },
+  emailDescription: {
+    fontSize: 16,
+    textAlign: 'center',
+    color: 'blue',
+    fontWeight: '400',
+    // fontFamily: 'nunitoSan',
+  },
   description: {
     fontSize: 16,
     textAlign: 'center',
     color: '#777',
-    marginBottom: 20,
-    fontFamily: 'nunitoSan',
+    fontWeight: '400',
+    // fontFamily: 'nunitoSan',
   },
   codeContainer: {
+    marginTop:20,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -168,6 +192,10 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   verifyButton: {
+    position: 'absolute',
+    width: '100%',
+    marginLeft: '7%',
+    bottom: 50,
     padding: 15,
     backgroundColor: '#F55F44',
     borderRadius: 30,
@@ -177,6 +205,24 @@ const styles = StyleSheet.create({
   verifyButtonText: {
     color: '#FFF',
     fontSize: 16,
+    fontWeight: 'bold',
+    fontFamily: 'nunitoSan',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    marginBottom: 20,
+    paddingHorizontal: 10,
+  },
+  icon: {
+    width: 24,
+    height: 24,
+  },
+  stepText: {
+    fontSize: 16,
+    color: '#555',
     fontWeight: 'bold',
     fontFamily: 'nunitoSan',
   },

@@ -6,14 +6,21 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useFocusEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {getUserCart} from '../../../apiClient'; // Assuming you have a function to get product by ID
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {useRoute} from '@react-navigation/native';
-
+import {
+  setCartItems,
+  incrementQuantity,
+  decrementQuantity,
+  removeCartItem,
+  setTransactionId,
+} from '../../../redux/slice/cartSlice';
 const ConfirmOrder = () => {
   const route = useRoute(); // Access route using the hook
+  const dispatch = useDispatch();
 
   const userId = useSelector(state => state.auth.user?.userId); // Retrieve the userId from the Redux store
   const token = useSelector(state => state.auth.user?.token); // Retrieve the token at the top level
@@ -21,97 +28,102 @@ const ConfirmOrder = () => {
   const {cartItems} = route.params; // Retrieve cartItems from route params
   console.log(userId);
   console.log(token);
+  const fetchUserCart = async () => {
+    if (!userId || !token) return;
 
-  const calculateTotalPrice = () => {
-    return cartItems.reduce(
-      (total, item) => total + item.price * item.quantity,
-      0,
-    );
+    try {
+      setLoading(true);
+      const data = await getUserCart(userId, token);
+      dispatch(setCartItems(data.cart));
+    } catch (err) {
+      console.error('Error fetching user cart:', err);
+    } finally {
+      setLoading(false);
+    }
   };
-  const handleIncrement = id => {
-    setCartItems(prevItems =>
-      prevItems.map(item =>
-        item.id === id ? {...item, quantity: item.quantity + 1} : item,
-      ),
-    );
+  useEffect(() => {
+    fetchUserCart();
+  }, [userId, token]);
+  const handleIncrement = async id => {
+    dispatch(incrementQuantity(id)); // Update in Redux store
+
+    // Find the item and update API
+    const item = cartItems.find(item => item.id === id);
+    if (item) {
+      await updateUserCart(userId, token, id, {quantity: item.quantity + 1});
+    }
   };
 
-  const handleDecrement = id => {
-    setCartItems(prevItems =>
-      prevItems.map(item =>
-        item.id === id && item.quantity > 1
-          ? {...item, quantity: item.quantity - 1}
-          : item,
-      ),
-    );
+  const handleDecrement = async id => {
+    const item = cartItems.find(item => item.id === id);
+    if (item && item.quantity > 1) {
+      dispatch(decrementQuantity(id)); // Update in Redux store
+      await updateUserCart(userId, token, id, {quantity: item.quantity - 1});
+    }
   };
+
   const [editingItemId, setEditingItemId] = useState(null);
 
   const handleEditToggle = id => {
     setEditingItemId(editingItemId === id ? null : id);
   };
-  const handleDelete = id => {
-    setCartItems(prevItems => prevItems.filter(item => item.id !== id));
+  const handleDelete = async id => {
+    console.log('cartitem', id);
+    await removeUserCartItem(userId, token, id);
+
+    dispatch(removeCartItem(id));
   };
+
   const handleInfoRightPress = id => {
     if (editingItemId === id) {
       setEditingItemId(null);
     }
   };
-  const totalPrice = calculateTotalPrice();
-
-  const renderProductItem = ({item}) => {
+  const renderItem = ({item}) => {
     const isEditing = editingItemId === item.id;
+
+    // Sum the prices of all attributes
+    const totalTop = item.attributeId.reduce(
+      (sum, attribute) => sum + attribute.price,
+      0,
+    );
+
+    // Calculate the total price for the item (attributes + product price * quantity)
+    const itemTotalPrice = totalTop + item.price * item.quantity;
+
+    const nameString = item.attributeId
+      .map(attribute => attribute.size)
+      .join(', ');
 
     return (
       <View style={styles.productItem}>
         <View
           style={[styles.imgLeft, isEditing && {width: 0, display: 'none'}]}>
           <Image style={styles.productImg} source={{uri: item.image}} />
-          <View style={styles.quantityView}>
-            <TouchableOpacity style={styles.orangeCircle}>
-              <Image
-                style={styles.iconQuantity}
-                source={require('../../../../assets/images/icons/minusIcon.png')}
-              />
-            </TouchableOpacity>
-            <Text style={styles.quantityText}>{item.quantity}</Text>
-            <TouchableOpacity style={styles.orangeCircle}>
-              <Image
-                style={styles.iconQuantity}
-                source={require('../../../../assets/images/icons/plusIcon.png')}
-              />
-            </TouchableOpacity>
-          </View>
         </View>
-
         <TouchableOpacity
           style={[styles.infoRight, isEditing && styles.mrginLeft]}
           onPress={() => handleInfoRightPress(item.id)}>
           <Text style={styles.nameItem}>{item.name}</Text>
-          <Text style={styles.thinGrayText}>Size: {item.size}</Text>
           <Text style={styles.thinGrayText}>Quantity: x{item.quantity}</Text>
-          <Text style={styles.thinGrayText}>Customization</Text>
+          <Text style={styles.thinGrayText1}>Topping: {nameString}</Text>
           <Text style={styles.thinGrayText}>{item.note}</Text>
-          <Text style={styles.priceText}>${item.price.toFixed(2)}</Text>
+          <Text style={styles.priceText}>${itemTotalPrice}</Text>
         </TouchableOpacity>
-
-        {isEditing ? (
-          <TouchableOpacity style={styles.deleteView}>
-            <Image
-              style={styles.iconQuantity}
-              source={require('../../../../assets/images/icons/deleteItemIcon.png')}
-            />
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-            style={styles.editItemView}
-            onPress={() => handleEditToggle(item.id)}>
-            <Text style={styles.editText}>Edit Menu</Text>
-          </TouchableOpacity>
-        )}
       </View>
     );
+  };
+
+  // Calculate the total price for all items in the cart
+  const calculateTotalPrice = () => {
+    return cartItems.reduce((total, item) => {
+      const totalTop = item.attributeId.reduce(
+        (sum, attribute) => sum + attribute.price,
+        0,
+      );
+      const itemTotalPrice = totalTop + item.price * item.quantity;
+      return total + itemTotalPrice;
+    }, 0);
   };
   return (
     <View style={styles.container}>
@@ -140,8 +152,8 @@ const ConfirmOrder = () => {
       <View style={styles.mainView}>
         <FlatList
           data={cartItems}
-          renderItem={renderProductItem}
-          keyExtractor={item => item.id}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => item.id || index.toString()}
           contentContainerStyle={{paddingBottom: 20}}
         />
       </View>
@@ -154,7 +166,7 @@ const ConfirmOrder = () => {
         <View style={styles.lineGray}></View>
         <View style={styles.totalView}>
           <Text style={styles.totalText}>Total Amount:</Text>
-          <Text style={styles.totalText}>${totalPrice}</Text>
+          <Text style={styles.totalText}>${calculateTotalPrice()}</Text>
         </View>
         <TouchableOpacity
           style={styles.payBtn}
@@ -329,7 +341,7 @@ const styles = StyleSheet.create({
   },
   nameItem: {
     fontFamily: 'nunitoSan',
-    paddingTop: 8,
+    paddingTop: 18,
     paddingBottom: 5,
     fontSize: 15,
     color: 'black',
@@ -359,7 +371,7 @@ const styles = StyleSheet.create({
     width: '90%',
     height: 80,
     marginLeft: '10%',
-    marginTop: 20,
+    marginTop: 30,
     resizeMode: 'contain',
   },
   infoRight: {

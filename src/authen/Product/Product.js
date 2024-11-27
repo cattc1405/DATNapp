@@ -112,10 +112,14 @@ const Product = () => {
         <View style={styles.productImage}>
           <Image source={{uri: item.image}} style={styles.productImage}></Image>
         </View>
-        <Text style={styles.productName}>{item.name}</Text>
+        <Text numberOfLines={1} style={styles.productName}>
+          {item.name}
+        </Text>
         <Text style={styles.productDescription}>{item.description}</Text>
 
-        <Text style={styles.productPrice}>${item.price}</Text>
+        <Text style={styles.productPrice}>
+          {new Intl.NumberFormat('vi-VN').format(item.price)} VNĐ
+        </Text>
         <View style={styles.button}>
           <ImageBackground
             source={require('../../../assets/images/icons/ov_shape.png')}
@@ -286,15 +290,10 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  productName: {
-    fontWeight: 'bold',
-    fontSize: 10,
-    fontFamily: 'nunitoSan',
-    color: '#000000',
-  },
+
   productDescription: {
     fontWeight: 'bold',
-    fontSize: 10,
+    fontSize: 9,
     fontFamily: 'nunitoSan',
     color: '#9D9D9D',
   },
@@ -318,6 +317,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 140,
     borderRadius: 20,
+    elevation: 5,
     backgroundColor: 'white',
 
     margin: 10,
@@ -429,10 +429,9 @@ const styles = StyleSheet.create({
   },
   productName: {
     marginTop: 5,
-    fontSize: 16,
-    fontWeight: 'bold',
-    flexWrap: 'wrap',
-    lineHeight: 20,
+    fontSize: 13,
+    fontWeight: '700',
+    color: 'black',
   },
   columnWrapper: {
     justifyContent: 'space-between', // Spaces out the columns
@@ -453,6 +452,8 @@ const styles = StyleSheet.create({
   iconMenuView: {
     width: 25,
     height: 25,
+    resizeMode:'contain',
+
     marginTop: 50,
   },
   iconMenuView2: {

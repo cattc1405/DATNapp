@@ -27,6 +27,10 @@ import Profile from '../../authen/Profile/Profile';
 import TestPhoto from '../../authen/Profile/TestPhoto';
 import BranchMap from './Restaurant/BranchMap';
 import Notification from './Home/Notification';
+import EditProfile from '../../authen/Profile/EditProfile';
+import PersonalInfo from '../../authen/Profile/PersonalInfo';
+import Notification1 from './Home/Notification_q';
+
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -58,7 +62,7 @@ const HomeStack = () => {
       /> */}
       <Stack.Screen
         name="Notifications"
-        component={Notification}
+        component={Notification1}
         options={{headerShown: false}}
       />
       <Stack.Screen
@@ -103,6 +107,16 @@ const ProfileStack = () => {
       <Stack.Screen
         name="Profile"
         component={Profile}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="PersonalInfo"
+        component={PersonalInfo}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="EditProfile"
+        component={EditProfile}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

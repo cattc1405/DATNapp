@@ -8,10 +8,11 @@ const Stack = createNativeStackNavigator();
 
 const ForgotPassNavigator = () => {
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="NewPass" component={NewPass} />
       <Stack.Screen name="ForgetPass" component={ForgetPass} />
       <Stack.Screen name="Code" component={Code} />
-      <Stack.Screen name="NewPass" component={NewPass} />
+  
     </Stack.Navigator>
   );
 };

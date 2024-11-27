@@ -5,100 +5,67 @@ import {
   View,
   Image,
   TouchableOpacity,
-  TextInput,
-  Alert,
+  FlatList,
+  SafeAreaView,
   ScrollView,
-
-  // Import ScrollView
+  Alert,
 } from 'react-native';
 import {useSelector} from 'react-redux';
-import {
-  getUserInfo,
-  updateUser,
-  uploadAvatar,
-  changePassword,
-} from '../../apiClient';
+
+import {getUserInfo, uploadAvatar} from '../../apiClient';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
-import {useFocusEffect} from '@react-navigation/native';
+import ActionSheet from 'react-native-actionsheet';
+const Profile = props => {
+  const {navigation} = props;
+  const profileOptions = [
+    {title: 'Personal Information', navigate: 'PersonalInfo'},
+    {title: 'Edit Profile', navigate: 'EditProfile'},
+    {title: 'Country', value: 'New York'},
+    {title: 'Language', value: 'English'},
+  ];
 
-const Profile = () => {
+  const generalOptions = [
+    {title: 'Notifications', navigate: 'Notifications'},
+    {title: 'Dark Mode', navigate: 'DarkMode'},
+    {title: 'Touch ID and Password', navigate: 'TouchID'},
+  ];
+
+  const supportOptions = [
+    {title: 'Privacy and Security', navigate: 'PrivacySecurity'},
+    {title: 'About Us', navigate: 'AboutUs'},
+  ];
+  const renderOption = ({item}) => (
+    <TouchableOpacity
+      onPress={() => navigation.navigate(item.navigate)}
+      style={styles.optionContainer}>
+      <Text style={styles.optionText}>{item.title}</Text>
+      {item.value ? (
+        <Text style={styles.optionValue}>{item.value}</Text>
+      ) : (
+        <Text style={styles.arrow}>{'>'}</Text>
+      )}
+    </TouchableOpacity>
+  );
+  const [imageUri, setImageUri] = useState(null);
+  const [avatar, setAvatar] = useState(null);
   const userId = useSelector(state => state.auth.user?.userId);
   const token = useSelector(state => state.auth.user?.token);
   const [userInfo, setUserInfo] = useState(null);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [imageUri, setImageUri] = useState(null);
-  const [avatar, setAvatar] = useState(null);
 
-  // New state for password change
-  const [currentPass, setCurrentPass] = useState('');
-  const [newPass, setNewPass] = useState('');
-
-  const handleChangePassword = async () => {
-    if (!currentPass || !newPass) {
-      Alert.alert('Lỗi', 'Vui lòng điền đầy đủ thông tin mật khẩu!');
-      return;
-    }
-
-    const passwordData = {
-      userId: userId,
-      currentPassword: currentPass,
-      newPassword: newPass,
-    };
-
-    try {
-      await changePassword(passwordData, token);
-      Alert.alert('Thành công', 'Đã thay đổi mật khẩu thành công!');
-      setCurrentPass('');
-      setNewPass('');
-    } catch (error) {
-      console.error('Error changing password:', error);
-      Alert.alert('Lỗi', 'Không thể thay đổi mật khẩu!');
-    }
-  };
   const fetchUser = async () => {
     try {
       const data = await getUserInfo(userId, token);
       setUserInfo(data);
-      setName(data.name);
-      setEmail(data.email);
-      setPhone(data.phone);
       setAvatar(data.image);
     } catch (error) {
       console.error('Error fetching user info:', error);
     }
   };
-
-  useFocusEffect(
-    React.useCallback(() => {
-      // Your code to run when the screen is focused
-      fetchUser();
-
-      // Optionally, return a cleanup function if needed
-      return () => {
-        // Cleanup code (if any)
-      };
-    }, [userId, token]), // You can add any dependencies here
-  );
-  const handleEditPress = async () => {
-    const userForm = {
-      name,
-      email,
-      phone,
-    };
-
-    try {
-      await updateUser(userId, userForm, token);
-      Alert.alert('Thành công', 'Cập nhật thông tin cá nhân thành công!');
-      fetchUser();
-    } catch (error) {
-      console.error('Error updating user:', error);
-      Alert.alert('Lỗi', 'Không thể cập nhật thông tin cá nhân!');
-    }
-  };
-
+  useEffect(() => {
+    fetchUser();
+  }, [userId, token]);
+  if (!userInfo) return <Text>Đang tải...</Text>;
   const requestPermission = async permission => {
     const result = await check(permission);
     if (result === RESULTS.DENIED || result === RESULTS.BLOCKED) {
@@ -133,6 +100,7 @@ const Profile = () => {
           console.log('ImagePicker Error: ', response.errorCode);
         } else {
           setImageUri(response.assets[0].uri);
+          handleUploadAvatar();
         }
       },
     );
@@ -158,6 +126,7 @@ const Profile = () => {
           console.log('Camera Error: ', response.errorCode);
         } else {
           setImageUri(response.assets[0].uri);
+          handleUploadAvatar();
         }
       },
     );
@@ -186,179 +155,170 @@ const Profile = () => {
     }
   };
 
-  if (!userInfo) return <Text>Đang tải...</Text>;
-
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {/* Profile Image */}
-      <View style={styles.profileImageContainer}>
-        <Image source={{uri: imageUri || avatar}} style={styles.profileImage} />
-        <TouchableOpacity
-          style={styles.editButton}
-          onPress={handleUploadAvatar}>
-          <Text style={styles.editButtonText}>Tải lên</Text>
-        </TouchableOpacity>
-        <View style={{flexDirection: 'row'}}>
-          <TouchableOpacity style={styles.editButton} onPress={handlePickImage}>
-            <Text style={styles.editButtonText}>Thư viện</Text>
-          </TouchableOpacity>
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <View style={styles.headView}>
+          <Image
+            style={styles.redFoodBgr}
+            source={require('../../../assets/images/redFoodBgr.png')}
+          />
+        </View>
+        <View style={styles.contentContainer}>
+          <View style={styles.avatarContainer}>
+            <Image style={styles.avatar} source={{uri: imageUri || avatar}} />
+            <View style={{flexDirection: 'row'}}>
+              <TouchableOpacity onPress={handleCaptureImage}>
+                <Image
+                  style={{width: 36, height: 36, borderRadius: 180}}
+                  source={require('../../../assets/images/icons/came.png')}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handlePickImage}>
+                <Image
+                  style={{
+                    width: 36,
+                    height: 36,
+                    marginLeft: 18,
+                    borderRadius: 180,
+                  }}
+                  source={require('../../../assets/images/icons/gal.jpg')}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Account</Text>
+            <FlatList
+              data={profileOptions}
+              renderItem={renderOption}
+              keyExtractor={item => item.title}
+            />
+          </View>
+
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>General</Text>
+            <FlatList
+              data={generalOptions}
+              renderItem={renderOption}
+              keyExtractor={item => item.title}
+            />
+          </View>
+
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Help and Support</Text>
+            <FlatList
+              data={supportOptions}
+              renderItem={renderOption}
+              keyExtractor={item => item.title}
+            />
+          </View>
+
           <TouchableOpacity
-            style={styles.editButton}
-            onPress={handleCaptureImage}>
-            <Text style={styles.editButtonText}>Máy ảnh</Text>
+            onPress={() => navigation.navigate('Login')}
+            style={styles.logoutButton}>
+            <Text style={styles.logoutText}>Log Out</Text>
+            <Image
+              style={styles.imgLogOut}
+              source={require('../../../assets/images/icons/logoutIcon.png')}
+            />
           </TouchableOpacity>
         </View>
-      </View>
-
-      {/* User Info */}
-      <View style={styles.infoContainer}>
-        <TextInput
-          style={styles.input}
-          value={name}
-          onChangeText={setName}
-          placeholder="Tên"
-        />
-        <TextInput
-          style={styles.input}
-          value={email}
-          onChangeText={setEmail}
-          placeholder="Email"
-          keyboardType="email-address"
-        />
-        <TextInput
-          style={styles.input}
-          value={phone}
-          onChangeText={setPhone}
-          placeholder="Số điện thoại"
-          keyboardType="phone-pad"
-        />
-        <TouchableOpacity onPress={handleEditPress} style={styles.saveButton}>
-          <Text style={styles.saveButtonText}>Lưu</Text>
-        </TouchableOpacity>
-      </View>
-      {/* Change Password */}
-      <View style={styles.infoContainer}>
-        <TextInput
-          style={styles.input}
-          value={currentPass}
-          onChangeText={setCurrentPass}
-          placeholder="Mật khẩu hiện tại"
-          secureTextEntry
-        />
-        <TextInput
-          style={styles.input}
-          value={newPass}
-          onChangeText={setNewPass}
-          placeholder="Mật khẩu mới"
-          secureTextEntry
-        />
-        <TouchableOpacity
-          onPress={handleChangePassword}
-          style={styles.saveButton}>
-          <Text style={styles.saveButtonText}>Thay đổi mật khẩu</Text>
-        </TouchableOpacity>
-      </View>
-      {/* Additional Info */}
-      <View style={styles.detailsContainer}>
-        <Text style={styles.detailLabel}>Email: {userInfo.email}</Text>
-        <Text style={styles.detailLabel}>Name: {userInfo.name}</Text>
-        <Text style={styles.detailLabel}>Số điện thoại: {userInfo.phone}</Text>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    backgroundColor: '#f2f2f2',
+  },
+  scrollContent: {
     flexGrow: 1,
-    backgroundColor: '#e9eff1',
-    alignItems: 'center',
-    padding: 20,
+    paddingBottom: 20, // Khoảng cách cuối cùng để dễ cuộn hơn
   },
-  profileImageContainer: {
+  headView: {
+    backgroundColor: '#ff6347',
     alignItems: 'center',
-    marginBottom: 25,
+    paddingVertical: 20,
   },
-  profileImage: {
-    width: 140,
-    height: 140,
-    borderRadius: 70,
-    marginBottom: 15,
-    borderColor: '#4a90e2',
+  redFoodBgr: {
+    width: '100%',
+    height: 210,
+    position: 'absolute',
+  },
+  avatarContainer: {
+    alignItems: 'center',
+    marginBottom: 30,
+  },
+  avatar: {
+    width: 130,
+    height: 130,
+    borderRadius: 100,
     borderWidth: 2,
+    borderColor: '#fff',
   },
-  editButton: {
-    backgroundColor: '#5a9ee1',
-    paddingVertical: 10,
-    paddingHorizontal: 30,
-    borderRadius: 20,
-    marginTop: 10,
-    alignItems: 'center',
-    justifyContent: 'center', // Căn giữa nội dung
-    width: 150, // Đặt chiều rộng cố định để các nút có kích thước bằng nhau
+  contentContainer: {
+    backgroundColor: '#fff',
+    marginHorizontal: 20,
+    marginTop: 20,
+    borderRadius: 10,
+    paddingVertical: 20,
+    paddingHorizontal: 15,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 3},
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.2,
-    shadowRadius: 5,
+    shadowRadius: 8,
     elevation: 5,
   },
-  editButtonText: {
-    color: '#fff',
-    fontSize: 15,
-    fontWeight: '600',
+  section: {
+    paddingHorizontal: 10,
   },
-  infoContainer: {
-    width: '100%',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  input: {
-    width: '90%',
-    padding: 14,
-    borderRadius: 15,
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: '900',
+    color: '#000000',
     marginBottom: 10,
-    backgroundColor: '#ffffff',
-    borderWidth: 1,
-    borderColor: '#d0d0d0',
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 2,
+    marginTop: 20,
+    fontFamily: 'nunitoSan',
   },
-  saveButton: {
-    backgroundColor: '#4caf50',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 20,
-    marginTop: 10,
+  optionContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    elevation: 5,
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
   },
-  saveButtonText: {
-    color: '#fff',
+
+  optionValue: {
+    fontSize: 14,
+    color: '#888',
+    fontFamily: 'nunitoSan',
+  },
+  arrow: {
+    fontSize: 18,
+    color: '#888',
+    fontFamily: 'nunitoSan',
+  },
+  logoutButton: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  logoutText: {
     fontSize: 16,
-    fontWeight: '600',
-  },
-  detailsContainer: {
-    width: '100%',
-    padding: 20,
-    backgroundColor: '#ffffff',
-    borderRadius: 20,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    elevation: 5,
-    marginTop: 15,
-  },
-  detailLabel: {
-    fontSize: 16,
-    color: '#333',
+    color: 'red',
     marginBottom: 5,
+    fontFamily: 'nunitoSan',
   },
+  imgLogOut: {
+    height: 17,
+    width: 15,
+  },
+  //
 });
 
 export default Profile;

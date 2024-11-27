@@ -24,12 +24,17 @@ const OrderScreen = ({status}) => {
   const token = useSelector(state => state.auth.user?.token);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false); // Add state for refreshing
+  const [refreshing, setRefreshing] = useState(false);
+
+  // Fetch orders from the API
   const fetchOrders = async () => {
     try {
       setLoading(true);
       const fetchedOrders = await getUserOrder(userId, token, {status});
-      setOrders(fetchedOrders);
+      const sortedOrders = fetchedOrders.sort(
+        (a, b) => new Date(b.dateOrdered) - new Date(a.dateOrdered),
+      );
+      setOrders(sortedOrders);
     } catch (err) {
       console.error('Error fetching orders:', err);
     } finally {
@@ -37,36 +42,71 @@ const OrderScreen = ({status}) => {
       setRefreshing(false); // End refresh when done
     }
   };
+
+  // Group orders by date
+  const groupProductsByDate = orders => {
+    return orders.reduce((acc, order) => {
+      const date = new Date(order.dateOrdered).toLocaleDateString();
+      if (!acc[date]) acc[date] = [];
+      acc[date].push(order);
+      return acc;
+    }, {});
+  };
+
+  const groupedOrders = groupProductsByDate(orders);
+  const groupedOrdersArray = Object.entries(groupedOrders); // Array of [date, orders]
+
   useEffect(() => {
     fetchOrders();
   }, [userId, token, status]);
+
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     fetchOrders();
   }, [userId, token, status]);
+
   const handlePress = item => {
     navigation.navigate('OrderItemScreen', {item});
   };
 
-  const renderOrderItem = ({item}) => (
-    <TouchableOpacity
-      style={styles.itemContainer}
-      onPress={() => handlePress(item)}>
-      <Text style={styles.transactionId}>{item.transactionId}</Text>
-      <View style={styles.detailsContainer}>
-        <Text style={styles.detailsText}>{item.paymentMethod}</Text>
-        <Text style={styles.detailsText}>Total: ${item.totalPrice}</Text>
-      </View>
-      <View style={styles.separator} />
-    </TouchableOpacity>
-  );
-
-  const chunkOrders = (orders, chunkSize) => {
-    let result = [];
-    for (let i = 0; i < orders.length; i += chunkSize) {
-      result.push(orders.slice(i, i + chunkSize));
+  // Render order item
+  const renderItem = ({item, index}) => {
+    if (!item.restaurant?._id || !item.restaurant?.image || !item._id) {
+      return null; // Avoid rendering invalid orders
     }
-    return result;
+
+    const orderNumber = String(index + 1).padStart(3, '0'); // Order number padding
+
+    return (
+      <TouchableOpacity onPress={() => handlePress(item)}>
+        <View style={styles.orderCard}>
+          <Image
+            source={{uri: item.restaurant.image}}
+            style={styles.restaurantImage}
+          />
+          <View style={styles.orderInfo}>
+            <Text style={styles.orderNumber}>Order #{orderNumber}</Text>
+            <Text style={styles.restaurant}>{item.paymentMethob}</Text>
+            <Text style={styles.totalPrice}>
+              {formatCurrency(item.totalPrice)}
+            </Text>
+            <TouchableOpacity
+              style={styles.detailButton}
+              onPress={() => handlePress(item)}>
+              <Text style={styles.detailButtonText}>Detail</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  const formatCurrency = amount => {
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+      minimumFractionDigits: 0,
+    }).format(amount);
   };
 
   if (loading) {
@@ -74,27 +114,24 @@ const OrderScreen = ({status}) => {
       <ActivityIndicator size="large" color="#0000ff" style={styles.loading} />
     );
   }
-
+  console.log(orders);
   return (
-    <View style={styles.tabContent}>
-      <FlatList
-        data={chunkOrders(orders, 7)}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({item}) => (
-          <FlatList
-            data={item}
-            keyExtractor={subItem => subItem.id.toString()}
-            renderItem={renderOrderItem}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-          />
-        )}
-        key={status}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      />
-    </View>
+    <FlatList
+      data={groupedOrdersArray}
+      keyExtractor={item => item[0]} // Using date as key for section header
+      renderItem={({item: [date, products]}) => (
+        <>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionHeaderText}>{date}</Text>
+          </View>
+          {products.map((product, index) => renderItem({item: product, index}))}
+        </>
+      )}
+      contentContainerStyle={styles.listContainer}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    />
   );
 };
 
@@ -196,8 +233,8 @@ const Order = () => {
               borderRadius: 1.5,
             },
           }}>
-          <Tab.Screen name="Pending">
-            {() => <OrderScreen status="Pending" />}
+          <Tab.Screen name="Coming">
+            {() => <OrderScreen status="Coming" />}
           </Tab.Screen>
           <Tab.Screen name="Success">
             {() => <OrderScreen status="Success" />}
@@ -215,6 +252,85 @@ const Order = () => {
 export default Order;
 
 const styles = StyleSheet.create({
+  //orderItem
+  listContainer: {
+    paddingHorizontal: 16,
+  },
+  sectionHeaderText: {
+    fontWeight: 'bold',
+    fontSize: 19,
+    marginTop: 10,
+    marginLeft: 5,
+    fontFamily: 'nunitoSan',
+  },
+  orderCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+
+    borderRadius: 25,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: {width: 0, height: 1},
+    shadowRadius: 4,
+    elevation: 2,
+    width: 360,
+    height: 130,
+    margin: 15,
+
+    alignSelf: 'center',
+  },
+  restaurantImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 10,
+    marginRight: 12,
+    marginLeft: 30,
+  },
+  orderInfo: {
+    flex: 1,
+    marginLeft: 15,
+  },
+  orderNumber: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+    fontFamily: 'nunitoSan',
+  },
+  restaurant: {
+    fontSize: 14,
+    color: '#888',
+    marginVertical: 4,
+    fontFamily: 'nunitoSan',
+  },
+  totalPrice: {
+    fontSize: 14,
+    color: 'green',
+    marginLeft: 4,
+    fontFamily: 'nunitoSan',
+  },
+  detailButton: {
+    backgroundColor: '#FF3D00',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+
+    flexDirection: 'row',
+    position: 'absolute',
+    width: 73,
+    height: 29,
+    marginLeft: 180,
+    justifyContent: 'center',
+  },
+
+  detailButtonText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
+
+  //
   iconImage: {
     width: 25,
     height: 25,

@@ -14,7 +14,13 @@ import {getAttributeByProductId, getProductById} from '../../apiClient'; // Assu
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useSelector} from 'react-redux';
 import {addUserCart} from '../../apiClient';
-
+import Animated, {
+  Easing,
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withClamp,
+} from 'react-native-reanimated';
 const ProductDetail = ({route}) => {
   const navigation = useNavigation();
   const [selectedType, setSelectedType] = useState();
@@ -29,51 +35,47 @@ const ProductDetail = ({route}) => {
   const [size, setSize] = useState();
   const [localUserId, setLocalUserId] = useState(null);
   const token = useSelector(state => state.auth.user?.token); // Retrieve the token at the top level
-  console.log('type', selectedType);
+  console.log('type - top', selectedItems);
   // Send to cartUser
   const [itemOrder, setItemOrder] = useState([]);
   const addToCart = async () => {
     try {
       const newItem = {
         id: Math.random().toString(),
-        drink: selectedDrink,
-        excluded: selectedItems,
-        attributeId: selectedType,
+
+        attributeId: selectedItems,
 
         image: product.image,
         name: product.name,
-        price: price,
+        price: product.price,
+
         quantity: 1,
-        size: size,
+
         userId: userId, // Use the current user's ID
       };
 
       setItemOrder(prevItems =>
         Array.isArray(prevItems) ? [...prevItems, newItem] : [newItem],
       );
+      const addCart = async () => {
+        if (itemOrder.length > 0 && userId && token) {
+          try {
+            const response = await addUserCart(userId, itemOrder, token);
+            console.log('Cart updated successfully:', response);
+          } catch (error) {
+            console.error(
+              'Failed to add cart:',
+              error.response ? error.response.data : error.message,
+            );
+          }
+        }
+      };
+      addCart();
     } catch (error) {
       console.error('Error in addToCart:', error);
     }
   };
 
-  // Effect to add items to the cart when itemOrder changes
-  useEffect(() => {
-    const addCart = async () => {
-      if (itemOrder.length > 0 && userId && token) {
-        try {
-          const response = await addUserCart(userId, itemOrder, token);
-          console.log('Cart updated successfully:', response);
-        } catch (error) {
-          console.error(
-            'Failed to add cart:',
-            error.response ? error.response.data : error.message,
-          );
-        }
-      }
-    };
-
-    addCart();
-  }, [itemOrder, userId, token]);
   console.log(itemOrder);
   useEffect(() => {
     console.log('Updated Item Order:', itemOrder);
@@ -92,6 +94,7 @@ const ProductDetail = ({route}) => {
     const fetchProductDetail = async () => {
       try {
         const productDetail = await getProductById(productId);
+
         setProduct(productDetail);
       } catch (error) {
         console.error('Error fetching product detail:', error);
@@ -101,7 +104,7 @@ const ProductDetail = ({route}) => {
       fetchProductDetail();
     }
   }, [productId]);
-
+  console.log('Product', product);
   const handleSelectType = (type, price, name) => {
     setSelectedType(type);
     setPrice(price);
@@ -112,13 +115,13 @@ const ProductDetail = ({route}) => {
   const handleSelectDrink = drink => {
     setSelectedDrink(drink);
   };
-  const handleSelectItem = item => {
-    if (selectedItems.includes(item)) {
-      setSelectedItems(selectedItems.filter(i => i !== item));
-    } else {
-      setSelectedItems([...selectedItems, item]);
-    }
-  };
+  // const handleSelectItem = item => {
+  //   if (selectedItems.includes(item)) {
+  //     setSelectedItems(selectedItems.filter(i => i !== item));
+  //   } else {
+  //     setSelectedItems([...selectedItems, item]);
+  //   }
+  // };
   const renderAttributes = () => (
     <FlatList
       data={product.attributes}
@@ -146,273 +149,164 @@ const ProductDetail = ({route}) => {
       }
     />
   );
+  const handleSelectItem = item => {
+    const selectedItem = {
+      id: item._id,
+      size: item.size,
+      price: item.price,
+    };
 
+    const isItemSelected = selectedItems.some(
+      selected =>
+        selected.id === selectedItem.id && selected.size === selectedItem.size,
+    );
+
+    if (isItemSelected) {
+      // Deselect item by filtering it out from the selectedItems array
+      setSelectedItems(
+        selectedItems.filter(
+          selected =>
+            selected.id !== selectedItem.id ||
+            selected.size !== selectedItem.size,
+        ),
+      );
+    } else {
+      // Add item to the selectedItems array
+      setSelectedItems([...selectedItems, selectedItem]);
+    }
+  };
+
+  /// Slidedown animation
+  const [isExpanded, setIsExpanded] = useState(false);
+  const animationHeight = useSharedValue(0);
+  const animatedStyle = useAnimatedStyle(() => ({
+    height: withTiming(isExpanded ? animationHeight.value : 0, {
+      duration: 500,
+      easing: Easing.ease, // Smooth easing for the animation
+    }),
+  }));
+  const handleToggleExpandSameDeal = () => {
+    setIsExpanded(prev => !prev);
+    animationHeight.value = isExpanded ? 0 : product.attributes.length * -15; // Adjust for your item height
+  };
+
+  const renderTopping = ({item}) => {
+    if (!item.image || !item.size || !item.price) return null;
+
+    const isSelected = selectedItems.some(
+      selected =>
+        selected.id === item._id &&
+        selected.size === item.size &&
+        selected.price === item.price,
+    );
+
+    return (
+      <TouchableOpacity onPress={() => handleSelectItem(item)}>
+        <View style={styles.ingredientsListView}>
+          <View style={styles.ingredientView}>
+            <View style={{width: 14, height: 14, position: 'absolute'}}>
+              <Image
+                style={{marginLeft: 40}}
+                source={
+                  isSelected
+                    ? require('../../../assets/images/icons/checkProduct.png') // Checked image
+                    : require('../../../assets/images/icons/uncheckProduct.png') // Unchecked image
+                }
+              />
+            </View>
+            <View style={styles.ingredientImgView}>
+              <Image style={styles.ingredientImg} source={{uri: item.image}} />
+            </View>
+            <Text style={styles.nameIngre}>{item.size}</Text>
+            <Text style={styles.priceIngre}>{formatCurrency(item.price)}</Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+  const formatCurrency = amount => {
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+      minimumFractionDigits: 0,
+    }).format(amount);
+  };
   const renderProductDetail = () => {
     if (product) {
       return (
         <ScrollView
           style={styles.productContainer}
           contentContainerStyle={styles.centeredContent}>
-          <Image style={styles.productImage} source={{uri: product.image}} />
-          <Text style={styles.titleBoldText}>{product.name}</Text>
-          <Text style={styles.grayThinText}>{product.description}</Text>
-          <View style={styles.ingredientsListView}>
-            <View style={styles.ingredientView}>
-              <Image
-                style={styles.ingredientImg}
-                source={require('../../../assets/images/BigMacBun.png')}
-              />
-              <Text style={styles.nameIngre}>Big Mac Bun</Text>
+          <ImageBackground
+            style={styles.redFoodBgr}
+            source={require('../../../assets/images/productDetailHeader.png')}
+          />
+          <View style={styles.headView2}>
+            <View
+              style={{
+                justifyContent: 'space-between',
+
+                display: 'flex',
+                flexDirection: 'row',
+              }}>
+              <TouchableOpacity>
+                <Image
+                  style={{marginTop: 24, marginLeft: 20}}
+                  source={require('../../../assets/images/icons/whiteBackArrow.png')}
+                />
+              </TouchableOpacity>
+
+              <TouchableOpacity>
+                <Image
+                  style={{marginTop: 24, marginRight: 20}}
+                  source={require('../../../assets/images/icons/3dotsIcon.png')}
+                />
+              </TouchableOpacity>
             </View>
-            <View style={styles.ingredientView}>
-              <Image
-                style={styles.ingredientImg}
-                source={require('../../../assets/images/BeefPatty.png')}
-              />
-              <Text style={styles.nameIngre}>Beef Patty</Text>
+          </View>
+
+          <View style={styles.productImageContainer}>
+            <Image style={styles.productImage} source={{uri: product.image}} />
+          </View>
+          <View style={{position: 'relative', marginTop: 70}}>
+            <Text style={styles.titleBoldText1}>{product.name}</Text>
+            <Text style={styles.priceText}>
+              {formatCurrency(product.price)}
+            </Text>
+
+            <Text style={styles.titleBoldText2}>About</Text>
+            <Text style={styles.grayThinText}>{product.description}</Text>
+            <View style={styles.menuView}>
+              <Text style={styles.titleBoldText}>Popular Featured</Text>
+              <TouchableOpacity onPress={handleToggleExpandSameDeal}>
+                <Text style={styles.viewallText}>
+                  {isExpanded ? 'Show Less' : 'View All'}
+                </Text>
+              </TouchableOpacity>
             </View>
-            <View style={styles.ingredientView}>
-              <Image
-                style={styles.ingredientImg}
-                source={require('../../../assets/images/Lettuce.png')}
+
+            <View style={styles.sectionContainer}>
+              <FlatList
+                data={product.attributes.slice(0, 3)}
+                keyExtractor={item => item._id.toString()}
+                renderItem={renderTopping}
+                showsVerticalScrollIndicator={true}
+                horizontal={true}
               />
-              <Text style={styles.nameIngre}>Lettuce</Text>
             </View>
+
+            <ScrollView style={styles.scrollContainer}>
+              <Animated.View style={[styles.expandedContainer, animatedStyle]}>
+                <FlatList
+                  data={product.attributes.slice(3)} // Show the remaining items
+                  renderItem={renderTopping}
+                  keyExtractor={item => item.id?.toString()}
+                  showsVerticalScrollIndicator={false}
+                  numColumns={3}
+                />
+              </Animated.View>
+            </ScrollView>
           </View>
-          <Text style={styles.grayNormalText}>How big?</Text>
-          <View style={styles.attributeContainer}>
-            {product.attributes
-              .filter(item => item.isActive)
-              .map(item => (
-                <TouchableOpacity
-                  key={item._id}
-                  style={[
-                    styles.optionBtn,
-                    selectedType === item._id && styles.optionFocusBtn,
-                  ]}
-                  onPress={() =>
-                    handleSelectType(item._id, item.price, item.size)
-                  }>
-                  <Text
-                    style={[
-                      styles.optionText,
-                      selectedType === item._id && styles.optionFocusText,
-                    ]}>
-                    {item.size} - ${item.price}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-          </View>
-
-          <Text style={styles.grayNormalText}>What do you want to drink?</Text>
-          <View style={styles.optionDrinkView}>
-            <TouchableOpacity
-              style={[
-                styles.optionDrinkBtn,
-                selectedDrink === 'Water' && styles.optionFocusBtn,
-              ]}
-              onPress={() => handleSelectDrink('Water')}>
-              <Text
-                style={[
-                  styles.optionText,
-                  selectedDrink === 'Water' && styles.optionFocusText,
-                ]}>
-                Water
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[
-                styles.optionDrinkBtn,
-                selectedDrink === 'Lemonade' && styles.optionFocusBtn,
-              ]}
-              onPress={() => handleSelectDrink('Lemonade')}>
-              <Text
-                style={[
-                  styles.optionText,
-                  selectedDrink === 'Lemonade' && styles.optionFocusText,
-                ]}>
-                Lemonade
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[
-                styles.optionDrinkBtn,
-                selectedDrink === 'Fanta' && styles.optionFocusBtn,
-              ]}
-              onPress={() => handleSelectDrink('Fanta')}>
-              <Text
-                style={[
-                  styles.optionText,
-                  selectedDrink === 'Fanta' && styles.optionFocusText,
-                ]}>
-                Fanta
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[
-                styles.optionDrinkBtn,
-                selectedDrink === 'Iced Tea' && styles.optionFocusBtn,
-              ]}
-              onPress={() => handleSelectDrink('Iced Tea')}>
-              <Text
-                style={[
-                  styles.optionText,
-                  selectedDrink === 'Iced Tea' && styles.optionFocusText,
-                ]}>
-                Iced Tea
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.optionDrinkBtn,
-                selectedDrink === 'Pepsi' && styles.optionFocusBtn,
-              ]}
-              onPress={() => handleSelectDrink('Pepsi')}>
-              <Text
-                style={[
-                  styles.optionText,
-                  selectedDrink === 'Pepsi' && styles.optionFocusText,
-                ]}>
-                Pepsi
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.optionDrinkBtn,
-                selectedDrink === 'Dr.Pepper' && styles.optionFocusBtn,
-              ]}
-              onPress={() => handleSelectDrink('Dr.Pepper')}>
-              <Text
-                style={[
-                  styles.optionText,
-                  selectedDrink === 'Dr.Pepper' && styles.optionFocusText,
-                ]}>
-                Dr.Pepper
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.optionDrinkBtn,
-                selectedDrink === 'Sprite' && styles.optionFocusBtn,
-              ]}
-              onPress={() => handleSelectDrink('Sprite')}>
-              <Text
-                style={[
-                  styles.optionText,
-                  selectedDrink === 'Sprite' && styles.optionFocusText,
-                ]}>
-                Sprite
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <Text style={styles.grayNormalText}>
-            Do you want to take something out?
-          </Text>
-          <View style={styles.optionDrinkView}>
-            <TouchableOpacity
-              style={[
-                styles.optionDrinkBtn,
-                selectedItems.includes('Lettuce') && styles.optionFocusBtn,
-              ]}
-              onPress={() => handleSelectItem('Lettuce')}>
-              <Text
-                style={[
-                  styles.optionText,
-                  selectedItems.includes('Lettuce') && styles.optionFocusText,
-                ]}>
-                Lettuce
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[
-                styles.optionDrinkBtn,
-                selectedItems.includes('Big Mac Sauce') &&
-                  styles.optionFocusBtn,
-              ]}
-              onPress={() => handleSelectItem('Big Mac Sauce')}>
-              <Text
-                style={[
-                  styles.optionText,
-                  selectedItems.includes('Big Mac Sauce') &&
-                    styles.optionFocusText,
-                ]}>
-                Big Mac Sauce
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[
-                styles.optionDrinkBtn,
-                selectedItems.includes('Cheese') && styles.optionFocusBtn,
-              ]}
-              onPress={() => handleSelectItem('Cheese')}>
-              <Text
-                style={[
-                  styles.optionText,
-                  selectedItems.includes('Cheese') && styles.optionFocusText,
-                ]}>
-                Cheese
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[
-                styles.optionDrinkBtn,
-                selectedItems.includes('Pickles') && styles.optionFocusBtn,
-              ]}
-              onPress={() => handleSelectItem('Pickles')}>
-              <Text
-                style={[
-                  styles.optionText,
-                  selectedItems.includes('Pickles') && styles.optionFocusText,
-                ]}>
-                Pickles
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[
-                styles.optionDrinkBtn,
-                selectedItems.includes('Onion') && styles.optionFocusBtn,
-              ]}
-              onPress={() => handleSelectItem('Onion')}>
-              <Text
-                style={[
-                  styles.optionText,
-                  selectedItems.includes('Onion') && styles.optionFocusText,
-                ]}>
-                Onion
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.spaceView} />
-
-          <TouchableOpacity
-            style={styles.addBtn}
-            onPress={async () => {
-              const itemOrder = {
-                productId: product._id,
-                attributeId: product.attributes,
-                drink: selectedDrink,
-                excluded: selectedItems,
-                quantity: 1,
-                image: product.image,
-                price: price,
-                size: size,
-                name: product.name,
-
-                userId: localUserId,
-              };
-              console.log('art', product.attributes);
-              setItemOrder(itemOrder);
-              addToCart();
-            }}>
-            <Text style={styles.addText}>Add to Order</Text>
-          </TouchableOpacity>
         </ScrollView>
       );
     } else {
@@ -423,305 +317,28 @@ const ProductDetail = ({route}) => {
   return (
     <View style={styles.container}>
       <View style={styles.headView}>
-        <ImageBackground
-          style={styles.redFoodBgr}
-          source={require('../../../assets/images/redFoodBgr.png')}
-        />
-        <View style={styles.menuView}>
-          <View
-            style={{
-              justifyContent: 'space-between',
-
-              display: 'flex',
-              flexDirection: 'row',
-
-              position: 'relative',
-            }}>
-            <TouchableOpacity>
-              <Image
-                source={require('../../../assets/images/icons/whiteBackArrow.png')}
-              />
-            </TouchableOpacity>
-
-            <TouchableOpacity>
-              <Image
-                source={require('../../../assets/images/icons/3dotsIcon.png')}
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
-        {renderProductDetail()}
+        <View>{renderProductDetail()}</View>
       </View>
-
-      {/* <ScrollView style={styles.mainView} showsVerticalScrollIndicator={false}>
-        {/* {renderProductDetail()} */}
-      {/* <View style={styles.ingredientTitleView}>
-          <Text style={styles.titleBoldText}>INGREDIENTS INCLUDED</Text>
-          <Text style={styles.viewallText}>View all</Text>
-        </View>
-        <View style={styles.ingredientsListView}>
-          <View style={styles.ingredientView}>
-            <Image
-              style={styles.ingredientImg}
-              source={require('../../../assets/images/BigMacBun.png')}
-            />
-            <Text style={styles.nameIngre}>Big Mac Bun</Text>
-          </View>
-          <View style={styles.ingredientView}>
-            <Image
-              style={styles.ingredientImg}
-              source={require('../../../assets/images/BigMacBun.png')}
-            />
-            <Text style={styles.nameIngre}>Beef Patty</Text>
-          </View>
-          <View style={styles.ingredientView}>
-            <Image
-              style={styles.ingredientImg}
-              source={require('../../../assets/images/BigMacBun.png')}
-            />
-            <Text style={styles.nameIngre}>Lettuce</Text>
-          </View>
-        </View>
-        <Text style={styles.titleBoldText}>CUSTOMIZATIONS</Text>
-        <Text style={styles.grayNormalText}>
-          What is the size of your burguer?
-        </Text>
-
-        <View style={styles.optionView}>
-          <TouchableOpacity
-            style={[
-              styles.optionBtn,
-              selectedType === 'Small' && styles.optionFocusBtn,
-            ]}
-            onPress={() => handleSelectType('Small')}>
-            <Text
-              style={[
-                styles.optionText,
-                selectedType === 'Small' && styles.optionFocusText,
-              ]}>
-              Small
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.optionBtn,
-              selectedType === 'Medium' && styles.optionFocusBtn,
-            ]}
-            onPress={() => handleSelectType('Medium')}>
-            <Text
-              style={[
-                styles.optionText,
-                selectedType === 'Medium' && styles.optionFocusText,
-              ]}>
-              Medium
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.optionBtn,
-              selectedType === 'Big' && styles.optionFocusBtn,
-            ]}
-            onPress={() => handleSelectType('Big')}>
-            <Text
-              style={[
-                styles.optionText,
-                selectedType === 'Big' && styles.optionFocusText,
-              ]}>
-              Big
-            </Text>
-          </TouchableOpacity>
-        </View> */}
-      {/* drink */}
-      {/* <Text style={styles.grayNormalText}>What do you want to drink?</Text>
-        <View style={styles.optionDrinkView}>
-          <TouchableOpacity
-            style={[
-              styles.optionDrinkBtn,
-              selectedDrink === 'Water' && styles.optionFocusBtn,
-            ]}
-            onPress={() => handleSelectDrink('Water')}>
-            <Text
-              style={[
-                styles.optionText,
-                selectedDrink === 'Water' && styles.optionFocusText,
-              ]}>
-              Water
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.optionDrinkBtn,
-              selectedDrink === 'Lemonade' && styles.optionFocusBtn,
-            ]}
-            onPress={() => handleSelectDrink('Lemonade')}>
-            <Text
-              style={[
-                styles.optionText,
-                selectedDrink === 'Lemonade' && styles.optionFocusText,
-              ]}>
-              Lemonade
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.optionDrinkBtn,
-              selectedDrink === 'Fanta' && styles.optionFocusBtn,
-            ]}
-            onPress={() => handleSelectDrink('Fanta')}>
-            <Text
-              style={[
-                styles.optionText,
-                selectedDrink === 'Fanta' && styles.optionFocusText,
-              ]}>
-              Fanta
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.optionDrinkBtn,
-              selectedDrink === 'Iced Tea' && styles.optionFocusBtn,
-            ]}
-            onPress={() => handleSelectDrink('Iced Tea')}>
-            <Text
-              style={[
-                styles.optionText,
-                selectedDrink === 'Iced Tea' && styles.optionFocusText,
-              ]}>
-              Iced Tea
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.optionDrinkBtn,
-              selectedDrink === 'Pepsi' && styles.optionFocusBtn,
-            ]}
-            onPress={() => handleSelectDrink('Pepsi')}>
-            <Text
-              style={[
-                styles.optionText,
-                selectedDrink === 'Pepsi' && styles.optionFocusText,
-              ]}>
-              Pepsi
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.optionDrinkBtn,
-              selectedDrink === 'Dr.Pepper' && styles.optionFocusBtn,
-            ]}
-            onPress={() => handleSelectDrink('Dr.Pepper')}>
-            <Text
-              style={[
-                styles.optionText,
-                selectedDrink === 'Dr.Pepper' && styles.optionFocusText,
-              ]}>
-              Dr.Pepper
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.optionDrinkBtn,
-              selectedDrink === 'Sprite' && styles.optionFocusBtn,
-            ]}
-            onPress={() => handleSelectDrink('Sprite')}>
-            <Text
-              style={[
-                styles.optionText,
-                selectedDrink === 'Sprite' && styles.optionFocusText,
-              ]}>
-              Sprite
-            </Text>
-          </TouchableOpacity>
-        </View> */}
-
-      {/* sth out */}
-      {/* <Text style={styles.grayNormalText}>
-          Do you want to take something out?
-        </Text>
-        <View style={styles.optionDrinkView}>
-          <TouchableOpacity
-            style={[
-              styles.optionDrinkBtn,
-              selectedItems.includes('Lettuce') && styles.optionFocusBtn,
-            ]}
-            onPress={() => handleSelectItem('Lettuce')}>
-            <Text
-              style={[
-                styles.optionText,
-                selectedItems.includes('Lettuce') && styles.optionFocusText,
-              ]}>
-              Lettuce
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.optionDrinkBtn,
-              selectedItems.includes('Big Mac Sauce') && styles.optionFocusBtn,
-            ]}
-            onPress={() => handleSelectItem('Big Mac Sauce')}>
-            <Text
-              style={[
-                styles.optionText,
-                selectedItems.includes('Big Mac Sauce') &&
-                  styles.optionFocusText,
-              ]}>
-              Big Mac Sauce
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.optionDrinkBtn,
-              selectedItems.includes('Cheese') && styles.optionFocusBtn,
-            ]}
-            onPress={() => handleSelectItem('Cheese')}>
-            <Text
-              style={[
-                styles.optionText,
-                selectedItems.includes('Cheese') && styles.optionFocusText,
-              ]}>
-              Cheese
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.optionDrinkBtn,
-              selectedItems.includes('Pickles') && styles.optionFocusBtn,
-            ]}
-            onPress={() => handleSelectItem('Pickles')}>
-            <Text
-              style={[
-                styles.optionText,
-                selectedItems.includes('Pickles') && styles.optionFocusText,
-              ]}>
-              Pickles
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.optionDrinkBtn,
-              selectedItems.includes('Onion') && styles.optionFocusBtn,
-            ]}
-            onPress={() => handleSelectItem('Onion')}>
-            <Text
-              style={[
-                styles.optionText,
-                selectedItems.includes('Onion') && styles.optionFocusText,
-              ]}>
-              Onion
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.spaceView} /> */}
-      {/* </ScrollView> */}
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          position: 'absolute',
+          bottom: 0,
+          width: '100%',
+          height: 50,
+          backgroundColor: 'white',
+          padding: 15,
+        }}>
+        <Text style={styles.addTD}>Do you want to add something?</Text>
+        <TouchableOpacity
+          style={styles.addBtn}
+          onPress={async () => {
+            addToCart();
+          }}>
+          <Text style={styles.addText}>Add to Order</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -741,16 +358,22 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   addBtn: {
-    height: 45,
-    width: '100%',
-    position: 'relative',
-    bottom: 5,
-
+    height: 40,
+    width: 142,
+    marginLeft: 30,
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
+    alignContent: 'center',
     borderRadius: 30,
     backgroundColor: '#F55F44',
+  },
+  addTD: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: '#000000 50%',
+    marginLeft: 30,
+    alignSelf: 'center',
   },
   optionDrinkBtn: {
     backgroundColor: '#CBCED1',
@@ -769,6 +392,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginLeft: 30,
+  },
+  expandedContainer: {
+    overflow: 'hidden', // Ensures items don't overflow the container
+
+    alignItems: 'center',
   },
   optionView: {
     width: '100%',
@@ -818,60 +446,86 @@ const styles = StyleSheet.create({
   },
   nameIngre: {
     fontFamily: 'nunitoSan',
-    fontSize: 13,
+    fontSize: 11,
     textAlign: 'center',
     color: 'black',
     marginTop: 5,
-    fontWeight: 'bold',
+  },
+  priceIngre: {
+    fontFamily: 'nunitoSan',
+    fontSize: 11,
+    textAlign: 'center',
+    color: 'black',
   },
   ingredientImg: {
-    width: '100%',
+    width: 50,
+    height: 50,
+    borderRadius: 180,
+    alignContent: 'center',
+    alignSelf: 'center',
+  },
+  ingredientImgView: {
+    width: 60,
     height: 60,
     marginTop: 10,
-    resizeMode: 'contain',
+    borderRadius: 180,
+    backgroundColor: 'white',
+    justifyContent: 'center',
   },
   ingredientView: {
-    width: '30.5%',
+    width: 102,
     height: 110,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
     borderRadius: 25,
-    elevation: 2,
+    margin: 10,
+    alignItems: 'center',
   },
   ingredientsListView: {
-    marginTop: 10,
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    flex: 1,
   },
+
+  ingredientTitleView: {},
   viewallText: {
     fontFamily: 'nunitoSan',
-    fontSize: 13,
-    marginTop: 25,
-    marginBottom: 12,
+    fontSize: 11.5,
+
     color: '#F55F44',
-    fontWeight: 'bold',
   },
-  ingredientTitleView: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  titleBoldText2: {
+    fontFamily: 'nunitoSan',
+    fontSize: 12,
+    marginLeft: 20,
+    marginTop: 15,
+    color: 'black',
   },
   titleBoldText: {
     fontFamily: 'nunitoSan',
-    fontSize: 25,
-    marginTop: 25,
-    marginBottom: 12,
+    fontSize: 12,
+
     color: 'black',
-    fontWeight: 'bold',
-    textTransform: 'uppercase',
+  },
+  titleBoldText1: {
+    fontFamily: 'nunitoSan',
+    fontSize: 18,
+    marginLeft: 20,
+    color: 'black',
+  },
+  priceText: {
+    fontSize: 24,
+    marginLeft: 20,
+
+    color: 'black',
+    fontFamily: 'nunitoSan',
   },
   grayThinText: {
     fontFamily: 'nunitoSan',
-    fontSize: 17,
+    fontSize: 12,
     color: '#9D9D9D',
     textAlign: 'justify',
     lineHeight: 18,
-    marginLeft: 10,
-    fontWeight: '700',
+    marginLeft: 20,
+
+    fontWeight: 'Bold',
   },
   nameProduct: {
     fontFamily: 'nunitoSan',
@@ -881,58 +535,62 @@ const styles = StyleSheet.create({
   },
   mainView: {
     width: '86%',
-    marginLeft: '7%',
   },
   productImage: {
-    width: 180,
-    height: 180,
-    position: 'relative',
-    alignItems: 'center',
+    width: 200,
+    height: 170,
+    justifyContent: 'center',
+    top: 60,
+    position: 'absolute',
+    alignSelf: 'center',
+  },
+  productImageContainer: {
+    width: 200,
+    height: 170,
+
+    alignSelf: 'center',
     justifyContent: 'center',
   },
   menuView: {
     width: '90%',
-    height: 150,
+    height: 50,
     justifyContent: 'space-between',
-    height: 100,
-    display: 'flex',
-    flexDirection: 'column',
-    marginTop: '18%',
+    height: 20,
+
+    flexDirection: 'row',
+    marginTop: 20,
     position: 'relative',
+    alignSelf: 'center',
   },
   container: {
-    width: '100%',
-    height: '100%',
+    flex: 1,
+    backgroundColor: '#F7F6FB',
+    alignContent: 'center',
   },
   productContainer: {
-    width: '100%',
-    height: '100%',
+    backgroundColor: '#F7F6FB',
+  },
 
-    backgroundColor: 'white',
-  },
-  centeredContent: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  headView: {
-    flex: 1,
-    alignItems: 'center',
+  headView: {},
+  headView2: {
+    justifyContent: 'space-between',
+    marginTop: 20,
   },
   redFoodBgr: {
     width: 500,
     height: 500,
-    borderRadius: 500,
+    borderRadius: 250, // Half of width/height to make it a perfect circle
+    backgroundColor: '#F55F44', // Example color for the background
     position: 'absolute',
-    top: -250,
-  },
-  attributeContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    marginTop: 20,
-    marginBottom: 20,
-    alignItems: 'center',
+    overflow: 'hidden',
+
     alignSelf: 'center',
-    left: 5,
+    top: -260, // Offset the top to make it appear in the center of the screen
+  },
+  sectionContainer: {
+    flex: 1,
+    backgroundColor: '#F7F6FB',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

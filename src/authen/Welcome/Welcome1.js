@@ -68,8 +68,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   decribeText: {
-    color: '#989DA3',
-    fontWeight: '400',
+    color: 'yellow',
+    fontWeight: '200',
     fontSize: 17,
     lineHeight: 28,
     fontFamily: 'nunitoSan',

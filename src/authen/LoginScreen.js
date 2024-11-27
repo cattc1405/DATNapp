@@ -18,16 +18,23 @@ import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth'; // Firebase Auth package
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AccessToken, LoginManager, Settings} from 'react-native-fbsdk-next'; // Facebook SDK imports
+import CustomAlert from '../CustomAlert';
 
 const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState('admin@gmail.com');
-  const [password, setPassword] = useState('Bin1234567');
+  const [password, setPassword] = useState('Bin123456');
   const dispatch = useDispatch();
   const status = useSelector(state => state.auth.status); // Accessing auth status from the Redux store
   const error = useSelector(state => state.auth.error);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const authStatus = useSelector(state => state.auth.status);
   const [loading, setLoading] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertTitle, setAlertTitle] = useState('');
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
+  const handleOk = () => {
+    setIsAlertVisible(false); 
+  };
   useEffect(() => {
     // Initialize the Facebook SDK once when the component mounts
     Settings.initializeSDK();
@@ -35,7 +42,9 @@ const LoginScreen = ({navigation}) => {
   // Hàm xử lý khi người dùng nhấn vào nút "LOGIN"
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert('Error', 'Please enter both email and password.');
+      setAlertMessage('Vui lòng nhập đầy đủ thông tin!');
+      setAlertTitle('Thiếu thông tin!');
+      setIsAlertVisible(true);
       return;
     }
 
@@ -53,7 +62,10 @@ const LoginScreen = ({navigation}) => {
     } catch (error) {
       console.error('Login error:', error);
       const message = error.response?.data?.message || 'Invalid credentials.';
-      Alert.alert('Login Failed', message);
+      // Alert.alert('Login Failed', message);
+      setAlertMessage('Login Failed');
+      setAlertTitle(message);
+      setIsAlertVisible(true);
     }
   };
   const handleGoogleLogin = async () => {
@@ -93,13 +105,19 @@ const LoginScreen = ({navigation}) => {
       await sendTokenToBackend(userCredential.idToken);
 
       // Alert user of successful login
-      Alert.alert('Login Successful', 'Welcome back!');
+      setAlertMessage('Login Successful!');
+      setAlertTitle('Welcome back!');
+      setIsAlertVisible(true);
+      // Alert.alert('Login Successful', 'Welcome back!');
     } catch (error) {
       console.error('Google Sign-In Error:', error);
-      Alert.alert(
-        'Login Failed',
-        error.message || 'An error occurred during login',
-      );
+      setAlertMessage('Login Failed!');
+      setAlertTitle(error.message || 'An error occurred during login');
+      setIsAlertVisible(true);
+      // Alert.alert(
+      //   'Login Failed',
+      //   error.message || 'An error occurred during login',
+      // );
     }
   };
   const handleFacebookLogin = async () => {
@@ -111,7 +129,10 @@ const LoginScreen = ({navigation}) => {
       ]);
 
       if (result.isCancelled) {
-        Alert.alert('Login Cancelled', 'Facebook login was cancelled.');
+        setAlertMessage('Login Cancelled');
+        setAlertTitle('Facebook login was cancelled.');
+        setIsAlertVisible(true);
+        // Alert.alert('Login Cancelled', 'Facebook login was cancelled.');
         return;
       }
 
@@ -120,13 +141,19 @@ const LoginScreen = ({navigation}) => {
       console.log('Access token', data.accessToken);
       // Now send the Facebook access token to your backend
       await sendTokenToBackendFacebook(data.accessToken); // <-- Send Facebook token here
-      Alert.alert('Login Successful', 'Welcome back!');
+      setAlertMessage('Login Successful!');
+      setAlertTitle('Welcome back!');
+      setIsAlertVisible(true);
+      // Alert.alert('Login Successful', 'Welcome back!');
     } catch (error) {
       console.error('Facebook Login Error:', error);
-      Alert.alert(
-        'Login Failed',
-        error.message || 'An error occurred during login',
-      );
+      setAlertMessage('Login Failed');
+      setAlertTitle(error.message || 'An error occurred during login');
+      setIsAlertVisible(true);
+      // Alert.alert(
+      //   'Login Failed',
+      //   error.message || 'An error occurred during login',
+      // );
     } finally {
       setLoading(false);
     }
@@ -175,11 +202,22 @@ const LoginScreen = ({navigation}) => {
     } catch (error) {
       console.error('Error sending token to backend:', error);
       // Provide a meaningful error message to the user
-      Alert.alert('Error', 'An error occurred while logging in');
+      setAlertMessage('Error!');
+      setAlertTitle('An error occurred while logging in');
+      setIsAlertVisible(true);
+      // Alert.alert('Error', 'An error occurred while logging in');
     }
   };
   return (
+    
     <View style={styles.container}>
+       <CustomAlert
+        visible={isAlertVisible}
+        title={alertTitle}
+        message={alertMessage}
+        // onCancel={handleCancel}
+        onOk={handleOk}
+      />
       {/* Back Button (optional) */}
 
       {/* Logo Section */}
@@ -631,10 +669,10 @@ const styles = StyleSheet.create({
   },
   decribeText: {
     color: '#989DA3',
-    fontWeight: '400',
+    fontWeight: '600',
     fontSize: 17,
     lineHeight: 28,
-    fontFamily: 'nunitoSan',
+    // fontFamily: 'nunitoSan',
     textAlign: 'center',
   },
   welcomeText: {

@@ -33,7 +33,7 @@ const BrandDetails = ({route}) => {
       <View style={styles.statusRestaurantView}>
         <View style={styles.nameView}>
           <Text style={styles.nameBrandText}>{brand.name}</Text>
-          <Text style={styles.statusResText}>Open Right Now</Text>
+          <Text style={styles.statusResText}>Open</Text>
         </View>
         <Text style={styles.locateText}>{brand.address}</Text>
         <View style={styles.rateView}>
@@ -105,20 +105,25 @@ const BrandDetails = ({route}) => {
               <View style={styles.photoContainer1}>
                 <Image
                   style={styles.recentPhoto}
-                  source={{uri: brand.gallery[0]}} // Use the first image from the gallery
-                />
+                  // source={{uri: brand.gallery[0]}} // Use the first image from the gallery
+                  source={require('../../../../assets/images/starbuckPhoto1.png')}
+                  />
               </View>
               <View style={styles.photoContainer2}>
                 <Image
                   style={styles.recentPhoto}
-                  source={{uri: brand.gallery[1]}} // Use the second image from the gallery
+                  // source={{uri: brand.gallery[1]}} // Use the second image from the gallery
+                  source={require('../../../../assets/images/starbuckPhoto1.png')}
+
                 />
               </View>
             </View>
             <View style={styles.secondPhotosView}>
               <Image
                 style={styles.recentPhoto}
-                source={{uri: brand.gallery[2]}} // Use the third image from the gallery
+                // source={{uri: brand.gallery[2]}} // Use the third image from the gallery
+                source={require('../../../../assets/images/starbuckPhoto1.png')}
+
               />
             </View>
             <View style={styles.thirdPhotosView}>
@@ -130,7 +135,9 @@ const BrandDetails = ({route}) => {
                   <View key={index} style={styles.photoContainer3}>
                     <Image
                       style={styles.recentPhoto}
-                      source={{uri: image}} // Render each image from the gallery
+                      // source={{uri: image}} // Render each image from the gallery
+                      source={require('../../../../assets/images/starbuckPhoto1.png')}
+
                     />
                   </View>
                 ),
@@ -210,6 +217,7 @@ const styles = StyleSheet.create({
   viewallText: {
     color: '#F55F44',
     fontSize: 15,
+    // backgroundColor:'red',
     fontWeight: '600',
     fontFamily: 'nunitoSan',
   },
@@ -224,11 +232,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 20,
+    marginVertical: 15,
   },
   mainView: {
-    width: '86%',
-    marginLeft: '7%',
+    // width: '86%',
+    // marginLeft: '7%',
     marginTop: 20,
     height: 400,
   },
@@ -373,13 +381,10 @@ const styles = StyleSheet.create({
     marginTop: '18%',
     alignItems: 'center',
   },
-  container: {
-    width: '100%',
-    height: '100%',
-  },
+  
   headView: {
     width: '100%',
-    height: '30%',
+    height: '100%',
     backgroundColor: 'blue',
   },
   brandImgBgr: {
@@ -388,7 +393,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   ratingSection: {
-    marginVertical: 20,
+    // marginVertical: 20,
+    marginBottom:40
   },
   ratingRow: {
     flexDirection: 'row',

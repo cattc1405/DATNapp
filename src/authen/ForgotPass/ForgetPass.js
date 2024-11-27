@@ -65,11 +65,21 @@ const ForgetPass = () => {
 
   return (
     <View style={styles.container}>
-      <Image source={require('../../../assets/images/Back.png')} />
-      <TouchableOpacity
-        style={styles.backButton}
-        onPress={() => navigation.navigate('Login')}></TouchableOpacity>
-      <Text style={styles.stepText}>Step 1/3</Text>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Image
+            source={require('../../../assets/images/Back.png')}
+            style={styles.icon}
+          />
+        </TouchableOpacity>
+        <Text style={styles.stepText}>Step 1/3</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+          <Image
+            source={require('../../../assets/images/Exit.png')}
+            style={styles.icon}
+          />
+        </TouchableOpacity>
+      </View>
       <View style={styles.imagePlaceholder}>
         <Image source={require('../../../assets/images/Img.png')} />
       </View>
@@ -80,12 +90,22 @@ const ForgetPass = () => {
       </Text>
 
       {/* Trường nhập email */}
-      <TextInput
+      <View style={styles.inputNameView}>
+        <TextInput
+          style={styles.inputView}
+          placeholder="Example: abc@gmail.com"
+          placeholderTextColor="rgb(177, 189, 199)"
+          onChangeText={setEmail}
+          value={email}
+        />
+        <Text style={styles.inputLabel}>Nhập email của bạn</Text>
+      </View>
+      {/* <TextInput
         style={styles.input}
         placeholder="Nhập email của bạn"
         value={email}
         onChangeText={setEmail}
-      />
+      /> */}
 
       <TouchableOpacity
         style={
@@ -131,8 +151,35 @@ const ForgetPass = () => {
 };
 
 const styles = StyleSheet.create({
+  inputNameView: {
+    width: '100%',
+    height: 50,
+    marginBottom: 15,
+    borderRadius: 25,
+    borderWidth: 1.8,
+    borderColor: 'rgb(211, 222, 232)',
+  },
+  inputLabel: {
+    textTransform: 'uppercase',
+    position: 'absolute',
+    fontFamily: 'nunitoSan',
+    left: 20,
+    fontWeight: '700',
+    color: '#F55F44',
+    top: -11,
+    paddingHorizontal: 4,
+    backgroundColor: '#fff',
+  },
+  inputView: {
+    paddingHorizontal: 25,
+    color: 'black',
+    fontWeight: '400',
+  },
+  backArrow: {
+    marginTop: 5,
+  },
   input: {
-    height: 40,
+    height: 50,
     borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 5,
@@ -180,9 +227,10 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 16,
     textAlign: 'center',
+    fontWeight: '500',
     color: '#777',
     marginBottom: 20,
-    fontFamily: 'nunitoSan',
+    // fontFamily: 'nunitoSan',
   },
   optionUncheck: {
     padding: 20,
@@ -220,6 +268,10 @@ const styles = StyleSheet.create({
     fontFamily: 'nunitoSan',
   },
   sendButton: {
+    position: 'absolute',
+    width: '100%',
+    marginLeft: '7%',
+    bottom:50,
     padding: 15,
     backgroundColor: '#F55F44',
     borderRadius: 30,
@@ -229,6 +281,24 @@ const styles = StyleSheet.create({
   sendButtonText: {
     color: '#FFF',
     fontSize: 16,
+    fontWeight: 'bold',
+    fontFamily: 'nunitoSan',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    marginBottom: 20,
+    paddingHorizontal: 10,
+  },
+  icon: {
+    width: 24,
+    height: 24,
+  },
+  stepText: {
+    fontSize: 16,
+    color: '#555',
     fontWeight: 'bold',
     fontFamily: 'nunitoSan',
   },

@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -48,25 +48,49 @@ const slides = [
 import {useNavigation} from '@react-navigation/native';
 const WelcomeSlideShow = ({onGetStarted}) => {
   const scrollX = useSharedValue(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentItem, setCurrentItem] = useState(0);
   const flatListRef = useRef(null);
   const navigation = useNavigation();
+  const toLogin = () => {
+    navigation.navigate('Login');
+}
   const handleScroll = event => {
-    scrollX.value = event.nativeEvent.contentOffset.x;
+    const x = event.nativeEvent.contentOffset.x;
+    const newIndex = Math.round(x / width);
+    setCurrentIndex(newIndex);
+    setCurrentItem(slides[newIndex]);
   };
+
+  const renderImage = item => (
+    <Image style={styles.bgrImg} source={item.image} />
+  );
+
+  const renderContent = (item, index) => (
+    <View style={styles.contentWelcome}>
+      <View style={styles.threeLineView}>
+        {slides.map((_, i) => (
+          <View
+            key={i}
+            style={[styles.lineNot, i === index && styles.lineNavi]}
+          />
+        ))}
+      </View>
+      <Text style={styles.welcomeText}>{item.title}</Text>
+      {item.description.map((line, i) => (
+        <Text key={i} style={styles.decribeText}>
+          {line}
+        </Text>
+      ))}
+    </View>
+  );
 
   const renderSlide = ({item, index}) => {
     return (
       <View style={styles.slide}>
         <Image style={styles.bgrImg} source={item.image} />
         <View style={styles.contentWelcome}>
-          <View style={styles.threeLineView}>
-            {slides.map((_, i) => (
-              <View
-                key={i}
-                style={[styles.lineNot, i === index && styles.lineNavi]}
-              />
-            ))}
-          </View>
+          
           <Text style={styles.welcomeText}>{item.title}</Text>
           {item.description.map((line, i) => (
             <Text key={i} style={styles.decribeText}>
@@ -74,43 +98,52 @@ const WelcomeSlideShow = ({onGetStarted}) => {
             </Text>
           ))}
         </View>
-        <View style={styles.btnView}>
-          <TouchableOpacity
-            style={styles.btnContainer}
-            onPress={() => {
-              if (index < slides.length - 1) {
-                flatListRef.current.scrollToIndex({index: index + 1});
-              } else {
-                navigation.navigate('Login');
-              }
-            }}>
-            <Text style={styles.continueText}>
-              {index < slides.length - 1 ? 'Continue' : 'Get Started!'}
-            </Text>
-          </TouchableOpacity>
-          {index < slides.length - 1 && (
-            <Text style={styles.skipText}>Skip</Text>
-          )}
-        </View>
       </View>
     );
   };
 
   return (
-    <FlatList
-      data={slides}
-      renderItem={renderSlide}
-      keyExtractor={item => item.id}
-      horizontal
-      pagingEnabled
-      showsHorizontalScrollIndicator={false}
-      ref={flatListRef}
-      onScroll={handleScroll}
-      scrollEventThrottle={16}
-    />
+    <View>
+      <FlatList
+        data={slides}
+        renderItem={renderSlide}
+        keyExtractor={item => item.id}
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        ref={flatListRef}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+      />
+      <View style={styles.threeLineView}>
+        {slides.map((_, i) => (
+          <View
+            key={i}
+            style={[styles.lineNot, i === currentIndex && styles.lineNavi]}
+          />
+        ))}
+      </View>
+      <View style={styles.btnView}>
+        <TouchableOpacity
+          style={styles.btnContainer}
+          onPress={() => {
+            if (currentIndex < slides.length - 1) {
+              flatListRef.current.scrollToIndex({index: currentIndex + 1});
+            } else {
+              navigation.navigate('Login');
+            }
+          }}>
+          <Text style={styles.continueText}>
+            {currentIndex < slides.length - 1 ? 'Continue' : 'Get Started!'}
+          </Text>
+        </TouchableOpacity>
+        {currentIndex < slides.length - 1 && (
+          <Text style={styles.skipText} onPress={toLogin}>Skip</Text>
+        )}
+      </View>
+    </View>
   );
 };
-
 export default WelcomeSlideShow;
 
 const styles = StyleSheet.create({
@@ -143,15 +176,15 @@ const styles = StyleSheet.create({
   decribeText: {
     color: '#989DA3',
     fontWeight: '400',
-    fontSize: 17,
+    fontSize: 15,
     lineHeight: 28,
-    fontFamily: 'nunitoSan',
+    // fontFamily: 'nunitoSan',
   },
   welcomeText: {
     color: 'black',
     fontWeight: '700',
     fontSize: 20,
-    marginTop: '7%',
+    marginTop: 50,
     marginBottom: '2%',
     fontFamily: 'nunitoSan',
   },
@@ -167,8 +200,12 @@ const styles = StyleSheet.create({
   },
   threeLineView: {
     flexDirection: 'row',
-    marginTop: '10%',
-    height: '1.6%',
+    height: '0.6%',
+    width: '100%',
+    justifyContent:'center',
+    backgroundColor: '#F7F6FB',
+    position: 'absolute',
+top: 520
   },
   contentWelcome: {
     width: '100%',
@@ -177,12 +214,12 @@ const styles = StyleSheet.create({
   },
   bgrImg: {
     width: '100%',
-    height: '55%',
+    height: 500,
   },
   slide: {
     width,
     backgroundColor: '#F7F6FB',
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'center',
   },
 });

@@ -103,7 +103,13 @@ const OrderScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <Text style={styles.stepText}>Step 1/4</Text>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Image
+            source={require('../../../assets/images/backArrow.png')}
+            style={styles.backIcon}
+          />
+        </TouchableOpacity>
+        <Text style={styles.stepText}>Step 1/3</Text>
         <Image
           source={require('../../../assets/images/closeArrow.png')}
           style={styles.closeIcon}
@@ -151,24 +157,26 @@ const OrderScreen = ({navigation}) => {
                 renderItem={renderItem}
                 contentContainerStyle={styles.scrollContainer}
               />
+              <View style={styles.addContactContainer}>
+                <TextInput
+                  style={styles.contactInput}
+                  placeholder="Enter new contact"
+                  value={newContact}
+                  onChangeText={setNewContact}
+                />
+                <TouchableOpacity
+                  style={styles.changeContactButton2}
+                  onPress={handleAddContact}>
+                  <Text style={styles.changeContactButtonText}>
+                    Add Contact
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           ) : (
             <Text>No contacts available. Add a new one below.</Text>
           )}
         </Animated.View>
-        <View style={styles.addContactContainer}>
-          <TextInput
-            style={styles.contactInput}
-            placeholder="Enter new contact"
-            value={newContact}
-            onChangeText={setNewContact}
-          />
-          <TouchableOpacity
-            style={styles.changeContactButton}
-            onPress={handleAddContact}>
-            <Text style={styles.addContactButtonText}>Add Contact</Text>
-          </TouchableOpacity>
-        </View>
       </View>
 
       <TouchableOpacity
@@ -196,25 +204,34 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  backIcon: {
+    width: 20,
+    height: 20,
+  },
+  changeContactButton2: {
+    backgroundColor: '#ff6347',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
   headerContainer: {
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 100,
-    justifyContent: 'center',
+    marginBottom: 70,
+    marginTop: 10,
+    justifyContent: 'space-between',
   },
   stepText: {
     fontSize: 16,
     color: '#999',
-    marginBottom: 10,
+
     fontFamily: 'nunitoSan',
   },
   closeIcon: {
     width: 20,
     height: 20,
-    position: 'absolute',
-    right: 20,
-    top: 0,
   },
   hamburger: {
     marginTop: 20,
@@ -226,15 +243,15 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     textAlign: 'center',
     fontFamily: 'nunitoSan',
-    color:'#000000'
+    color: '#000000',
   },
-subText: {
+  subText: {
     fontSize: 15,
     color: '#989DA3',
     textAlign: 'center',
     marginBottom: 20,
     fontFamily: 'nunitoSan',
-    fontWeight:'600'
+    fontWeight: '600',
   },
   contactBox: {
     width: '100%',

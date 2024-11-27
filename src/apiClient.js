@@ -587,7 +587,24 @@ export const getNearestBranch = async cordinate => {
     console.error('Get nearest branch failed:', error);
   }
 };
-
+export const sendTransactions = async (token, transactionform) => {
+  try {
+    const response = await apiInstance.post(
+      `/payment/transactions`,
+      transactionform,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    console.log('Transaction success:', response.data);
+    // Navigate to the next screen upon successful transaction
+  } catch (error) {
+    console.error('Transaction failed:', error);
+  }
+};
 export const getToken = async () => {
   return await AsyncStorage.getItem('userToken');
 };

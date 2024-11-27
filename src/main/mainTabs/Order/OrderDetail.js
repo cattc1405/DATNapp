@@ -71,12 +71,6 @@ const OrderDetail = ({route}) => {
     }
   };
 
-  const calculateTotalPrice = () => {
-    return cartItems.reduce(
-      (total, item) => total + item.price * item.quantity,
-      0,
-    );
-  };
   const [editingItemId, setEditingItemId] = useState(null);
 
   const handleEditToggle = id => {
@@ -95,6 +89,19 @@ const OrderDetail = ({route}) => {
   };
   const renderItem = ({item}) => {
     const isEditing = editingItemId === item.id;
+
+    // Sum the prices of all attributes
+    const totalTop = item.attributeId.reduce(
+      (sum, attribute) => sum + attribute.price,
+      0,
+    );
+
+    // Calculate the total price for the item (attributes + product price * quantity)
+    const itemTotalPrice = totalTop + item.price * item.quantity;
+
+    const nameString = item.attributeId
+      .map(attribute => attribute.size)
+      .join(', ');
 
     return (
       <View style={styles.productItem}>
@@ -125,12 +132,10 @@ const OrderDetail = ({route}) => {
           style={[styles.infoRight, isEditing && styles.mrginLeft]}
           onPress={() => handleInfoRightPress(item.id)}>
           <Text style={styles.nameItem}>{item.name}</Text>
-          <Text style={styles.thinGrayText}>Size: {item.size}</Text>
-
           <Text style={styles.thinGrayText}>Quantity: x{item.quantity}</Text>
-          <Text style={styles.thinGrayText}>Customization</Text>
+          <Text style={styles.thinGrayText1}>Topping: {nameString}</Text>
           <Text style={styles.thinGrayText}>{item.note}</Text>
-          <Text style={styles.priceText}>${item.price.toFixed(2)}</Text>
+          <Text style={styles.priceText}>${itemTotalPrice}</Text>
         </TouchableOpacity>
 
         {isEditing ? (
@@ -152,6 +157,19 @@ const OrderDetail = ({route}) => {
       </View>
     );
   };
+
+  // Calculate the total price for all items in the cart
+  const calculateTotalPrice = () => {
+    return cartItems.reduce((total, item) => {
+      const totalTop = item.attributeId.reduce(
+        (sum, attribute) => sum + attribute.price,
+        0,
+      );
+      const itemTotalPrice = totalTop + item.price * item.quantity;
+      return total + itemTotalPrice;
+    }, 0);
+  };
+
   const handleCheckout = () => {
     try {
       const createTransactionId = () => {
@@ -385,9 +403,18 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontFamily: 'nunitoSan',
   },
+  thinGrayText1: {
+    fontFamily: 'nunitoSan',
+    fontSize: 12,
+    color: '#9D9D9D',
+    opacity: 0.5,
+    fontWeight: 'bold',
+    fontFamily: 'nunitoSan',
+    flexWrap: 'wrap',
+  },
   nameItem: {
     fontFamily: 'nunitoSan',
-    paddingTop: 8,
+    paddingTop: 24,
     paddingBottom: 5,
     fontSize: 15,
     color: 'black',
