@@ -8,10 +8,28 @@ import {
   ScrollView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import CustomAlert from '../../CustomAlert';
 
 const ReceiveNotifi = () => {
   const [selectedNotifications, setSelectedNotifications] = useState([]);
   const navigation = useNavigation();
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertTitle, setAlertTitle] = useState('');
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
+
+  const handleOk = () => {
+    setIsAlertVisible(false); 
+    navigation.navigate('YourPass');
+
+  };
+
+
+  const handleTurnOn = () => {
+    setAlertMessage('Notifications!');
+    setAlertTitle('Your changes has save!');
+    setIsAlertVisible(true);
+    
+  };
 
   const toggleNotification = notification => {
     if (selectedNotifications.includes(notification)) {
@@ -25,6 +43,15 @@ const ReceiveNotifi = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      
+      <CustomAlert
+        visible={isAlertVisible}
+        title={alertTitle}
+        message={alertMessage}
+        // onCancel={handleCancel}
+        onOk={handleOk}
+      />
+
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image source={require('../../../assets/images/Back.png')} />
@@ -68,7 +95,7 @@ const ReceiveNotifi = () => {
           </TouchableOpacity>
         ))}
       </View>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={handleTurnOn}>
         <Text style={styles.buttonText}>Turn Notifications On</Text>
       </TouchableOpacity>
       <TouchableOpacity
@@ -117,7 +144,7 @@ const styles = StyleSheet.create({
     color: '#989DA3',
     textAlign: 'center',
     marginBottom: 20,
-    fontWeight: '600',
+    fontWeight: '500',
     lineHeight: 25,
   },
   notificationOptions: {
@@ -126,13 +153,13 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     marginBottom: 20,
-    alignItems: 'center',
+    // alignItems: 'center',
     marginVertical: 10,
     paddingVertical: 10,
     paddingHorizontal: 30,
   },
   subTitle: {
-    fontSize: 9,
+    fontSize: 13,
     fontWeight: '900',
     color: '#979DA3',
     marginBottom: 10,
@@ -153,16 +180,18 @@ const styles = StyleSheet.create({
     borderColor: '#FF6347',
     alignItems: 'center',
     justifyContent: 'center',
-    marginLeft: 40,
+    marginLeft: 20,
   },
   radioButtonSelected: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    borderWidth:4,
+    borderColor:'#EEEEEE',
     backgroundColor: '#FF6347',
   },
   optionText: {
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: '600',
     color: '#989DA3',
     textAlign: 'center',

@@ -9,25 +9,32 @@ import {
 } from 'react-native';
 import {useRoute} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
-import {setGender} from '../../redux/slice/userSlice';
+import { setGender } from '../../redux/slice/userSlice';
+import CustomAlert from '../../CustomAlert';
+
 const Gender = props => {
   const {navigation} = props;
   const route = useRoute();
   const dispatch = useDispatch();
   const name = useSelector(state => state.user.name);
   const gender = useSelector(state => state.user.gender);
-  const [selectedGender, setSelectedGender] = useState(null);
+  const [selectedGender, setSelectedGender] = useState('');
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertTitle, setAlertTitle] = useState('');
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
+  const handleOk = () => {
+    setIsAlertVisible(false); 
+  };
+
   const handleSelectGender = gender => {
     setSelectedGender(gender);
   };
   console.log(name);
   const handleNextStep = () => {
-    if (!selectedGender) {
-      Alert.alert(
-        'Gender Not Selected',
-        'Please select your gender before proceeding.',
-        [{text: 'OK'}],
-      );
+    if (selectedGender=='') {
+      setAlertMessage('Select your gender!');
+      setAlertTitle('Gender unselected!');
+      setIsAlertVisible(true);
     } else {
       dispatch(setGender(selectedGender));
 
@@ -36,11 +43,16 @@ const Gender = props => {
   };
   return (
     <View style={styles.container}>
+      <CustomAlert
+        visible={isAlertVisible}
+        title={alertTitle}
+        message={alertMessage}
+        // onCancel={handleCancel}
+        onOk={handleOk}
+      />
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.navigate('Name')}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image
             source={require('../../../assets/images/Back.png')}
             style={styles.icon}
@@ -48,7 +60,7 @@ const Gender = props => {
         </TouchableOpacity>
         <Text style={styles.stepText}>Step 2/10</Text>
         <TouchableOpacity
-          style={styles.closeButton}
+          style={styles.closeIcon}
           onPress={() => navigation.navigate('Login')}>
           <Image
             source={require('../../../assets/images/Exit.png')}
@@ -139,7 +151,7 @@ const Gender = props => {
       {/* Nút bấm */}
       <TouchableOpacity
         style={styles.nextButton}
-        disabled={!selectedGender}
+        // disabled={!selectedGender}
         onPress={handleNextStep}>
         <Text style={styles.nextButtonText}>Next Step</Text>
       </TouchableOpacity>
@@ -215,8 +227,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
-    paddingHorizontal: 10,
     marginBottom: 20,
+    paddingHorizontal: 10,
   },
   icon: {
     width: 24,
@@ -224,6 +236,7 @@ const styles = StyleSheet.create({
   },
   stepText: {
     fontSize: 16,
+    color: '#555',
     fontWeight: 'bold',
     fontFamily: 'nunitoSan',
   },
@@ -247,8 +260,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     color: '#888',
+    fontWeight:'500',
     marginBottom: 20,
-    fontFamily: 'nunitoSan',
+    // fontFamily: 'nunitoSan',
   },
   genderContainer: {
     flexDirection: 'row',
@@ -296,9 +310,10 @@ const styles = StyleSheet.create({
   },
   skipText: {
     textAlign: 'center',
-    color: 'gray',
+    color:'red',
+    fontSize:15,
+    fontWeight:'500',
     marginBottom: 20,
-    fontFamily: 'nunitoSan',
   },
 });
 

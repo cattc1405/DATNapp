@@ -210,7 +210,9 @@ const styles = StyleSheet.create({
   atLeastText: {
     paddingLeft: 10,
     fontSize: 13,
-    fontFamily: 'nunitoSan',
+    fontWeight: '500',
+    
+    // fontFamily: 'nunitoSan',
   },
   containCheck: {
     width: 17,
@@ -231,7 +233,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontFamily: 'nunitoSan',
     textTransform: 'uppercase',
-    fontSize: 12,
+    fontSize: 13,
     marginTop: '8%',
     color: '#989DA3',
   },
@@ -336,9 +338,10 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 16,
     textAlign: 'center',
+    fontWeight:'500',
     color: '#777',
     marginBottom: 20,
-    fontFamily: 'nunitoSan',
+    // fontFamily: 'nunitoSan',
   },
   // inputContainer: {
   //   marginBottom: 20,

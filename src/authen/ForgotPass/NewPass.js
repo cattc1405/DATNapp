@@ -17,8 +17,8 @@ const NewPass = ({navigation}) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [inputValue, setInputValue] = useState('');
   const router = useRoute();
-  const {email} = router.params;
-  console.log('email is:', email);
+  // const {email} = router.params;
+  // console.log('email is:', email);
   const handleTextChange = text => {
     setInputValue(text);
   };
@@ -26,20 +26,19 @@ const NewPass = ({navigation}) => {
   }
   // Hàm xử lý khi nhấn nút "Next Step"
   const handleNextStep = async () => {
-    if (password !== confirmPassword) {
-      Alert.alert(
-        'Mật khẩu không khớp',
-        'Vui lòng kiểm tra lại mật khẩu của bạn.',
-      );
-      return;
-    }
-
-    try {
-      resetPassword(email, confirmPassword);
-    } catch (error) {
-      console.error(error);
-      Alert.alert('Lỗi', 'Đã có lỗi xảy ra. Vui lòng thử lại sau.');
-    }
+    // if (password !== confirmPassword) {
+    //   Alert.alert(
+    //     'Mật khẩu không khớp',
+    //     'Vui lòng kiểm tra lại mật khẩu của bạn.',
+    //   );
+    //   return;
+    // }
+    // try {
+    //   resetPassword(email, confirmPassword);
+    // } catch (error) {
+    //   console.error(error);
+    //   Alert.alert('Lỗi', 'Đã có lỗi xảy ra. Vui lòng thử lại sau.');
+    // }
   };
 
   return (
@@ -63,7 +62,13 @@ const NewPass = ({navigation}) => {
         style={styles.image}
         resizeMode="contain"
       />
+      {/* Tiêu đề */}
+      <Text style={styles.title}>Set Your New Password</Text>
 
+      {/* Mô tả */}
+      <Text style={styles.description}>
+      Try to create a new password that you that you will remember.
+      </Text>
       <View style={styles.inputNameView}>
         <View style={styles.inputContainer}>
           <TextInput
@@ -87,6 +92,52 @@ const NewPass = ({navigation}) => {
             value={confirmPassword}
           />
           <Text style={styles.inputLabel}>Confirm Password</Text>
+        </View>
+
+        <Text style={styles.containText}>Your password must contain</Text>
+        <View style={styles.checkView}>
+          <Image
+            style={styles.containCheck}
+            source={
+              password.length >= 8 && password.length <= 20
+                ? require('../../../assets/images/orangeChecked.png')
+                : require('../../../assets/images/grayNotChecked.png')
+            }
+          />
+          <Text style={styles.atLeastText}>Between 8 and 20 characters</Text>
+        </View>
+        <View style={styles.checkView}>
+          <Image
+            style={styles.containCheck}
+            source={
+              /[A-Z]/.test(password)
+                ? require('../../../assets/images/orangeChecked.png')
+                : require('../../../assets/images/grayNotChecked.png')
+            }
+          />
+          <Text style={styles.atLeastText}>1 upper case letter</Text>
+        </View>
+        <View style={styles.checkView}>
+          <Image
+            style={styles.containCheck}
+            source={
+              /[0-9]/.test(password)
+                ? require('../../../assets/images/orangeChecked.png')
+                : require('../../../assets/images/grayNotChecked.png')
+            }
+          />
+          <Text style={styles.atLeastText}>1 or more numbers</Text>
+        </View>
+        <View style={styles.checkView}>
+          <Image
+            style={styles.containCheck}
+            source={
+              /[!@#$%^&*(),.?":{}|<>]/.test(password)
+                ? require('../../../assets/images/orangeChecked.png')
+                : require('../../../assets/images/grayNotChecked.png')
+            }
+          />
+          <Text style={styles.atLeastText}>1 or more special characters</Text>
         </View>
       </View>
 
@@ -269,6 +320,10 @@ const styles = StyleSheet.create({
     color: '#555',
   },
   nextButton: {
+    position: 'absolute',
+    width: '100%',
+    marginLeft: '7%',
+    bottom: 50,
     padding: 15,
     backgroundColor: '#F55F44',
     borderRadius: 30,

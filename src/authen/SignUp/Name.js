@@ -9,16 +9,43 @@ import {
 } from 'react-native';
 import {useDispatch} from 'react-redux';
 import {setName} from '../../redux/slice/userSlice';
+import CustomAlert from '../../CustomAlert';
+
 const Name = props => {
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertTitle, setAlertTitle] = useState('');
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
+
   const {navigation} = props;
   const [inputValue, setInputValue] = useState('');
   const dispatch = useDispatch();
-
+  const handleOk = () => {
+    setIsAlertVisible(false);
+  };
   const handleTextChange = text => {
+    
     setInputValue(text);
+  };
+  const handleNextStep = text => {
+    if (!inputValue) {
+      setAlertMessage('Enter your name!');
+      setAlertTitle('Name!');
+      setIsAlertVisible(true);
+    }
+    else {
+      navigation.navigate('Gender')
+
+    }
   };
   return (
     <View style={styles.container}>
+      <CustomAlert
+        visible={isAlertVisible}
+        title={alertTitle}
+        message={alertMessage}
+        // onCancel={handleCancel}
+        onOk={handleOk}
+      />
       {/* Tiêu đề bước */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -28,7 +55,9 @@ const Name = props => {
           />
         </TouchableOpacity>
         <Text style={styles.stepText}>Step 1/10</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+        <TouchableOpacity
+          style={styles.closeIcon}
+          onPress={() => navigation.navigate('Login')}>
           <Image
             source={require('../../../assets/images/Exit.png')}
             style={styles.icon}
@@ -81,7 +110,7 @@ const Name = props => {
         style={styles.nextButton}
         onPress={() => {
           dispatch(setName(inputValue));
-          navigation.navigate('Gender');
+          handleNextStep()
         }}>
         <Text style={styles.nextButtonText}>Next Step</Text>
       </TouchableOpacity>
@@ -104,7 +133,7 @@ const styles = StyleSheet.create({
   },
   atLeastText: {
     paddingLeft: 10,
-    fontFamily: 'nunitoSan',
+    // fontFamily: 'nunitoSan',
   },
   containCheck: {
     width: 20,
@@ -128,7 +157,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F7F6FB',
     paddingHorizontal: 20,
-    paddingVertical: 40,
+    paddingVertical: 20,
   },
   header: {
     flexDirection: 'row',
@@ -170,9 +199,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#888',
     textAlign: 'center',
+    fontWeight: '500',
     marginHorizontal: 20,
     marginBottom: 20,
-    fontFamily: 'nunitoSan',
+    // fontFamily: 'nunitoSan',
   },
   inputContainer: {
     width: '90%',
@@ -205,9 +235,11 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   inputHint: {
-    fontSize: 12,
+    fontSize: 15,
     color: '#888',
-    fontFamily: 'nunitoSan',
+    marginTop: 10,
+    fontWeight: '500',
+    // fontFamily: 'nunitoSan',
   },
   inputRequirement: {
     fontSize: 12,
@@ -215,11 +247,16 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   nextButton: {
+    // position: 'absolute',
+    // width: '100%',
+    // marginLeft: '7%',
+    // bottom: 50,
+    marginTop: 100,
+    
     backgroundColor: '#FF6F61',
     paddingVertical: 15,
     paddingHorizontal: 100,
     borderRadius: 30,
-    marginTop: 20,
   },
   nextButtonText: {
     color: '#FFF',
