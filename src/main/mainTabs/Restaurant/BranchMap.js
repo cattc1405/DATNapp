@@ -58,7 +58,7 @@ const BranchMap = () => {
         <View style={{flex: 1, marginLeft: 10}}>
           <Text style={{fontSize: 16}}>{item.name}</Text>
           <Text style={{fontSize: 12}}>{item.address}</Text>
-          <Text style={{fontSize: 12, color: '#777'}}>
+          <Text style={{fontSize: 12}}>
             {item.review} reviews
           </Text>
           {/* Display coordinates */}

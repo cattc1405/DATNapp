@@ -85,7 +85,7 @@ const Home = () => {
               />
             ))}
             <Text style={styles.thinText}>
-              ({item.review}) | {item.distance} away
+              ({item.review}) | {item.distance}1km away
             </Text>
           </View>
         </View>
@@ -172,7 +172,7 @@ const Home = () => {
             <View>
               <Image
                 style={styles.iconImage1}
-                source={require('../../../../assets/images/noti.png')}
+                source={require('../../../../assets/images/icons/WhiteNoti.png')}
               />
             </View>
           </TouchableOpacity>
@@ -260,6 +260,7 @@ const Home = () => {
 export default Home;
 
 const styles = StyleSheet.create({
+
   //Pagination for offer
   paginator: {
     flexDirection: 'row',
@@ -313,7 +314,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
     marginLeft: 20,
     fontFamily: 'nunitoSan',
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: 'bold',
   },
   bestText: {
@@ -352,6 +353,7 @@ const styles = StyleSheet.create({
   itemPopularView: {
     marginLeft: 20,
     width: 250,
+    elevation:4,
     height: 160,
   },
   describeText: {
@@ -365,7 +367,7 @@ const styles = StyleSheet.create({
   },
   brandText: {
     color: 'white',
-    fontSize: 17,
+    fontSize: 23,
     fontWeight: '700',
     margin: 15,
     fontFamily: 'nunitoSan',

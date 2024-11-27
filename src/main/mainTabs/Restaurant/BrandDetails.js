@@ -23,7 +23,9 @@ const BrandDetails = ({route}) => {
         source={{uri: brand.image}} // Set the main brand image from brand data
       />
       <View style={styles.menuView}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity
+          style={styles.menuView}
+          onPress={() => navigation.goBack()}>
           <Image
             source={require('../../../../assets/images/icons/whiteBackArrow.png')}
           />
@@ -107,14 +109,13 @@ const BrandDetails = ({route}) => {
                   style={styles.recentPhoto}
                   // source={{uri: brand.gallery[0]}} // Use the first image from the gallery
                   source={require('../../../../assets/images/starbuckPhoto1.png')}
-                  />
+                />
               </View>
               <View style={styles.photoContainer2}>
                 <Image
                   style={styles.recentPhoto}
                   // source={{uri: brand.gallery[1]}} // Use the second image from the gallery
                   source={require('../../../../assets/images/starbuckPhoto1.png')}
-
                 />
               </View>
             </View>
@@ -123,7 +124,6 @@ const BrandDetails = ({route}) => {
                 style={styles.recentPhoto}
                 // source={{uri: brand.gallery[2]}} // Use the third image from the gallery
                 source={require('../../../../assets/images/starbuckPhoto1.png')}
-
               />
             </View>
             <View style={styles.thirdPhotosView}>
@@ -137,7 +137,6 @@ const BrandDetails = ({route}) => {
                       style={styles.recentPhoto}
                       // source={{uri: image}} // Render each image from the gallery
                       source={require('../../../../assets/images/starbuckPhoto1.png')}
-
                     />
                   </View>
                 ),
@@ -361,8 +360,8 @@ const styles = StyleSheet.create({
   statusRestaurantView: {
     width: '86%',
     height: 220,
-    position: 'absolute',
-    bottom: -150,
+    // position: 'absolute',
+    // bottom: -150,
     marginLeft: '7%',
     borderRadius: 20,
     backgroundColor: '#fff',
@@ -372,29 +371,31 @@ const styles = StyleSheet.create({
     height: 50,
   },
   menuView: {
-    width: '90%',
-    justifyContent: 'space-between',
+    width: 50,
+    justifyContent: 'center',
     marginLeft: '5%',
     height: 50,
     display: 'flex',
     flexDirection: 'row',
-    marginTop: '18%',
+    backgroundColor: colors.orange1,
+    borderRadius: 10,
+    marginVertical: 40,
     alignItems: 'center',
   },
-  
+
   headView: {
     width: '100%',
     height: '100%',
-    backgroundColor: 'blue',
+    backgroundColor: colors.whiteBgr,
   },
   brandImgBgr: {
     width: '100%',
-    height: '100%',
+    height: '35%',
     position: 'absolute',
   },
   ratingSection: {
     // marginVertical: 20,
-    marginBottom:40
+    marginBottom: 40,
   },
   ratingRow: {
     flexDirection: 'row',

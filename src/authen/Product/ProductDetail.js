@@ -249,7 +249,7 @@ const ProductDetail = ({route}) => {
                 display: 'flex',
                 flexDirection: 'row',
               }}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={()=>navigation.goBack()}>
                 <Image
                   style={{marginTop: 24, marginLeft: 20}}
                   source={require('../../../assets/images/icons/whiteBackArrow.png')}
@@ -360,6 +360,8 @@ const styles = StyleSheet.create({
   addBtn: {
     height: 40,
     width: 142,
+    position: 'absolute',
+    right:10,
     marginLeft: 30,
     alignItems: 'center',
     justifyContent: 'center',
@@ -369,10 +371,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#F55F44',
   },
   addTD: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: 'bold',
-    color: '#000000 50%',
-    marginLeft: 30,
+    color: 'gray',
+    marginLeft: 16,
     alignSelf: 'center',
   },
   optionDrinkBtn: {
@@ -493,7 +495,7 @@ const styles = StyleSheet.create({
   },
   titleBoldText2: {
     fontFamily: 'nunitoSan',
-    fontSize: 12,
+    fontSize: 15,
     marginLeft: 20,
     marginTop: 15,
     color: 'black',
@@ -589,6 +591,7 @@ const styles = StyleSheet.create({
   },
   sectionContainer: {
     flex: 1,
+    elevation:4,
     backgroundColor: '#F7F6FB',
     justifyContent: 'center',
     alignItems: 'center',
