@@ -311,9 +311,12 @@ const styles = StyleSheet.create({
   },
   detailButton: {
     backgroundColor: '#FF3D00',
-    paddingHorizontal: 12,
+    position: 'absolute',
+    right: -5,
+    top:0,
     paddingVertical: 6,
-    borderRadius: 8,
+    borderTopLeftRadius: 8,
+    borderBottomLeftRadius: 8,
 
     flexDirection: 'row',
     position: 'absolute',

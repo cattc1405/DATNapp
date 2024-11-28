@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import {useRoute, useNavigation} from '@react-navigation/native';
+import colors from '../../../../assets/colors';
 
 const OrderItemScreen = () => {
   const route = useRoute();
@@ -30,7 +31,7 @@ const OrderItemScreen = () => {
     const attributeImage = item2.map(attr => attr.image);
     console.log('rend', attributeImage.join(' , '));
     return (
-      <View style={{}}>
+      <View style={styles.containerItem}>
         <View style={styles.orderItem}>
           <Image
             style={styles.restaurantImage}
@@ -146,9 +147,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRightWidth: 1,
     borderColor: '#EDEDED',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.whiteBgr,
     marginTop: 15,
   },
   container: {

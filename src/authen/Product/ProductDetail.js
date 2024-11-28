@@ -495,28 +495,28 @@ const styles = StyleSheet.create({
   },
   titleBoldText2: {
     fontFamily: 'nunitoSan',
-    fontSize: 15,
+    fontSize: 18,
     marginLeft: 20,
     marginTop: 15,
     color: 'black',
   },
   titleBoldText: {
-    fontFamily: 'nunitoSan',
-    fontSize: 12,
-
+    fontSize: 16,
+    fontWeight: '600',
+    
     color: 'black',
   },
   titleBoldText1: {
     fontFamily: 'nunitoSan',
-    fontSize: 18,
+    fontSize: 22,
     marginLeft: 20,
     color: 'black',
   },
   priceText: {
-    fontSize: 24,
+    fontSize: 20,
     marginLeft: 20,
 
-    color: 'black',
+    color: 'gray',
     fontFamily: 'nunitoSan',
   },
   grayThinText: {
@@ -558,7 +558,7 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: 'space-between',
     height: 20,
-
+    marginBottom:10,
     flexDirection: 'row',
     marginTop: 20,
     position: 'relative',

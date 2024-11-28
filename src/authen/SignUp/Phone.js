@@ -27,7 +27,7 @@ const Phone = props => {
             style={styles.icon}
           />
         </TouchableOpacity>
-        <Text style={styles.stepText}>Step 8/10</Text>
+        <Text style={styles.stepText}>Step 7/10</Text>
         <TouchableOpacity onPress={() => navigation.navigate('Login')}>
           <Image
             source={require('../../../assets/images/Exit.png')}
@@ -37,7 +37,7 @@ const Phone = props => {
       </View>
       <View style={styles.illustrationContainer}>
         <Image
-          source={require('../../../assets/images/ImgPeople.png')}
+          source={require('../../../assets/images/phoneImg.png')}
           style={styles.illustrationImage}
         />
       </View>
@@ -47,7 +47,7 @@ const Phone = props => {
       />
       <Text style={styles.title}>What is Your Phone?</Text>
       <Text style={styles.description}>
-        In order to help us verify you, we need to know your real email.
+        In order to help us verify you, we need to know your real phone number.
       </Text>
       <View style={styles.inputContainer}>
         <View style={styles.inputNameView}>
@@ -165,21 +165,21 @@ const styles = StyleSheet.create({
     color: '#000',
     textAlign: 'center',
     marginBottom: 10,
-    fontFamily: 'nunitoSan',
   },
   description: {
-    fontSize: 16,
+    fontSize: 18,
+    fontWeight:'500',
     color: '#888',
     textAlign: 'center',
     marginHorizontal: 20,
     marginBottom: 20,
-    fontFamily: 'nunitoSan',
   },
   inputContainer: {
     width: '90%',
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 20,
+    elevation:4,
     borderColor: 'gray',
     marginBottom: 30,
     alignItems: 'flex-start',
@@ -206,9 +206,10 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   inputHint: {
-    fontSize: 12,
+    marginTop:10,
+    fontSize: 15,
+    fontWeight:'600',
     color: '#888',
-    fontFamily: 'nunitoSan',
   },
   inputRequirement: {
     fontSize: 12,

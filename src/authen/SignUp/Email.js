@@ -191,12 +191,12 @@ const styles = StyleSheet.create({
     fontFamily: 'nunitoSan',
   },
   description: {
-    fontSize: 16,
+    fontSize: 18,
+    fontWeight:'500',
     color: '#888',
     textAlign: 'center',
     marginHorizontal: 20,
     marginBottom: 20,
-    fontFamily: 'nunitoSan',
   },
   inputContainer: {
     width: '90%',
@@ -229,9 +229,10 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   inputHint: {
-    fontSize: 12,
+    marginTop:10,
+    fontSize: 15,
+    fontWeight:'600',
     color: '#888',
-    fontFamily: 'nunitoSan',
   },
   inputRequirement: {
     fontSize: 12,

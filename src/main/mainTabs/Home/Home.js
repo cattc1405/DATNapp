@@ -177,7 +177,7 @@ const Home = () => {
             </View>
           </TouchableOpacity>
         </View>
-        <View style={styles.pointView}>
+        {/* <View style={styles.pointView}>
           <View style={styles.titleLine}>
             <Text style={styles.currentText}>Current Points</Text>
             <View style={styles.youthereView}>
@@ -197,7 +197,7 @@ const Home = () => {
               <Text style={styles.pointText}>keep going to win rewards!</Text>
             </View>
           </View>
-        </View>
+        </View> */}
       </View>
       <ScrollView>
         <View style={styles.mainView}>
@@ -357,8 +357,8 @@ const styles = StyleSheet.create({
     height: 160,
   },
   describeText: {
-    fontSize: 16,
-    width: '45%',
+    fontSize: 14,
+    width: '48%',
     color: 'white',
     fontWeight: 'bold',
     marginLeft: 15,
@@ -432,7 +432,7 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   mainView: {
-    marginTop: 110,
+    marginTop: 20,
     backgroundColor: '#F7F6FB',
   },
   pointText: {
@@ -521,11 +521,12 @@ const styles = StyleSheet.create({
     height: 50,
     display: 'flex',
     flexDirection: 'row',
-    marginTop: '18%',
+    marginTop: 100,
     alignItems: 'center',
   },
   container: {
     width: '100%',
+    backgroundColor:colors.whiteBgr,
     height: '100%',
   },
   headView: {
