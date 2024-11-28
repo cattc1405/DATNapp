@@ -249,7 +249,9 @@ const ProductDetail = ({route}) => {
                 display: 'flex',
                 flexDirection: 'row',
               }}>
-              <TouchableOpacity>
+              <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              >
                 <Image
                   style={{marginTop: 24, marginLeft: 20}}
                   source={require('../../../assets/images/icons/whiteBackArrow.png')}

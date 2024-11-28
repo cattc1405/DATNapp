@@ -53,7 +53,6 @@ const Name = props => {
         <View style={styles.inputNameView}>
           <TextInput
             style={styles.inputView}
-            secureTextEntry={true}
             placeholder="Example: John Smith"
             placeholderTextColor="rgb(177, 189, 199)"
             onChangeText={handleTextChange}

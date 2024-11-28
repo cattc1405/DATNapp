@@ -6,16 +6,16 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import React, {useEffect, useState, useContext} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import React, { useEffect, useState, useContext } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import {
   getUserCart,
   updateUserCart,
   removeUserCartItem,
 } from '../../../apiClient'; // Assuming you have a function to get product by ID
-import {AuthContext} from '../../../../context/AuthContext';
-import {useSelector, useDispatch} from 'react-redux';
-import {useFocusEffect} from '@react-navigation/native';
+import { AuthContext } from '../../../../context/AuthContext';
+import { useSelector, useDispatch } from 'react-redux';
+import { useFocusEffect } from '@react-navigation/native';
 import {
   setCartItems,
   incrementQuantity,
@@ -24,7 +24,7 @@ import {
   setTransactionId,
 } from '../../../redux/slice/cartSlice';
 
-const OrderDetail = ({route}) => {
+const OrderDetail = ({ route }) => {
   const userId = useSelector(state => state.auth.user?.userId); // Retrieve the userId from the Redux store
   const token = useSelector(state => state.auth.user?.token); // Retrieve the token at the top level
   const navigation = useNavigation();
@@ -59,7 +59,7 @@ const OrderDetail = ({route}) => {
     // Find the item and update API
     const item = cartItems.find(item => item.id === id);
     if (item) {
-      await updateUserCart(userId, token, id, {quantity: item.quantity + 1});
+      await updateUserCart(userId, token, id, { quantity: item.quantity + 1 });
     }
   };
 
@@ -67,7 +67,7 @@ const OrderDetail = ({route}) => {
     const item = cartItems.find(item => item.id === id);
     if (item && item.quantity > 1) {
       dispatch(decrementQuantity(id)); // Update in Redux store
-      await updateUserCart(userId, token, id, {quantity: item.quantity - 1});
+      await updateUserCart(userId, token, id, { quantity: item.quantity - 1 });
     }
   };
 
@@ -87,7 +87,7 @@ const OrderDetail = ({route}) => {
       setEditingItemId(null);
     }
   };
-  const renderItem = ({item}) => {
+  const renderItem = ({ item }) => {
     const isEditing = editingItemId === item.id;
 
     // Sum the prices of all attributes
@@ -106,8 +106,8 @@ const OrderDetail = ({route}) => {
     return (
       <View style={styles.productItem}>
         <View
-          style={[styles.imgLeft, isEditing && {width: 0, display: 'none'}]}>
-          <Image style={styles.productImg} source={{uri: item.image}} />
+          style={[styles.imgLeft, isEditing && { width: 0, display: 'none' }]}>
+          <Image style={styles.productImg} source={{ uri: item.image }} />
           <View style={styles.quantityView}>
             <TouchableOpacity
               style={styles.orangeCircle}
@@ -192,7 +192,7 @@ const OrderDetail = ({route}) => {
       const newTransactionId = createTransactionId();
       dispatch(setTransactionId(newTransactionId));
       console.log('New Transaction ID:', newTransactionId);
-      navigation.navigate('ConfirmOrder', {cartItems});
+      navigation.navigate('ConfirmOrder', { cartItems });
     } catch (err) {
       console.error('Error creating transaction ID:', err);
     }
@@ -215,9 +215,7 @@ const OrderDetail = ({route}) => {
           </TouchableOpacity>
           <Text style={styles.titleBoldText}>Order Details</Text>
           <TouchableOpacity>
-            <Image
-              source={require('../../../../assets/images/icons/3dotsIcon.png')}
-            />
+            <View/>
           </TouchableOpacity>
         </View>
       </View>
@@ -238,15 +236,18 @@ const OrderDetail = ({route}) => {
           keyExtractor={item => item.id.toString()}
           renderItem={renderItem}
         />
-        <Text style={styles.totalText}>Total Amount:</Text>
-        <Text style={styles.totalText}>${calculateTotalPrice()}</Text>
+
       </View>
 
       <View style={styles.footerView}>
         <View style={styles.totalView}>
-          <Text style={styles.totalText}>
             {/* Total Amount: <Text style={styles.mgnL15}>${totalAmount}</Text> */}
-          </Text>
+            <View style={{marginBottom: 20}}>
+              <Text style={styles.totalText}>Total Amount:</Text>
+
+              <Text style={styles.totalText}>${calculateTotalPrice()}</Text>
+            </View>
+
           <TouchableOpacity style={styles.checkoutBtn} onPress={handleCheckout}>
             <Text style={styles.checkoutText}>Checkout</Text>
           </TouchableOpacity>
@@ -327,9 +328,9 @@ const styles = StyleSheet.create({
   },
   checkoutBtn: {
     borderRadius: 20,
-    marginLeft: 70,
-    marginTop: -70,
+    marginLeft: 130,
     backgroundColor: '#F55F44',
+    marginTop: -20
   },
   totalText: {
     fontFamily: 'nunitoSan',
@@ -342,7 +343,6 @@ const styles = StyleSheet.create({
   totalView: {
     width: '86%',
     height: '40%',
-    marginLeft: '7%',
     flexDirection: 'row',
     alignItems: 'center',
   },

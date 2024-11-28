@@ -174,7 +174,22 @@ const OrderScreen = ({navigation}) => {
               </View>
             </View>
           ) : (
-            <Text>No contacts available. Add a new one below.</Text>
+            <View style={styles.addContactContainer}>
+                <TextInput
+                  style={styles.contactInput}
+                  placeholder="Enter new contact"
+                  value={newContact}
+                  onChangeText={setNewContact}
+                />
+                <TouchableOpacity
+                  style={styles.changeContactButton2}
+                  onPress={handleAddContact}>
+                  <Text style={styles.changeContactButtonText}>
+                    Add Contact
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            
           )}
         </Animated.View>
       </View>
