@@ -4,13 +4,12 @@ import {
   View,
   Image,
   TouchableOpacity,
-  FlatList,
-  TextInput,
-  ImageBackground,
   ScrollView,
+  FlatList,
+  ImageBackground,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {getFeaturedProduct, getProductSameDeal} from '../../../apiClient';
 import Animated, {
   Easing,
@@ -18,25 +17,16 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated';
+import colors from '../../../../assets/colors';
 
 const WhatsInToday = () => {
   const navigation = useNavigation();
-  const route = useRoute();
-  const [products, setProducts] = useState([]);
   const [productF, setProductF] = useState([]);
   const [productSD, setProductSD] = useState([]);
-
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  const [showFilterOptions, setShowFilterOptions] = useState(false);
-  const filterContainerHeight = useSharedValue(0);
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [searchQuery, setSearchQuery] = useState(''); // State for search query
-  //ex
   const [isExpandedF, setIsExpandedF] = useState(false);
-  const [isExpandedAll, setIsExpandedAll] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-  const animationHeight = useSharedValue(0);
+  const featuredAnimationHeight = useSharedValue(0);
+  const dealAnimationHeight = useSharedValue(0);
 
   useEffect(() => {
     fetchData();
@@ -44,78 +34,88 @@ const WhatsInToday = () => {
 
   const fetchData = async () => {
     try {
-      // Fetch both data simultaneously using Promise.all
       const [featuredData, sameDealData] = await Promise.all([
-        getFeaturedProduct(), // Fetch featured products
-        getProductSameDeal(), // Fetch products on the same deal
+        getFeaturedProduct(),
+        getProductSameDeal(),
       ]);
-
-      // Set state with the fetched data
-      setProductF(featuredData);
+      setProductF(sameDealData);
       setProductSD(sameDealData);
     } catch (error) {
-      console.error('Error fetching data:', error); // Log the error
+      console.error('Error fetching data:', error);
     }
   };
 
-  console.log('product', productSD);
-  // Animated style for expanding container
-  const animatedStyle = useAnimatedStyle(() => ({
-    height: withTiming(isExpanded ? animationHeight.value : 0, {duration: 500}),
-  }));
-
-  // Toggle the visibility of additional items
   const handleToggleExpandFeatured = () => {
+    console.log(productF);
     setIsExpandedF(prev => !prev);
-    animationHeight.value = isExpandedF ? 0 : productF.length * 15; // Adjust for your item height
+    if (!isExpandedF) {
+      featuredAnimationHeight.value = productSD.slice(3).length * 70;
+      if (isExpanded) {
+        setIsExpanded(false);
+        dealAnimationHeight.value = 0;
+      }
+    } else {
+      featuredAnimationHeight.value = 0;
+    }
   };
+
   const handleToggleExpandSameDeal = () => {
     setIsExpanded(prev => !prev);
-    animationHeight.value = isExpanded ? 0 : productSD.length * -15; // Adjust for your item height
+    if (!isExpanded) {
+      dealAnimationHeight.value = productSD.slice(3).length * 70;
+      if (isExpandedF) {
+        setIsExpandedF(false);
+        featuredAnimationHeight.value = 0;
+      }
+    } else {
+      dealAnimationHeight.value = 0;
+    }
   };
+
+  const featuredAnimatedStyle = useAnimatedStyle(() => ({
+    height: withTiming(featuredAnimationHeight.value, {
+      duration: 500,
+      easing: Easing.inOut(Easing.ease),
+    }),
+    // overflow: 'hidden',
+  }));
+
+  const dealAnimatedStyle = useAnimatedStyle(() => ({
+    height: withTiming(dealAnimationHeight.value, {
+      duration: 500,
+    }),
+  }));
 
   const renderProductItem = ({item}) => (
     <TouchableOpacity
-      onPress={() => {
+      onPress={() =>
         navigation.navigate('ProductStack', {
           screen: 'ProductDetail',
           params: {productId: item._id},
-        });
-      }}>
+        })
+      }>
       <View style={styles.productsContainer}>
-        <View style={styles.productImage}>
-          <Image source={{uri: item.image}} style={styles.productImage}></Image>
-        </View>
+        <Image source={{uri: item.image}} style={styles.productImage} />
         <Text numberOfLines={1} style={styles.productName}>
           {item.name}
         </Text>
         <Text style={styles.productDescription}>{item.description}</Text>
-
         <Text style={styles.productPrice}>
           {new Intl.NumberFormat('vi-VN').format(item.price)} VNĐ
         </Text>
-        <View style={styles.button}>
-          <ImageBackground
-            source={require('../../../../assets/images/icons/ov_shape.png')}
-            style={{width: 39, height: 18, justifyContent: 'center'}}>
-            <Image
-              source={require('../../../../assets/images/icons/ov_shape_arr.png')}
-              style={{
-                alignSelf: 'center',
-              }}></Image>
-          </ImageBackground>
-        </View>
       </View>
     </TouchableOpacity>
   );
+
   return (
     <View style={styles.container}>
+      {/* Header Section */}
       <View style={styles.headView}>
         <ImageBackground
           style={styles.redFoodBgr}
           source={require('../../../../assets/images/redFoodBgr.png')}
         />
-        <View style={styles.menuView}>
+        <View style={styles.headSpaceView}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Image
               style={styles.iconMenuView}
@@ -129,100 +129,91 @@ const WhatsInToday = () => {
             />
           </TouchableOpacity>
         </View>
-        <Text style={styles.titleBoldText}>What's in Today?</Text>
+        <Text style={styles.titleBoldText}>Hôm nay có gì?</Text>
       </View>
+      {/* Popular Featured Section */}
 
-      {/* <ScrollView style={styles.scrollContainer}> */}
-      <View style={styles.menuView}>
-        <Text style={styles.titleBoldText1}>Popular Featured</Text>
-        <TouchableOpacity onPress={handleToggleExpandFeatured}>
-          <Text style={styles.viewallText}>
-            {isExpandedF ? 'Show Less' : 'View All'}
-          </Text>
-        </TouchableOpacity>
-      </View>
-      {/* FlatList for initial items */}
-    
-      <View style={styles.sectionContainer}>
-        <FlatList
-          data={productF.slice(0, 3)}
-          renderItem={renderProductItem}
-          keyExtractor={item => item.id?.toString()}
-          showsVerticalScrollIndicator={true}
-          numColumns={3}
-        />
-      </View>
+      <ScrollView style={styles.bodyView}>
+        <View style={styles.menuView}>
+          <Text style={styles.titleBoldText1}>Sản phẩm đề xuất</Text>
+          <TouchableOpacity onPress={handleToggleExpandFeatured}>
+            <Text style={styles.viewallText}>
+              {isExpandedF ? 'Show Less' : 'View All'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.sectionContainer}>
+          <FlatList
+            data={productF.slice(0, 3)}
+            renderItem={renderProductItem}
+            keyExtractor={item => item.id?.toString()}
+            numColumns={3}
+          />
+        </View>
+        <Animated.View
+          style={[styles.expandedContainer, featuredAnimatedStyle]}>
+          {productF.slice(3, 15).length > 0 && (
+            <FlatList
+              data={productF.slice(3, 15)} // Display only products from 4 to 15
+              renderItem={renderProductItem}
+              keyExtractor={item => item.id?.toString()}
+              numColumns={3}
+            />
+          )}
+        </Animated.View>
 
-      {/* Animated container for additional items */}
-      <View style={styles.scrollContainer}>
-      <Animated.View style={[styles.expandedContainer, animatedStyle]}>
-        <FlatList
-          data={productF.slice(3)} // Show the remaining items
-          renderItem={renderProductItem}
-          keyExtractor={item => item.id?.toString()}
-          showsVerticalScrollIndicator={false}
-          numColumns={3}
-        />
-      </Animated.View>
-      </View>
-      {/*--------------------Same----------------------- */}
-      <View style={styles.menuView}>
-        <Text style={styles.titleBoldText1}>1$ Deal</Text>
-        <TouchableOpacity onPress={handleToggleExpandSameDeal}>
-          <Text style={styles.viewallText}>
-            {isExpanded ? 'Show Less' : 'View All'}
-          </Text>
-        </TouchableOpacity>
-      </View>
-      {/* FlatList for initial items */}
+        {/* 30k Deal Section */}
+        <View style={styles.menuView}>
+          <Text style={styles.titleBoldText1}>Đồng giá 30k</Text>
+          <TouchableOpacity onPress={handleToggleExpandSameDeal}>
+            <Text style={styles.viewallText}>
+              {isExpanded ? 'Show Less' : 'View All'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.sectionContainer}>
+          <FlatList
+            data={productSD.slice(0, 3)}
+            renderItem={renderProductItem}
+            keyExtractor={item => item.id?.toString()}
+            numColumns={3}
+          />
+        </View>
+        <Animated.View style={[styles.expandedContainer, dealAnimatedStyle]}>
+          <FlatList
+            data={productSD.slice(3)}
+            renderItem={renderProductItem}
+            keyExtractor={item => item.id?.toString()}
+            numColumns={3}
+          />
+        </Animated.View>
+        {/* <View style={styles.menuView}> */}
 
-      <View style={styles.sectionContainer}>
-        <FlatList
-          data={productSD.slice(0, 3)}
-          renderItem={renderProductItem}
-          keyExtractor={item => item.id?.toString()}
-          showsVerticalScrollIndicator={true}
-          numColumns={3} // Show 3 items in a row
-        />
-      </View>
-
-      {/* Animated container for additional items */}
-      {/* <ScrollView style={styles.scrollContainer}> */}
-      <Animated.View style={[styles.expandedContainer, animatedStyle]}>
-        <FlatList
-          data={productSD.slice(3)} // Show the remaining items
-          renderItem={renderProductItem}
-          keyExtractor={item => item.id?.toString()}
-          showsVerticalScrollIndicator={false}
-          numColumns={3}
-        />
-      </Animated.View>
-      {/* </ScrollView> */}
-
-      {/*--------------------ALL----------------------- */}
-      {/* </ScrollView> */}
-      <View style={styles.menuView}>
-        <Text style={styles.titleBoldText1}>View all</Text>
+        <View style={( !isExpanded && !isExpandedF) ? styles.allPviewAbsolute:styles.allPView}>
+          <TouchableOpacity
+            style={styles.viewAllProduct}
+            onPress={() =>
+              navigation.navigate('ProductStack', {screen: 'Product'})
+            }>
+            <Text style={styles.viewallPText}>
+              Xem tất cả sản phẩm của chúng tôi
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+      <View style={ isExpanded || isExpandedF?  styles.allPviewAbsolute:styles.allPView}>
         <TouchableOpacity
+          style={styles.viewAllProduct}
           onPress={() =>
             navigation.navigate('ProductStack', {screen: 'Product'})
           }>
-          <Text style={styles.viewallText}>View All</Text>
+          <Text style={styles.viewallPText}>
+            Xem tất cả sản phẩm của chúng tôi
+          </Text>
         </TouchableOpacity>
       </View>
-
-      <View style={styles.brandTag}>
-        <Text style={styles.orderText}>Order From</Text>
-        <View style={styles.locateView}>
-          <Text style={styles.locateText}>McDonald’s - Flat Bush Street</Text>
-          <View style={styles.bagView}>
-            <Image
-              source={require('../../../../assets/images/icons/shoppingBag.png')}
-            />
-            {/* <Text style={styles.quantityItem}>{products.length} items</Text> */}
-          </View>
-        </View>
-      </View>
+      {/* </View> */}
+      {/* Footer Section */}
     </View>
   );
 };
@@ -230,8 +221,33 @@ const WhatsInToday = () => {
 export default WhatsInToday;
 
 const styles = StyleSheet.create({
-  scrollContainer: {
+  bodyView: {
     width: '100%',
+    height: '100%',
+  },
+  allPviewAbsolute: {
+    width: '100%',
+    position: 'absolute',
+display:'none'  },
+  allPView: {
+    width: '100%',
+    position: 'relative',
+    display:'flex'
+  },
+  viewallPText: {
+    color: 'white',
+    fontSize: 15,
+    fontWeight: '600',
+    marginRight: 16,
+  },
+  viewAllProduct: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '86%',
+    marginLeft: '7%',
+    borderRadius: 20,
+    backgroundColor: colors.orange1,
+    height: 50,
   },
 
   productDescription: {
@@ -247,22 +263,15 @@ const styles = StyleSheet.create({
     color: '#000000',
   },
   expandedContainer: {
-    overflow: 'hidden', // Ensures items don't overflow the container
+    overflow: 'hidden',
   },
-  button: {
-    width: 40,
-    height: 18,
-    position: 'absolute',
-    bottom: -0.7,
-    right: 0,
-  },
+
   productsContainer: {
     width: 100,
     height: 140,
     borderRadius: 20,
     elevation: 4,
     backgroundColor: 'white',
-
     margin: 10,
     marginLeft: 22,
     justifyContent: 'center',
@@ -384,33 +393,30 @@ const styles = StyleSheet.create({
   iconMenuView: {
     width: 25,
     height: 25,
-  resizeMode:'contain',
+    resizeMode: 'contain',
     marginTop: 50,
   },
   iconMenuView2: {
     width: 25,
     height: 25,
-    resizeMode:'contain',
+    resizeMode: 'contain',
 
     marginLeft: '5%',
     marginTop: 50,
   },
-  containerF: {
-    width: 30,
-    height: 30,
-    borderRadius: 50,
-    backgroundColor: 'green',
-    justifyContent: 'center',
+  headSpaceView: {
+    justifyContent: 'space-between',
+    marginLeft: '5%',
+    height: 50,
+    flexDirection: 'row',
     alignItems: 'center',
-    marginLeft: '2%',
-    alignSelf: 'center',
   },
   menuView: {
     justifyContent: 'space-between',
     marginLeft: '5%',
     height: 50,
+    backgroundColor: colors.whiteBgr,
     flexDirection: 'row',
-
     alignItems: 'center',
   },
   container: {
@@ -419,7 +425,7 @@ const styles = StyleSheet.create({
   },
   headView: {
     width: '100%',
-    height: '23%',
+    height: 200,
     backgroundColor: 'blue',
   },
   redFoodBgr: {
@@ -427,167 +433,4 @@ const styles = StyleSheet.create({
     height: '100%',
     position: 'absolute',
   }, //animated filter
-  filterOptionsContainer: {
-    backgroundColor: 'white', // Background color of the filter options
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
-    padding: 10,
-  },
-
-  filterButton: {
-    padding: 10,
-    marginVertical: 5,
-    backgroundColor: '#f0f0f0',
-    borderRadius: 5,
-  },
-
-  filterButtonText: {
-    fontSize: 16,
-    color: '#333',
-    textAlign: 'center',
-  },
-  //filter options
-  buttonContainer: {
-    margin: 5,
-
-    alignItems: 'center',
-  },
-  optionFocusText: {
-    fontSize: 14,
-    paddingHorizontal: 20,
-    paddingVertical: 7,
-    fontFamily: 'nunitoSan',
-    color: 'white',
-    fontWeight: 'bold',
-  },
-  optionText: {
-    fontSize: 14,
-    paddingHorizontal: 20,
-    paddingVertical: 7,
-    fontFamily: 'nunitoSan',
-    color: 'black',
-    fontWeight: 'bold',
-    // opacity: 0.75,
-  },
-  optionFocusBtn: {
-    backgroundColor: '#FF5733',
-    opacity: 1,
-  },
-  optionBtn: {
-    backgroundColor: '#CBCED1',
-    opacity: 0.25,
-    borderRadius: 7,
-    marginRight: 15,
-  },
-  // Filter and other styles remain unchanged
-  searchInput: {
-    height: 50,
-    borderColor: '#ccc',
-    borderWidth: 2,
-    borderRadius: 8,
-  },
-  searchContainer: {
-    backgroundColor: '#f8f8f8',
-    paddingHorizontal: 10,
-    marginBottom: 10,
-    borderRadius: 8,
-
-    width: '90%',
-    alignSelf: 'center',
-  },
-  //itemproducts
-  starView: {
-    marginLeft: 20,
-    marginTop: 5,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  starIcon: {
-    width: 16,
-    height: 16,
-    marginRight: 3,
-  },
-  nameText: {
-    color: 'black',
-    marginTop: 12,
-    marginLeft: 20,
-    fontFamily: 'nunitoSan',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  bestText: {
-    color: 'white',
-    padding: 7,
-    paddingHorizontal: 12,
-    fontSize: 10,
-    fontFamily: 'nunitoSan',
-    fontWeight: 'bold',
-  },
-  bestTag: {
-    borderTopLeftRadius: 5,
-    borderBottomLeftRadius: 5,
-    position: 'absolute',
-    right: -4,
-    top: 8,
-    backgroundColor: '#F55F44',
-  },
-  tagBrand: {
-    width: 230,
-    height: 70,
-    borderRadius: 10,
-    left: 10,
-    backgroundColor: 'white',
-    position: 'absolute',
-    bottom: -20,
-  },
-  itemPopularView: {
-    marginLeft: 20,
-    width: 250,
-    height: 160,
-  },
-  thinText: {
-    paddingLeft: 3,
-    fontSize: 11,
-    fontWeight: '700',
-    fontFamily: 'nunitoSan',
-    color: '#9D9D9D',
-    marginLeft: 16,
-  },
-  ///brand
-  brandTag: {
-    height: 70,
-    backgroundColor: '#F55F44',
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
-    fontFamily: 'nunitoSan',
-  },
-  bagView: {
-    flexDirection: 'row',
-    position: 'absolute',
-    right: 30,
-    alignItems: 'center',
-  },
-
-  locateView: {
-    flexDirection: 'row',
-  },
-  locateText: {
-    color: '#fff',
-    marginLeft: 30,
-    paddingVertical: 3,
-    fontSize: 12,
-    borderBottomColor: 'white',
-    borderBottomWidth: 1,
-    fontWeight: 'bold',
-    fontFamily: 'nunitoSan',
-  },
-  orderText: {
-    color: '#fff',
-    opacity: 0.5,
-    marginLeft: 30,
-    marginTop: 8,
-    fontSize: 13,
-    fontWeight: 'bold',
-    fontFamily: 'nunitoSan',
-  },
 });

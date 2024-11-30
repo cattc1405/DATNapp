@@ -23,6 +23,7 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated';
+import colors from '../../../assets/colors';
 
 const Product = () => {
   const navigation = useNavigation();
@@ -216,7 +217,9 @@ const Product = () => {
             borderBlockColor: '#F55F44',
           }}>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <Text style={styles.filterTextTilte}>Categories</Text>
+            <Text style={styles.filterTextTilte}>
+              Chọn danh mục bạn muốn tìm
+            </Text>
             <TouchableOpacity onPress={handleReset}>
               <Text style={styles.filterTextTilte2}>Clear all</Text>
             </TouchableOpacity>
@@ -226,6 +229,7 @@ const Product = () => {
             renderItem={renderCategoryItem}
             keyExtractor={item => item._id.toString()}
             numColumns={3}
+            contentContainerStyle={styles.categoryList}
           />
         </View>
       </Animated.View>
@@ -250,6 +254,11 @@ const Product = () => {
 export default Product;
 
 const styles = StyleSheet.create({
+  categoryList: {
+    width: '100%',
+    justifyContent: 'center', // Căn giữa
+    alignItems: 'center',
+  },
   inputContainer: {
     width: 385,
     height: 36,
@@ -274,7 +283,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 'bold',
     fontFamily: 'nunitoSan',
-    color: '#979DA3',
+    color: colors.orange1,
     marginRight: '5%',
     marginTop: '15%',
   },
@@ -396,11 +405,6 @@ const styles = StyleSheet.create({
     height: 18,
   },
 
-  headView: {
-    flex: 1,
-    backgroundColor: 'blue',
-  },
-
   productCardContainer: {
     flex: 1,
     padding: 5,
@@ -452,7 +456,7 @@ const styles = StyleSheet.create({
   iconMenuView: {
     width: 25,
     height: 25,
-    resizeMode:'contain',
+    resizeMode: 'contain',
 
     marginTop: 50,
   },
@@ -486,7 +490,7 @@ const styles = StyleSheet.create({
   },
   headView: {
     width: '100%',
-    height: '23%',
+    height: 200,
     backgroundColor: 'blue',
   },
   redFoodBgr: {
@@ -545,7 +549,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#CBCED1',
     opacity: 0.25,
     borderRadius: 7,
-    marginRight: 15,
+    marginRight: 5,
   },
   optionBtn: {
     backgroundColor: '#CBCED1',
