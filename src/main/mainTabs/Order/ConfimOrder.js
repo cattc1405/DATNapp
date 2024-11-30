@@ -173,18 +173,7 @@ const ConfirmOrder = () => {
           onPress={() => navigation.navigate('CheckoutNavigator', {cartItems})}>
           <Text style={styles.payText}>Proceed to Payment</Text>
         </TouchableOpacity>
-        <View style={styles.brandTag}>
-          <Text style={styles.orderText}>Order From</Text>
-          <View style={styles.locateView}>
-            <Text style={styles.locateText}>McDonald’s - Flat Bush Street</Text>
-            <View style={styles.bagView}>
-              <Image
-                source={require('../../../../assets/images/icons/shoppingBag.png')}
-              />
-              <Text style={styles.quantityItem}>0 items</Text>
-            </View>
-          </View>
-        </View>
+        
       </View>
     </View>
   );
@@ -289,7 +278,7 @@ const styles = StyleSheet.create({
     height: '30%',
   },
   mainView: {
-    height: '50%',
+    height: '57%',
   },
   mrginLeft: {
     width: '80%',

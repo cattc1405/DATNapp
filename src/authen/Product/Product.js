@@ -72,7 +72,7 @@ const Product = () => {
 
   const toggleFilterOptions = () => {
     setShowFilterOptions(prev => !prev);
-    filterContainerHeight.value = withTiming(showFilterOptions ? 0 : 150, {
+    filterContainerHeight.value = withTiming(showFilterOptions ? 0 : 160, {
       duration: 300,
       easing: Easing.ease,
     });
@@ -216,7 +216,7 @@ const Product = () => {
             borderColor: '#F55F44',
             borderBlockColor: '#F55F44',
           }}>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View style={styles.fliterHeader}>
             <Text style={styles.filterTextTilte}>
               Chọn danh mục bạn muốn tìm
             </Text>
@@ -224,6 +224,7 @@ const Product = () => {
               <Text style={styles.filterTextTilte2}>Clear all</Text>
             </TouchableOpacity>
           </View>
+          <View style={styles.line}></View>
           <FlatList
             data={categories}
             renderItem={renderCategoryItem}
@@ -232,6 +233,7 @@ const Product = () => {
             contentContainerStyle={styles.categoryList}
           />
         </View>
+        <View style={styles.space}></View>
       </Animated.View>
       {/* Selected Category Title */}
       {selectedCategoryName ? (
@@ -254,6 +256,21 @@ const Product = () => {
 export default Product;
 
 const styles = StyleSheet.create({
+  fliterHeader: {
+    width: '92%',
+    marginLeft: '4%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems:'center'
+  },
+  line: {
+    width: '92%',
+    marginLeft:'4%',
+    height: 0.1,
+    backgroundColor: 'black',
+    marginTop: 10,
+    marginBottom:3
+  },
   categoryList: {
     width: '100%',
     justifyContent: 'center', // Căn giữa
@@ -520,9 +537,8 @@ const styles = StyleSheet.create({
   //filter options
   buttonContainer: {
     margin: 5,
-
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: 10,
   },
   optionFocusText: {
     fontSize: 14,

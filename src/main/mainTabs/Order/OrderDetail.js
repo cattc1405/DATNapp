@@ -23,6 +23,7 @@ import {
   removeCartItem,
   setTransactionId,
 } from '../../../redux/slice/cartSlice';
+import colors from '../../../../assets/colors';
 
 const OrderDetail = ({route}) => {
   const userId = useSelector(state => state.auth.user?.userId); // Retrieve the userId from the Redux store
@@ -135,7 +136,11 @@ const OrderDetail = ({route}) => {
           <Text style={styles.thinGrayText}>Quantity: x{item.quantity}</Text>
           <Text style={styles.thinGrayText1}>Topping: {nameString}</Text>
           <Text style={styles.thinGrayText}>{item.note}</Text>
-          <Text style={styles.priceText}>${itemTotalPrice}</Text>
+
+          <Text style={styles.priceText}>
+            {' '}
+            {new Intl.NumberFormat('vi-VN').format(itemTotalPrice)} VNĐ
+          </Text>
         </TouchableOpacity>
 
         {isEditing ? (
@@ -192,7 +197,8 @@ const OrderDetail = ({route}) => {
       const newTransactionId = createTransactionId();
       dispatch(setTransactionId(newTransactionId));
       console.log('New Transaction ID:', newTransactionId);
-      navigation.navigate('ConfirmOrder', {cartItems});
+      // navigation.navigate('ConfirmOrder', {cartItems});
+      navigation.navigate('CheckoutNavigator', { cartItems });
     } catch (err) {
       console.error('Error creating transaction ID:', err);
     }
@@ -238,8 +244,15 @@ const OrderDetail = ({route}) => {
           keyExtractor={item => item.id.toString()}
           renderItem={renderItem}
         />
-        <Text style={styles.totalText}>Total Amount:</Text>
-        <Text style={styles.totalText}>${calculateTotalPrice()}</Text>
+        <View style={styles.totalAmountView}>
+          <Text style={styles.totalText}>Total Amount:</Text>
+          <Text style={styles.totalTextOrange}>
+            {new Intl.NumberFormat('vi-VN').format(calculateTotalPrice())} VNĐ
+          </Text>
+        </View>
+        <TouchableOpacity style={styles.checkoutBtn} onPress={handleCheckout}>
+            <Text style={styles.checkoutText}>Checkout</Text>
+          </TouchableOpacity>
       </View>
 
       <View style={styles.footerView}>
@@ -247,22 +260,9 @@ const OrderDetail = ({route}) => {
           <Text style={styles.totalText}>
             {/* Total Amount: <Text style={styles.mgnL15}>${totalAmount}</Text> */}
           </Text>
-          <TouchableOpacity style={styles.checkoutBtn} onPress={handleCheckout}>
-            <Text style={styles.checkoutText}>Checkout</Text>
-          </TouchableOpacity>
+         
         </View>
-        <View style={styles.brandTag}>
-          <Text style={styles.orderText}>Order From</Text>
-          <View style={styles.locateView}>
-            <Text style={styles.locateText}>McDonald’s - Flat Bush Street</Text>
-            <View style={styles.bagView}>
-              <Image
-                source={require('../../../../assets/images/icons/shoppingBag.png')}
-              />
-              {/* <Text style={styles.quantityItem}>{products.length} items</Text> */}
-            </View>
-          </View>
-        </View>
+        
       </View>
     </View>
   );
@@ -271,6 +271,10 @@ const OrderDetail = ({route}) => {
 export default OrderDetail;
 
 const styles = StyleSheet.create({
+  totalAmountView: {
+    flexDirection: 'row',
+    alignItems:'flex-end'
+  },
   bagView: {
     flexDirection: 'row',
     position: 'absolute',
@@ -327,13 +331,25 @@ const styles = StyleSheet.create({
   },
   checkoutBtn: {
     borderRadius: 20,
-    marginLeft: 70,
-    marginTop: -70,
+    width: '86%',
+    marginTop:10,
+    marginLeft: '7%',
+    height:46,
+    justifyContent: 'center',
+    alignItems:'center',    
     backgroundColor: '#F55F44',
+  },
+  totalTextOrange: {
+    fontFamily: 'nunitoSan',
+    fontSize: 17,
+    color: colors.orange1,
+    fontWeight: 'bold',
+    alignItems: 'center',
+    marginLeft: 10,
   },
   totalText: {
     fontFamily: 'nunitoSan',
-    fontSize: 12,
+    fontSize: 15,
     color: 'black',
     fontWeight: 'bold',
     alignItems: 'center',
@@ -351,7 +367,7 @@ const styles = StyleSheet.create({
     height: '17%',
   },
   mainView: {
-    height: '60%',
+    height: '75%',
   },
   mrginLeft: {
     width: '80%',
@@ -462,7 +478,8 @@ const styles = StyleSheet.create({
     width: '80%',
     flexDirection: 'row',
     height: 140,
-    marginTop: '7%',
+    marginTop: 15,
+    marginBottom:10,
     backgroundColor: '#fff',
     elevation: 5,
     marginLeft: '10%',

@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from 'react';
+
 import {
   StyleSheet,
   View,
   Text,
   Image,
   TouchableOpacity,
+  KeyboardAvoidingView,
   FlatList,
   Dimensions,
   TextInput,
@@ -18,6 +20,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
+import CustomAlert from '../../CustomAlert';
 
 const {width, height} = Dimensions.get('window');
 
@@ -28,7 +31,12 @@ const OrderScreen = ({navigation}) => {
   const [newContact, setNewContact] = useState('');
   const userId = useSelector(state => state.auth.user?.userId);
   const token = useSelector(state => state.auth.user?.token);
-
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertTitle, setAlertTitle] = useState('');
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
+  const handleOk = () => {
+    setIsAlertVisible(false);
+  };
   const animationValue = useSharedValue(0);
 
   useEffect(() => {
@@ -102,6 +110,13 @@ const OrderScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
+      <CustomAlert
+        visible={isAlertVisible}
+        title={alertTitle}
+        message={alertMessage}
+        // onCancel={handleCancel}
+        onOk={handleOk}
+      />
       <View style={styles.headerContainer}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image
@@ -183,7 +198,9 @@ const OrderScreen = ({navigation}) => {
         style={styles.nextButton}
         onPress={() => {
           if (!selectedContact) {
-            alert('Please select a contact.');
+            setAlertMessage('Vui lòng chọn một liên hệ!');
+            setAlertTitle('Thiếu thông tin!');
+            setIsAlertVisible(true);
             return;
           }
           navigation.navigate('AddressScreen', {selectedContact});
@@ -197,7 +214,7 @@ const OrderScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
     padding: 20,
@@ -249,14 +266,15 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#989DA3',
     textAlign: 'center',
-    marginBottom: 20,
-    fontFamily: 'nunitoSan',
+    marginVertical: 20,
+    // fontFamily: 'nunitoSan',
     fontWeight: '600',
   },
   contactBox: {
     width: '100%',
     backgroundColor: '#f8f8f8',
     padding: 15,
+    elevation:5,
     borderRadius: 10,
     marginBottom: 20,
   },
