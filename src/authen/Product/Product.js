@@ -37,10 +37,6 @@ const Product = () => {
   const filterContainerHeight = useSharedValue(0);
   const [searchQuery, setSearchQuery] = useState(''); // State for search query
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const fetchData = async () => {
     try {
       const [productData, categoryData] = await Promise.all([
@@ -54,7 +50,9 @@ const Product = () => {
       console.error('Error fetching data:', error);
     }
   };
-
+  useEffect(() => {
+    fetchData();
+  }, []);
   const filterProducts = (categoryId, categoryName) => {
     if (categoryId) {
       // Filter products by selected category

@@ -31,12 +31,13 @@ const Checkout4 = ({navigation}) => {
     }
     if (selectedOption === 'Cash') {
       handleSubmitOrder();
-      navigation.navigate('Checkout5');
+      // navigation.navigate('Checkout5');
       console.log('Go cash');
     }
   };
   //order
-  const transactionId = useSelector(state => state.cart.transactionId);
+  const transactionId3 = useSelector(state => state.cart.transactionId);
+
   const [cartIds, setCartIds] = useState([]);
   const [orderId, setOrderId] = useState();
   const token = useSelector(state => state.auth.user?.token);
@@ -50,11 +51,13 @@ const Checkout4 = ({navigation}) => {
   }));
 
   const handleSubmitOrder = async () => {
+    const transaction2 = transactionId3;
     const shippingAddress = `${contact}`;
     const restaurant = `${brand}`;
     const paymentMethob = `${selectedOption}`;
     const status = 'Coming';
-    const transactionId = `${transactionId}`;
+    const transactionId = `${transaction2}`;
+    console.log('trans  ', transactionId);
     try {
       const orderResponse = await submitOrder(
         orderItems,
