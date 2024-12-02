@@ -12,7 +12,7 @@ import {
   getUserCart,
   updateUserCart,
   removeUserCartItem,
-} from '../../../apiClient'; // Assuming you have a function to get product by ID
+} from '../../../apiClient';
 import {AuthContext} from '../../../../context/AuthContext';
 import {useSelector, useDispatch} from 'react-redux';
 import {useFocusEffect} from '@react-navigation/native';
@@ -26,8 +26,8 @@ import {
 import colors from '../../../../assets/colors';
 
 const OrderDetail = ({route}) => {
-  const userId = useSelector(state => state.auth.user?.userId); // Retrieve the userId from the Redux store
-  const token = useSelector(state => state.auth.user?.token); // Retrieve the token at the top level
+  const userId = useSelector(state => state.auth.user?.userId); 
+  const token = useSelector(state => state.auth.user?.token); 
   const navigation = useNavigation();
   const cartItems = useSelector(state => state.cart.items); // or state.cart.cartItems depending on your slice structure
   const dispatch = useDispatch();
@@ -180,10 +180,8 @@ const OrderDetail = ({route}) => {
       const createTransactionId = () => {
         const maxOrderCode = 9007199254740991;
 
-        // Generate a random integer order code within the valid range (1 to maxOrderCode)
         const orderCode = Math.floor(Math.random() * maxOrderCode) + 1;
 
-        // Ensure that the generated order code is within bounds and is a valid integer
         if (
           !Number.isInteger(orderCode) ||
           orderCode <= 0 ||
@@ -197,13 +195,11 @@ const OrderDetail = ({route}) => {
       const newTransactionId = createTransactionId();
       dispatch(setTransactionId(newTransactionId));
       console.log('New Transaction ID:', newTransactionId);
-      // navigation.navigate('ConfirmOrder', {cartItems});
       navigation.navigate('CheckoutNavigator', { cartItems });
     } catch (err) {
       console.error('Error creating transaction ID:', err);
     }
   };
-  // Function to create a new transaction ID
 
   return (
     <View style={styles.container}>
@@ -229,48 +225,65 @@ const OrderDetail = ({route}) => {
       </View>
 
       <View style={styles.mainView}>
-        {/* <FlatList
-          data={products} // Data should be an array of product objects
-          renderItem={renderProductItem}
-          keyExtractor={item => item.id.toString()}
-        /> */}
-        {/* <FlatList
-          data={cartItems}
-          keyExtractor={item => item.id}
-          renderItem={renderItem}
-        /> */}
-        <FlatList
-          data={cartItems}
-          keyExtractor={item => item.id.toString()}
-          renderItem={renderItem}
-        />
-        <View style={styles.totalAmountView}>
-          <Text style={styles.totalText}>Total Amount:</Text>
-          <Text style={styles.totalTextOrange}>
-            {new Intl.NumberFormat('vi-VN').format(calculateTotalPrice())} VNĐ
-          </Text>
-        </View>
-        <TouchableOpacity style={styles.checkoutBtn} onPress={handleCheckout}>
-            <Text style={styles.checkoutText}>Checkout</Text>
-          </TouchableOpacity>
-      </View>
+        {cartItems.length === 0 ? (
+          <View style={styles.emptyCartView}>
+            <Text style={styles.emptyCartText}>
+              Bạn chưa có sản phẩm nào trong giỏ hàng
+            </Text>
+          </View>
+        ) : (
+          <>
+            <FlatList
+              data={cartItems}
+              keyExtractor={item => item.id.toString()}
+              renderItem={renderItem}
+            />
+            <View style={styles.totalAmountView}>
+              <Text style={styles.totalText}>Tổng cộng:</Text>
+              <Text style={styles.totalTextOrange}>
+                {new Intl.NumberFormat('vi-VN').format(calculateTotalPrice())} VNĐ
+              </Text>
+            </View>
+          </>
+        )}
 
-      <View style={styles.footerView}>
-        <View style={styles.totalView}>
-          <Text style={styles.totalText}>
-            {/* Total Amount: <Text style={styles.mgnL15}>${totalAmount}</Text> */}
-          </Text>
-         
-        </View>
-        
+        <TouchableOpacity
+          style={[
+            styles.checkoutBtn,
+            cartItems.length === 0 && styles.disabledButton,
+          ]}
+          onPress={handleCheckout}
+          disabled={cartItems.length === 0}>
+          <Text style={styles.checkoutText}>Checkout</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
+
 };
 
 export default OrderDetail;
 
 const styles = StyleSheet.create({
+  emptyCartView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '90%',
+  },
+  emptyCartText: {
+    fontFamily: 'nunitoSan',
+    fontSize: 16,
+    color: '#9D9D9D',
+    fontWeight: 'bold',
+  },
+  disabledButton: {
+    backgroundColor: '#ccc',
+  },
+  iconQuantity: {
+    width: 15,
+    height: 15,
+    resizeMode:'contain'
+  },
   totalAmountView: {
     flexDirection: 'row',
     alignItems:'flex-end'
@@ -437,6 +450,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   quantityText: {
+    width: 20,
+    textAlign:'center',
     fontFamily: 'nunitoSan',
     fontSize: 18,
     color: 'black',
@@ -446,12 +461,13 @@ const styles = StyleSheet.create({
   quantityView: {
     width: '32%',
     marginLeft: '20%',
+    alignItems:'center',
     justifyContent: 'space-between',
     flexDirection: 'row',
   },
   orangeCircle: {
-    width: 26,
-    height: 26,
+    width: 20,
+    height: 20,
     backgroundColor: '#F55F44',
     borderRadius: 13,
     alignItems: 'center',

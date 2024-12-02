@@ -184,6 +184,7 @@ const styles = StyleSheet.create({
     marginTop: '18%',
   },
   icon: {
+    resizeMode:'contain',
     width: 24,
     height: 24,
     tintColor: '#fff',

@@ -17,6 +17,10 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import {useRoute} from '@react-navigation/native';
+import colors from '../../../assets/colors';
+import CustomAlert from '../../CustomAlert';
+
+
 const AddressScreen = ({navigation}) => {
   const [showBrands, setShowBrands] = useState(false);
   const animationValue = useSharedValue(0);
@@ -26,7 +30,10 @@ const AddressScreen = ({navigation}) => {
   const selectedContact = router.params;
   const token = useSelector(state => state.auth.user?.token);
   const userId = useSelector(state => state.auth.user?.userId);
-
+  const [showImage, setShowImage] = useState(true);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertTitle, setAlertTitle] = useState('');
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
   const restaurant2 = selectedBrand;
   const contact = selectedContact.selectedContact;
   console.log('res1', restaurant2);
@@ -43,12 +50,19 @@ const AddressScreen = ({navigation}) => {
     fetchBrands();
   }, []);
 
+  const toggleShowImage = () => {
+    setShowImage(prev => !prev);
+  };
+  const handleOk = () => {
+    setIsAlertVisible(false);
+  };
   const renderItem = ({item}) => (
     <TouchableOpacity
       style={styles.restaurantCard}
       onPress={() => {
-        setSelectedBrand(item); // Set the selected brand
-        setShowBrands(false); // Close the brands list after selection
+        toggleShowImage();
+        setSelectedBrand(item);
+        setShowBrands(false);
       }}>
       <View style={{flexDirection: 'row', padding: 10}}>
         <Image source={{uri: item.image}} style={styles.logo} />
@@ -72,12 +86,13 @@ const AddressScreen = ({navigation}) => {
           <Text style={styles.offerText}>{item.offers}</Text>
         </View>
       </View>
+      <View style={styles.lineItem}></View>
     </TouchableOpacity>
   );
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
-      height: withTiming(showBrands ? 200 : 0, {
+      height: withTiming(showBrands ? 300 : 0, {
         duration: 300,
         easing: Easing.inOut(Easing.ease),
       }),
@@ -86,12 +101,20 @@ const AddressScreen = ({navigation}) => {
   });
 
   const toggleBrands = () => {
+    toggleShowImage();
     setShowBrands(prev => !prev);
     animationValue.value = showBrands ? 0 : 1;
   };
 
   return (
     <View style={styles.container}>
+      <CustomAlert
+        visible={isAlertVisible}
+        title={alertTitle}
+        message={alertMessage}
+        // onCancel={handleCancel}
+        onOk={handleOk}
+      />
       {/* Header */}
       <View style={styles.headerContainer}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -108,10 +131,12 @@ const AddressScreen = ({navigation}) => {
       </View>
 
       {/* Image */}
-      <Image
-        source={require('../../../assets/images/backroundHome.png')}
-        style={styles.buildingImage}
-      />
+      {showImage && (
+        <Image
+          source={require('../../../assets/images/backroundHome.png')}
+          style={styles.buildingImage}
+        />
+      )}
 
       {/* Text */}
       <Text style={styles.questionText}>
@@ -154,6 +179,7 @@ const AddressScreen = ({navigation}) => {
         {/* Animated Brand Options */}
         <Animated.View style={[styles.brandOptionsContainer, animatedStyle]}>
           <FlatList
+            style={styles.flatlistAddress}
             data={brands}
             keyExtractor={item => item._id}
             renderItem={renderItem}
@@ -167,8 +193,10 @@ const AddressScreen = ({navigation}) => {
         style={styles.nextButton}
         onPress={() => {
           if (!selectedBrand) {
-            alert('Please select a brand');
-            return; // Prevent proceeding if no brand is selected
+            setAlertMessage('Vui lòng chọn một địa chỉ!');
+            setAlertTitle('Thiếu thông tin!');
+            setIsAlertVisible(true);
+            return; 
           }
           const brand = selectedBrand._id;
           console.log(brand, contact);
@@ -181,6 +209,19 @@ const AddressScreen = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  flatlistAddress: {
+    marginTop:5
+  },
+  infoContainer: {
+    width: '90%',
+    justifyContent: 'center',
+    marginRight: 20,
+  },
+  lineItem: {
+    width: '100%',
+    height: 0.5,
+    backgroundColor: 'gray',
+  },
   container: {
     flex: 1,
     padding: 20,
@@ -189,7 +230,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   restaurantCard: {
-    width: '90%',
+    width: '100%',
 
     borderRadius: 10,
     marginBottom: 10,
@@ -208,8 +249,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#888',
     marginBottom: 5,
-    fontFamily: 'nunitoSan',
+    // fontFamily: 'nunitoSan',
     marginLeft: 10,
+    // marginRight:30,
     flex: 1,
   },
   logo: {
@@ -246,38 +288,31 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   questionText: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 20,
+    fontWeight: '700',
     textAlign: 'center',
-    marginBottom: 10,
     fontFamily: 'nunitoSan',
+    color: '#000000',
   },
   subText: {
-    fontSize: 14,
-    color: '#888',
+    fontSize: 15,
+    color: '#989DA3',
     textAlign: 'center',
-    marginBottom: 20,
-    fontFamily: 'nunitoSan',
+    marginVertical: 20,
+    fontWeight: '600',
   },
   addressBox: {
     width: '100%',
-    backgroundColor: '#fff',
+    backgroundColor: colors.whiteBgr,
+    padding: 15,
+    elevation: 5,
     borderRadius: 10,
-    padding: 20,
-    shadowColor: '#000',
-    marginTop: 30,
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    elevation: 2,
     marginBottom: 20,
   },
   addressHeader: {
-    fontSize: 14,
-    color: '#999',
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: 'bold',
     marginBottom: 10,
     fontFamily: 'nunitoSan',
   },
@@ -285,22 +320,23 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 4,
   },
   addressTitle: {
     fontSize: 16,
+    color:'black',
     fontWeight: 'bold',
-    fontFamily: 'nunitoSan',
+    // fontFamily: 'nunitoSan',
   },
   deleteIcon: {
     width: 20,
     height: 20,
-    marginTop: -40,
+    marginTop: 0,
   },
   addressDetails: {
     fontSize: 14,
     color: '#666',
-    fontFamily: 'nunitoSan',
+    // fontFamily: 'nunitoSan',
   },
   changeAddressButton: {
     marginTop: 10,

@@ -105,7 +105,7 @@ const Restaurant1 = ({navigation}) => {
         data={brands}
         keyExtractor={item => item._id}
         renderItem={renderItem}
-        contentContainerStyle={styles.scrollContainer} // giống ScrollView của bạn
+        contentContainerStyle={styles.scrollContainer} 
       />
     </View>
   );

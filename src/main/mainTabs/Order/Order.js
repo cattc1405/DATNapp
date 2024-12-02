@@ -14,6 +14,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import {getUserOrder} from '../../../apiClient';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import colors from '../../../../assets/colors';
 
 // Define Tab from createMaterialTopTabNavigator
 const Tab = createMaterialTopTabNavigator();
@@ -206,7 +207,7 @@ const Order = () => {
             <View>
               <Image
                 style={styles.iconImage}
-                source={require('../../../../assets/images/icons/shopping-bag.png')}
+                source={require('../../../../assets/images/icons/shoppingBag.png')}
               />
               <Text style={styles.iconText}>{itemCount}</Text>
             </View>
@@ -337,14 +338,15 @@ const styles = StyleSheet.create({
   iconImage: {
     width: 25,
     height: 25,
+    resizeMode:'contain'
   },
   iconText: {
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
     position: 'absolute',
-    left: 15,
-    top: 10,
+    left: 20,
+    top: -10,
   },
   itemContainer: {
     backgroundColor: '#fff',
@@ -422,6 +424,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
+    backgroundColor:colors.whiteBgr
   },
   headView: {
     height: '15%',

@@ -9,8 +9,9 @@ import {
 } from 'react-native';
 import {useRoute} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
-import { setGender } from '../../redux/slice/userSlice';
+import {setGender} from '../../redux/slice/userSlice';
 import CustomAlert from '../../CustomAlert';
+import CustomHeaderSignup from './CustomHeaderSignup';
 
 const Gender = props => {
   const {navigation} = props;
@@ -23,7 +24,7 @@ const Gender = props => {
   const [alertTitle, setAlertTitle] = useState('');
   const [isAlertVisible, setIsAlertVisible] = useState(false);
   const handleOk = () => {
-    setIsAlertVisible(false); 
+    setIsAlertVisible(false);
   };
 
   const handleSelectGender = gender => {
@@ -31,7 +32,7 @@ const Gender = props => {
   };
   console.log(name);
   const handleNextStep = () => {
-    if (selectedGender=='') {
+    if (selectedGender == '') {
       setAlertMessage('Select your gender!');
       setAlertTitle('Gender unselected!');
       setIsAlertVisible(true);
@@ -50,24 +51,11 @@ const Gender = props => {
         // onCancel={handleCancel}
         onOk={handleOk}
       />
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image
-            source={require('../../../assets/images/Back.png')}
-            style={styles.icon}
-          />
-        </TouchableOpacity>
-        <Text style={styles.stepText}>Step 2/10</Text>
-        <TouchableOpacity
-          style={styles.closeIcon}
-          onPress={() => navigation.navigate('Login')}>
-          <Image
-            source={require('../../../assets/images/Exit.png')}
-            style={styles.icon}
-          />
-        </TouchableOpacity>
-      </View>
+      <CustomHeaderSignup
+        stepText="Step 2/10"
+        onBackPress={() => navigation.goBack()}
+        onClosePress={() => navigation.navigate('Login')}
+      />
 
       {/* Image ở giữa */}
       <View style={styles.imageContainer}>
@@ -156,10 +144,9 @@ const Gender = props => {
         <Text style={styles.nextButtonText}>Next Step</Text>
       </TouchableOpacity>
 
-      {/* Skip link */}
-      <TouchableOpacity>
+      {/* <TouchableOpacity>
         <Text style={styles.skipText}>Skip this Step</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };
@@ -194,12 +181,15 @@ const styles = StyleSheet.create({
   checkGenderView: {
     width: '100%',
     marginTop: '5%',
+    elevation: 5,
+
     height: '20%',
     justifyContent: 'center',
   },
   checkedBlank: {
     width: '20%',
     marginLeft: '70%',
+
     height: '70%',
     resizeMode: 'contain',
   },
@@ -207,10 +197,11 @@ const styles = StyleSheet.create({
     width: '45%',
     height: '100%',
     borderRadius: 15,
+    elevation: 5,
     backgroundColor: '#fff',
   },
   chooseGenderView: {
-    width: '100%',
+    width: '92%',
     height: '30%',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -219,17 +210,10 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: '#F8F8F8',
-    justifyContent: 'space-between',
+    // justifyContent: 'space-between',
     alignItems: 'center',
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-    marginBottom: 20,
-    paddingHorizontal: 10,
-  },
+
   icon: {
     width: 24,
     height: 24,
@@ -245,24 +229,24 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   image: {
-    width: 180,
-    height: 180,
+    width: 170,
+    height: 220,
     resizeMode: 'contain',
   },
   title: {
     fontSize: 22,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginVertical: 10,
+    // marginVertical: 10,
     fontFamily: 'nunitoSan',
   },
   description: {
     fontSize: 16,
+    color: 'gray',
+    marginTop: 5,
     textAlign: 'center',
-    color: '#888',
-    fontWeight:'500',
+    fontWeight: '400',
     marginBottom: 20,
-    // fontFamily: 'nunitoSan',
   },
   genderContainer: {
     flexDirection: 'row',
@@ -295,12 +279,12 @@ const styles = StyleSheet.create({
   //   fontWeight: 'bold',
   // },
   nextButton: {
+    marginTop: 25,
     backgroundColor: '#FF6347',
     paddingVertical: 15,
     paddingHorizontal: 100,
     borderRadius: 30,
     alignItems: 'center',
-    marginVertical: 10,
   },
   nextButtonText: {
     color: '#FFF',
@@ -310,9 +294,9 @@ const styles = StyleSheet.create({
   },
   skipText: {
     textAlign: 'center',
-    color:'red',
-    fontSize:15,
-    fontWeight:'500',
+    color: 'red',
+    fontSize: 15,
+    fontWeight: '500',
     marginBottom: 20,
   },
 });

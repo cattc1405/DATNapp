@@ -10,6 +10,7 @@ import {
 import {useDispatch} from 'react-redux';
 import {setName} from '../../redux/slice/userSlice';
 import CustomAlert from '../../CustomAlert';
+import CustomHeaderSignup from './CustomHeaderSignup';
 
 const Name = props => {
   const [alertMessage, setAlertMessage] = useState('');
@@ -22,17 +23,22 @@ const Name = props => {
   const handleOk = () => {
     setIsAlertVisible(false);
   };
+
   const handleTextChange = text => {
     
     setInputValue(text);
   };
+
   const handleNextStep = text => {
     if (!inputValue) {
-      setAlertMessage('Enter your name!');
-      setAlertTitle('Name!');
+      setAlertMessage('Vui lòng nhập tên của bạn!');
+      setAlertTitle('Thiếu thông tin!');
       setIsAlertVisible(true);
     }
-    else {
+    else if(inputValue.length < 5){ setAlertMessage('Vui lòng nhập tên dài hơn 5 ký tự!');
+    setAlertTitle('Tên quá ngắn!');
+    setIsAlertVisible(true);}else
+    {
       navigation.navigate('Gender')
 
     }
@@ -46,24 +52,16 @@ const Name = props => {
         // onCancel={handleCancel}
         onOk={handleOk}
       />
-      {/* Tiêu đề bước */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image
-            source={require('../../../assets/images/Back.png')}
-            style={styles.icon}
-          />
-        </TouchableOpacity>
-        <Text style={styles.stepText}>Step 1/10</Text>
-        <TouchableOpacity
-          style={styles.closeIcon}
-          onPress={() => navigation.navigate('Login')}>
-          <Image
-            source={require('../../../assets/images/Exit.png')}
-            style={styles.icon}
-          />
-        </TouchableOpacity>
-      </View>
+      <Image
+        style={styles.langquang}
+        source={require('../../../assets/images/topLeftFl.png')}
+      />
+      
+      <CustomHeaderSignup
+        stepText="Step 1/10"
+        onBackPress={() => navigation.goBack()}
+        onClosePress={() => navigation.navigate('Login')}
+      />
       <View style={styles.illustrationContainer}>
         <Image
           source={require('../../../assets/images/ImgPeople.png')}
@@ -82,7 +80,7 @@ const Name = props => {
         <View style={styles.inputNameView}>
           <TextInput
             style={styles.inputView}
-            secureTextEntry={true}
+            secureTextEntry={false}
             placeholder="Example: John Smith"
             placeholderTextColor="rgb(177, 189, 199)"
             onChangeText={handleTextChange}
@@ -119,6 +117,11 @@ const Name = props => {
 };
 
 const styles = StyleSheet.create({
+  langquang: {
+    position: 'absolute',
+    left: 0,
+    top:0
+  },
   inputNameView: {
     width: '100%',
     height: 50,
@@ -148,7 +151,7 @@ const styles = StyleSheet.create({
   },
   twopeopleShadow: {
     width: '70%',
-    marginTop: 10,
+    marginTop: 0,
     marginBottom: 15,
   },
   container: {
@@ -183,8 +186,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   illustrationImage: {
-    width: 250,
-    height: 150,
+    width: 280,
+    height: 250,
     resizeMode: 'contain',
   },
   title: {
@@ -197,9 +200,9 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: 16,
-    color: '#888',
+    color: 'gray',
     textAlign: 'center',
-    fontWeight: '500',
+    fontWeight: '400',
     marginHorizontal: 20,
     marginBottom: 20,
     // fontFamily: 'nunitoSan',
@@ -209,6 +212,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 20,
+    elevation:5,
     borderColor: 'gray',
     marginBottom: 30,
     alignItems: 'flex-start',
@@ -251,7 +255,7 @@ const styles = StyleSheet.create({
     // width: '100%',
     // marginLeft: '7%',
     // bottom: 50,
-    marginTop: 100,
+    marginTop: 50,
     
     backgroundColor: '#FF6F61',
     paddingVertical: 15,

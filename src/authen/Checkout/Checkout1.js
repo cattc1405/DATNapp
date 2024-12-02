@@ -21,11 +21,13 @@ import Animated, {
 import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import CustomAlert from '../../CustomAlert';
+import colors from '../../../assets/colors';
 
 const {width, height} = Dimensions.get('window');
 
 const OrderScreen = ({navigation}) => {
   const [showContacts, setShowContacts] = useState(false);
+  const [showHamburger, setShowHamburger] = useState(true);
   const [user, setUser] = useState({});
   const [selectedContact, setSelectedContact] = useState(null);
   const [newContact, setNewContact] = useState('');
@@ -33,10 +35,15 @@ const OrderScreen = ({navigation}) => {
   const token = useSelector(state => state.auth.user?.token);
   const [alertMessage, setAlertMessage] = useState('');
   const [alertTitle, setAlertTitle] = useState('');
+  const [contactBoxHeight, setContactBoxHeight] = useState(0);
   const [isAlertVisible, setIsAlertVisible] = useState(false);
   const handleOk = () => {
     setIsAlertVisible(false);
   };
+  const toggleHamburger = () => {
+    setShowHamburger(prev => !prev);
+  };
+
   const animationValue = useSharedValue(0);
 
   useEffect(() => {
@@ -61,6 +68,7 @@ const OrderScreen = ({navigation}) => {
 
       try {
         await updateUser(userId, updatedUser, token);
+        setContactBoxHeight(contactBoxHeight + 54);
         setUser(updatedUser); // Update local state with new contact
         setNewContact(''); // Clear input
       } catch (error) {
@@ -74,6 +82,14 @@ const OrderScreen = ({navigation}) => {
 
     try {
       await updateUser(userId, updatedUser, token);
+      if (user.contact.length == 1) {
+        setContactBoxHeight(110)
+      }
+      else {
+        setContactBoxHeight(contactBoxHeight - 54);
+
+      }
+      
       setUser(updatedUser); // Update state with the removed contact
     } catch (error) {
       console.error('Error removing contact:', error);
@@ -86,6 +102,7 @@ const OrderScreen = ({navigation}) => {
       onPress={() => {
         setSelectedContact(item);
         setShowContacts(false);
+        toggleHamburger();
       }}>
       <Text style={styles.contactName}>{item}</Text>
       <TouchableOpacity
@@ -97,7 +114,7 @@ const OrderScreen = ({navigation}) => {
   );
 
   const animatedStyle = useAnimatedStyle(() => ({
-    height: withTiming(showContacts ? 200 : 0, {
+    height: withTiming(showContacts ? contactBoxHeight : 0, {
       duration: 300,
       easing: Easing.inOut(Easing.ease),
     }),
@@ -105,7 +122,10 @@ const OrderScreen = ({navigation}) => {
   }));
 
   const toggleContacts = () => {
+    console.log(user.contact.length);
+    setContactBoxHeight(Object.keys(user.contact).length * 54 + 100);
     setShowContacts(prev => !prev);
+    toggleHamburger();
   };
 
   return (
@@ -130,10 +150,12 @@ const OrderScreen = ({navigation}) => {
           style={styles.closeIcon}
         />
       </View>
-      <Image
-        source={require('../../../assets/images/hamburger.png')}
-        style={styles.hamburger}
-      />
+      {showHamburger && (
+        <Image
+          source={require('../../../assets/images/hamburger.png')}
+          style={styles.hamburger}
+        />
+      )}
       <Text style={styles.questionText}>
         How Do You Want To Receive Your Order?
       </Text>
@@ -189,7 +211,24 @@ const OrderScreen = ({navigation}) => {
               </View>
             </View>
           ) : (
-            <Text>No contacts available. Add a new one below.</Text>
+            <View>
+              <Text>No contacts available. Add a new one below.</Text>
+              <View style={styles.addContactContainer}>
+                <TextInput
+                  style={styles.contactInput}
+                  placeholder="Enter new contact"
+                  value={newContact}
+                  onChangeText={setNewContact}
+                />
+                <TouchableOpacity
+                  style={styles.changeContactButton2}
+                  onPress={handleAddContact}>
+                  <Text style={styles.changeContactButtonText}>
+                    Add Contact
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
           )}
         </Animated.View>
       </View>
@@ -212,6 +251,11 @@ const OrderScreen = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  removeButtonText: {
+    color: 'white',
+    paddingHorizontal: 8,
+    fontWeight: '500',
+  },
   container: {
     flex: 1,
     // justifyContent: 'center',
@@ -272,21 +316,23 @@ const styles = StyleSheet.create({
   },
   contactBox: {
     width: '100%',
-    backgroundColor: '#f8f8f8',
+    backgroundColor: colors.whiteBgr,
     padding: 15,
-    elevation:5,
+    elevation: 5,
     borderRadius: 10,
     marginBottom: 20,
   },
   contactHeader: {
+    textAlign:'center',
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 10,
     fontFamily: 'nunitoSan',
   },
   contactTitle: {
-    fontSize: 14,
-    fontFamily: 'nunitoSan',
+    fontSize: 16,
+    fontWeight: '500',
+    // fontFamily: 'nunitoSan',
   },
   contactContent: {
     flexDirection: 'row',

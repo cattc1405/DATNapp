@@ -9,6 +9,8 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import CustomAlert from '../../CustomAlert';
+import CustomHeaderSignup from './CustomHeaderSignup';
+import colors from '../../../assets/colors';
 
 const ReceiveNotifi = () => {
   const [selectedNotifications, setSelectedNotifications] = useState([]);
@@ -18,17 +20,14 @@ const ReceiveNotifi = () => {
   const [isAlertVisible, setIsAlertVisible] = useState(false);
 
   const handleOk = () => {
-    setIsAlertVisible(false); 
+    setIsAlertVisible(false);
     navigation.navigate('YourPass');
-
   };
-
 
   const handleTurnOn = () => {
     setAlertMessage('Notifications!');
     setAlertTitle('Your changes has save!');
     setIsAlertVisible(true);
-    
   };
 
   const toggleNotification = notification => {
@@ -42,8 +41,7 @@ const ReceiveNotifi = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      
+    <View style={styles.container}>
       <CustomAlert
         visible={isAlertVisible}
         title={alertTitle}
@@ -52,21 +50,17 @@ const ReceiveNotifi = () => {
         onOk={handleOk}
       />
 
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image source={require('../../../assets/images/Back.png')} />
-        </TouchableOpacity>
-        <Text style={styles.stepText}>Step 3/10</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-          <Image source={require('../../../assets/images/Exit.png')} />
-        </TouchableOpacity>
-      </View>
-
-      <Image
-        source={require('../../../assets/images/Notifi.png')}
-        style={styles.image}
+      <CustomHeaderSignup
+        stepText="Step 3/10"
+        onBackPress={() => navigation.goBack()}
+        onClosePress={() => navigation.navigate('Login')}
       />
-
+      <View style={styles.imageContainer}>
+        <Image
+          source={require('../../../assets/images/Notifi.png')}
+          style={styles.image}
+        />
+      </View>
       <Text style={styles.title}>
         Do You Want to Receive{'\n'} Notifications?
       </Text>
@@ -104,16 +98,21 @@ const ReceiveNotifi = () => {
         }}>
         <Text style={styles.skipText}>Skip this Step</Text>
       </TouchableOpacity>
-    </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
+  imageContainer: {
     alignItems: 'center',
+    marginVertical: 20,
+  },
+  container: {
+    flex: 1,
     padding: 20,
-    backgroundColor: '#F8F8F8',
+    height: '100%',
+    backgroundColor: colors.whiteBgr,
+    alignItems: 'center',
   },
   header: {
     flexDirection: 'row',
@@ -133,25 +132,26 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   title: {
-    fontSize: 20,
-    fontWeight: '700',
+    fontSize: 22,
+    fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 10,
-    color: '#000000',
+    // marginVertical: 10,
+    fontFamily: 'nunitoSan',
   },
   description: {
-    fontSize: 15,
-    color: '#989DA3',
+    fontSize: 16,
+    color: 'gray',
+    marginTop:5,
     textAlign: 'center',
+    fontWeight: '400',
     marginBottom: 20,
-    fontWeight: '500',
-    lineHeight: 25,
   },
   notificationOptions: {
-    width: '90%',
+    width: '86%',
     backgroundColor: '#FFFFFF',
     borderRadius: 20,
-    padding: 10,
+    elevation: 5,
+
     marginBottom: 20,
     // alignItems: 'center',
     marginVertical: 10,
@@ -186,8 +186,8 @@ const styles = StyleSheet.create({
     width: 16,
     height: 16,
     borderRadius: 8,
-    borderWidth:4,
-    borderColor:'#EEEEEE',
+    borderWidth: 4,
+    borderColor: '#EEEEEE',
     backgroundColor: '#FF6347',
   },
   optionText: {
