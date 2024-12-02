@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   FlatList,
+  KeyboardAvoidingView,
   ImageBackground,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
@@ -49,7 +50,7 @@ const WhatsInToday = () => {
     console.log(productF);
     setIsExpandedF(prev => !prev);
     if (!isExpandedF) {
-      featuredAnimationHeight.value = productSD.slice(3).length * 70;
+      featuredAnimationHeight.value = productSD.slice(3).length * 45;
       if (isExpanded) {
         setIsExpanded(false);
         dealAnimationHeight.value = 0;
@@ -62,7 +63,7 @@ const WhatsInToday = () => {
   const handleToggleExpandSameDeal = () => {
     setIsExpanded(prev => !prev);
     if (!isExpanded) {
-      dealAnimationHeight.value = productSD.slice(3).length * 70;
+      dealAnimationHeight.value = productSD.slice(3).length * 45;
       if (isExpandedF) {
         setIsExpandedF(false);
         featuredAnimationHeight.value = 0;
@@ -77,12 +78,24 @@ const WhatsInToday = () => {
       duration: 500,
       easing: Easing.inOut(Easing.ease),
     }),
+    marginTop: withTiming(isExpandedF ? -155 : 0, {
+      duration: 500,
+      easing: Easing.inOut(Easing.ease),
+    }),
+    backgroundColor: withTiming(isExpandedF ? 'red' : '', {
+      duration: 500,
+      easing: Easing.inOut(Easing.ease),
+    }),
     // overflow: 'hidden',
   }));
 
   const dealAnimatedStyle = useAnimatedStyle(() => ({
     height: withTiming(dealAnimationHeight.value, {
       duration: 500,
+    }),
+    marginTop: withTiming(isExpandedF ? 0 : -155, {
+      duration: 500,
+      easing: Easing.inOut(Easing.ease),
     }),
   }));
 
@@ -133,7 +146,7 @@ const WhatsInToday = () => {
       </View>
       {/* Popular Featured Section */}
 
-      <ScrollView style={styles.bodyView}>
+      <View style={styles.bodyView}>
         <View style={styles.menuView}>
           <Text style={styles.titleBoldText1}>Sản phẩm đề xuất</Text>
           <TouchableOpacity onPress={handleToggleExpandFeatured}>
@@ -143,23 +156,27 @@ const WhatsInToday = () => {
           </TouchableOpacity>
         </View>
         <View style={styles.sectionContainer}>
-          <FlatList
-            data={productF.slice(0, 3)}
-            renderItem={renderProductItem}
-            keyExtractor={item => item.id?.toString()}
-            numColumns={3}
-          />
-        </View>
-        <Animated.View
-          style={[styles.expandedContainer, featuredAnimatedStyle]}>
-          {productF.slice(3, 15).length > 0 && (
+          {!isExpandedF ? (
             <FlatList
-              data={productF.slice(3, 15)} // Display only products from 4 to 15
+              data={productF.slice(0, 3)}
               renderItem={renderProductItem}
               keyExtractor={item => item.id?.toString()}
               numColumns={3}
             />
+          ) : (
+            <View />
           )}
+        </View>
+        <Animated.View
+          style={[styles.expandedContainer, featuredAnimatedStyle]}>
+          {/* {productF.slice(0, 15).length > 0 && ( */}
+            <FlatList
+              data={productF.slice(0, 15)} // Display only products from 4 to 15
+              renderItem={renderProductItem}
+              keyExtractor={item => item.id?.toString()}
+              numColumns={3}
+            />
+          {/* )} */}
         </Animated.View>
 
         {/* 30k Deal Section */}
@@ -172,36 +189,29 @@ const WhatsInToday = () => {
           </TouchableOpacity>
         </View>
         <View style={styles.sectionContainer}>
-          <FlatList
-            data={productSD.slice(0, 3)}
-            renderItem={renderProductItem}
-            keyExtractor={item => item.id?.toString()}
-            numColumns={3}
-          />
+          {!isExpanded ? (
+            <FlatList
+              data={productSD.slice(0, 3)}
+              renderItem={renderProductItem}
+              keyExtractor={item => item.id?.toString()}
+              numColumns={3}
+            />
+          ) : (
+            <View />
+          )}
         </View>
         <Animated.View style={[styles.expandedContainer, dealAnimatedStyle]}>
           <FlatList
-            data={productSD.slice(3)}
+            style={styles.flatlistRend}
+            data={productSD.slice(0, 15)}
             renderItem={renderProductItem}
             keyExtractor={item => item.id?.toString()}
             numColumns={3}
           />
         </Animated.View>
         {/* <View style={styles.menuView}> */}
-
-        <View style={( !isExpanded && !isExpandedF) ? styles.allPviewAbsolute:styles.allPView}>
-          <TouchableOpacity
-            style={styles.viewAllProduct}
-            onPress={() =>
-              navigation.navigate('ProductStack', {screen: 'Product'})
-            }>
-            <Text style={styles.viewallPText}>
-              Xem tất cả sản phẩm của chúng tôi
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-      <View style={ isExpanded || isExpandedF?  styles.allPviewAbsolute:styles.allPView}>
+      </View>
+      <View style={styles.allPviewAbsolute}>
         <TouchableOpacity
           style={styles.viewAllProduct}
           onPress={() =>
@@ -212,8 +222,6 @@ const WhatsInToday = () => {
           </Text>
         </TouchableOpacity>
       </View>
-      {/* </View> */}
-      {/* Footer Section */}
     </View>
   );
 };
@@ -221,18 +229,21 @@ const WhatsInToday = () => {
 export default WhatsInToday;
 
 const styles = StyleSheet.create({
+  
   bodyView: {
     width: '100%',
+    // backgroundColor:'red',
     height: '100%',
   },
   allPviewAbsolute: {
     width: '100%',
     position: 'absolute',
-display:'none'  },
+    bottom: 180,
+  },
   allPView: {
     width: '100%',
     position: 'relative',
-    display:'flex'
+    display: 'flex',
   },
   viewallPText: {
     color: 'white',
@@ -263,7 +274,9 @@ display:'none'  },
     color: '#000000',
   },
   expandedContainer: {
+    height: 300,
     overflow: 'hidden',
+    alignItems:'center'
   },
 
   productsContainer: {
@@ -279,7 +292,9 @@ display:'none'  },
   },
 
   sectionContainer: {
-    flex: 1,
+    // flex: 1,
+    alignItems:'center',
+    height: 155,
     backgroundColor: '#F7F6FB',
   },
   //View all section
@@ -337,10 +352,7 @@ display:'none'  },
     height: 18,
   },
 
-  headView: {
-    flex: 1,
-    backgroundColor: 'blue',
-  },
+ 
 
   productCardContainer: {
     flex: 1,
@@ -420,12 +432,12 @@ display:'none'  },
     alignItems: 'center',
   },
   container: {
-    flex: 1,
+    // flex: 1,
     backgroundColor: colors.whiteBgr,
   },
   headView: {
     width: '100%',
-    height: 200,
+    height: 170,
     backgroundColor: 'blue',
   },
   redFoodBgr: {

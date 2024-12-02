@@ -12,6 +12,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {setGender} from '../../redux/slice/userSlice';
 import CustomAlert from '../../CustomAlert';
 import CustomHeaderSignup from './CustomHeaderSignup';
+import colors from '../../../assets/colors';
 
 const Gender = props => {
   const {navigation} = props;
@@ -39,7 +40,7 @@ const Gender = props => {
     } else {
       dispatch(setGender(selectedGender));
 
-      navigation.navigate('ReceiveNotifi');
+      navigation.navigate('YourPass');
     }
   };
   return (
@@ -52,7 +53,7 @@ const Gender = props => {
         onOk={handleOk}
       />
       <CustomHeaderSignup
-        stepText="Step 2/10"
+        stepText="Step 2/6"
         onBackPress={() => navigation.goBack()}
         onClosePress={() => navigation.navigate('Login')}
       />
@@ -77,7 +78,14 @@ const Gender = props => {
       <View style={styles.chooseGenderView}>
         {/* gender female */}
         <TouchableOpacity
-          style={styles.genderView}
+          style={[
+            styles.genderView,
+            {
+              transform: [
+                {scale: selectedGender === 'female' ? 1.1 : 0.9}, // Female lớn khi được chọn
+              ],
+            },
+          ]}
           onPress={() => handleSelectGender('female')}>
           <View style={styles.checkGenderView}>
             <Image
@@ -107,7 +115,14 @@ const Gender = props => {
 
         {/* male */}
         <TouchableOpacity
-          style={styles.genderView}
+          style={[
+            styles.genderView,
+            {
+              transform: [
+                {scale: selectedGender === 'male' ? 1.1 : 0.9}, // Female lớn khi được chọn
+              ],
+            },
+          ]}
           onPress={() => handleSelectGender('male')}>
           <View style={styles.checkGenderView}>
             <Image
@@ -209,7 +224,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#F8F8F8',
+    backgroundColor: colors.whiteBgr,
     // justifyContent: 'space-between',
     alignItems: 'center',
   },

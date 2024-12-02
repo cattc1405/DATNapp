@@ -21,9 +21,13 @@ import Animated, {
   withTiming,
   withClamp,
 } from 'react-native-reanimated';
+import CustomLoading from '../../CustomLoading';
+import colors from '../../../assets/colors';
+
 const ProductDetail = ({route}) => {
   const navigation = useNavigation();
   const [selectedType, setSelectedType] = useState();
+  const [loading, setLoading] = useState(true);
 
   const [selectedDrink, setSelectedDrink] = useState(null);
   const [selectedItems, setSelectedItems] = useState([]);
@@ -201,7 +205,7 @@ const ProductDetail = ({route}) => {
     );
 
     return (
-      <TouchableOpacity onPress={() => handleSelectItem(item)}>
+      <TouchableOpacity style={styles.toppingView} onPress={() => handleSelectItem(item)}>
         <View style={styles.ingredientsListView}>
           <View style={styles.ingredientView}>
             <View style={{width: 14, height: 14, position: 'absolute'}}>
@@ -234,7 +238,7 @@ const ProductDetail = ({route}) => {
   const renderProductDetail = () => {
     if (product) {
       return (
-        <ScrollView
+        <View
           style={styles.productContainer}
           contentContainerStyle={styles.centeredContent}>
           <ImageBackground
@@ -249,19 +253,19 @@ const ProductDetail = ({route}) => {
                 display: 'flex',
                 flexDirection: 'row',
               }}>
-              <TouchableOpacity onPress={()=>navigation.goBack()}>
+              <TouchableOpacity onPress={() => navigation.goBack()}>
                 <Image
                   style={{marginTop: 24, marginLeft: 20}}
                   source={require('../../../assets/images/icons/whiteBackArrow.png')}
                 />
               </TouchableOpacity>
 
-              <TouchableOpacity>
+              {/* <TouchableOpacity>
                 <Image
                   style={{marginTop: 24, marginRight: 20}}
                   source={require('../../../assets/images/icons/3dotsIcon.png')}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </View>
 
@@ -274,28 +278,25 @@ const ProductDetail = ({route}) => {
               {formatCurrency(product.price)}
             </Text>
 
-            <Text style={styles.titleBoldText2}>About</Text>
+            <Text style={styles.titleBoldText2}>Mô tả</Text>
             <Text style={styles.grayThinText}>{product.description}</Text>
             <View style={styles.menuView}>
-              <Text style={styles.titleBoldText}>Popular Featured</Text>
+              <Text style={styles.titleBoldText}>Bạn muốn thêm gì không?</Text>
               <TouchableOpacity onPress={handleToggleExpandSameDeal}>
-                <Text style={styles.viewallText}>
-                  {isExpanded ? 'Show Less' : 'View All'}
-                </Text>
+                
               </TouchableOpacity>
             </View>
 
             <View style={styles.sectionContainer}>
               <FlatList
-                data={product.attributes.slice(0, 3)}
+                data={product.attributes}
                 keyExtractor={item => item._id.toString()}
                 renderItem={renderTopping}
-                showsVerticalScrollIndicator={true}
-                horizontal={true}
+                numColumns={3}
               />
             </View>
 
-            <ScrollView style={styles.scrollContainer}>
+            {/* <ScrollView style={styles.scrollContainer}>
               <Animated.View style={[styles.expandedContainer, animatedStyle]}>
                 <FlatList
                   data={product.attributes.slice(3)} // Show the remaining items
@@ -305,12 +306,12 @@ const ProductDetail = ({route}) => {
                   numColumns={3}
                 />
               </Animated.View>
-            </ScrollView>
+            </ScrollView> */}
           </View>
-        </ScrollView>
+        </View>
       );
     } else {
-      return <Text>Loading...</Text>;
+      return <CustomLoading visible={loading} message="Loading..." />;
     }
   };
 
@@ -320,23 +321,13 @@ const ProductDetail = ({route}) => {
         <View>{renderProductDetail()}</View>
       </View>
       <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          position: 'absolute',
-          bottom: 0,
-          width: '100%',
-          height: 50,
-          backgroundColor: 'white',
-          padding: 15,
-        }}>
-        <Text style={styles.addTD}>Do you want to add something?</Text>
+        style={styles.addVIew}>
         <TouchableOpacity
           style={styles.addBtn}
           onPress={async () => {
             addToCart();
           }}>
-          <Text style={styles.addText}>Add to Order</Text>
+          <Text style={styles.addText}>Thêm vào giỏ hàng</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -346,6 +337,16 @@ const ProductDetail = ({route}) => {
 export default ProductDetail;
 
 const styles = StyleSheet.create({
+  addVIew:
+  {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    position: 'absolute',
+    bottom: 5,
+    width: '100%',
+    height: 54,
+    padding: 15,
+  },
   spaceView: {
     height: 50,
   },
@@ -359,10 +360,8 @@ const styles = StyleSheet.create({
   },
   addBtn: {
     height: 40,
-    width: 142,
     position: 'absolute',
-    right:10,
-    marginLeft: 30,
+    right: 10,
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
@@ -475,6 +474,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   ingredientView: {
+    elevation:5,
     width: 102,
     height: 110,
     backgroundColor: '#FFFFFF',
@@ -501,12 +501,13 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   titleBoldText: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: '600',
-    
+    fontFamily: 'nunitoSan',
     color: 'black',
   },
   titleBoldText1: {
+    textAlign:'center',
     fontFamily: 'nunitoSan',
     fontSize: 22,
     marginLeft: 20,
@@ -515,8 +516,8 @@ const styles = StyleSheet.create({
   priceText: {
     fontSize: 20,
     marginLeft: 20,
-
-    color: 'gray',
+textAlign:'center',
+    color: colors.orange1,
     fontFamily: 'nunitoSan',
   },
   grayThinText: {
@@ -558,7 +559,7 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: 'space-between',
     height: 20,
-    marginBottom:10,
+    marginBottom: 10,
     flexDirection: 'row',
     marginTop: 20,
     position: 'relative',
@@ -566,7 +567,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#F7F6FB',
+    backgroundColor: colors.whiteBgr,
     alignContent: 'center',
   },
   productContainer: {
@@ -590,8 +591,6 @@ const styles = StyleSheet.create({
     top: -260, // Offset the top to make it appear in the center of the screen
   },
   sectionContainer: {
-    flex: 1,
-    elevation:4,
     backgroundColor: '#F7F6FB',
     justifyContent: 'center',
     alignItems: 'center',

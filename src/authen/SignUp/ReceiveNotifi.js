@@ -25,8 +25,8 @@ const ReceiveNotifi = () => {
   };
 
   const handleTurnOn = () => {
-    setAlertMessage('Notifications!');
-    setAlertTitle('Your changes has save!');
+    setAlertMessage('Your changes has save!');
+    setAlertTitle('Notifications!');
     setIsAlertVisible(true);
   };
 
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   notificationOptions: {
-    width: '86%',
+    width: '90%',
     backgroundColor: '#FFFFFF',
     borderRadius: 20,
     elevation: 5,

@@ -58,7 +58,7 @@ const Name = props => {
       />
       
       <CustomHeaderSignup
-        stepText="Step 1/10"
+        stepText="Step 1/6"
         onBackPress={() => navigation.goBack()}
         onClosePress={() => navigation.navigate('Login')}
       />

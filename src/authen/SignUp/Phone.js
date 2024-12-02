@@ -8,7 +8,9 @@ import {
   StyleSheet,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
-import {setPhone} from '../../redux/slice/userSlice';
+import { setPhone } from '../../redux/slice/userSlice';
+import CustomHeaderSignup from './CustomHeaderSignup';
+
 const Phone = props => {
   const {navigation} = props;
   const [inputValue, setInputValue] = useState('');
@@ -19,32 +21,19 @@ const Phone = props => {
   };
   return (
     <View style={styles.container}>
-      {/* Tiêu đề bước */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image
-            source={require('../../../assets/images/Back.png')}
-            style={styles.icon}
-          />
-        </TouchableOpacity>
-        <Text style={styles.stepText}>Step 7/10</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-          <Image
-            source={require('../../../assets/images/Exit.png')}
-            style={styles.icon}
-          />
-        </TouchableOpacity>
-      </View>
+      <CustomHeaderSignup
+        stepText="Step 4/6"
+        onBackPress={() => navigation.goBack()}
+        onClosePress={() => navigation.navigate('Login')}
+      />
+     
       <View style={styles.illustrationContainer}>
         <Image
           source={require('../../../assets/images/phoneImg.png')}
           style={styles.illustrationImage}
         />
       </View>
-      <Image
-        style={styles.twopeopleShadow}
-        source={require('../../../assets/images/twopeopleShadow.png')}
-      />
+    
       <Text style={styles.title}>What is Your Phone?</Text>
       <Text style={styles.description}>
         In order to help us verify you, we need to know your real phone number.
@@ -68,12 +57,12 @@ const Phone = props => {
           <Image
             style={styles.containCheck}
             source={
-              inputValue.length >= 5
+              inputValue.length >= 10 
                 ? require('../../../assets/images/orangeChecked.png')
                 : require('../../../assets/images/grayNotChecked.png')
             }
           />
-          <Text style={styles.atLeastText}>At least 5 characters</Text>
+          <Text style={styles.atLeastText}>At least 10 characters</Text>
         </View>
       </View>
 
@@ -105,7 +94,6 @@ const styles = StyleSheet.create({
   },
   atLeastText: {
     paddingLeft: 10,
-    fontFamily: 'nunitoSan',
   },
   containCheck: {
     width: 20,
@@ -124,12 +112,10 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   container: {
-    flex: 1,
-    justifyContent: 'flex-start',
+    // justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: '#F7F6FB',
-    paddingHorizontal: 20,
-    paddingVertical: 40,
+    padding: 20,
   },
   header: {
     flexDirection: 'row',
@@ -155,8 +141,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   illustrationImage: {
-    width: 250,
-    height: 150,
+    width: 300,
+    height: 210,
     resizeMode: 'contain',
   },
   title: {
@@ -165,12 +151,13 @@ const styles = StyleSheet.create({
     color: '#000',
     textAlign: 'center',
     marginBottom: 10,
+    fontFamily: 'nunitoSan',
   },
   description: {
-    fontSize: 18,
-    fontWeight:'500',
-    color: '#888',
+    fontSize: 16,
+    color: 'gray',
     textAlign: 'center',
+    fontWeight: '400',
     marginHorizontal: 20,
     marginBottom: 20,
   },
@@ -206,10 +193,10 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   inputHint: {
-    marginTop:10,
     fontSize: 15,
-    fontWeight:'600',
     color: '#888',
+    marginTop: 10,
+    fontWeight: '500',
   },
   inputRequirement: {
     fontSize: 12,

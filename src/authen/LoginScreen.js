@@ -19,6 +19,7 @@ import auth from '@react-native-firebase/auth'; // Firebase Auth package
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AccessToken, LoginManager, Settings} from 'react-native-fbsdk-next'; // Facebook SDK imports
 import CustomAlert from '../CustomAlert';
+import CustomLoading from '../CustomLoading';
 
 const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState('admin@gmail.com');
@@ -32,6 +33,7 @@ const LoginScreen = ({navigation}) => {
   const [alertMessage, setAlertMessage] = useState('');
   const [alertTitle, setAlertTitle] = useState('');
   const [isAlertVisible, setIsAlertVisible] = useState(false);
+
   const handleOk = () => {
     setIsAlertVisible(false); 
   };
@@ -47,7 +49,7 @@ const LoginScreen = ({navigation}) => {
       setIsAlertVisible(true);
       return;
     }
-
+    setLoading(true);
     try {
       const response = await dispatch(
         loginUser({email: email.trim(), password}),
@@ -66,6 +68,9 @@ const LoginScreen = ({navigation}) => {
       setAlertMessage('Login Failed');
       setAlertTitle(message);
       setIsAlertVisible(true);
+    } finally {
+      setLoading(false);
+
     }
   };
   const handleGoogleLogin = async () => {
@@ -211,6 +216,7 @@ const LoginScreen = ({navigation}) => {
   return (
     
     <View style={styles.container}>
+       <CustomLoading visible={loading} message="Please wait..." />
        <CustomAlert
         visible={isAlertVisible}
         title={alertTitle}

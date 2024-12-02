@@ -18,10 +18,10 @@ const SignUpNavigation = () => {
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="Name" component={Name} />
       <Stack.Screen name="Gender" component={Gender} />
-      <Stack.Screen name="ReceiveNotifi" component={ReceiveNotifi} />
+      {/* <Stack.Screen name="ReceiveNotifi" component={ReceiveNotifi} /> */}
       <Stack.Screen name="YourPass" component={YourPass} />
-      <Stack.Screen name="Finger" component={Finger} />
-      <Stack.Screen name="FavRestaurant" component={FavRestaurant} />
+      {/* <Stack.Screen name="Finger" component={Finger} /> */}
+      {/* <Stack.Screen name="FavRestaurant" component={FavRestaurant} /> */}
       <Stack.Screen name="Phone" component={Phone} />
 
       <Stack.Screen name="Email" component={Email} />

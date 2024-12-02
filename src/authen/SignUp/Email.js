@@ -9,7 +9,10 @@ import {
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {register} from '../../apiClient';
-import {setEmail} from '../../redux/slice/userSlice';
+import { setEmail } from '../../redux/slice/userSlice';
+import CustomHeaderSignup from './CustomHeaderSignup';
+import CustomAlert from '../../CustomAlert';
+
 const Email = props => {
   const {navigation} = props;
   const [inputValue, setInputValue] = useState('');
@@ -19,6 +22,14 @@ const Email = props => {
   const phone = useSelector(state => state.user.phone);
   const gender = useSelector(state => state.user.gender);
   const email = useSelector(state => state.user.email);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertTitle, setAlertTitle] = useState('');
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
+
+
+  const handleOk = () => {
+    setIsAlertVisible(false);
+  };
   const admin = false;
   const handleTextChange = text => {
     setInputValue(text);
@@ -42,38 +53,34 @@ const Email = props => {
         navigation.navigate('Code1');
       })
       .catch(error => {
-        console.error('Registration Error: ', error);
-        // Handle registration error
+        setAlertTitle('Email lỗi!');
+      setAlertMessage('Email đã tồn tại!');
+      setIsAlertVisible(true);
       });
   };
   return (
     <View style={styles.container}>
+       <CustomHeaderSignup
+        stepText="Step 5/6"
+        onBackPress={() => navigation.goBack()}
+        onClosePress={() => navigation.navigate('Login')}
+      />
+       <CustomAlert
+        visible={isAlertVisible}
+        title={alertTitle}
+        message={alertMessage}
+        // onCancel={handleCancel}
+        onOk={handleOk}
+      />
       {/* Tiêu đề bước */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image
-            source={require('../../../assets/images/Back.png')}
-            style={styles.icon}
-          />
-        </TouchableOpacity>
-        <Text style={styles.stepText}>Step 8/10</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-          <Image
-            source={require('../../../assets/images/Exit.png')}
-            style={styles.icon}
-          />
-        </TouchableOpacity>
-      </View>
+      
       <View style={styles.illustrationContainer}>
         <Image
-          source={require('../../../assets/images/ImgPeople.png')}
+          source={require('../../../assets/images/emailMan.png')}
           style={styles.illustrationImage}
         />
       </View>
-      <Image
-        style={styles.twopeopleShadow}
-        source={require('../../../assets/images/twopeopleShadow.png')}
-      />
+      
       <Text style={styles.title}>What is Your Email?</Text>
       <Text style={styles.description}>
         In order to help us verify you, we need to know your real email.
@@ -101,7 +108,7 @@ const Email = props => {
                 : require('../../../assets/images/grayNotChecked.png')
             }
           />
-          <Text style={styles.atLeastText}>At least 5 characters</Text>
+          <Text style={styles.atLeastText}>Nhập đúng định dạng</Text>
         </View>
       </View>
 
@@ -128,7 +135,7 @@ const styles = StyleSheet.create({
   },
   atLeastText: {
     paddingLeft: 10,
-    fontFamily: 'nunitoSan',
+    fontWeight:'500'
   },
   containCheck: {
     width: 20,
@@ -178,8 +185,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   illustrationImage: {
-    width: 250,
-    height: 150,
+    width: 350,
+    height: 270,
     resizeMode: 'contain',
   },
   title: {
@@ -191,15 +198,16 @@ const styles = StyleSheet.create({
     fontFamily: 'nunitoSan',
   },
   description: {
-    fontSize: 18,
-    fontWeight:'500',
-    color: '#888',
+    fontSize: 16,
+    color: 'gray',
     textAlign: 'center',
+    fontWeight: '400',
     marginHorizontal: 20,
     marginBottom: 20,
   },
   inputContainer: {
     width: '90%',
+    elevation:5,
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 20,
@@ -229,10 +237,10 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   inputHint: {
-    marginTop:10,
     fontSize: 15,
-    fontWeight:'600',
     color: '#888',
+    marginTop: 10,
+    fontWeight: '500',
   },
   inputRequirement: {
     fontSize: 12,

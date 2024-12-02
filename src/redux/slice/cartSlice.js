@@ -33,6 +33,9 @@ const cartSlice = createSlice({
     setDataOrder(state, action) {
       state.dataOrder = action.payload; // Update the dataOrder
     },
+    removeAllCartItems: (state) => {
+      state.items = [];
+    },
   },
 });
 
@@ -43,6 +46,7 @@ export const {
   removeCartItem,
   setTransactionId,
   clearCart,
+  removeAllCartItems,
   Orderdata, // Export the action to set the transaction ID
 } = cartSlice.actions;
 export default cartSlice.reducer;

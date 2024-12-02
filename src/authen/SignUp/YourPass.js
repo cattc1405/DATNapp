@@ -10,11 +10,27 @@ import {
 import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
-import {setPassword} from '../../redux/slice/userSlice';
+import { setPassword } from '../../redux/slice/userSlice';
+import CustomHeaderSignup from './CustomHeaderSignup';
+import CustomAlert from '../../CustomAlert';
+import CustomSuccessAlert from '../../CustomSuccessAlert';
+
+
 const YourPass = () => {
   const [inputValue, setInputValue] = useState('');
   const [confirmValue, setConfirmValue] = useState('');
   const navigation = useNavigation();
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertTitle, setAlertTitle] = useState('');
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
+  const [isAlertSuccessVisible, setIsAlertSuccessVisible] = useState(false);
+
+  const handleOk = () => {
+    setIsAlertVisible(false);
+  };
+  const handleSuccessOk = () => {
+    navigation.navigate('Phone')
+  }
   const dispatch = useDispatch(); // Get the dispatch function from Redux store
   const handleTextChange = text => {
     setInputValue(text);
@@ -23,30 +39,60 @@ const YourPass = () => {
     setConfirmValue(text);
   };
   const checkPasswordMatch = () => {
-    if (inputValue === confirmValue) {
-      Alert.alert('Password match');
-      dispatch(setPassword(inputValue)); // Set password to Redux store
-      navigation.navigate('Finger');
+    if (inputValue.length < 8) {
+      setAlertTitle('Mật khẩu quá ngắn!');
+      setAlertMessage('Vui lòng nhập mật khẩu từ 8 ký tự trở lên!');
+      setIsAlertVisible(true);
+    } else  if (inputValue.length > 20) {
+      setAlertTitle('Mật khẩu quá dài!');
+      setAlertMessage('Vui lòng nhập mật khẩu từ 20 ký tự trở xuống!');
+      setIsAlertVisible(true);
+    } else if ( /[A-Z]/.test(inputValue)<1) {
+      setAlertTitle('Thêm ký tự in hoa nhé!');
+      setAlertMessage('Vui lòng thêm ít nhất một ký tự in hoa vào mật khẩu!');
+      setIsAlertVisible(true);
+    } else if ( /[0-9]/.test(inputValue)<1) {
+      setAlertTitle('Thêm số vào nhé!');
+      setAlertMessage('Vui lòng thêm ít nhất một chữ số vào mật khẩu!');
+      setIsAlertVisible(true);
+    } else if (  /[!@#$%^&*(),.?":{}|<>]/.test(inputValue)<1) {
+      setAlertTitle('Thêm ký tự đặt biệt nhé!');
+      setAlertMessage('Vui lòng thêm ít nhất một ký tự đặc biệt vào mật khẩu!');
+      setIsAlertVisible(true);
+    } else
+    if (inputValue != confirmValue) {
+      setAlertTitle('Mật khẩu nhập lại không khớp!');
+      setAlertMessage('Mật khẩu nhập lại của bạn không giống nhau!');
+      setIsAlertVisible(true);
     } else {
-      Alert.alert('Password doesnt match');
+      dispatch(setPassword(inputValue));
+      setAlertTitle('Thành công!');
+      setAlertMessage('Hãy nhớ mật khẩu bạn vừa tạo nhé!');
+      setIsAlertSuccessVisible(true);
     }
   };
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}>
-          <Image source={require('../../../assets/images/Back.png')} />
-        </TouchableOpacity>
-        <Text style={styles.stepText}>Step 4/10</Text>
-        <TouchableOpacity
-          style={styles.closeButton}
-          onPress={() => navigation.navigate('Login')}>
-          <Image source={require('../../../assets/images/Exit.png')} />
-        </TouchableOpacity>
-      </View>
-
+      <CustomHeaderSignup
+        stepText="Step 3/6"
+        onBackPress={() => navigation.goBack()}
+        onClosePress={() => navigation.navigate('Login')}
+      />
+     
+     <CustomAlert
+        visible={isAlertVisible}
+        title={alertTitle}
+        message={alertMessage}
+        // onCancel={handleCancel}
+        onOk={handleOk}
+      />
+      <CustomSuccessAlert
+        visible={isAlertSuccessVisible}
+        title={alertTitle}
+        message={alertMessage}
+        // onCancel={handleCancel}
+        onOk={handleSuccessOk}
+      />
       <Image
         source={require('../../../assets/images/Img2.png')}
         style={styles.image}
@@ -61,70 +107,6 @@ const YourPass = () => {
         In order to keep your account safe you need to create a strong password.
       </Text>
 
-      {/* Ô nhập mật khẩu */}
-      {/* <View style={styles.inputContainer}>
-        <Text style={styles.inputLabel}>PASSWORD</Text>
-        <View style={styles.passwordWrapper}>
-          <TextInput
-            style={styles.input}
-            secureTextEntry={!isPasswordVisible}
-            value={password}
-            onChangeText={setPassword}
-            placeholder="********"
-          />
-          <TouchableOpacity
-            onPress={() => setPasswordVisible(!isPasswordVisible)}
-            style={styles.iconButton}
-          >
-            <Image
-              source={require('../../../assets/images/NotEye.png')} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setPassword('')}
-            style={styles.iconButton}
-          >
-            <Image
-              source={require('../../../assets/images/RedExit.png')} />
-          </TouchableOpacity>
-        </View>
-      </View> */}
-
-      {/* Ô nhập xác nhận mật khẩu */}
-      {/* <View style={styles.inputContainer}>
-        <Text style={styles.inputLabel}>CONFIRM PASSWORD</Text>
-        <View style={styles.passwordWrapper}>
-          <TextInput
-            style={styles.input}
-            secureTextEntry={!isConfirmPasswordVisible}
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-            placeholder="********"
-          />
-          <TouchableOpacity
-            onPress={() => setConfirmPasswordVisible(!isConfirmPasswordVisible)}
-            style={styles.iconButton}
-          >
-            <Image
-              source={require('../../../assets/images/NotEye.png')} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setConfirmPassword('')}
-            style={styles.iconButton}
-          >
-            <Image
-              source={require('../../../assets/images/RedExit.png')} />
-          </TouchableOpacity>
-        </View>
-      </View>
-
-
-      <View style={styles.passwordRequirements}>
-        <Text style={styles.requirementTitle}>YOUR PASSWORD MUST CONTAIN</Text>
-        <Text style={styles.requirement}>• Between 8 and 20 characters</Text>
-        <Text style={styles.requirement}>• 1 upper case letter</Text>
-        <Text style={styles.requirement}>• 1 or more numbers</Text>
-        <Text style={styles.requirement}>• 1 or more special characters</Text>
-      </View> */}
 
       <View style={styles.inputNameView}>
         <View style={styles.inputContainer}>
@@ -337,11 +319,11 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: 16,
+    color: 'gray',
+    marginTop: 5,
     textAlign: 'center',
-    fontWeight:'500',
-    color: '#777',
+    fontWeight: '400',
     marginBottom: 20,
-    // fontFamily: 'nunitoSan',
   },
   // inputContainer: {
   //   marginBottom: 20,

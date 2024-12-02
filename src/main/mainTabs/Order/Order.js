@@ -15,6 +15,7 @@ import {useSelector} from 'react-redux';
 import {getUserOrder} from '../../../apiClient';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import colors from '../../../../assets/colors';
+import CustomLoading from '../../../CustomLoading';
 
 // Define Tab from createMaterialTopTabNavigator
 const Tab = createMaterialTopTabNavigator();
@@ -24,7 +25,7 @@ const OrderScreen = ({status}) => {
   const userId = useSelector(state => state.auth.user?.userId);
   const token = useSelector(state => state.auth.user?.token);
   const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
   // Fetch orders from the API
@@ -188,6 +189,7 @@ const Order = () => {
 
   return (
     <View style={styles.container}>
+
       <View style={styles.headView}>
         <Image
           style={styles.redFoodBgr}
@@ -314,7 +316,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FF3D00',
     position: 'absolute',
     right: -5,
-    top:0,
+    top: 0,
     paddingVertical: 6,
     borderTopLeftRadius: 8,
     borderBottomLeftRadius: 8,
@@ -338,7 +340,7 @@ const styles = StyleSheet.create({
   iconImage: {
     width: 25,
     height: 25,
-    resizeMode:'contain'
+    resizeMode: 'contain',
   },
   iconText: {
     color: '#fff',
@@ -424,7 +426,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
-    backgroundColor:colors.whiteBgr
+    backgroundColor: colors.whiteBgr,
   },
   headView: {
     height: '15%',

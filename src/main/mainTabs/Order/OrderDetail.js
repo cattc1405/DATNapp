@@ -39,7 +39,7 @@ const OrderDetail = ({route}) => {
   const fetchUserCart = async () => {
     if (!userId || !token) return;
 
-    try {
+    try { 
       setLoading(true);
       const data = await getUserCart(userId, token);
       dispatch(setCartItems(data.cart));
@@ -71,7 +71,17 @@ const OrderDetail = ({route}) => {
       await updateUserCart(userId, token, id, {quantity: item.quantity - 1});
     }
   };
-
+  const handleDeleteAll = async () => {
+    try {
+      for (const item of cartItems) {
+        await removeUserCartItem(userId, token, item.id);
+        dispatch(removeCartItem(item.id));
+      }
+    } catch (err) {
+      console.error('Err:', err);
+    } 
+  };
+  
   const [editingItemId, setEditingItemId] = useState(null);
 
   const handleEditToggle = id => {
@@ -256,6 +266,17 @@ const OrderDetail = ({route}) => {
           disabled={cartItems.length === 0}>
           <Text style={styles.checkoutText}>Checkout</Text>
         </TouchableOpacity>
+
+        {/* nút này cho lỗi tự động thêm hàng trăm sản phẩm vào giỏ hàng */}
+        {/* <TouchableOpacity
+          style={[
+            styles.checkoutBtn,
+            cartItems.length === 0 && styles.disabledButton,
+          ]}
+          onPress={handleDeleteAll}
+          disabled={cartItems.length === 0}>
+          <Text style={styles.checkoutText}>Delete All</Text>
+        </TouchableOpacity> */}
       </View>
     </View>
   );
