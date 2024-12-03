@@ -71,7 +71,7 @@ const Home = () => {
           <View style={styles.bestTag}>
             <Text style={styles.bestText}>BEST OFFER</Text>
           </View>
-          <Text style={styles.nameText}>{item.name}</Text>
+          <Text style={styles.nameText} numberOfLines={1}>{item.name}</Text>
           <View style={styles.starView}>
             {[...Array(5)].map((_, index) => (
               <Image
@@ -312,6 +312,7 @@ const styles = StyleSheet.create({
   nameText: {
     color: 'black',
     marginTop: 12,
+    width:'56%',
     marginLeft: 20,
     fontFamily: 'nunitoSan',
     fontSize: 17,

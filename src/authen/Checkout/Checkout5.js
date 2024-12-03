@@ -73,6 +73,12 @@ const Checkout5 = ({navigation}) => {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.illustrationContainer}>
+      <Text style={styles.questionText}>
+        Đơn hàng của bạn đang được chuẩn bị.
+      </Text>
+      <Text style={styles.subText}>
+        Hãy đến cửa hàng ngay để nhận hàng nhé!
+      </Text>
         <Image
           source={require('../../../assets/images/backroundcheckout5.png')}
           style={styles.illustrationImage}
@@ -129,6 +135,21 @@ const Checkout5 = ({navigation}) => {
 export default Checkout5;
 
 const styles = StyleSheet.create({
+  questionText: {
+    fontSize: 20,
+    fontWeight: '700',
+    textAlign: 'center',
+    fontFamily: 'nunitoSan',
+    color: '#000000',
+  },
+  subText: {
+    width:'80%',
+    fontSize: 15,
+    color: '#989DA3',
+    textAlign: 'center',
+    marginVertical: 20,
+    fontWeight: '600',
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',

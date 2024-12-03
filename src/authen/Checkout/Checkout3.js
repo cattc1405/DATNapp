@@ -84,8 +84,11 @@ export default Checkuot3;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'red',
     padding: 20,
+    // justifyContent: 'flex-start',
+    // alignItems: 'center',
+    // backgroundColor: '#fff',
   },
   header: {
     flexDirection: 'row',

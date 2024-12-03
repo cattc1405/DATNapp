@@ -205,9 +205,11 @@ const ProductDetail = ({route}) => {
     );
 
     return (
-      <TouchableOpacity style={styles.toppingView} onPress={() => handleSelectItem(item)}>
+      <TouchableOpacity
+        
+        onPress={() => handleSelectItem(item)}>
         <View style={styles.ingredientsListView}>
-          <View style={styles.ingredientView}>
+          <View  style={[styles.ingredientView,isSelected && styles.ingredientViewSelected]}>
             <View style={{width: 14, height: 14, position: 'absolute'}}>
               <Image
                 style={{marginLeft: 40}}
@@ -282,9 +284,8 @@ const ProductDetail = ({route}) => {
             <Text style={styles.grayThinText}>{product.description}</Text>
             <View style={styles.menuView}>
               <Text style={styles.titleBoldText}>Bạn muốn thêm gì không?</Text>
-              <TouchableOpacity onPress={handleToggleExpandSameDeal}>
-                
-              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={handleToggleExpandSameDeal}></TouchableOpacity>
             </View>
 
             <View style={styles.sectionContainer}>
@@ -320,8 +321,7 @@ const ProductDetail = ({route}) => {
       <View style={styles.headView}>
         <View>{renderProductDetail()}</View>
       </View>
-      <View
-        style={styles.addVIew}>
+      <View style={styles.addVIew}>
         <TouchableOpacity
           style={styles.addBtn}
           onPress={async () => {
@@ -337,8 +337,10 @@ const ProductDetail = ({route}) => {
 export default ProductDetail;
 
 const styles = StyleSheet.create({
-  addVIew:
-  {
+  ingredientViewSelected: {
+    backgroundColor:'rgb(218, 183, 93)'
+  },
+  addVIew: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     position: 'absolute',
@@ -474,7 +476,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   ingredientView: {
-    elevation:5,
+    elevation: 5,
     width: 102,
     height: 110,
     backgroundColor: '#FFFFFF',
@@ -507,7 +509,7 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   titleBoldText1: {
-    textAlign:'center',
+    textAlign: 'center',
     fontFamily: 'nunitoSan',
     fontSize: 22,
     marginLeft: 20,
@@ -516,7 +518,7 @@ const styles = StyleSheet.create({
   priceText: {
     fontSize: 20,
     marginLeft: 20,
-textAlign:'center',
+    textAlign: 'center',
     color: colors.orange1,
     fontFamily: 'nunitoSan',
   },

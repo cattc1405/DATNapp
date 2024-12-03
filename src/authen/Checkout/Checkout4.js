@@ -13,13 +13,20 @@ import {submitOrder, removeUserCartItem} from '../../apiClient';
 const {width, height} = Dimensions.get('window'); // Lấy chiều rộng và chiều cao của màn hình
 import {useNavigation} from '@react-navigation/native';
 import {useRoute} from '@react-navigation/native';
+import colors from '../../../assets/colors';
+import CustomAlert from '../../CustomAlert';
 const Checkout4 = ({navigation}) => {
   const [selectedOption, setSelectedOption] = useState(null);
   const route = useRoute();
   const {brand, contact} = route.params;
   console.log('Received brand:', brand);
   console.log('Received contact:', contact);
-
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertTitle, setAlertTitle] = useState('');
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
+  const handleOk = () => {
+    setIsAlertVisible(false);
+  };
   const handleOptionPress = option => {
     setSelectedOption(option);
   };
@@ -33,6 +40,10 @@ const Checkout4 = ({navigation}) => {
       handleSubmitOrder();
       navigation.navigate('Checkout5');
       console.log('Go cash');
+    } else {
+      setAlertMessage('Hãy chọn thanh toán bằng tiền mặt hoặc chuyển khoản!');
+      setAlertTitle('Chưa chọn phương thức!');
+      setIsAlertVisible(true);
     }
   };
   //order
@@ -94,7 +105,14 @@ const Checkout4 = ({navigation}) => {
   console.log('orderId', orderId);
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
+        <CustomAlert
+        visible={isAlertVisible}
+        title={alertTitle}
+        message={alertMessage}
+        // onCancel={handleCancel}
+        onOk={handleOk}
+      />
+     <View style={styles.headerContainer}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image
             source={require('../../../assets/images/backArrow.png')}
@@ -108,7 +126,7 @@ const Checkout4 = ({navigation}) => {
         />
       </View>
       <Image
-        source={require('../../../assets/images/hamburger.png')}
+        source={require('../../../assets/images/backroundcheckout4.png')}
         style={styles.hamburger}
       />
       <Text style={styles.questionText}>
@@ -123,31 +141,37 @@ const Checkout4 = ({navigation}) => {
           style={[
             styles.option,
             selectedOption === 'Cash' && styles.optionSelected,
+            { transform: [
+                {scale: selectedOption === 'Cash' ? 1 : 0.8}, 
+              ]}
           ]}
           onPress={() => handleOptionPress('Cash')}>
           <Image
-            source={require('../../../assets/images/mcdonal.png')}
+            source={require('../../../assets/images/tienmat.jpg')}
             style={styles.icon}
           />
-          <Text style={styles.optionText}>Nhận tại cửa hàng</Text>
+          <Text style={styles.optionText}>Tiền mặt</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={[
             styles.option,
             selectedOption === 'Bank Transfer' && styles.optionSelected,
+            { transform: [
+                {scale: selectedOption === 'Bank Transfer' ? 1 : 0.8}, 
+              ]}
           ]}
           onPress={() => handleOptionPress('Bank Transfer')}>
           <Image
-            source={require('../../../assets/images/uber.png')}
+            source={require('../../../assets/images/chuyenkhoan.png')}
             style={styles.icon}
           />
-          <Text style={styles.optionText}>Uber Eats</Text>
+          <Text style={styles.optionText}>Chuyển khoản</Text>
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity style={styles.nextButton} onPress={handleChangeScreen}>
-        <Text style={styles.nextButtonText}>Bước Tiếp Theo</Text>
+      <TouchableOpacity style={styles.nextButton}   onPress={handleChangeScreen}>
+        <Text style={styles.nextButtonText}>Chọn</Text>
       </TouchableOpacity>
     </View>
   );
@@ -155,20 +179,21 @@ const Checkout4 = ({navigation}) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, // Để chiếm toàn bộ chiều cao màn hình
-    justifyContent: 'center',
+    flex: 1,
+    // justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: colors.whiteBgr,
     padding: 20,
-    width: '100%', // Chiếm toàn bộ chiều ngang màn hình
-    height: '100%', // Chiếm toàn bộ chiều cao màn hình
+    width: '100%',
+    height: '100%',
   },
   headerContainer: {
-    width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-
     justifyContent: 'space-between',
+    width: '100%',
+    marginBottom: 20,
+    marginTop: 10,
   },
   stepText: {
     fontSize: 16,
@@ -181,50 +206,63 @@ const styles = StyleSheet.create({
     height: 20,
   },
   hamburger: {
+    height:200,
     marginTop: 20,
     marginBottom: 40,
     resizeMode: 'contain', // Đảm bảo hình ảnh không bị cắt mất
   },
   questionText: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 20,
+    fontWeight: '700',
     textAlign: 'center',
     fontFamily: 'nunitoSan',
+    color: '#000000',
   },
   subText: {
-    fontSize: 14,
-    color: '#888',
+    width:'80%',
+    fontSize: 15,
+    color: '#989DA3',
     textAlign: 'center',
-    marginBottom: 20,
-    fontFamily: 'nunitoSan',
+    marginVertical: 20,
+    fontWeight: '600',
   },
   optionsContainer: {
     flexDirection: 'row',
+    elevation:5,
     justifyContent: 'space-between',
     width: '100%',
     marginBottom: 20,
   },
   option: {
     flex: 1,
+    // width:'100%',
     alignItems: 'center',
     padding: 50,
+    elevation:5,
     backgroundColor: '#f8f8f8',
     borderRadius: 8,
     marginRight: 10,
-    borderWidth: 2,
+    // borderWidth: 2,
     borderColor: 'transparent',
+
   },
   optionSelected: {
+    elevation:1,
     borderColor: 'black',
+    backgroundColor: 'rgba(252, 119, 18, 0.522);',
+
   },
   icon: {
     width: width * 0.2, // Kích thước icon là 20% chiều rộng màn hình
     height: width * 0.2,
     marginBottom: 10,
-    resizeMode: 'contain', // Đảm bảo hình ảnh không bị cắt
+    borderRadius:50,
+    // resizeMode: 'contain', // Đảm bảo hình ảnh không bị cắt
   },
   optionText: {
     fontSize: 14,
+    textAlign:'center',
+    // backgroundColor:'red',
     color: '#333',
     fontFamily: 'nunitoSan',
   },
