@@ -24,6 +24,7 @@ import {
   setTransactionId,
 } from '../../../redux/slice/cartSlice';
 import colors from '../../../../assets/colors';
+import CustomLoading from '../../../CustomLoading';
 
 const OrderDetail = ({route}) => {
   const userId = useSelector(state => state.auth.user?.userId); 
@@ -34,17 +35,20 @@ const OrderDetail = ({route}) => {
   console.log(userId);
   console.log(token);
   const [loading, setLoading] = useState(true); // Loading state
+  const [message, setMessage] = useState(''); 
   const transactionId = useSelector(state => state.transactionId); // or state.cart.cartItems depending on your slice structure
   console.log('red', transactionId);
+
   const fetchUserCart = async () => {
     if (!userId || !token) return;
 
     try { 
+      setMessage("Đang tải giỏ hàng...")
       setLoading(true);
       const data = await getUserCart(userId, token);
       dispatch(setCartItems(data.cart));
     } catch (err) {
-      console.error('Error fetching user cart:', err);
+      console.log('Error fetching user cart:', err);
     } finally {
       setLoading(false);
     }
@@ -89,7 +93,17 @@ const OrderDetail = ({route}) => {
   };
   const handleDelete = async id => {
     console.log('cartitem', id);
-    await removeUserCartItem(userId, token, id);
+    setMessage("Đang xóa sản phẩm...")
+
+    setLoading(true)
+
+    try{
+      await removeUserCartItem(userId, token, id);
+    } catch (err) {
+      console.log('Error fetching user cart:', err)
+    }finally{
+      setLoading(false)
+    }
 
     dispatch(removeCartItem(id));
   };
@@ -213,6 +227,8 @@ const OrderDetail = ({route}) => {
 
   return (
     <View style={styles.container}>
+             <CustomLoading visible={loading} message={message} />
+
       <View style={styles.headView}>
         <Image
           style={styles.redFoodBgr}

@@ -9,12 +9,11 @@ import {
   ScrollView,
   FlatList,
 } from 'react-native';
-import React, {useState, useEffect, useRef} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import SlideNav from '../../slidenav/SlideNav';
-import {useSelector} from 'react-redux'; // Import useSelector
-
-import {getBrands, getFeaturedProduct} from '../../../apiClient';
+import { useSelector } from 'react-redux'; // Import useSelector
+import { getBrands, getFeaturedProduct } from '../../../apiClient';
 import colors from '../../../../assets/colors';
 const Home = () => {
   const navigation = useNavigation();
@@ -55,18 +54,18 @@ const Home = () => {
     await Promise.all([fetchFeatured(), fetchBrands()]); // Optional: fetch both simultaneously
   };
 
-  const renderItemBrand = ({item}) => (
+  const renderItemBrand = ({ item }) => (
     <TouchableOpacity
       onPress={() =>
         navigation.navigate('RestaurantStack', {
           screen: 'BrandDetails',
-          params: {brand: item}, // Passing the item data as params
+          params: { brand: item }, // Passing the item data as params
         })
       }>
       <ImageBackground
         style={styles.itemPopularView}
-        source={{uri: item.image}}
-        imageStyle={{borderRadius: 15}}>
+        source={{ uri: item.image }}
+        imageStyle={{ borderRadius: 15 }}>
         <View style={styles.tagBrand}>
           <View style={styles.bestTag}>
             <Text style={styles.bestText}>BEST OFFER</Text>
@@ -92,12 +91,12 @@ const Home = () => {
       </ImageBackground>
     </TouchableOpacity>
   );
-  const renderItemOffer = ({item, index}) => (
+  const renderItemOffer = ({ item, index }) => (
     <TouchableOpacity
       onPress={() =>
         navigation.navigate('ProductStack', {
           screen: 'ProductDetail',
-          params: {productId: item._id},
+          params: { productId: item._id },
         })
       }>
       <View
@@ -112,7 +111,7 @@ const Home = () => {
         </View>
         <Text style={styles.brandText}>{item.name}</Text>
         <Text style={styles.describeText}>For only 30.000 VND</Text>
-        <Image style={styles.productImg} source={{uri: item.image}} />
+        <Image style={styles.productImg} source={{ uri: item.image }} />
       </View>
     </TouchableOpacity>
   );
@@ -176,36 +175,20 @@ const Home = () => {
               />
             </View>
           </TouchableOpacity>
+         
         </View>
-        {/* <View style={styles.pointView}>
-          <View style={styles.titleLine}>
-            <Text style={styles.currentText}>Current Points</Text>
-            <View style={styles.youthereView}>
-              <Text style={styles.youthereText}>You are almost there!</Text>
-            </View>
-          </View>
-
-          <View style={styles.treasureView}>
-            <Image
-              style={styles.diggerImg}
-              source={require('../../../../assets/images/TreasureDigger.png')}
-            />
-            <View style={styles.pointTextView}>
-              <Text style={styles.pointText}>
-                Currently you have 125 points,
-              </Text>
-              <Text style={styles.pointText}>keep going to win rewards!</Text>
-            </View>
-          </View>
-        </View> */}
+        <TouchableOpacity style={styles.allProductBtn} onPress={()=>{ navigation.navigate('ProductStack', {screen: 'Product'})}}>
+          <Text style={styles.allPText}>Đặt món</Text>
+        </TouchableOpacity>
       </View>
-      <ScrollView>
+     
+      <View>
         <View style={styles.mainView}>
           <View style={styles.titleAndViewall}>
-            <Text style={styles.titleBoldText}>What's in Today?</Text>
+            <Text style={styles.titleBoldText}>Hôm nay có gì?</Text>
             <TouchableOpacity
               onPress={() => navigation.navigate('WhatsInToday')}>
-              <Text style={styles.viewallText}>View All</Text>
+              <Text style={styles.viewallText}>Xem tất cả</Text>
             </TouchableOpacity>
           </View>
 
@@ -232,27 +215,30 @@ const Home = () => {
                 key={index}
                 style={[
                   styles.dot,
-                  {opacity: index === currentIndex ? 1 : 0.3},
+                  { opacity: index === currentIndex ? 1 : 0.3 },
                 ]}
               />
             ))}
           </View>
           <View style={styles.titleAndViewall}>
-            <Text style={styles.titleBoldText}>Popular Restaurants Nearby</Text>
+            <Text style={styles.titleBoldText}>Cửa hàng phổ biến</Text>
             <TouchableOpacity>
-              <Text style={styles.viewallText}>View All</Text>
+              <Text style={styles.viewallText}>Xem tất cả</Text>
             </TouchableOpacity>
           </View>
           <FlatList
             data={brands}
             horizontal
             showsHorizontalScrollIndicator={false}
-            renderItem={({item}) => renderItemBrand({item})}
+            renderItem={({ item }) => renderItemBrand({ item })}
             keyExtractor={item => item.id}
             style={styles.popularView}
           />
         </View>
-      </ScrollView>
+      </View>
+
+      
+      
     </View>
   );
 };
@@ -260,7 +246,29 @@ const Home = () => {
 export default Home;
 
 const styles = StyleSheet.create({
+  allPText:{
+    textAlign:'center',
+    color: colors.orange1,
+    fontSize:19,
+    fontWeight:'600'
+  },
+  allProductBtn:{
+    width:'60%',
+    justifyContent:'center',
+    // borderTopLeftRadiusRadius:20,
+    // borderBottomLeftRadiusRadius:20,
+    borderRadius:5,
+    
+    marginLeft:'20%',
+    backgroundColor:colors.whiteBgr,
+    position:'absolute',
+    height:50,
+    // right:0,
+    bottom:-25,
+    elevation:15,
+ 
 
+  },
   //Pagination for offer
   paginator: {
     flexDirection: 'row',
@@ -312,7 +320,7 @@ const styles = StyleSheet.create({
   nameText: {
     color: 'black',
     marginTop: 12,
-    width:'56%',
+    width: '56%',
     marginLeft: 20,
     fontFamily: 'nunitoSan',
     fontSize: 17,
@@ -354,7 +362,7 @@ const styles = StyleSheet.create({
   itemPopularView: {
     marginLeft: 20,
     width: 250,
-    elevation:4,
+    elevation: 4,
     height: 160,
   },
   describeText: {
@@ -434,7 +442,7 @@ const styles = StyleSheet.create({
   },
   mainView: {
     marginTop: 20,
-    backgroundColor: '#F7F6FB',
+    // backgroundColor: '#F7F6FB',
   },
   pointText: {
     fontSize: 13,
@@ -527,12 +535,12 @@ const styles = StyleSheet.create({
   },
   container: {
     width: '100%',
-    backgroundColor:colors.whiteBgr,
+    backgroundColor: colors.whiteBgr,
     height: '100%',
   },
   headView: {
     width: '100%',
-    height: '30%',
+    height: 210,
     backgroundColor: 'blue',
   },
   redFoodBgr: {

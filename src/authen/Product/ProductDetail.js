@@ -30,6 +30,7 @@ const ProductDetail = ({route}) => {
   const navigation = useNavigation();
   const [selectedType, setSelectedType] = useState();
   const [loading, setLoading] = useState(true);
+  const [clickable, setClickable] = useState(true);
   const [alertMessage, setAlertMessage] = useState('');
   const [alertTitle, setAlertTitle] = useState('');
   const [isAlertVisible, setIsAlertVisible] = useState(false);
@@ -54,37 +55,44 @@ const ProductDetail = ({route}) => {
   const [itemOrder, setItemOrder] = useState([]);
   const addToCart = async () => {
     try {
+      setClickable(false);
       const newItem = {
         id: Math.random().toString(),
-
         attributeId: selectedItems,
-
         image: product.image,
         name: product.name,
         price: product.price,
-
         quantity: 1,
-
         userId: userId, // Use the current user's ID
       };
 
+      // Cập nhật itemOrder
       setItemOrder(prevItems =>
         Array.isArray(prevItems) ? [...prevItems, newItem] : [newItem],
       );
-      const addCart = async () => {
-        if (itemOrder.length > 0 && userId && token) {
-          try {
-            const response = await addUserCart(userId, itemOrder, token);
-            console.log('Cart updated successfully:', response);
-          } catch (error) {
-            console.error(
-              'Failed to add cart:',
-              error.response ? error.response.data : error.message,
-            );
-          }
+
+      // Kiểm tra itemOrder sau khi cập nhật
+      const updatedItemOrder = Array.isArray(itemOrder) ? [...itemOrder, newItem] : [newItem];
+
+      // Hàm async riêng biệt để thêm vào giỏ hàng
+      const addCartAsync = async (userId, updatedItemOrder, token) => {
+        try {
+          const response = await addUserCart(userId, updatedItemOrder, token);
+          console.log('Cart updated successfully:', response);
+        } catch (error) {
+          console.error(
+            'Failed to add cart:',
+            error.response ? error.response.data : error.message,
+          );
         }
       };
-      addCart();
+
+      // Kiểm tra và gọi hàm addCartAsync
+      if (updatedItemOrder.length > 0 && userId && token) {
+        await addCartAsync(userId, updatedItemOrder, token);
+      } else {
+        console.warn('Invalid data provided');
+      }
     } catch (error) {
       console.error('Error in addToCart:', error);
     } finally {
@@ -93,7 +101,6 @@ const ProductDetail = ({route}) => {
       setIsAlertVisible(true);
     }
   };
-
   console.log(itemOrder);
   useEffect(() => {
     console.log('Updated Item Order:', itemOrder);
@@ -344,7 +351,11 @@ const ProductDetail = ({route}) => {
       </View>
       <View style={styles.addVIew}>
         <TouchableOpacity
-          style={styles.addBtn}
+          style={clickable ?styles.addBtn:styles.addBtnDisabled}
+          
+
+          
+          disabled={clickable==false}
           onPress={async () => {
             addToCart();
           }}>
@@ -380,6 +391,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 22,
     paddingVertical: 8,
     fontWeight: 'bold',
+  },
+  addBtnDisabled:{
+    height: 40,
+    position: 'absolute',
+    right: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    alignContent: 'center',
+    borderRadius: 30,
+    backgroundColor: 'gray',
   },
   addBtn: {
     height: 40,

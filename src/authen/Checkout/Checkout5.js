@@ -20,7 +20,7 @@ const Checkout5 = ({navigation}) => {
   const transactionId = useSelector(state => state.cart.transactionId);
   const [data, setData] = useState();
   const token = useSelector(state => state.auth.user?.token);
-
+  
   const route = useRoute();
 
   console.log('Payment Data:', JSON.stringify(data, null, 2));
@@ -107,7 +107,7 @@ const Checkout5 = ({navigation}) => {
             Order Code: {data.orderCode}
           </Text>
           <Text style={styles.transactionText}>Amount: {data.amount} VND</Text>
-
+{/* 
           {data.transactions && data.transactions.length > 0 && (
             <View>
               <Text style={styles.paymentInfoSubTitle}>
@@ -130,7 +130,7 @@ const Checkout5 = ({navigation}) => {
                 </View>
               ))}
             </View>
-          )}
+          )} */}
         </View>
       )}
 
@@ -139,7 +139,10 @@ const Checkout5 = ({navigation}) => {
       {/* Finish Button */}
       <TouchableOpacity
         style={styles.finishButton}
-        onPress={() => navigation.navigate('Home')}>
+        onPress={() => navigation.navigate('HomeStack', {
+          screen: 'Home',
+         
+        })}>
         <Text style={styles.finishButtonText}>Back to home</Text>
       </TouchableOpacity>
     </View>
@@ -196,6 +199,7 @@ const styles = StyleSheet.create({
   paymentInfoContainer: {
     backgroundColor: '#f9f9f9',
     padding: 15,
+    elevation:5,
     borderRadius: 10,
     marginBottom: 20,
   },

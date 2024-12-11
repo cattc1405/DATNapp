@@ -43,7 +43,7 @@ const OrderItemScreen = () => {
                 Price: {formatCurrency(item.product.price)}
               </Text>
 
-              <Text style={styles.itemDetail}>Quantity: {item.quantity}</Text>
+              <Text style={styles.itemDetail}>Số lượng: {item.quantity}</Text>
               <Text style={styles.itemDetail2}>
                 Topping: {attributeNames.join(' , ')}
               </Text>
@@ -71,7 +71,7 @@ const OrderItemScreen = () => {
   };
 
   return (
-    <ScrollView>
+    <View>
       <View style={styles.container}>
         <View style={styles.headView}>
           <Image
@@ -124,15 +124,15 @@ const OrderItemScreen = () => {
         </View>
 
         {/* FlatList to render orderItems */}
-
+            <View style={{flex:1}}>
         <FlatList
           data={item.orderItems}
           renderItem={renderOrderItem}
           keyExtractor={orderItem => orderItem._id}
           contentContainerStyle={styles.flatList}
-        />
+        /></View>
       </View>
-    </ScrollView>
+    </View>
   );
 };
 export default OrderItemScreen;
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   toppingContainer: {
-    flex: 1,
+    // flex: 1,
     borderTopWidth: 1,
     flexDirection: 'row',
     justifyContent: 'center',
@@ -165,7 +165,8 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   container: {
-    flex: 1,
+    // flex: 1,
+    height:'100%',
     backgroundColor: '#fff',
     alignItems: 'center',
   },

@@ -35,7 +35,7 @@ const Checkout4 = ({navigation}) => {
       handleSubmitOrder();
       navigation.navigate('PaymentOS');
       console.log('Go payos');
-    }
+    } else
     if (selectedOption === 'Cash') {
       handleSubmitOrder();
       navigation.navigate('Checkout5');
@@ -105,7 +105,7 @@ const Checkout4 = ({navigation}) => {
       console.log('All items removed from cart successfully.');
       navigate.navigate('Checkout5');
     } catch (error) {
-      console.error('Error removing items:', error);
+      console.log('Error removing items:', error);
     }
   };
   console.log('orderId', orderId);
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
     height: 20,
   },
   hamburger: {
-    height:200,
+    height:150,
     marginTop: 20,
     marginBottom: 40,
     resizeMode: 'contain', // Đảm bảo hình ảnh không bị cắt mất

@@ -74,7 +74,7 @@ const OrderScreen = ({status}) => {
   // Render order item
   const renderItem = ({item, index}) => {
     if (!item.restaurant?._id || !item.restaurant?.image || !item._id) {
-      return null; // Avoid rendering invalid orders
+      return null; 
     }
 
     const orderNumber = String(index + 1).padStart(3, '0'); // Order number padding

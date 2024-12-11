@@ -9,8 +9,8 @@ import {
   ImageBackground,
   ScrollView,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import {
   getProduct,
   getCategories,
@@ -24,9 +24,10 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import colors from '../../../assets/colors';
+import { useSelector } from 'react-redux';
 
-const Product = () => {
-  const navigation = useNavigation();
+const Product = ({navigation}) => {
+  // const navigation = useNavigation();
   const route = useRoute();
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -37,10 +38,18 @@ const Product = () => {
   const [showFilterOptions, setShowFilterOptions] = useState(false);
   const filterContainerHeight = useSharedValue(0);
   const [searchQuery, setSearchQuery] = useState(''); // State for search query
+  const [itemCount, setItemCount] = useState(0);
+  const cartItems = useSelector(state => state.cart.items);
 
   useEffect(() => {
     fetchData();
-  }, []);
+    const count = cartItems.reduce(
+      (total, item) => total + (item.quantity || 1),
+      0,
+    );
+    setItemCount(count);
+  }, [cartItems]);
+
 
   const fetchData = async () => {
     try {
@@ -48,9 +57,15 @@ const Product = () => {
         getProduct(), // Fetch products
         getCategories(), // Fetch categories
       ]);
+      const validProducts = productData.filter(
+        product => product.category !== null
+      );
+
+      console.log('Product data: ', productData)
       setProducts(productData);
       setCategories(categoryData);
-      setFilteredProducts(productData); // Show all products initially
+      setFilteredProducts(validProducts);
+      // setFilteredProducts(productData); // Show all products initially
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -72,7 +87,7 @@ const Product = () => {
 
   const toggleFilterOptions = () => {
     setShowFilterOptions(prev => !prev);
-    filterContainerHeight.value = withTiming(showFilterOptions ? 0 : 160, {
+    filterContainerHeight.value = withTiming(showFilterOptions ? 0 : 170, {
       duration: 300,
       easing: Easing.ease,
     });
@@ -85,7 +100,7 @@ const Product = () => {
     setShowFilterOptions(false); // Optionally close filter after selection
   };
 
-  const renderCategoryItem = ({item}) => (
+  const renderCategoryItem = ({ item }) => (
     <View style={styles.buttonContainer}>
       <TouchableOpacity
         style={[
@@ -104,14 +119,14 @@ const Product = () => {
     </View>
   );
 
-  const renderProductItem = ({item}) => (
+  const renderProductItem = ({ item }) => (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate('ProductDetail', {productId: item._id});
+        navigation.navigate('ProductDetail', { productId: item._id });
       }}>
       <View style={styles.productsContainer}>
         <View style={styles.productImage}>
-          <Image source={{uri: item.image}} style={styles.productImage}></Image>
+          <Image source={{ uri: item.image }} style={styles.productImage}></Image>
         </View>
         <Text numberOfLines={1} style={styles.productName}>
           {item.name}
@@ -124,15 +139,18 @@ const Product = () => {
         <View style={styles.button}>
           <ImageBackground
             source={require('../../../assets/images/icons/ov_shape.png')}
-            style={{width: 39, height: 18, justifyContent: 'center'}}>
+            style={{ width: 39, height: 18, justifyContent: 'center' }}>
             <Image
               source={require('../../../assets/images/icons/ov_shape_arr.png')}
               style={{
                 alignSelf: 'center',
               }}></Image>
+
           </ImageBackground>
         </View>
       </View>
+
+
     </TouchableOpacity>
   );
   const animatedStyle = useAnimatedStyle(() => ({
@@ -183,11 +201,11 @@ const Product = () => {
             placeholder="Enter product name"
             value={searchQuery}
             onChangeText={onHandleSearch}></TextInput>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <View
-              >
+            >
               <Image
-                style={{width: 19, height: 19, top: -27}}
+                style={{ width: 19, height: 19, top: -27 }}
                 source={require('../../../assets/images/icons/SearcCon.png')}
               />
             </View>
@@ -239,6 +257,20 @@ const Product = () => {
         numColumns={3} // Set the number of columns to 3
         key={'3-columns'}
       />
+      <TouchableOpacity
+        style={styles.allProductBtn}
+        onPress={() =>
+          navigation.navigate('CartStack', { screen: 'OrderDetail' })
+        }>
+        <View>
+          <Image
+            style={styles.iconImage}
+            source={require('../../../assets/images/icons/cartIconOrange.png')}
+          />
+                      <Text style={styles.iconText}>{itemCount}</Text>
+
+        </View>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -246,6 +278,45 @@ const Product = () => {
 export default Product;
 
 const styles = StyleSheet.create({
+  iconImage:{
+width:40,
+height:40,
+resizeMode:'contain'
+  },
+  iconText: {
+    color: colors.orange1,
+    fontSize: 18,
+    fontWeight: 'bold',
+    position: 'absolute',
+    right: -5,
+    top: -15,
+  },
+  allPText: {
+    textAlign: 'center',
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '500'
+  },
+  allProductBtn: {
+    width: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    // borderTopLeftRadiusRadius:20,
+    // borderBottomLeftRadiusRadius:20,
+    borderRadius: 30,
+
+    // marginLeft:'20%',
+    // borderWidth:2,
+    // borderColor:colors.orange1,
+    backgroundColor: colors.whiteBgr,
+    position: 'absolute',
+    height: 60,
+    right: 10,
+    bottom: 10,
+    elevation: 15,
+
+
+  },
   searchContent: {
     marginLeft: 27,
     // textAlignVertical:'bottom'
@@ -256,15 +327,15 @@ const styles = StyleSheet.create({
     marginLeft: '4%',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems:'center'
+    alignItems: 'center'
   },
   line: {
     width: '92%',
-    marginLeft:'4%',
-    height: 0.1,
+    marginLeft: '4%',
+    height: 0.5,
     backgroundColor: 'black',
-    marginTop: 10,
-    marginBottom:3
+    marginTop: 12,
+    marginBottom: 3
   },
   categoryList: {
     width: '100%',
@@ -285,10 +356,12 @@ const styles = StyleSheet.create({
 
   filterTextTilte: {
     fontSize: 15,
+    height: 20,
     fontWeight: 'bold',
     fontFamily: 'nunitoSan',
     color: '#979DA3',
     marginLeft: '2%',
+    marginBottom: 2,
     marginTop: '3%',
   },
   filterTextTilte2: {
@@ -502,7 +575,7 @@ const styles = StyleSheet.create({
   },
   headView: {
     width: '100%',
-    height: 200,
+    height: 180,
     backgroundColor: 'blue',
   },
   redFoodBgr: {
