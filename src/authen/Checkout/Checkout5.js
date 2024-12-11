@@ -25,9 +25,23 @@ const Checkout5 = ({navigation}) => {
 
   console.log('Payment Data:', JSON.stringify(data, null, 2));
   console.log('Payment id:', transactionId);
-  useEffect(async () => {
-    const response = await getPaymentInfo(transactionId, token);
-    setData(response);
+  // useEffect(async () => {
+  //   const response = await getPaymentInfo(transactionId, token);
+  //   setData(response);
+  // }, [transactionId, token]);
+  useEffect(() => {
+    const fetchPaymentInfo = async () => {
+      try {
+        const response = await getPaymentInfo(transactionId, token);
+        setData(response);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+  
+    if (transactionId && token) {
+      fetchPaymentInfo();
+    }
   }, [transactionId, token]);
   // useEffect(() => {
   //   const processTransaction = async () => {

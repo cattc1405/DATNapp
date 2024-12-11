@@ -183,7 +183,7 @@ const PaymentOS = () => {
           />
         </View>
       )}
-      <Text style={styles.footerText}>Thank youfor your patience!</Text>
+      <Text style={styles.footerText}>Thank you for your patience!</Text>
     </View>
   );
 };
@@ -200,6 +200,7 @@ const styles = StyleSheet.create({
   },
   qrBanner: {
     width: 212,
+    marginBottom:20,
     height: 74,
   },
   title: {
@@ -227,7 +228,7 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   footerText: {
-    fontSize: 16,
+    fontSize: 17,
     color: '#666',
     marginTop: 20,
     textAlign: 'center',

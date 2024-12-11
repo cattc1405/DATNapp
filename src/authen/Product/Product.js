@@ -179,23 +179,13 @@ const Product = () => {
 
         <View style={styles.inputContainer}>
           <TextInput
-            style={{
-              marginLeft: 25,
-              color: '#9D9D9D',
-              fontSize: 14,
-              fontWeight: 'bold',
-              fontFamily: 'nunitoSanasd',
-            }}
+            style={styles.searchContent}
             placeholder="Enter product name"
             value={searchQuery}
             onChangeText={onHandleSearch}></TextInput>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <View
-              style={{
-                width: 35,
-                height: 35,
-                position: 'relative',
-              }}>
+              >
               <Image
                 style={{width: 19, height: 19, top: -27}}
                 source={require('../../../assets/images/icons/SearcCon.png')}
@@ -256,6 +246,11 @@ const Product = () => {
 export default Product;
 
 const styles = StyleSheet.create({
+  searchContent: {
+    marginLeft: 27,
+    // textAlignVertical:'bottom'
+    // textAlign:'center'
+  },
   fliterHeader: {
     width: '92%',
     marginLeft: '4%',

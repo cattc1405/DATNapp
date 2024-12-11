@@ -23,12 +23,16 @@ import Animated, {
 } from 'react-native-reanimated';
 import CustomLoading from '../../CustomLoading';
 import colors from '../../../assets/colors';
+import CustomAlert from '../../CustomAlert';
+import CustomSuccessAlert from '../../CustomSuccessAlert';
 
 const ProductDetail = ({route}) => {
   const navigation = useNavigation();
   const [selectedType, setSelectedType] = useState();
   const [loading, setLoading] = useState(true);
-
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertTitle, setAlertTitle] = useState('');
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
   const [selectedDrink, setSelectedDrink] = useState(null);
   const [selectedItems, setSelectedItems] = useState([]);
   const userId = useSelector(state => state.auth.user?.userId);
@@ -41,6 +45,12 @@ const ProductDetail = ({route}) => {
   const token = useSelector(state => state.auth.user?.token); // Retrieve the token at the top level
   console.log('type - top', selectedItems);
   // Send to cartUser
+
+  const handleOk = () => {
+    setIsAlertVisible(false);
+    navigation.goBack()
+  };
+
   const [itemOrder, setItemOrder] = useState([]);
   const addToCart = async () => {
     try {
@@ -77,6 +87,10 @@ const ProductDetail = ({route}) => {
       addCart();
     } catch (error) {
       console.error('Error in addToCart:', error);
+    } finally {
+      setAlertMessage('Đã thêm sản phẩm vào giỏ hàng!');
+      setAlertTitle('Thành công!');
+      setIsAlertVisible(true);
     }
   };
 
@@ -318,6 +332,13 @@ const ProductDetail = ({route}) => {
 
   return (
     <View style={styles.container}>
+      <CustomSuccessAlert
+        visible={isAlertVisible}
+        title={alertTitle}
+        message={alertMessage}
+        // onCancel={handleCancel}
+        onOk={handleOk}
+      />
       <View style={styles.headView}>
         <View>{renderProductDetail()}</View>
       </View>

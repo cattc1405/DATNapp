@@ -421,7 +421,7 @@ const styles = StyleSheet.create({
     marginLeft: '5%',
     height: 50,
     flexDirection: 'row',
-    alignItems: 'center',
+    // alignItems: 'center',
   },
   menuView: {
     justifyContent: 'space-between',
