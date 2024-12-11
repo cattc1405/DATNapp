@@ -550,8 +550,7 @@ const styles = StyleSheet.create({
     textAlign: 'justify',
     lineHeight: 18,
     marginLeft: 20,
-
-    fontWeight: 'Bold',
+    fontWeight: '500',
   },
   nameProduct: {
     fontFamily: 'nunitoSan',
