@@ -63,6 +63,7 @@ const ProductDetail = ({route}) => {
         name: product.name,
         price: product.price,
         quantity: 1,
+        product: product._id,
         userId: userId, // Use the current user's ID
       };
 
