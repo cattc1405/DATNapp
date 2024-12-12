@@ -47,7 +47,12 @@ const Checkout4 = ({navigation}) => {
     quantity: item.quantity,
     drink: item.drink,
     excluded: item.excluded,
-    attribute: item.attributeId.map(attribute => attribute.id), // Pass all attribute IDs
+    attribute:
+      item.attributeId.length > 0
+        ? item.attributeId.map(attribute => attribute.id)
+        : [], // Use an empty array if no attributes
+
+    product: item.product, // Include the product field always
   }));
 
   const handleSubmitOrder = async () => {

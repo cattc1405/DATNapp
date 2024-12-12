@@ -50,7 +50,7 @@ const ProductDetail = ({route}) => {
         price: product.price,
 
         quantity: 1,
-
+        product: product._id,
         userId: userId, // Use the current user's ID
       };
 
@@ -249,9 +249,7 @@ const ProductDetail = ({route}) => {
                 display: 'flex',
                 flexDirection: 'row',
               }}>
-              <TouchableOpacity
-              onPress={() => navigation.goBack()}
-              >
+              <TouchableOpacity onPress={() => navigation.goBack()}>
                 <Image
                   style={{marginTop: 24, marginLeft: 20}}
                   source={require('../../../assets/images/icons/whiteBackArrow.png')}
