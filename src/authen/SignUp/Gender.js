@@ -67,12 +67,11 @@ const Gender = props => {
       </View>
 
       {/* Tiêu đề */}
-      <Text style={styles.title}>What is Your Gender?</Text>
+      <Text style={styles.title}>Giới tính của bạn là gì?</Text>
 
       {/* Mô tả */}
       <Text style={styles.description}>
-        To make sure you receive the best personalized offers we need to know
-        your gender.
+      Để đảm bảo bạn nhận được những ưu đãi cá nhân tốt nhất, chúng tôi cần biết giới tính của bạn.
       </Text>
 
       <View style={styles.chooseGenderView}>

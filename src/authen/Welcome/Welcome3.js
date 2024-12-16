@@ -1,7 +1,7 @@
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
 
-const Welcome3 = ({onGetStarted}) => {
+const Welcome3 = ({ onGetStarted }) => {
   return (
     <View style={styles.container}>
       <Image
@@ -14,18 +14,17 @@ const Welcome3 = ({onGetStarted}) => {
           <View style={styles.lineNot} />
           <View style={styles.lineNavi} />
         </View>
-        <Text style={styles.welcomeText}>Exclusive Offers and Rewards!</Text>
+        <Text style={styles.welcomeText}>Ưu đãi và phần thưởng độc quyền!</Text>
         <Text style={styles.decribeText}>
-          We offer amazing and exclusive rewards
+          Chúng tôi mang đến những phần thưởng và ưu đãi
         </Text>
-        <Text style={styles.decribeText}>and coupons that you can only</Text>
-        <Text style={styles.decribeText}>find in here!</Text>
+        <Text style={styles.decribeText}>độc quyền mà bạn chỉ có thể tìm thấy</Text>
+        <Text style={styles.decribeText}>tại đây!</Text>
       </View>
       <View style={styles.btnView}>
         <TouchableOpacity style={styles.btnContainer} onPress={onGetStarted}>
-          <Text style={styles.continueText}>Get Started!</Text>
+          <Text style={styles.continueText}>Bắt đầu ngay!</Text>
         </TouchableOpacity>
-        {/* <Text style={styles.skipText}>Skip</Text> */}
       </View>
     </View>
   );

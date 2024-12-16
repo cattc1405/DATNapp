@@ -72,10 +72,9 @@ const Name = props => {
         style={styles.twopeopleShadow}
         source={require('../../../assets/images/twopeopleShadow.png')}
       />
-      <Text style={styles.title}>What is Your Name?</Text>
+      <Text style={styles.title}>Tên bạn là gì?</Text>
       <Text style={styles.description}>
-        In order to help us identify you, we need to know your real name.
-      </Text>
+      Để giúp chúng tôi xác định danh tính của bạn, chúng tôi cần biết tên thật của bạn.      </Text>
       <View style={styles.inputContainer}>
         <View style={styles.inputNameView}>
           <TextInput

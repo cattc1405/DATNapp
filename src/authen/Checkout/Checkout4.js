@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -7,18 +7,18 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import {submitOrder, removeUserCartItem} from '../../apiClient';
+import { useDispatch, useSelector } from 'react-redux';
+import { submitOrder, removeUserCartItem } from '../../apiClient';
 
-const {width, height} = Dimensions.get('window'); // Lấy chiều rộng và chiều cao của màn hình
-import {useNavigation} from '@react-navigation/native';
-import {useRoute} from '@react-navigation/native';
+const { width, height } = Dimensions.get('window'); // Lấy chiều rộng và chiều cao của màn hình
+import { useNavigation } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import colors from '../../../assets/colors';
 import CustomAlert from '../../CustomAlert';
-const Checkout4 = ({navigation}) => {
+const Checkout4 = ({ navigation }) => {
   const [selectedOption, setSelectedOption] = useState(null);
   const route = useRoute();
-  const {brand, contact} = route.params;
+  const { brand, contact } = route.params;
   console.log('Received brand:', brand);
   console.log('Received contact:', contact);
   const [alertMessage, setAlertMessage] = useState('');
@@ -36,15 +36,15 @@ const Checkout4 = ({navigation}) => {
       navigation.navigate('PaymentOS');
       console.log('Go payos');
     } else
-    if (selectedOption === 'Cash') {
-      handleSubmitOrder();
-      navigation.navigate('Checkout5');
-      console.log('Go cash');
-    } else {
-      setAlertMessage('Hãy chọn thanh toán bằng tiền mặt hoặc chuyển khoản!');
-      setAlertTitle('Chưa chọn phương thức!');
-      setIsAlertVisible(true);
-    }
+      if (selectedOption === 'Cash') {
+        handleSubmitOrder();
+        navigation.navigate('Checkout5');
+        console.log('Go cash');
+      } else {
+        setAlertMessage('Hãy chọn thanh toán bằng tiền mặt hoặc chuyển khoản!');
+        setAlertTitle('Chưa chọn phương thức!');
+        setIsAlertVisible(true);
+      }
   };
   //order
   // const transactionId = useSelector(state => state.cart.transactionId);
@@ -59,10 +59,10 @@ const Checkout4 = ({navigation}) => {
     drink: item.drink,
     excluded: item.excluded,
     attribute:
-    item.attributeId.length > 0
-      ? item.attributeId.map(attribute => attribute.id)
-      : [], 
-  product: item.product,
+      item.attributeId.length > 0
+        ? item.attributeId.map(attribute => attribute.id)
+        : [],
+    product: item.product,
   }));
 
   const handleSubmitOrder = async () => {
@@ -94,7 +94,7 @@ const Checkout4 = ({navigation}) => {
       console.error('Failed to submit order:', error);
     }
   };
-  
+
   useEffect(() => {
     const ids = cartItems2.map(item => item.id);
     setCartIds(ids);
@@ -115,14 +115,14 @@ const Checkout4 = ({navigation}) => {
   console.log('orderId', orderId);
   return (
     <View style={styles.container}>
-        <CustomAlert
+      <CustomAlert
         visible={isAlertVisible}
         title={alertTitle}
         message={alertMessage}
         // onCancel={handleCancel}
         onOk={handleOk}
       />
-     <View style={styles.headerContainer}>
+      <View style={styles.headerContainer}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image
             source={require('../../../assets/images/backArrow.png')}
@@ -140,10 +140,10 @@ const Checkout4 = ({navigation}) => {
         style={styles.hamburger}
       />
       <Text style={styles.questionText}>
-        How Do You Want To Pay For Your Order?
+        Bạn muốn thanh toán đơn hàng của mình bằng cách nào?
       </Text>
       <Text style={styles.subText}>
-        Choose one of the following methods to payment your order.
+        Chọn một trong những phương thức sau để thanh toán đơn hàng của bạn.
       </Text>
 
       <View style={styles.optionsContainer}>
@@ -151,9 +151,11 @@ const Checkout4 = ({navigation}) => {
           style={[
             styles.option,
             selectedOption === 'Cash' && styles.optionSelected,
-            { transform: [
-                {scale: selectedOption === 'Cash' ? 1 : 0.8}, 
-              ]}
+            {
+              transform: [
+                { scale: selectedOption === 'Cash' ? 1 : 0.8 },
+              ]
+            }
           ]}
           onPress={() => handleOptionPress('Cash')}>
           <Image
@@ -167,9 +169,11 @@ const Checkout4 = ({navigation}) => {
           style={[
             styles.option,
             selectedOption === 'Bank Transfer' && styles.optionSelected,
-            { transform: [
-                {scale: selectedOption === 'Bank Transfer' ? 1 : 0.8}, 
-              ]}
+            {
+              transform: [
+                { scale: selectedOption === 'Bank Transfer' ? 1 : 0.8 },
+              ]
+            }
           ]}
           onPress={() => handleOptionPress('Bank Transfer')}>
           <Image
@@ -180,7 +184,7 @@ const Checkout4 = ({navigation}) => {
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity style={styles.nextButton}   onPress={handleChangeScreen}>
+      <TouchableOpacity style={styles.nextButton} onPress={handleChangeScreen}>
         <Text style={styles.nextButtonText}>Chọn</Text>
       </TouchableOpacity>
     </View>
@@ -216,7 +220,7 @@ const styles = StyleSheet.create({
     height: 20,
   },
   hamburger: {
-    height:150,
+    height: 150,
     marginTop: 20,
     marginBottom: 40,
     resizeMode: 'contain', // Đảm bảo hình ảnh không bị cắt mất
@@ -229,7 +233,7 @@ const styles = StyleSheet.create({
     color: '#000000',
   },
   subText: {
-    width:'80%',
+    width: '80%',
     fontSize: 15,
     color: '#989DA3',
     textAlign: 'center',
@@ -238,7 +242,7 @@ const styles = StyleSheet.create({
   },
   optionsContainer: {
     flexDirection: 'row',
-    elevation:5,
+    elevation: 5,
     justifyContent: 'space-between',
     width: '100%',
     marginBottom: 20,
@@ -248,7 +252,7 @@ const styles = StyleSheet.create({
     // width:'100%',
     alignItems: 'center',
     padding: 50,
-    elevation:5,
+    elevation: 5,
     backgroundColor: '#f8f8f8',
     borderRadius: 8,
     marginRight: 10,
@@ -257,7 +261,7 @@ const styles = StyleSheet.create({
 
   },
   optionSelected: {
-    elevation:1,
+    elevation: 1,
     borderColor: 'black',
     backgroundColor: 'rgba(252, 119, 18, 0.522);',
 
@@ -266,12 +270,12 @@ const styles = StyleSheet.create({
     width: width * 0.2, // Kích thước icon là 20% chiều rộng màn hình
     height: width * 0.2,
     marginBottom: 10,
-    borderRadius:50,
+    borderRadius: 50,
     // resizeMode: 'contain', // Đảm bảo hình ảnh không bị cắt
   },
   optionText: {
     fontSize: 14,
-    textAlign:'center',
+    textAlign: 'center',
     // backgroundColor:'red',
     color: '#333',
     fontFamily: 'nunitoSan',

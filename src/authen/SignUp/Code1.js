@@ -108,7 +108,7 @@ const Code1 = props => {
         style={styles.image}
         resizeMode="contain"
       />
-      <Text style={styles.title}>Enter the Verification Code</Text>
+      <Text style={styles.title}>Nhập Mã Xác Minh</Text>
       <Text style={styles.description}>
         {`Enter the 6 digit number that we sent to ${email}`}
       </Text>
@@ -140,7 +140,7 @@ const Code1 = props => {
       {/* Liên kết gửi lại mã */}
       <Text style={styles.resendText}>
         Didn't Receive Anything?{' '}
-        <Text style={styles.resendLink}>Resend Code</Text>
+        <Text style={styles.resendLink}>Gửi lại mã</Text>
       </Text>
     </View>
   );

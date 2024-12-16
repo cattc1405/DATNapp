@@ -13,12 +13,12 @@ const Payment5 = () => {
             <View style={styles.imageContainer}>
                 <Image source={require('../../../assets/images/Success.png')} style={styles.image} />
             </View>
-            <Text style={styles.title}>Your Order Has Been Placed Successfully!</Text>
+            <Text style={styles.title}>Đơn hàng của bạn đã được đặt thành công!</Text>
             <Text style={styles.description}>
-                Your order has been successfully completed. Within moments you will receive a notification with the receipt of your purchase.
+            Đơn hàng của bạn đã hoàn tất thành công. Trong chốc lát, bạn sẽ nhận được thông báo có biên lai mua hàng.
             </Text>
             <TouchableOpacity style={styles.button}>
-                <Text style={styles.buttonText}>Finish Order</Text>
+                <Text style={styles.buttonText}>Hoàn thành đơn hàng</Text>
             </TouchableOpacity>
         </View>
     );

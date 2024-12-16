@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -7,7 +7,7 @@ import {
   Image,
   ScrollView,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import CustomAlert from '../../CustomAlert';
 import CustomHeaderSignup from './CustomHeaderSignup';
 import colors from '../../../assets/colors';
@@ -68,6 +68,42 @@ const ReceiveNotifi = () => {
         Select the notifications that you want to{'\n'} receive in order to
         track every coupon.
       </Text>
+      <Text style={styles.title}>
+        Bạn có muốn nhận{'\n'} thông báo không?
+      </Text>
+      <Text style={styles.description}>
+        Chọn những thông báo mà bạn muốn nhận{'\n'} để theo dõi mọi phiếu giảm giá.
+      </Text>
+
+      <View style={styles.notificationOptions}>
+        <Text style={styles.subTitle}>BẠN SẼ NHẬN THÔNG BÁO VỀ</Text>
+        {[
+          'Các cửa hàng yêu thích gần bạn',
+          'Phần thưởng và phiếu giảm giá độc quyền',
+          'Ưu đãi đặc biệt',
+        ].map(item => (
+          <TouchableOpacity
+            key={item}
+            style={styles.option}
+            onPress={() => toggleNotification(item)}>
+            <View style={styles.radioButton}>
+              {selectedNotifications.includes(item) && (
+                <View style={styles.radioButtonSelected} />
+              )}
+            </View>
+            <Text style={styles.optionText}>{item}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+      <TouchableOpacity style={styles.button} onPress={handleTurnOn}>
+        <Text style={styles.buttonText}>Bật thông báo</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('YourPass');
+        }}>
+        <Text style={styles.skipText}>Bỏ qua bước này</Text>
+      </TouchableOpacity>
 
       <View style={styles.notificationOptions}>
         <Text style={styles.subTitle}>YOU WILL RECEIVE NOTIFICATIONS FOR</Text>
@@ -141,7 +177,7 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 16,
     color: 'gray',
-    marginTop:5,
+    marginTop: 5,
     textAlign: 'center',
     fontWeight: '400',
     marginBottom: 20,

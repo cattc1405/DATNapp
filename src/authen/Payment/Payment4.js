@@ -13,9 +13,9 @@ const Payment4 = ({ navigation }) => {
             <View style={styles.imageContainer}>
                 <Image source={require('../../../assets/images/Delivery.png')} style={styles.image} />
             </View>
-            <Text style={styles.title}>Your Order Has Been Placed Successfully!</Text>
+            <Text style={styles.title}>Đơn hàng của bạn đã được đặt thành công!</Text>
             <Text style={styles.description}>
-                Your order has been successfully completed. Within moments you will receive a notification with the receipt of your purchase and you can track every step of your order.
+            Đơn hàng của bạn đã hoàn tất thành công. Trong chốc lát, bạn sẽ nhận được thông báo về biên lai mua hàng và bạn có thể theo dõi mọi bước trong đơn hàng của mình.
             </Text>
             <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Product')}>
                 <Text style={styles.buttonText}>Finish Order</Text>

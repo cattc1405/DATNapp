@@ -106,7 +106,7 @@ const Checkout5 = ({navigation}) => {
           <Text style={styles.transactionText}>
             Order Code: {data.orderCode}
           </Text>
-          <Text style={styles.transactionText}>Amount: {data.amount} VND</Text>
+          <Text style={styles.transactionText}>Tổng tiền: {data.amount} VND</Text>
 {/* 
           {data.transactions && data.transactions.length > 0 && (
             <View>

@@ -17,7 +17,7 @@ const PhoneNumberScreen = (props) => {
       // Navigate to the next screen
       navigation.navigate('NextScreen');
     } else {
-      console.log('Please enter valid phone number and accept terms');
+      console.log('Vui lòng nhập số điện thoại hợp lệ và chấp nhận các điều khoản');
     }
   };
 
@@ -46,7 +46,7 @@ const PhoneNumberScreen = (props) => {
 
       <Text style={styles.title}>Add Your Phone Number</Text>
       <Text style={styles.description}>
-        Enter your phone number in order to send you your OTP security code.
+      Nhập số điện thoại của bạn để chúng tôi gửi cho bạn mã bảo mật OTP.
       </Text>
 
       <View style={styles.inputContainer}>

@@ -30,7 +30,7 @@ const ChooseRestaurant = (props) => {
             {/* Title and Description */}
             <Text style={styles.title}>Sync All Your Accounts</Text>
             <Text style={styles.description}>
-                Sync all of your accounts and don't lose{"\n"}any important data.
+            Đồng bộ hóa tất cả tài khoản của bạn và không bị mất {"\n"} bất kỳ dữ liệu quan trọng nào.
             </Text>
 
             {/* Email Input and Icons */}

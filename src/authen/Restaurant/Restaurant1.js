@@ -85,7 +85,7 @@ const Restaurant1 = ({navigation}) => {
             source={require('../../../assets/images/BackWhite.png')}
           />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Nearby Restaurants</Text>
+        <Text style={styles.headerTitle}>Nhà hàng gần đó</Text>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('CartStack', {screen: 'OrderDetail'});

@@ -59,9 +59,9 @@ const Payment1 = props => {
       </View>
 
       {/* Tiêu đề */}
-      <Text style={styles.title}>How Do You Want To Receive Your Order?</Text>
+      <Text style={styles.title}>Bạn muốn nhận đơn hàng của mình như thế nào?</Text>
       <Text style={styles.description}>
-        Choose one of the following methods to receive your order.
+        Chọn một trong những phương pháp sau để nhận đơn hàng của bạn.
       </Text>
 
       {/* Các tùy chọn */}

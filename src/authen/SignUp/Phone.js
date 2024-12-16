@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -7,12 +7,12 @@ import {
   Image,
   StyleSheet,
 } from 'react-native';
-import {useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setPhone } from '../../redux/slice/userSlice';
 import CustomHeaderSignup from './CustomHeaderSignup';
 
 const Phone = props => {
-  const {navigation} = props;
+  const { navigation } = props;
   const [inputValue, setInputValue] = useState('');
   const dispatch = useDispatch();
 
@@ -26,18 +26,17 @@ const Phone = props => {
         onBackPress={() => navigation.goBack()}
         onClosePress={() => navigation.navigate('Login')}
       />
-     
+
       <View style={styles.illustrationContainer}>
         <Image
           source={require('../../../assets/images/phoneImg.png')}
           style={styles.illustrationImage}
         />
       </View>
-    
-      <Text style={styles.title}>What is Your Phone?</Text>
+
+      <Text style={styles.title}>Điện thoại của bạn là gì?</Text>
       <Text style={styles.description}>
-        In order to help us verify you, we need to know your real phone number.
-      </Text>
+        Để giúp chúng tôi xác minh bạn, chúng tôi cần biết số điện thoại thực của bạn.      </Text>
       <View style={styles.inputContainer}>
         <View style={styles.inputNameView}>
           <TextInput
@@ -57,7 +56,7 @@ const Phone = props => {
           <Image
             style={styles.containCheck}
             source={
-              inputValue.length >= 10 
+              inputValue.length >= 10
                 ? require('../../../assets/images/orangeChecked.png')
                 : require('../../../assets/images/grayNotChecked.png')
             }
@@ -166,7 +165,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 20,
-    elevation:4,
+    elevation: 4,
     borderColor: 'gray',
     marginBottom: 30,
     alignItems: 'flex-start',

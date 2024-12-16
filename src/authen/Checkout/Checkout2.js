@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -7,8 +7,8 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import {getBrands, submitOrder, removeUserCartItem} from '../../apiClient';
-import {useDispatch, useSelector} from 'react-redux';
+import { getBrands, submitOrder, removeUserCartItem } from '../../apiClient';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Animated, {
   Easing,
@@ -16,12 +16,12 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated';
-import {useRoute} from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import colors from '../../../assets/colors';
 import CustomAlert from '../../CustomAlert';
 
 
-const AddressScreen = ({navigation}) => {
+const AddressScreen = ({ navigation }) => {
   const [showBrands, setShowBrands] = useState(false);
   const animationValue = useSharedValue(0);
   const [brands, setBrand] = useState([]);
@@ -56,7 +56,7 @@ const AddressScreen = ({navigation}) => {
   const handleOk = () => {
     setIsAlertVisible(false);
   };
-  const renderItem = ({item}) => (
+  const renderItem = ({ item }) => (
     <TouchableOpacity
       style={styles.restaurantCard}
       onPress={() => {
@@ -64,8 +64,8 @@ const AddressScreen = ({navigation}) => {
         setSelectedBrand(item);
         setShowBrands(false);
       }}>
-      <View style={{flexDirection: 'row', padding: 10}}>
-        <Image source={{uri: item.image}} style={styles.logo} />
+      <View style={{ flexDirection: 'row', padding: 10 }}>
+        <Image source={{ uri: item.image }} style={styles.logo} />
         <View style={styles.infoContainer}>
           <Text
             style={styles.restaurantName}
@@ -140,16 +140,16 @@ const AddressScreen = ({navigation}) => {
 
       {/* Text */}
       <Text style={styles.questionText}>
-        Which Address Do You Want to Receive Your Order?
+        Bạn muốn nhận đơn hàng tại địa chỉ nào?
       </Text>
       <Text style={styles.subText}>
-        Choose the address where you want your order to be delivered.
+        Chọn địa chỉ nhận hàng cho đơn hàng của bạn.
       </Text>
 
       {/* Address Box */}
       <View style={styles.addressBox}>
-        <Text style={styles.addressHeader}>CHOOSE YOUR ADDRESS</Text>
-        {selectedBrand ? ( // Check if a brand is selected
+        <Text style={styles.addressHeader}>CHỌN ĐỊA CHỈ CỦA BẠN</Text>
+        {selectedBrand ? ( //Kiểm tra nếu đã chọn thương hiệu
           <View style={styles.addressContent}>
             <Text style={styles.addressTitle}>{selectedBrand.name}</Text>
             <TouchableOpacity onPress={() => setSelectedBrand(null)}>
@@ -161,7 +161,7 @@ const AddressScreen = ({navigation}) => {
             </TouchableOpacity>
           </View>
         ) : (
-          <Text style={styles.addressTitle}>Select a brand</Text> // Placeholder if no brand is selected
+          <Text style={styles.addressTitle}>Chọn một thương hiệu</Text> // Placeholder if no brand is selected
         )}
         {selectedBrand && ( // Only show address details if a brand is selected
           <>
@@ -173,7 +173,7 @@ const AddressScreen = ({navigation}) => {
         <TouchableOpacity
           style={styles.changeAddressButton}
           onPress={toggleBrands}>
-          <Text style={styles.changeAddressButtonText}>Change Address</Text>
+          <Text style={styles.changeAddressButtonText}>Thay đổi địa chỉ</Text>
         </TouchableOpacity>
 
         {/* Animated Brand Options */}
@@ -196,11 +196,11 @@ const AddressScreen = ({navigation}) => {
             setAlertMessage('Vui lòng chọn một địa chỉ!');
             setAlertTitle('Thiếu thông tin!');
             setIsAlertVisible(true);
-            return; 
+            return;
           }
           const brand = selectedBrand._id;
           console.log(brand, contact);
-          navigation.navigate('Checkout4', {brand, contact});
+          navigation.navigate('Checkout4', { brand, contact });
         }}>
         <Text style={styles.nextButtonText}>Next Step</Text>
       </TouchableOpacity>
@@ -210,7 +210,7 @@ const AddressScreen = ({navigation}) => {
 
 const styles = StyleSheet.create({
   flatlistAddress: {
-    marginTop:5
+    marginTop: 5
   },
   infoContainer: {
     width: '90%',
@@ -324,7 +324,7 @@ const styles = StyleSheet.create({
   },
   addressTitle: {
     fontSize: 16,
-    color:'black',
+    color: 'black',
     fontWeight: 'bold',
     // fontFamily: 'nunitoSan',
   },

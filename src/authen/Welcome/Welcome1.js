@@ -16,12 +16,12 @@ const Welcome1 = props => {
           <View style={styles.lineNot} />
           <View style={styles.lineNot} />
         </View>
-        <Text style={styles.welcomeText}>Welcome!</Text>
+        <Text style={styles.welcomeText}>Chào mừng!</Text>
         <Text style={styles.decribeText}>
-          Find your favorite restaurants and win
+          Tìm nhà hàng yêu thích của bạn và nhận
         </Text>
-        <Text style={styles.decribeText}>points and amazing rewards for</Text>
-        <Text style={styles.decribeText}>each purchase.</Text>
+        <Text style={styles.decribeText}>điểm thưởng cùng những phần quà hấp dẫn</Text>
+        <Text style={styles.decribeText}>cho mỗi lần mua sắm.</Text>
       </View>
       <View style={styles.btnView}>
         <TouchableOpacity style={styles.btnContainer}>

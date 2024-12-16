@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
 
 const Welcome2 = (props) => {
@@ -13,19 +13,19 @@ const Welcome2 = (props) => {
       />
       <View style={styles.contentWelcome}>
         <View style={styles.threeLineView}>
-        <View style={styles.lineNot} />
+          <View style={styles.lineNot} />
 
           <View style={styles.lineNavi} />
           <View style={styles.lineNot} />
         </View>
-        <Text style={styles.welcomeText}>Collect Points in a Single App!</Text>
+        <Text style={styles.welcomeText}>Thu thập điểm trong một ứng dụng duy nhất!</Text>
         <Text style={styles.decribeText}>
-        Collect points with each purchase and
+          Thu thập điểm với mỗi lần mua sắm và
         </Text>
-        <Text style={styles.decribeText}>exchange them for exclusive</Text>
-        <Text style={styles.decribeText}>rewards!</Text>
+        <Text style={styles.decribeText}>đổi chúng lấy những phần quà</Text>
+        <Text style={styles.decribeText}>độc quyền!</Text>
       </View>
-      <View style={styles.btnView}> 
+      <View style={styles.btnView}>
         <TouchableOpacity style={styles.btnContainer} onPress={() => navigation.navigate('Welcome3')}>
           <Text style={styles.continueText}>Continue</Text>
         </TouchableOpacity>

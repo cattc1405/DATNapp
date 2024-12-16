@@ -35,16 +35,16 @@ const FavRestaurant = props => {
       </View>
 
       {/* Text below Restaurant Image */}
-      <Text style={styles.chooseText}>CHOOSE YOUR FAVORITE RESTAURANTS</Text>
+      <Text style={styles.chooseText}>CHỌN NHÀ HÀNG YÊU THÍCH CỦA BẠN</Text>
       <Text style={styles.descriptionText}>
-        To be the first to receive the news and {'\n'}rewards, choose your
-        favorite restaurants.
+      Để là người đầu tiên nhận được tin tức và phần thưởng {'\n'}
+      , hãy chọn nhà hàng yêu thích của bạn.
       </Text>
 
       {/* Icon selection container */}
       <View style={styles.selectionContainer}>
         <View style={styles.iconsContainer}>
-          <Text style={styles.text1}>Choose Your Favorite Restaurants</Text>
+          <Text style={styles.text1}>Chọn nhà hàng yêu thích của bạn</Text>
           <View style={styles.row}>
             <TouchableOpacity
               style={[

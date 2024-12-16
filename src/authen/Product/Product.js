@@ -139,7 +139,8 @@ const Product = ({navigation}) => {
         <View style={styles.button}>
           <ImageBackground
             source={require('../../../assets/images/icons/ov_shape.png')}
-            style={{ width: 39, height: 18, justifyContent: 'center' }}>
+            style={{ width: 39, height: 18, justifyContent: 'center' }}
+            >
             <Image
               source={require('../../../assets/images/icons/ov_shape_arr.png')}
               style={{
@@ -263,6 +264,7 @@ const Product = ({navigation}) => {
           navigation.navigate('CartStack', { screen: 'OrderDetail' })
         }>
         <View>
+          
           <Image
             style={styles.iconImage}
             source={require('../../../assets/images/icons/cartIconOrange.png')}

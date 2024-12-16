@@ -146,7 +146,7 @@ const ConfirmOrder = () => {
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.titleBoldText}>Confirm Your Order</Text>
+        <Text style={styles.titleBoldText}>Xác nhận đơn hàng của bạn</Text>
       </View>
 
       <View style={styles.mainView}>
@@ -165,13 +165,13 @@ const ConfirmOrder = () => {
         </View>
         <View style={styles.lineGray}></View>
         <View style={styles.totalView}>
-          <Text style={styles.totalText}>Total Amount:</Text>
+          <Text style={styles.totalText}>Tổng số tiền:</Text>
           <Text style={styles.totalText}>${calculateTotalPrice()}</Text>
         </View>
         <TouchableOpacity
           style={styles.payBtn}
           onPress={() => navigation.navigate('CheckoutNavigator', {cartItems})}>
-          <Text style={styles.payText}>Proceed to Payment</Text>
+          <Text style={styles.payText}>Tiến hành thanh toán</Text>
         </TouchableOpacity>
         
       </View>

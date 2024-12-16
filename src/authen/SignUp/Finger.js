@@ -33,8 +33,8 @@ const Finger = props => {
       {/* Văn bản mô tả */}
       <Text style={styles.title}>Enable Your Fingerprint</Text>
       <Text style={styles.description}>
-        In order to log in into your account in a{'\n'} faster and safer way,
-        add your {'\n'}fingerprint.
+      Để đăng nhập vào tài khoản của bạn theo cách{'\n'} nhanh hơn và an toàn hơn,
+      hãy thêm dấu vân tay {'\n'} của bạn.
       </Text>
 
       {/* Hình ảnh Fingerprint */}

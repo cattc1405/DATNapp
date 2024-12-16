@@ -55,26 +55,26 @@ const Step1Register = () => {
             source={require('../../../assets/images/twopeopleShadow.png')}
           />
           <View style={styles.contentName}>
-            <Text style={styles.nameText}>What is Your Name?</Text>
+            <Text style={styles.nameText}>Tên của bạn là gì?</Text>
             <Text style={styles.decribeText}>
-              In order to help us identify you, we need
+              Để giúp chúng tôi nhận diện bạn, chúng tôi cần
             </Text>
-            <Text style={styles.decribeText}>to know your real name</Text>
+            <Text style={styles.decribeText}>biết tên thật của bạn</Text>
           </View>
 
           <View style={styles.inputNameView}>
             <View style={styles.inputContainer}>
               <TextInput
                 style={styles.inputView}
-                placeholder="Example: John Smith"
+                placeholder="Ví dụ: Nguyễn Văn A"
                 placeholderTextColor="rgb(177, 189, 199)"
                 onChangeText={handleTextChange} // Cập nhật trạng thái text
                 value={inputValue}
               />
-              <Text style={styles.inputLabel}>FULL NAME</Text>
+              <Text style={styles.inputLabel}>HỌ VÀ TÊN</Text>
             </View>
 
-            <Text style={styles.containText}>Your name must contain</Text>
+            <Text style={styles.containText}>Tên của bạn cần có:  </Text>
             <View style={styles.checkView}>
               <Image
                 style={styles.containCheck}
@@ -84,7 +84,7 @@ const Step1Register = () => {
                     : require('../../../assets/images/grayNotChecked.png')
                 }
               />
-              <Text style={styles.atLeastText}>At least 5 characters</Text>
+              <Text style={styles.atLeastText}>Ít nhất 5 ký tự</Text>
             </View>
           </View>
         </View>

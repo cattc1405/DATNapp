@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   StyleSheet,
@@ -11,21 +11,21 @@ import {
   Dimensions,
   TextInput,
 } from 'react-native';
-import {getUserInfo, updateUser} from '../../apiClient';
+import { getUserInfo, updateUser } from '../../apiClient';
 import Animated, {
   Easing,
   useSharedValue,
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated';
-import {useNavigation} from '@react-navigation/native';
-import {useSelector} from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 import CustomAlert from '../../CustomAlert';
 import colors from '../../../assets/colors';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
-const OrderScreen = ({navigation}) => {
+const OrderScreen = ({ navigation }) => {
   const [showContacts, setShowContacts] = useState(false);
   const [showHamburger, setShowHamburger] = useState(true);
   const [user, setUser] = useState({});
@@ -64,7 +64,7 @@ const OrderScreen = ({navigation}) => {
         ...user.contact,
         [`Contact ${Object.keys(user.contact || {}).length + 1}`]: newContact,
       };
-      const updatedUser = {...user, contact: updatedContacts};
+      const updatedUser = { ...user, contact: updatedContacts };
 
       try {
         await updateUser(userId, updatedUser, token);
@@ -78,7 +78,7 @@ const OrderScreen = ({navigation}) => {
   };
   const handleRemoveContact = async index => {
     const updatedContacts = user.contact.filter((_, i) => i !== index);
-    const updatedUser = {...user, contact: updatedContacts};
+    const updatedUser = { ...user, contact: updatedContacts };
 
     try {
       await updateUser(userId, updatedUser, token);
@@ -89,14 +89,14 @@ const OrderScreen = ({navigation}) => {
         setContactBoxHeight(contactBoxHeight - 54);
 
       }
-      
+
       setUser(updatedUser); // Update state with the removed contact
     } catch (error) {
       console.error('Error removing contact:', error);
     }
   };
 
-  const renderItem = ({item, index}) => (
+  const renderItem = ({ item, index }) => (
     <TouchableOpacity
       style={styles.contactCard}
       onPress={() => {
@@ -157,14 +157,14 @@ const OrderScreen = ({navigation}) => {
         />
       )}
       <Text style={styles.questionText}>
-        How Do You Want To Receive Your Order?
+        Bạn muốn nhận đơn hàng của mình như thế nào?
       </Text>
       <Text style={styles.subText}>
-        Choose one of the following methods to contact you.
+        Chọn một trong những phương pháp sau để liên hệ với bạn.
       </Text>
 
       <View style={styles.contactBox}>
-        <Text style={styles.contactHeader}>CHOOSE YOUR CONTACT</Text>
+        <Text style={styles.contactHeader}>CHỌN LIÊN HỆ CỦA BẠN</Text>
         {selectedContact ? (
           <View style={styles.contactContent}>
             <Text style={styles.contactTitle}>{selectedContact}</Text>
@@ -176,13 +176,13 @@ const OrderScreen = ({navigation}) => {
             </TouchableOpacity>
           </View>
         ) : (
-          <Text style={styles.contactTitle}>Select a contact</Text>
+          <Text style={styles.contactTitle}>Chọn một liên hệ</Text>
         )}
 
         <TouchableOpacity
           style={styles.changeContactButton}
           onPress={toggleContacts}>
-          <Text style={styles.changeContactButtonText}>Change Contact</Text>
+          <Text style={styles.changeContactButtonText}>Thay đổi liên hệ</Text>
         </TouchableOpacity>
 
         <Animated.View style={[styles.contactOptionsContainer, animatedStyle]}>
@@ -212,7 +212,7 @@ const OrderScreen = ({navigation}) => {
             </View>
           ) : (
             <View>
-              <Text>No contacts available. Add a new one below.</Text>
+              <Text>Không có liên hệ nào khả dụng. Thêm liên hệ mới bên dưới.</Text>
               <View style={styles.addContactContainer}>
                 <TextInput
                   style={styles.contactInput}
@@ -224,7 +224,7 @@ const OrderScreen = ({navigation}) => {
                   style={styles.changeContactButton2}
                   onPress={handleAddContact}>
                   <Text style={styles.changeContactButtonText}>
-                    Add Contact
+                    Thêm liên hệ
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -242,7 +242,7 @@ const OrderScreen = ({navigation}) => {
             setIsAlertVisible(true);
             return;
           }
-          navigation.navigate('AddressScreen', {selectedContact});
+          navigation.navigate('AddressScreen', { selectedContact });
         }}>
         <Text style={styles.nextButtonText}>Bước Tiếp Theo</Text>
       </TouchableOpacity>
@@ -323,7 +323,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   contactHeader: {
-    textAlign:'center',
+    textAlign: 'center',
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 10,

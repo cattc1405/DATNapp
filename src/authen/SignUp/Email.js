@@ -25,16 +25,19 @@ const Email = props => {
   const [alertMessage, setAlertMessage] = useState('');
   const [alertTitle, setAlertTitle] = useState('');
   const [isAlertVisible, setIsAlertVisible] = useState(false);
+  const [clickable, setClickable] = useState(true);
 
 
   const handleOk = () => {
     setIsAlertVisible(false);
+    setClickable(true);
   };
   const admin = false;
   const handleTextChange = text => {
     setInputValue(text);
   };
   const handleRegister = () => {
+    setClickable(false);
     // Dispatching actions to store user information
     dispatch(setEmail(inputValue));
 
@@ -54,7 +57,7 @@ const Email = props => {
       })
       .catch(error => {
         setAlertTitle('Email lỗi!');
-      setAlertMessage('Email đã tồn tại!');
+      setAlertMessage('Email không đúng định dạng hoặc đã tồn tại!');
       setIsAlertVisible(true);
       });
   };
@@ -113,7 +116,7 @@ const Email = props => {
       </View>
 
       {/* Nút tiếp tục */}
-      <TouchableOpacity style={styles.nextButton} onPress={handleRegister}>
+      <TouchableOpacity style={styles.nextButton} onPress={handleRegister} disabled={clickable==false}>
         <Text style={styles.nextButtonText}>Next Step</Text>
       </TouchableOpacity>
     </View>

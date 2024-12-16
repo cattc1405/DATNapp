@@ -6,8 +6,8 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import React, {useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import React, { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 const Step3Register = () => {
   const [inputValue, setInputValue] = useState('');
@@ -46,12 +46,13 @@ const Step3Register = () => {
           />
 
           <View style={styles.contentPass}>
-            <Text style={styles.passText}>Set Your Password</Text>
+            <Text style={styles.passText}>Thiết lập mật khẩu của bạn</Text>
             <Text style={styles.decribeText}>
-              In order to keep your account safe you need
+              Để giữ tài khoản của bạn an toàn, bạn cần
             </Text>
-            <Text style={styles.decribeText}>to create a strong password.</Text>
+            <Text style={styles.decribeText}>Tạo một mật khẩu mạnh.</Text>
           </View>
+
 
           <View style={styles.inputNameView}>
             <View style={styles.inputContainer}>
@@ -73,10 +74,10 @@ const Step3Register = () => {
                 placeholderTextColor="rgb(177, 189, 199)"
                 secureTextEntry={true}
               />
-              <Text style={styles.inputLabel}>confirm password</Text>
+              <Text style={styles.inputLabel}>Xác nhận mật khẩu</Text>
             </View>
 
-            <Text style={styles.containText}>Your password must contain</Text>
+            <Text style={styles.containText}>Mật khẩu của bạn phải chứa</Text>
             <View style={styles.checkView}>
               <Image
                 style={styles.containCheck}
@@ -99,7 +100,7 @@ const Step3Register = () => {
                     : require('../../../assets/images/grayNotChecked.png')
                 }
               />
-              <Text style={styles.atLeastText}>1 upper case letter</Text>
+              <Text style={styles.atLeastText}>1 chữ cái viết hoa</Text>
             </View>
             <View style={styles.checkView}>
               <Image
@@ -110,7 +111,7 @@ const Step3Register = () => {
                     : require('../../../assets/images/grayNotChecked.png')
                 }
               />
-              <Text style={styles.atLeastText}>1 or more numbers</Text>
+              <Text style={styles.atLeastText}>1 hoặc nhiều số</Text>
             </View>
             <View style={styles.checkView}>
               <Image
@@ -122,7 +123,7 @@ const Step3Register = () => {
                 }
               />
               <Text style={styles.atLeastText}>
-                1 or more special characters
+                1 hoặc nhiều ký tự đặc biệt
               </Text>
             </View>
           </View>

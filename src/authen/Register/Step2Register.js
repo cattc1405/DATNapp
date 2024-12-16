@@ -7,12 +7,12 @@ import {
   TouchableHighlight,
   TouchableOpacity,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 const Step2Register = () => {
   const [selectedGender, setSelectedGender] = useState(null);
-  const navigation = useNavigation(); 
+  const navigation = useNavigation();
 
   const handleSelectGender = gender => {
     setSelectedGender(gender);
@@ -21,12 +21,12 @@ const Step2Register = () => {
   const handleNextStep = () => {
     if (!selectedGender) {
       Alert.alert(
-        'Gender Not Selected',
-        'Please select your gender before proceeding.', 
-        [{text: 'OK'}] 
+        'Giới tính chưa được chọn',
+        'Vui lòng chọn giới tính của bạn trước khi tiếp tục.',
+        [{ text: 'OK' }]
       );
     } else {
-      navigation.navigate('Step3');  
+      navigation.navigate('Step3');
     }
   };
 
@@ -35,9 +35,9 @@ const Step2Register = () => {
     <View style={styles.container}>
       <View style={styles.mainContents}>
         <View style={styles.topView}>
-          <TouchableOpacity style={styles.iconTopView} onPress={()=>navigation.goBack()}>
+          <TouchableOpacity style={styles.iconTopView} onPress={() => navigation.goBack()}>
             <Image
-              
+
               style={styles.iconTop}
               source={require('../../../assets/images/backArrow.png')}
             />
@@ -58,14 +58,10 @@ const Step2Register = () => {
             source={require('../../../assets/images/girlThinking.png')}
           />
           <View style={styles.contentGender}>
-            <Text style={styles.welcomeText}>What is Your Gender?</Text>
-            <Text style={styles.decribeText}>
-              To make sure you receive the best
-            </Text>
-            <Text style={styles.decribeText}>
-              personalized offers we need to know
-            </Text>
-            <Text style={styles.decribeText}>your gender.</Text>
+            <Text style={styles.welcomeText}>Giới tính của bạn là gì?</Text>
+            <Text style={styles.decribeText}>Để đảm bảo bạn nhận được những ưu đãi</Text>
+            <Text style={styles.decribeText}>cá nhân hóa tốt nhất, chúng tôi cần biết</Text>
+            <Text style={styles.decribeText}>giới tính của bạn.</Text>
           </View>
 
           <View style={styles.chooseGenderView}>
@@ -131,10 +127,10 @@ const Step2Register = () => {
           </View>
         </View>
         <View style={styles.btnView}>
-          <TouchableOpacity style={styles.btnContainer}  onPress={handleNextStep}>
+          <TouchableOpacity style={styles.btnContainer} onPress={handleNextStep}>
             <Text
               style={styles.continueText}
-             >
+            >
               Next Step
             </Text>
           </TouchableOpacity>

@@ -21,12 +21,14 @@ const YourPass = () => {
   const [confirmValue, setConfirmValue] = useState('');
   const navigation = useNavigation();
   const [alertMessage, setAlertMessage] = useState('');
+  const [clickable, setClickable] = useState(true);
   const [alertTitle, setAlertTitle] = useState('');
   const [isAlertVisible, setIsAlertVisible] = useState(false);
   const [isAlertSuccessVisible, setIsAlertSuccessVisible] = useState(false);
 
   const handleOk = () => {
     setIsAlertVisible(false);
+    setClickable(true);
   };
   const handleSuccessOk = () => {
     navigation.navigate('Phone')
@@ -39,6 +41,7 @@ const YourPass = () => {
     setConfirmValue(text);
   };
   const checkPasswordMatch = () => {
+    setClickable(false);
     if (inputValue.length < 8) {
       setAlertTitle('Mật khẩu quá ngắn!');
       setAlertMessage('Vui lòng nhập mật khẩu từ 8 ký tự trở lên!');
@@ -181,7 +184,8 @@ const YourPass = () => {
       </View>
 
       {/* Nút "Next Step" */}
-      <TouchableOpacity style={styles.nextButton} onPress={checkPasswordMatch}>
+      <TouchableOpacity style={styles.nextButton} onPress={checkPasswordMatch}
+      disabled={clickable==false}>
         <Text style={styles.nextButtonText}>Next Step</Text>
       </TouchableOpacity>
     </View>
@@ -285,9 +289,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 20,
-  },
-  backButton: {
-    padding: 10,
   },
   backText: {
     fontSize: 24,
