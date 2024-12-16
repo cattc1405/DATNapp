@@ -38,10 +38,10 @@ const LoginScreen = ({navigation}) => {
     setIsAlertVisible(false); 
   };
   useEffect(() => {
-    // Initialize the Facebook SDK once when the component mounts
+    // Khởi tạo SDK Facebook khi component được mount
     Settings.initializeSDK();
   }, []);
-  // Hàm xử lý khi người dùng nhấn vào nút "LOGIN"
+  // Hàm xử lý khi người dùng nhấn vào nút "ĐĂNG NHẬP"
   const handleLogin = async () => {
     if (!email || !password) {
       setAlertMessage('Vui lòng nhập đầy đủ thông tin!');
@@ -57,71 +57,70 @@ const LoginScreen = ({navigation}) => {
 
       if (response) {
         console.log('User ID exists:', response.userId);
-        navigation.navigate('MainApp'); // Uncomment this line to enable navigation
-        setEmail(''); // Clear email input
-        setPassword(''); // Clear password input
+        navigation.navigate('MainApp'); // Bỏ comment dòng này để điều hướng tới màn hình chính
+        setEmail(''); // Xóa email đã nhập
+        setPassword(''); // Xóa mật khẩu đã nhập
       }
     } catch (error) {
       console.error('Login error:', error);
-      const message = error.response?.data?.message || 'Invalid credentials.';
-      // Alert.alert('Login Failed', message);
-      setAlertMessage('Login Failed');
+      const message = error.response?.data?.message || 'Thông tin đăng nhập không hợp lệ.';
+      // Alert.alert('Đăng nhập thất bại', message);
+      setAlertMessage('Đăng nhập thất bại');
       setAlertTitle(message);
       setIsAlertVisible(true);
     } finally {
       setLoading(false);
-
     }
   };
   const handleGoogleLogin = async () => {
     try {
-      // Ensure GoogleSignin is properly configured
+      // Đảm bảo rằng GoogleSignin được cấu hình đúng
       await GoogleSignin.configure({
         webClientId:
-          '133917263525-n79u5m6cmkalco31j6ktlrn2n2a27njh.apps.googleusercontent.com', // Replace with your actual webClientId
-        offlineAccess: true, // Optional: Allows Firebase to access user info even when offline
+          '133917263525-n79u5m6cmkalco31j6ktlrn2n2a27njh.apps.googleusercontent.com', // Thay thế bằng webClientId thực tế của bạn
+        offlineAccess: true, // Tùy chọn: Cho phép Firebase truy cập thông tin người dùng ngay cả khi offline
       });
       const {idToken, accessToken} = await GoogleSignin.signIn();
 
-      // Check if the user is already signed in
+      // Kiểm tra xem người dùng đã đăng nhập hay chưa
       const currentUser = await GoogleSignin.getCurrentUser();
       if (currentUser) {
-        console.log('Already signed in:', currentUser);
+        console.log('Đã đăng nhập:', currentUser);
         console.log('userToken', currentUser.idToken);
-        await sendTokenToBackend(currentUser.idToken); // Pass the token to backend for further processing
-        return; // Return early since the user is already signed in
+        await sendTokenToBackend(currentUser.idToken); // Gửi token tới backend để xử lý thêm
+        return; // Quay lại ngay vì người dùng đã đăng nhập
       }
 
-      // Proceed with Google Sign-In if the user is not signed in
+      // Tiến hành đăng nhập Google nếu người dùng chưa đăng nhập
 
-      // Create Firebase credential using the Google idToken and accessToken
+      // Tạo thông tin đăng nhập Firebase bằng idToken và accessToken của Google
       const googleCredential = auth.GoogleAuthProvider.credential(
         idToken,
         accessToken,
       );
 
-      // Sign in with Firebase using the Google credential
+      // Đăng nhập với Firebase bằng thông tin đăng nhập Google
       const userCredential = await auth().signInWithCredential(
         googleCredential,
       );
-      console.log('User Credential:', userCredential);
+      console.log('Thông tin người dùng:', userCredential);
 
-      // Send the Firebase ID token to the backend after successful Firebase login
+      // Gửi ID token Firebase tới backend sau khi đăng nhập thành công với Firebase
       await sendTokenToBackend(userCredential.idToken);
 
-      // Alert user of successful login
-      setAlertMessage('Login Successful!');
-      setAlertTitle('Welcome back!');
+      // Thông báo cho người dùng đăng nhập thành công
+      setAlertMessage('Đăng nhập thành công!');
+      setAlertTitle('Chào mừng bạn trở lại!');
       setIsAlertVisible(true);
-      // Alert.alert('Login Successful', 'Welcome back!');
+      // Alert.alert('Đăng nhập thành công', 'Chào mừng bạn trở lại!');
     } catch (error) {
-      console.error('Google Sign-In Error:', error);
-      setAlertMessage('Login Failed!');
-      setAlertTitle(error.message || 'An error occurred during login');
+      console.error('Lỗi Đăng nhập Google:', error);
+      setAlertMessage('Đăng nhập thất bại!');
+      setAlertTitle(error.message || 'Đã có lỗi xảy ra khi đăng nhập');
       setIsAlertVisible(true);
       // Alert.alert(
-      //   'Login Failed',
-      //   error.message || 'An error occurred during login',
+      //   'Đăng nhập thất bại',
+      //   error.message || 'Đã có lỗi xảy ra khi đăng nhập',
       // );
     }
   };
@@ -134,30 +133,30 @@ const LoginScreen = ({navigation}) => {
       ]);
 
       if (result.isCancelled) {
-        setAlertMessage('Login Cancelled');
-        setAlertTitle('Facebook login was cancelled.');
+        setAlertMessage('Đăng nhập bị hủy');
+        setAlertTitle('Đăng nhập Facebook bị hủy.');
         setIsAlertVisible(true);
-        // Alert.alert('Login Cancelled', 'Facebook login was cancelled.');
+        // Alert.alert('Đăng nhập bị hủy', 'Đăng nhập Facebook bị hủy.');
         return;
       }
 
       const data = await AccessToken.getCurrentAccessToken();
-      if (!data) throw new Error('Failed to obtain access token');
+      if (!data) throw new Error('Lỗi khi lấy access token');
       console.log('Access token', data.accessToken);
-      // Now send the Facebook access token to your backend
-      await sendTokenToBackendFacebook(data.accessToken); // <-- Send Facebook token here
-      setAlertMessage('Login Successful!');
-      setAlertTitle('Welcome back!');
+      // Gửi token Facebook tới backend
+      await sendTokenToBackendFacebook(data.accessToken); // <-- Gửi token Facebook ở đây
+      setAlertMessage('Đăng nhập thành công!');
+      setAlertTitle('Chào mừng bạn trở lại!');
       setIsAlertVisible(true);
-      // Alert.alert('Login Successful', 'Welcome back!');
+      // Alert.alert('Đăng nhập thành công', 'Chào mừng bạn trở lại!');
     } catch (error) {
-      console.error('Facebook Login Error:', error);
-      setAlertMessage('Login Failed');
-      setAlertTitle(error.message || 'An error occurred during login');
+      console.error('Lỗi Đăng nhập Facebook:', error);
+      setAlertMessage('Đăng nhập thất bại');
+      setAlertTitle(error.message || 'Đã có lỗi xảy ra khi đăng nhập');
       setIsAlertVisible(true);
       // Alert.alert(
-      //   'Login Failed',
-      //   error.message || 'An error occurred during login',
+      //   'Đăng nhập thất bại',
+      //   error.message || 'Đã có lỗi xảy ra khi đăng nhập',
       // );
     } finally {
       setLoading(false);
@@ -166,53 +165,54 @@ const LoginScreen = ({navigation}) => {
 
   const sendTokenToBackend = async idToken => {
     try {
-      console.log('This is the token:', idToken);
+      console.log('Đây là token:', idToken);
 
-      // Clear old token from AsyncStorage (optional step)
+      // Xóa token cũ khỏi AsyncStorage (bước tùy chọn)
       await AsyncStorage.removeItem('userToken');
 
-      // Store the new token in AsyncStorage
+      // Lưu token mới vào AsyncStorage
       await AsyncStorage.setItem('userToken', idToken);
 
-      // Dispatch the loginUserGoogle action to send the ID token to your backend
+      // Gửi ID token tới backend qua action loginUserGoogle
       const response = await dispatch(loginUserGoogle(idToken)).unwrap();
 
       if (response) {
         console.log('User ID exists:', response.userId);
 
-        // Navigate to the MainApp screen after successful login
+        // Điều hướng đến màn hình MainApp sau khi đăng nhập thành công
         navigation.navigate('MainApp');
       }
     } catch (error) {
-      console.error('Error sending token to backend:', error);
+      console.error('Lỗi khi gửi token tới backend:', error);
 
-      // Provide a meaningful error message to the user
-      Alert.alert('Error', 'An error occurred while logging in');
+      // Cung cấp thông báo lỗi cho người dùng
+      Alert.alert('Lỗi', 'Đã có lỗi khi đăng nhập');
     }
   };
   const sendTokenToBackendFacebook = async accessToken => {
     try {
-      console.log('This is the token:', accessToken);
-      // Clear old token from AsyncStorage (optional step)
+      console.log('Đây là token:', accessToken);
+      // Xóa token cũ khỏi AsyncStorage (bước tùy chọn)
       await AsyncStorage.removeItem('userToken');
-      // Store the new token in AsyncStorage
+      // Lưu token mới vào AsyncStorage
       await AsyncStorage.setItem('userToken', accessToken);
-      // Dispatch the loginUserGoogle action to send the ID token to your backend
+      // Gửi token Facebook tới backend qua action loginUserFacebook
       const response = await dispatch(loginUserFacebook(accessToken)).unwrap();
       if (response) {
         console.log('User ID exists with facebook:', response.userId);
-        // Navigate to the MainApp screen after successful login
+        // Điều hướng đến màn hình MainApp sau khi đăng nhập thành công
         navigation.navigate('MainApp');
       }
     } catch (error) {
-      console.error('Error sending token to backend:', error);
-      // Provide a meaningful error message to the user
-      setAlertMessage('Error!');
-      setAlertTitle('An error occurred while logging in');
+      console.error('Lỗi khi gửi token tới backend:', error);
+      // Cung cấp thông báo lỗi cho người dùng
+      setAlertMessage('Lỗi!');
+      setAlertTitle('Đã có lỗi xảy ra khi đăng nhập');
       setIsAlertVisible(true);
-      // Alert.alert('Error', 'An error occurred while logging in');
+      // Alert.alert('Lỗi', 'Đã có lỗi khi đăng nhập');
     }
   };
+
   return (
     
     <View style={styles.container}>
@@ -234,7 +234,7 @@ const LoginScreen = ({navigation}) => {
         />
       </View>
       <Text style={styles.welcomeText}>Welcome!</Text>
-      <Text style={styles.decribeText}>Sign in to continue using the app.</Text>
+      {/* <Text style={styles.decribeText}>Đăng nhập để tiếp tục sử dụng ứng dụng.</Text> */}
 
       <View style={styles.inputNameView}>
         <View style={styles.inputContainer}>
@@ -266,17 +266,17 @@ const LoginScreen = ({navigation}) => {
         </View>
         <TouchableOpacity
           onPress={() => navigation.navigate('ForgotPassNavigation')}>
-          <Text style={styles.forgotPassword}>Forgot password?</Text>
+          <Text style={styles.forgotPassword}>Quên mặt khảu</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-          <Text style={styles.loginButtonText}>LOGIN</Text>
+          <Text style={styles.loginButtonText}>Đăng nhập</Text>
         </TouchableOpacity>
         <View style={styles.signupContainer}>
-          <Text style={styles.signupText}>Don't have an account? </Text>
+          <Text style={styles.signupText}>Bạn chưa có tài khoản?</Text>
           <TouchableOpacity
             onPress={() => navigation.navigate('SignUpNavigation')}>
-            <Text style={styles.signupLink}>Sign Up</Text>
+            <Text style={styles.signupLink}> Đăng ký</Text>
           </TouchableOpacity>
         </View>
 

@@ -20,28 +20,30 @@ const slides = [
   {
     id: '1',
     image: require('../../../assets/images/welcome1pic.jpg'),
-    title: 'Welcome!',
+    title: 'Chào mừng!',
     description: [
-      'Find your favorite restaurants and win',
-      'points and amazing rewards for each purchase.',
+      'Tìm nhà hàng yêu thích của bạn và nhận',
+      'điểm thưởng cùng những phần quà hấp dẫn ',
     ],
   },
   {
     id: '2',
     image: require('../../../assets/images/welcome2pic.jpg'),
-    title: 'Collect Points in a Single App!',
+    title: 'Thu thập điểm trong một ứng dụng!',
     description: [
-      'Collect points with each purchase and',
-      'exchange them for exclusive rewards!',
+      'Thu thập điểm với mỗi lần mua sắm và',
+      'đổi chúng lấy những phần quà',
+      'độc quyền!',
     ],
   },
   {
     id: '3',
     image: require('../../../assets/images/welcome3pic.jpg'),
-    title: 'Exclusive Offers and Rewards!',
+    title: 'Ưu đãi và phần thưởng độc quyền!',
     description: [
-      'We offer amazing and exclusive rewards',
-      'and coupons that you can only find here!',
+      'Chúng tôi mang đến những phần thưởng và ưu đãi',
+      'độc quyền mà bạn chỉ có thể tìm thấy ',
+      'tại đây!',
     ],
   },
 ];
@@ -134,7 +136,7 @@ const WelcomeSlideShow = ({onGetStarted}) => {
             }
           }}>
           <Text style={styles.continueText}>
-            {currentIndex < slides.length - 1 ? 'Continue' : 'Get Started!'}
+            {currentIndex < slides.length - 1 ? 'Continue' : 'Bắt đầu ngay!'}
           </Text>
         </TouchableOpacity>
         {currentIndex < slides.length - 1 && (
