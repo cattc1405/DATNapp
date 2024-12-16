@@ -145,10 +145,13 @@ const OrderScreen = ({ navigation }) => {
           />
         </TouchableOpacity>
         <Text style={styles.stepText}>Step 1/3</Text>
-        <Image
-          source={require('../../../assets/images/closeArrow.png')}
-          style={styles.closeIcon}
-        />
+        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+          <Image
+            source={require('../../../assets/images/closeArrow.png')}
+            style={styles.closeIcon}
+          />
+        </TouchableOpacity>
+
       </View>
       {showHamburger && (
         <Image

@@ -15,7 +15,7 @@ const Payment4 = ({ navigation }) => {
             </View>
             <Text style={styles.title}>Đơn hàng của bạn đã được đặt thành công!</Text>
             <Text style={styles.description}>
-            Đơn hàng của bạn đã hoàn tất thành công. Trong chốc lát, bạn sẽ nhận được thông báo về biên lai mua hàng và bạn có thể theo dõi mọi bước trong đơn hàng của mình.
+                Đơn hàng của bạn đã hoàn tất thành công. Trong chốc lát, bạn sẽ nhận được thông báo về biên lai mua hàng và bạn có thể theo dõi mọi bước trong đơn hàng của mình.
             </Text>
             <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Product')}>
                 <Text style={styles.buttonText}>Finish Order</Text>

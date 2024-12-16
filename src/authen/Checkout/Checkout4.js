@@ -130,10 +130,12 @@ const Checkout4 = ({ navigation }) => {
           />
         </TouchableOpacity>
         <Text style={styles.stepText}>Step 3/3</Text>
-        <Image
-          source={require('../../../assets/images/closeArrow.png')}
-          style={styles.closeIcon}
-        />
+        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+          <Image
+            source={require('../../../assets/images/closeArrow.png')}
+            style={styles.closeIcon}
+          />
+        </TouchableOpacity>
       </View>
       <Image
         source={require('../../../assets/images/backroundcheckout4.png')}

@@ -11,6 +11,7 @@ const SlideNav = ({onClose}) => {
 
   return (
     <View style={styles.container}>
+      {/* Phần menu bên trái */}
       <View style={styles.leftContainer}>
         <View style={styles.headView}>
           <Image
@@ -27,30 +28,38 @@ const SlideNav = ({onClose}) => {
             </TouchableOpacity>
           </View>
         </View>
+
+        {/* Phần chính */}
         <View style={styles.mainView}>
+          {/* Avatar người dùng */}
           <Image
             style={styles.avatar}
             source={require('../../../assets/images/avatar.jpg')}
           />
           <TouchableOpacity style={styles.upgradeBtn}>
-            <Text style={styles.upgradeText}>Upgrade</Text>
+            <Text style={styles.upgradeText}>Nâng cấp</Text>
           </TouchableOpacity>
+
+          {/* Các mục */}
           <View style={styles.spaceBetwnView}>
             <View style={styles.nameAndCountry}>
               <View style={styles.nameAndEditView}>
-                <Text style={styles.nameText}>Mafalda Matias</Text>
+                <Text style={styles.nameText}>Admin</Text>
                 <Image
                   style={styles.editIcon}
                   source={require('../../../assets/images/icons/editPencil.png')}
                 />
-              </View>
-              <Text style={styles.countryText}>New York, USA</Text>
+              </View> 
+              <Text style={styles.countryText}>Hồ Chí Minh, VIETNAM</Text>
             </View>
+
             <View style={styles.lineView} />
-            <Text style={styles.titleBoldText}>Account</Text>
+            <Text style={styles.titleBoldText}>Tài khoản</Text>
+
+            {/* Tùy chọn tài khoản */}
             <View style={styles.accProperties}>
               <TouchableOpacity style={styles.properView}>
-                <Text style={styles.titleProper}>Personal Information</Text>
+                <Text style={styles.titleProper}>Thông tin cá nhân</Text>
                 <Text style={styles.valueProper}></Text>
                 <Image
                   style={styles.arrowGray}
@@ -59,24 +68,26 @@ const SlideNav = ({onClose}) => {
               </TouchableOpacity>
 
               <TouchableOpacity style={styles.properView}>
-                <Text style={styles.titleProper}>Edit Profile</Text>
+                <Text style={styles.titleProper}>Chỉnh sửa hồ sơ</Text>
                 <Text style={styles.valueProper}></Text>
                 <Image
                   style={styles.arrowGray}
                   source={require('../../../assets/images/icons/grayArrow.png')}
                 />
               </TouchableOpacity>
+
               <TouchableOpacity style={styles.properView}>
-                <Text style={styles.titleProper}>Country</Text>
-                <Text style={styles.valueProper}>New York</Text>
+                <Text style={styles.titleProper}>Quốc gia</Text>
+                <Text style={styles.valueProper}>Việt Nam</Text>
                 <Image
                   style={styles.arrowGray}
                   source={require('../../../assets/images/icons/grayArrow.png')}
                 />
               </TouchableOpacity>
+
               <TouchableOpacity style={styles.properView}>
-                <Text style={styles.titleProper}>Language</Text>
-                <Text style={styles.valueProper}>English</Text>
+                <Text style={styles.titleProper}>Ngôn ngữ</Text>
+                <Text style={styles.valueProper}>Việt Nam</Text>
                 <Image
                   style={styles.arrowGray}
                   source={require('../../../assets/images/icons/grayArrow.png')}
@@ -84,11 +95,11 @@ const SlideNav = ({onClose}) => {
               </TouchableOpacity>
             </View>
 
-            {/* General */}
-            <Text style={styles.titleBoldText}>General</Text>
+            {/* Cài đặt chung */}
+            <Text style={styles.titleBoldText}>Cài đặt chung</Text>
             <View style={styles.accProperties}>
               <TouchableOpacity style={styles.properView}>
-                <Text style={styles.titleProper}>Notifications</Text>
+                <Text style={styles.titleProper}>Thông báo</Text>
                 <Text style={styles.valueProper}></Text>
                 <Image
                   style={styles.arrowGray}
@@ -97,15 +108,7 @@ const SlideNav = ({onClose}) => {
               </TouchableOpacity>
 
               <TouchableOpacity style={styles.properView}>
-                <Text style={styles.titleProper}>Dark Mode</Text>
-                <Text style={styles.valueProper}></Text>
-                <Image
-                  style={styles.arrowGray}
-                  source={require('../../../assets/images/icons/grayArrow.png')}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.properView}>
-                <Text style={styles.titleProper}>Touch ID and Password</Text>
+                <Text style={styles.titleProper}>Chế độ tối</Text>
                 <Text style={styles.valueProper}></Text>
                 <Image
                   style={styles.arrowGray}
@@ -113,42 +116,25 @@ const SlideNav = ({onClose}) => {
                 />
               </TouchableOpacity>
             </View>
-            {/* Help and sp */}
-            <Text style={styles.titleBoldText}>Help and support</Text>
-            <View style={styles.accProperties}>
-              <TouchableOpacity style={styles.properView}>
-                <Text style={styles.titleProper}>Privacy and Security</Text>
-                <Text style={styles.valueProper}></Text>
-                <Image
-                  style={styles.arrowGray}
-                  source={require('../../../assets/images/icons/grayArrow.png')}
-                />
-              </TouchableOpacity>
 
-              <TouchableOpacity style={styles.properView}>
-                <Text style={styles.titleProper}>About Us</Text>
-                <Text style={styles.valueProper}></Text>
-                <Image
-                  style={styles.arrowGray}
-                  source={require('../../../assets/images/icons/grayArrow.png')}
-                />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.lineView} />
-            <TouchableOpacity
+            {/* Đăng xuất */}
+            
+          </View>
+          <TouchableOpacity
               style={styles.logoutView}
               onPress={() => {
-                navigation.navigate('Login'), dispatch(logoutUser());
+                navigation.navigate('Login');
+                dispatch(logoutUser());
               }}>
               <Image
                 style={styles.iconLogout}
                 source={require('../../../assets/images/icons/logoutIcon.png')}
               />
-              <Text style={styles.logoutText}>Log Out</Text>
+              <Text style={styles.logoutText}>Đăng xuất</Text>
             </TouchableOpacity>
-          </View>
         </View>
       </View>
+      {/* Phần menu bên phải */}
       <View style={styles.rightContainer}></View>
     </View>
   );
@@ -170,6 +156,7 @@ const styles = StyleSheet.create({
   logoutView: {
     marginLeft: 30,
     flexDirection: 'row',
+    marginTop: -15
   },
   titleProper: {
     width: '65%',
@@ -199,6 +186,7 @@ const styles = StyleSheet.create({
   accProperties: {
     marginLeft: 30,
     marginRight: 40,
+    marginTop: -40
   },
   titleBoldText: {
     fontSize: 23,
@@ -206,10 +194,11 @@ const styles = StyleSheet.create({
     color: 'black',
     fontWeight: 'bold',
     marginLeft: 30,
+    marginTop: -20
   },
   spaceBetwnView: {
     marginTop: 60,
-    justifyContent: 'space-evenly',
+    justifyContent:'space-evenly',
     // backgroundColor: 'pink',
     height: '85%',
   },
